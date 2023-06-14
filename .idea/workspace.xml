@@ -1,0 +1,854 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config>
+        <device id="Nexus 10" />
+        <device id="_device_class_tablet" />
+        <device id="_device_class_foldable" />
+        <option name="nonWearDeviceLastStateName" value="Landscape" />
+      </config>
+    </shared>
+  </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="DEBHome|DEBConfig|E/A|DEBUG|DEBDow|DEBLoad|DEBRound|DataRoundRunDetail|SERVER" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="02975933-13bd-409a-9671-b2a930ca064e" name="Changes" comment="Se cambia el nombre de la app">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/release/output-metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/release/output-metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/androidTest/java/com/basculasmagris/spimixer/ExampleInstrumentedTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/androidTest/java/com/basculasmagris/spimixer/ExampleInstrumentedTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/application/SpiMixerApplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/application/SpiMixerApplication.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/CorralDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/CorralDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/CorralRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/CorralRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/DietDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/DietDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/DietRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/DietRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/EstablishmentDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/EstablishmentDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/EstablishmentRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/EstablishmentRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/MixerDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/MixerDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/MixerRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/MixerRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/ProductDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/ProductDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/ProductRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/ProductRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/RemoteViewerDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/RemoteViewerDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/RemoteViewerRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/RemoteViewerRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/RoundDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/RoundDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/RoundRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/RoundRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/RoundRunReportDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/RoundRunReportDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/RoundRunReportRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/RoundRunReportRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/SpiMixerRoomDatabase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/SpiMixerRoomDatabase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/UserDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/UserDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/UserRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/database/UserRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/AddDietRemote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/AddDietRemote.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/Corral.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/Corral.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/CorralRemote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/CorralRemote.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/Diet.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/Diet.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/DietProduct.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/DietProduct.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/DietProductDetail.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/DietProductDetail.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/DietRemote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/DietRemote.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/Establishment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/Establishment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/EstablishmentRemote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/EstablishmentRemote.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/Mixer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/Mixer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/MixerRemote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/MixerRemote.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/Product.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/Product.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/ProductRemote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/ProductRemote.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RemoteViewer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RemoteViewer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RemoteViewerRemote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RemoteViewerRemote.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/Round.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/Round.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundCorral.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundCorral.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundCorralDetail.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundCorralDetail.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRemote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRemote.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRun.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRun.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRunBody.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRunBody.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRunDetail.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRunDetail.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRunProgressDownload.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRunProgressDownload.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRunProgressLoad.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRunProgressLoad.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRunRemote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRunRemote.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRunReport.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRunReport.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRunReportRemote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/RoundRunReportRemote.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/User.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/User.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/UserRemote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/entities/UserRemote.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/BaseService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/BaseService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/CorralAPI.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/CorralAPI.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/CorralApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/CorralApiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/DietAPI.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/DietAPI.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/DietApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/DietApiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/EstablishmentAPI.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/EstablishmentAPI.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/EstablishmentApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/EstablishmentApiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/MixerAPI.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/MixerAPI.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/MixerApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/MixerApiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/ProductAPI.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/ProductAPI.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/ProductApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/ProductApiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/RemoteViewerAPI.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/RemoteViewerAPI.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/RemoteViewerApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/RemoteViewerApiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/ReportAPI.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/ReportAPI.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/ReportApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/ReportApiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/RoundAPI.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/RoundAPI.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/RoundApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/RoundApiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/UserAPI.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/UserAPI.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/UserApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/model/network/UserApiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/services/BluetoothSDKService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/services/BluetoothSDKService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/TableViewAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/TableViewAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/TableViewListener.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/TableViewListener.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/TableViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/TableViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/holder/CellViewHolder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/holder/CellViewHolder.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/holder/ColumnHeaderViewHolder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/holder/ColumnHeaderViewHolder.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/holder/RowHeaderViewHolder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/holder/RowHeaderViewHolder.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/model/Cell.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/model/Cell.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/model/ColumnHeader.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/model/ColumnHeader.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/model/RowHeader.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/model/RowHeader.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/popup/ColumnHeaderLongPressPopup.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/popup/ColumnHeaderLongPressPopup.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/popup/RowHeaderLongPressPopup.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/tableview/popup/RowHeaderLongPressPopup.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/utils/BluetoothSDKListenerHelper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/utils/BluetoothSDKListenerHelper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/utils/BluetoothUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/utils/BluetoothUtils.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/utils/Constants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/utils/Constants.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/utils/Helper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/utils/Helper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/utils/Session.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/utils/Session.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/AddUpdateCorralActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/AddUpdateCorralActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/AddUpdateDietActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/AddUpdateDietActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/AddUpdateEstablishmentActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/AddUpdateEstablishmentActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/AddUpdateMixerActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/AddUpdateMixerActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/AddUpdateProductActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/AddUpdateProductActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/AddUpdateRemoteViewerActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/AddUpdateRemoteViewerActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/AddUpdateRoundActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/AddUpdateRoundActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/AddUpdateUserActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/AddUpdateUserActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/LoginActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/LoginActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/MixerConfigActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/MixerConfigActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/RemoteViewerConfigActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/RemoteViewerConfigActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/RoundRunActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/RoundRunActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/SplashActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/SplashActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/data/LoginDataSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/data/LoginDataSource.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/data/LoginRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/data/LoginRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/data/Result.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/data/Result.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/data/model/LoggedInUser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/data/model/LoggedInUser.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/CorralAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/CorralAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/CustomListItemAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/CustomListItemAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/DietAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/DietAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/DietProductAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/DietProductAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/EstablishmentAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/EstablishmentAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/MixerAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/MixerAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/ProductAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/ProductAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RemoteViewerAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RemoteViewerAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundCorralAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundCorralAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunCorralAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunCorralAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunCorralDownloadAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunCorralDownloadAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunCorralReportAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunCorralReportAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunCorralResumeAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunCorralResumeAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunProductAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunProductAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunProductReportAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunProductReportAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunProductResumeAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunProductResumeAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunReportAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunReportAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/UserAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/UserAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/ConfirmDialogFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/ConfirmDialogFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/CorralDetailFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/CorralDetailFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/CorralListFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/CorralListFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/DietDetailFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/DietDetailFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/DietListFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/DietListFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/EstablishmentDetailFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/EstablishmentDetailFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/EstablishmentListFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/EstablishmentListFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/HomeFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/HomeFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/InputValueDialogFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/InputValueDialogFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/MixerDetailFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/MixerDetailFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/MixerListFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/MixerListFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/ProductDetailFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/ProductDetailFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/ProductListFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/ProductListFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/RemoteViewerListFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/RemoteViewerListFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/ReportFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/ReportFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/RoundDetailFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/RoundDetailFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/RoundListFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/RoundListFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/SeleccionCalibracionFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/SeleccionCalibracionFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/StepConfigurationFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/StepConfigurationFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/StepDownloadFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/StepDownloadFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/StepLoadFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/StepLoadFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/StepResumeFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/StepResumeFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/SyncFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/SyncFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/UserListFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/UserListFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/interfaces/IBluetoothSDKListener.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/interfaces/IBluetoothSDKListener.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/CorralRemoteViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/CorralRemoteViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/CorralViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/CorralViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/DietRemoteViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/DietRemoteViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/DietViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/DietViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/EstablishmentRemoteViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/EstablishmentRemoteViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/EstablishmentViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/EstablishmentViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/HomeViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/HomeViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/MixerRemoteViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/MixerRemoteViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/MixerViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/MixerViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/ProductRemoteViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/ProductRemoteViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/ProductViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/ProductViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/RemoteViewerRemoteViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/RemoteViewerRemoteViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/RemoteViewerViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/RemoteViewerViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/RoundRemoteViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/RoundRemoteViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/RoundRunReportRemoteViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/RoundRunReportRemoteViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/RoundRunReportViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/RoundRunReportViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/RoundViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/RoundViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/UserRemoteViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/UserRemoteViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/UserViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/viewmodel/UserViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/navigation/mobile_navigation.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/navigation/mobile_navigation.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/com/basculasmagris/spimixer/ExampleUnitTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/com/basculasmagris/spimixer/ExampleUnitTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[R8MT1004CQR]" />
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="spimixer" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="spimixer" type="f1a62948:ProjectNode" />
+                <item name="app" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="spimixer" type="f1a62948:ProjectNode" />
+                <item name="app" type="2d1252cf:ModuleNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="valueResourceFile" />
+        <option value="Class" />
+        <option value="Kotlin Interface" />
+        <option value="resourceFile" />
+        <option value="Kotlin Class" />
+        <option value="layoutResourceFile" />
+      </list>
+    </option>
+  </component>
+  <component name="GenerateSignedApkSettings">
+    <option name="KEY_STORE_PATH" value="D:\Documentos\Proyectos\keys\keyTablets.jks" />
+    <option name="KEY_ALIAS" value="keytablet" />
+    <option name="REMEMBER_PASSWORDS" value="true" />
+    <option name="BUILD_TARGET_KEY" value="apk" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProjectId" id="2HaKvhX4q1zcWH4q1ATQYAsNAoM" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="foldersAlwaysOnTop" value="false" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ApkExportedModule" value="visorremotomixer.app" />
+    <property name="DEBUGGABLE_DEVICE" value="samsung-sm_t220-R8MT1004CQR" />
+    <property name="DEBUGGABLE_PROCESS" value="com.basculasmagris.spimixer" />
+    <property name="DEBUGGER_ID" value="Auto" />
+    <property name="ExportApk.ApkPath" value="C:\Users\tanto\StudioProjects\spi-mixer-android\app" />
+    <property name="ExportApk.BuildVariants" value="release" />
+    <property name="ResourceManagerPrefKey.ResourceType" value="STRING" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="SHOW_ALL_PROCESSES" value="false" />
+    <property name="ToolWindowBuild.ShowToolbar" value="false" />
+    <property name="android-custom-viewC:/Users/tanto/StudioProjects/TabletCamion/caches/modules-2/files-2.1/androidx.appcompat/appcompat/1.4.2/a0a6b931c735952c318e94c90b0239966c500c52/appcompat-1.4.2-sources.jar!/androidx/appcompat/widget/ActionMenuView.java_SELECTED" value="ActionMenuView" />
+    <property name="android-custom-viewC:/Users/tanto/StudioProjects/TabletCamion/caches/modules-2/files-2.1/androidx.appcompat/appcompat/1.4.2/a0a6b931c735952c318e94c90b0239966c500c52/appcompat-1.4.2-sources.jar!/androidx/appcompat/widget/Toolbar.java_SELECTED" value="Toolbar" />
+    <property name="android-custom-viewC:/Users/tanto/StudioProjects/TabletCamion/caches/modules-2/files-2.1/androidx.recyclerview/recyclerview/1.1.0/f2bdf79e1977939817f54a9d3e2f6bc52b63bdd0/recyclerview-1.1.0-sources.jar!/androidx/recyclerview/widget/RecyclerView.java_SELECTED" value="RecyclerView" />
+    <property name="android-custom-viewC:/Users/tanto/StudioProjects/TabletCamion/caches/modules-2/files-2.1/com.evrencoskun.library/tableview/0.8.9.4/7e851a89982152bfc0fa71da81d7bc5a141e594e/tableview-0.8.9.4-sources.jar!/com/evrencoskun/tableview/TableView.java_SELECTED" value="TableView" />
+    <property name="android-custom-viewC:/Users/tanto/StudioProjects/TabletCamion/caches/modules-2/files-2.1/com.google.android.material/material/1.6.1/d4d703885d24c61bc0ec39a9a705969e41d773ef/material-1.6.1-sources.jar!/com/google/android/material/card/MaterialCardView.java_SELECTED" value="MaterialCardView" />
+    <property name="android-custom-viewC:/Users/tanto/StudioProjects/TabletCamion/caches/modules-2/files-2.1/com.kofigyan.stateprogressbar/stateprogressbar/1.0.0/d43a7d06ee32f9ca92b02bf8f008c8dc8bd90136/stateprogressbar-1.0.0-sources.jar!/com/kofigyan/stateprogressbar/StateProgressBar.java_SELECTED" value="StateProgressBar" />
+    <property name="android-custom-viewC:/Users/tanto/StudioProjects/spi-mixer-android/app/src/main/java/com/basculasmagris/spimixer/utils/LockableScrollView.kt_SELECTED" value="LockableScrollView" />
+    <property name="android-custom-viewC:/Users/tanto/StudioProjects/spi-mixer-android/app/src/main/java/com/basculasmagris/spimixer/view/activities/MainActivity.kt_SELECTED" value="CancellableNavigationView" />
+    <property name="cidr.known.project.marker" value="true" />
+    <property name="com.android.tools.idea.sqlite.queryhistory" value="delete from mixer&#10;delete from round_run&#10;delete from round_run_progress_load &#10;delete from round_run_progress_load" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\tanto\StudioProjects\spi-mixer-android\app\src\main\res\font" />
+      <recent name="C:\Users\tanto\StudioProjects\spi-mixer-android\app\src\main\res\drawable-v24" />
+      <recent name="C:\Users\tanto\StudioProjects\spi-mixer-android\app\src\main\res\drawable" />
+      <recent name="C:\Users\tanto\StudioProjects\spi-mixer-android\app\src\main\res\mipmap-hdpi" />
+      <recent name="C:\Users\tanto\StudioProjects\spi-mixer-android\app\src\main\res\mipmap-xxxhdpi" />
+    </key>
+    <key name="android.template.-6210912">
+      <recent name="com.basculasmagris.spimixer.view.activities" />
+      <recent name="com.basculasmagris.spimixer.view.activities.data" />
+    </key>
+    <key name="android.template.-26939339">
+      <recent name="com.basculasmagris.spimixer.view.activities" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\tanto\StudioProjects\spi-mixer-android\app\src\main\res\drawable" />
+      <recent name="C:\Users\tanto\StudioProjects\spi-mixer-android\app\src\main\res\font" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="com.basculasmagris.spimixer.view.activities" />
+    </key>
+    <key name="android.template.-357192255">
+      <recent name="com.basculasmagris.spimixer.view.activities" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value=" nj " />
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App">
+      <module name="visorremotomixer.app" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="02975933-13bd-409a-9671-b2a930ca064e" name="Changes" comment="" />
+      <created>1668517987349</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1668517987349</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Update">
+      <created>1683305413939</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1683305413939</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Update">
+      <created>1683327350158</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1683327350158</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Update">
+      <created>1683382172714</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1683382172714</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Trabajando en carga/Descarga">
+      <created>1683390812578</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1683390812578</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Cuando se vuelve de StepConfigurationFragment.kt sin empezar la carga, la ronda ya no figura como iniciada con 0% de progreso">
+      <created>1683462913921</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1683462913921</updated>
+    </task>
+    <task id="LOCAL-00034" summary="correcciones varias en proceso de carga/descarga">
+      <created>1683471926880</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1683471926880</updated>
+    </task>
+    <task id="LOCAL-00035" summary="se linkea RoundDetailFragment a la tarjeta de ronda.&#10;Se creo el boton resumen en la tarjeta de ronda y se creo el link. El resumen no está mostrando los datos.">
+      <created>1683476794186</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1683476794186</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Se agrega inicio directo a StepLoadFragment.kt StepDownloadFragment.kt luego de una interrupcion decarga/descarga">
+      <created>1683806520209</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1683806520209</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Se cambió la forma de calculo de pesaje. Ahora el peso de cada uno de los productos o corrales, se calculo conla formula PesoFinal - PesoInicial en carga y PesoInicial - PesoFinal en descarga.">
+      <created>1683979161573</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1683979161573</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Se arregla ReportFragment.kt">
+      <created>1683991862776</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1683991862776</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Se agrega la funcion resto. Falta mejorar el dialogo.">
+      <created>1683995202644</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1683995202645</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Se agrega Visor Remoto al proyecto">
+      <created>1684143193021</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1684143193021</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Acomodando cosas">
+      <created>1684188595922</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1684188595922</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Se acomodó barra en ronda (configuracion-carga-descarga-resumen)">
+      <created>1684324336856</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1684324336856</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Update">
+      <created>1684503979051</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1684503979052</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Update">
+      <created>1684505341373</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1684505341373</updated>
+    </task>
+    <task id="LOCAL-00045" summary="Update">
+      <created>1684509301656</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1684509301656</updated>
+    </task>
+    <task id="LOCAL-00046" summary="Update conexionm con mixer">
+      <created>1684598604822</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1684598604822</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Update conexion con mixer">
+      <created>1684661369114</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1684661369114</updated>
+    </task>
+    <task id="LOCAL-00048" summary="Toggle Keyboard">
+      <created>1684673530438</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1684673530438</updated>
+    </task>
+    <task id="LOCAL-00049" summary="adapter corral y producto en round y diet">
+      <created>1684688835501</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1684688835501</updated>
+    </task>
+    <task id="LOCAL-00050" summary="Last product en carga y descarga">
+      <created>1684765735983</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1684765735983</updated>
+    </task>
+    <task id="LOCAL-00051" summary="La primer ronda creada se actualiza en pantalla">
+      <created>1684778380848</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1684778380848</updated>
+    </task>
+    <task id="LOCAL-00052" summary="La primer ronda creada se actualiza en pantalla">
+      <created>1684778405726</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1684778405726</updated>
+    </task>
+    <task id="LOCAL-00053" summary="Inputs">
+      <created>1684839804858</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1684839804858</updated>
+    </task>
+    <task id="LOCAL-00054" summary="Update, ajuste de peso en configuracion&#10;Dialogo de confirmacion para salir de carga o descarga&#10;Ajustes de vistas varias">
+      <created>1684848546423</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1684848546424</updated>
+    </task>
+    <task id="LOCAL-00055" summary="version visible en splash">
+      <created>1684849223888</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1684849223888</updated>
+    </task>
+    <task id="LOCAL-00056" summary="Correcciones versión Mario">
+      <created>1684900336983</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1684900336999</updated>
+    </task>
+    <task id="LOCAL-00057" summary="RoundRunCorralAdapter funciona seteo de cantidad de animales">
+      <created>1685053892128</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1685053892129</updated>
+    </task>
+    <task id="LOCAL-00058" summary="RoundRunCorralAdapter y StepConfigurationFragment&#10;correcciones">
+      <created>1685120976079</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1685120976080</updated>
+    </task>
+    <task id="LOCAL-00059" summary="Se pude volver atras en un producto o corral">
+      <created>1685204202664</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1685204202664</updated>
+    </task>
+    <task id="LOCAL-00060" summary="correccion de warnings">
+      <created>1685272002715</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1685272002715</updated>
+    </task>
+    <task id="LOCAL-00061" summary="si showCustomProgressDialog es visible, no se puede crear uno nuevo.">
+      <created>1685279183287</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1685279183288</updated>
+    </task>
+    <task id="LOCAL-00062" summary="Trabajando en los dialogos">
+      <created>1685294210289</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1685294210290</updated>
+    </task>
+    <task id="LOCAL-00063" summary="Recuadro de mixer seleccionado y refresco de mixer seleccionado en topbar">
+      <created>1685363592827</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1685363592828</updated>
+    </task>
+    <task id="LOCAL-00064" summary="Dialogo target reached">
+      <created>1685371490674</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1685371490674</updated>
+    </task>
+    <task id="LOCAL-00065" summary="stroke MixerAdapter.kt">
+      <created>1685371671919</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1685371671919</updated>
+    </task>
+    <task id="LOCAL-00066" summary="update">
+      <created>1685375086326</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1685375086326</updated>
+    </task>
+    <task id="LOCAL-00067" summary="Retoques">
+      <created>1685529232914</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1685529232915</updated>
+    </task>
+    <task id="LOCAL-00068" summary="Retoques">
+      <created>1685530609607</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1685530609607</updated>
+    </task>
+    <task id="LOCAL-00069" summary="Se agrega posibilidad de agregar peso existente a la mezcla">
+      <created>1685547128769</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1685547128769</updated>
+    </task>
+    <task id="LOCAL-00070" summary="Arreglando crashes">
+      <created>1685549684798</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1685549684799</updated>
+    </task>
+    <task id="LOCAL-00071" summary="Update">
+      <created>1685636071522</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1685636071523</updated>
+    </task>
+    <task id="LOCAL-00072" summary="Cuando agrego un corral a la ronda o un producto a la dieta, el cursor se posiciona en este nuevo artefacto">
+      <created>1685879411087</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1685879411087</updated>
+    </task>
+    <task id="LOCAL-00073" summary="Correcciones">
+      <created>1685972907036</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1685972907036</updated>
+    </task>
+    <task id="LOCAL-00074" summary="Se agrega alimento(Kg) por animal">
+      <created>1686152407133</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1686152407133</updated>
+    </task>
+    <task id="LOCAL-00075" summary="Se agrega alimento(Kg) por animal. Update">
+      <created>1686154499043</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1686154499043</updated>
+    </task>
+    <task id="LOCAL-00076" summary="Se agrega funcionalidad de servidor para poder conectar el visor remoto">
+      <created>1686569442488</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1686569442488</updated>
+    </task>
+    <task id="LOCAL-00077" summary="Se cambia el nombre de la app">
+      <created>1686746431842</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1686746431842</updated>
+    </task>
+    <option name="localTasksCounter" value="78" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+    <MESSAGE value="La primer ronda creada se actualiza en pantalla" />
+    <MESSAGE value="Inputs" />
+    <MESSAGE value="Update, ajuste de peso en configuracion&#10;Dialogo de confirmacion para salir de carga o descarga&#10;Ajustes de vistas varias" />
+    <MESSAGE value="version visible en splash" />
+    <MESSAGE value="Correcciones versión Mario" />
+    <MESSAGE value="RoundRunCorralAdapter funciona seteo de cantidad de animales" />
+    <MESSAGE value="RoundRunCorralAdapter y StepConfigurationFragment&#10;correcciones" />
+    <MESSAGE value="Se pude volver atras en un producto o corral" />
+    <MESSAGE value="correccion de warnings" />
+    <MESSAGE value="si showCustomProgressDialog es visible, no se puede crear uno nuevo." />
+    <MESSAGE value="Trabajando en los dialogos" />
+    <MESSAGE value="Recuadro de mixer seleccionado y refresco de mixer seleccionado en topbar" />
+    <MESSAGE value="Dialogo target reached" />
+    <MESSAGE value="stroke MixerAdapter.kt" />
+    <MESSAGE value="update" />
+    <MESSAGE value="Retoques" />
+    <MESSAGE value="Se agrega posibilidad de agregar peso existente a la mezcla" />
+    <MESSAGE value="Arreglando crashes" />
+    <MESSAGE value="Update" />
+    <MESSAGE value="Cuando agrego un corral a la ronda o un producto a la dieta, el cursor se posiciona en este nuevo artefacto" />
+    <MESSAGE value="Correcciones" />
+    <MESSAGE value="Se agrega alimento(Kg) por animal" />
+    <MESSAGE value="Se agrega alimento(Kg) por animal. Update" />
+    <MESSAGE value="Se agrega funcionalidad de servidor para poder conectar el visor remoto" />
+    <MESSAGE value="Se cambia el nombre de la app" />
+    <option name="LAST_COMMIT_MESSAGE" value="Se cambia el nombre de la app" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/RoundListFragment.kt</url>
+          <line>123</line>
+          <option name="timeStamp" value="65" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/MainActivity.kt</url>
+          <line>275</line>
+          <option name="timeStamp" value="127" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/HomeFragment.kt</url>
+          <line>676</line>
+          <option name="timeStamp" value="145" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunAdapter.kt</url>
+          <line>216</line>
+          <option name="timeStamp" value="154" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/fragments/HomeFragment.kt</url>
+          <line>1154</line>
+          <option name="timeStamp" value="155" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/activities/RoundRunActivity.kt</url>
+          <line>115</line>
+          <option name="timeStamp" value="188" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunProductAdapter.kt</url>
+          <line>120</line>
+          <option name="timeStamp" value="204" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/RoundRunProductAdapter.kt</url>
+          <line>188</line>
+          <option name="timeStamp" value="206" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/basculasmagris/spimixer/view/adapter/MixerAdapter.kt</url>
+          <line>91</line>
+          <option name="timeStamp" value="207" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Remote">
+        <watch expression="selectedPosition" language="kotlin" />
+      </configuration>
+    </watches-manager>
+  </component>
+</project>

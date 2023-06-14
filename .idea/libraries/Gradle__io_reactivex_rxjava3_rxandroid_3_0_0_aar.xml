@@ -1,0 +1,23 @@
+<component name="libraryTable">
+  <library name="Gradle: io.reactivex.rxjava3:rxandroid:3.0.0@aar">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../TabletCamion/caches/transforms-3/b3ca742d53e1e794860cd1df6ab668a2/transformed/jetified-rxandroid-3.0.0/res" />
+      <root url="file://$PROJECT_DIR$/../TabletCamion/caches/transforms-3/cfc7314221b341ce2787e867c85fb032/transformed/jetified-rxandroid-3.0.0/res" />
+      <root url="file://$PROJECT_DIR$/../TabletCamion/caches/transforms-3/a47daee957c75d6f1d35fbe779005167/transformed/jetified-rxandroid-3.0.0/res" />
+      <root url="file://$PROJECT_DIR$/../TabletCamion/caches/transforms-3/b9d7c93ebd20e232d2fc9bbe7f52804d/transformed/jetified-rxandroid-3.0.0/res" />
+      <root url="jar://$PROJECT_DIR$/../TabletCamion/caches/transforms-3/b3ca742d53e1e794860cd1df6ab668a2/transformed/jetified-rxandroid-3.0.0/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../TabletCamion/caches/transforms-3/b3ca742d53e1e794860cd1df6ab668a2/transformed/jetified-rxandroid-3.0.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b3ca742d53e1e794860cd1df6ab668a2/transformed/jetified-rxandroid-3.0.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b3ca742d53e1e794860cd1df6ab668a2/transformed/jetified-rxandroid-3.0.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/b3ca742d53e1e794860cd1df6ab668a2/transformed/jetified-rxandroid-3.0.0/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../TabletCamion/caches/modules-2/files-2.1/io.reactivex.rxjava3/rxandroid/3.0.0/7338d266d787a814852412b3650e9829e0a8dfbe/rxandroid-3.0.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava3/rxandroid/3.0.0/7338d266d787a814852412b3650e9829e0a8dfbe/rxandroid-3.0.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../TabletCamion/caches/modules-2/files-2.1/io.reactivex.rxjava3/rxandroid/3.0.0/6f5073194e25e518c55fe4eb1f3ec89c8b05ebe9/rxandroid-3.0.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava3/rxandroid/3.0.0/6f5073194e25e518c55fe4eb1f3ec89c8b05ebe9/rxandroid-3.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

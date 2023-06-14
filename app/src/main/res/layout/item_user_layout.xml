@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/color_medium_grey"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="310dp"
+        android:layout_height="98dp"
+        >
+
+        <FrameLayout
+            android:id="@+id/fl_user_frameLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageView
+                android:id="@+id/iv_user_image"
+                android:layout_width="107dp"
+                android:layout_height="98dp"
+                android:background="@color/color_medium_grey"
+                android:scaleType="fitXY"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/iv_add_user_image"
+                android:layout_width="107dp"
+                android:layout_height="98dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_add_photo"
+                android:padding="35dp"/>
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_user_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/fl_user_frameLayout"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Juan Domingo Pérez García">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_user_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_dark_grey"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintStart_toEndOf="@id/fl_user_frameLayout"
+            app:layout_constraintTop_toBottomOf="@+id/tv_user_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Operador">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/ib_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/more_contentDescription"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_more"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btn_delete_user"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Eliminar"
+            android:textSize="11sp"
+            android:background="@drawable/btn_user_delete_edit"
+            android:textColor="@color/color_acent_green"
+            app:layout_constraintTop_toBottomOf="@id/tv_user_description"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/fl_user_frameLayout"
+            app:layout_constraintEnd_toStartOf="@id/btn_edit_user"/>
+
+        <Button
+            android:id="@+id/btn_edit_user"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Editar"
+            android:textSize="11sp"
+            android:background="@drawable/btn_user_delete_edit"
+            android:textColor="@color/color_acent_green"
+            app:layout_constraintTop_toBottomOf="@id/tv_user_description"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/round_card"
+    android:layout_width="275dp"
+    android:layout_height="124dp"
+    app:cardCornerRadius="5dp"
+    app:cardUseCompatPadding="true"
+    app:strokeColor="@color/color_medium_grey"
+    android:backgroundTint="@color/color_light_grey"
+    app:strokeWidth="1dp"
+    >
+
+        <TextView
+            android:id="@+id/tv_corral_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_corral_order"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/green_500_dark"
+        android:gravity="center"
+        android:visibility="gone"
+        app:cardCornerRadius="@dimen/_15sdp"
+        app:cardElevation="0dp"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_corral_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="CORRAL 1"
+            android:textColor="@color/color_dark_grey"
+            android:textSize="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/ll_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/color_dark_grey"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_corral_name" />
+
+        <ImageView
+            android:id="@+id/iv_animal"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_cow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_separator"
+            app:tint="@color/color_dark_grey" />
+
+        <TextView
+            android:id="@+id/tv_corral_animal_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="200"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_animal"
+            app:layout_constraintStart_toEndOf="@id/iv_animal"
+            app:layout_constraintTop_toTopOf="@id/iv_animal" />
+
+        <ImageButton
+            android:id="@+id/ib_up_custom_animals"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_add_circle"
+            app:layout_constraintBottom_toBottomOf="@id/iv_animal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_animal" />
+
+        <ImageButton
+            android:id="@+id/ib_down_custom_animals"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_minus_circle"
+            app:layout_constraintBottom_toBottomOf="@id/iv_animal"
+            app:layout_constraintEnd_toStartOf="@id/ib_up_custom_animals"
+            app:layout_constraintTop_toTopOf="@id/iv_animal" />
+
+
+        <ImageView
+            android:id="@+id/iv_balance"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_balance"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_animal"
+            app:tint="@color/color_dark_grey" />
+
+        <TextView
+            android:id="@+id/tv_corral_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="2000kg"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_balance"
+            app:layout_constraintStart_toEndOf="@id/iv_balance"
+            app:layout_constraintTop_toTopOf="@id/iv_balance" />
+
+        <ImageButton
+            android:id="@+id/ib_up_custom_weight"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_add_circle"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@id/iv_balance"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_balance" />
+
+        <ImageButton
+            android:id="@+id/ib_down_custom_weight"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_minus_circle"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@id/iv_balance"
+            app:layout_constraintEnd_toStartOf="@id/ib_up_custom_weight"
+            app:layout_constraintTop_toTopOf="@id/iv_balance" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

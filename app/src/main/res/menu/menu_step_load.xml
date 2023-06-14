@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/bluetooth_mixer_status"
+        android:icon="@drawable/ic_bluetooth_connected_24px"
+        android:title=""
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom|withText"
+        />
+
+    <item
+        android:id="@+id/step_immage"
+        android:title="                                          "
+        app:showAsAction="always"
+        android:orderInCategory="102"
+        />
+</menu>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:backgroundTint="@null"
+    android:background="@drawable/item_round_run_product_bkg"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_product_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="7dp"
+            android:layout_weight="0.52"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.005"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_vertical"
+            android:background="@color/white" />
+        <TextView
+            android:id="@+id/tv_current_weight"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.34"
+            android:layout_marginEnd="10dp"
+            android:gravity="end|center_vertical"
+            android:textSize="18sp"
+            android:textColor="@color/white"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.005"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_vertical"
+            android:background="@color/white" />
+        <TextView
+            android:id="@+id/tv_diff_weight"
+            android:layout_width="0dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="0.23"
+            android:gravity="end|center_vertical"
+            android:textSize="16sp"
+            android:text=""
+            android:textColor="@color/color_acent_green"
+            android:layout_height="wrap_content"/>
+</LinearLayout>

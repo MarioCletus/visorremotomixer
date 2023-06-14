@@ -1,0 +1,20 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.versionedparcelable:versionedparcelable:1.1.1@aar">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../TabletCamion/caches/transforms-3/0a5998776018037f621c84e0cf390e29/transformed/versionedparcelable-1.1.1/res" />
+      <root url="file://$PROJECT_DIR$/../TabletCamion/caches/transforms-3/b1935bc4ea39aec0bec067eb0365da81/transformed/versionedparcelable-1.1.1/res" />
+      <root url="file://$PROJECT_DIR$/../TabletCamion/caches/transforms-3/c6c52d9a2de42e3e268bb15d85370533/transformed/versionedparcelable-1.1.1/res" />
+      <root url="file://$PROJECT_DIR$/../TabletCamion/caches/transforms-3/bffde615d0e968fe3680bcb97a82a1d5/transformed/versionedparcelable-1.1.1/res" />
+      <root url="file://$PROJECT_DIR$/../TabletCamion/caches/transforms-3/0a5998776018037f621c84e0cf390e29/transformed/versionedparcelable-1.1.1/AndroidManifest.xml" />
+      <root url="jar://$PROJECT_DIR$/../TabletCamion/caches/transforms-3/0a5998776018037f621c84e0cf390e29/transformed/versionedparcelable-1.1.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0a5998776018037f621c84e0cf390e29/transformed/versionedparcelable-1.1.1/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/0a5998776018037f621c84e0cf390e29/transformed/versionedparcelable-1.1.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0a5998776018037f621c84e0cf390e29/transformed/versionedparcelable-1.1.1/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../TabletCamion/caches/modules-2/files-2.1/androidx.versionedparcelable/versionedparcelable/1.1.1/d9085927216387af679d18b6f472bc0fc5c7cc81/versionedparcelable-1.1.1-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.versionedparcelable/versionedparcelable/1.1.1/d9085927216387af679d18b6f472bc0fc5c7cc81/versionedparcelable-1.1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

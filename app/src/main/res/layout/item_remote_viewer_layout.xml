@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/color_medium_grey"
+    app:cardCornerRadius="5dp"
+    app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp">
+
+        <ImageButton
+            android:id="@+id/btn_select"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_bluetooth_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/color_dark_grey"/>
+
+        <TextView
+            android:id="@+id/tv_remote_viewer_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:ellipsize="end"
+            android:textColor="@color/color_dark_grey"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="RemoteViewer 1">
+
+        </TextView>
+        <TextView
+            android:id="@+id/tv_mac"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_6sdp"
+            android:textStyle="normal"
+            android:layout_marginRight="@dimen/_10sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_remote_viewer_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="MAC99229JSJSJSA"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/et_remote_viewer_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textColor="@color/color_medium_grey"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_mac"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Descripción RemoteViewer">
+
+        </TextView>
+
+
+        <ImageView
+            android:id="@+id/iv_calibration"
+            android:layout_width="@dimen/_11sdp"
+            android:layout_height="@dimen/_11sdp"
+            android:layout_gravity="center_vertical"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_balance"
+            android:text="@string/lbl_animal_quantity"
+            android:visibility="visible"
+            app:tint="@color/color_acent_green"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_remote_viewer_description"
+            />
+
+        <TextView
+            android:id="@+id/tv_calibration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/_2sdp"
+            android:textColor="@color/color_acent_green"
+            android:text="0000kg"
+            app:layout_constraintTop_toTopOf="@id/iv_calibration"
+            app:layout_constraintStart_toEndOf="@id/iv_calibration"/>
+
+        <ImageView
+            android:id="@+id/iv_tara"
+            android:layout_width="@dimen/_11sdp"
+            android:layout_height="@dimen/_11sdp"
+            android:layout_gravity="center_vertical"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_tara2"
+            android:text="@string/lbl_animal_quantity"
+            app:tint="@color/color_acent_green"
+            android:layout_marginStart="10dp"
+            app:layout_constraintTop_toTopOf="@id/iv_calibration"
+            app:layout_constraintStart_toStartOf="@id/btn_edit_remote_viewer"
+            />
+
+        <TextView
+            android:id="@+id/tv_tara"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="14sp"
+            android:layout_marginLeft="@dimen/_2sdp"
+            android:textColor="@color/color_acent_green"
+            android:text="0000kg"
+            app:layout_constraintTop_toTopOf="@id/iv_tara"
+            app:layout_constraintStart_toEndOf="@id/iv_tara"/>
+
+        <Button
+            android:id="@+id/btn_delete_remote_viewer"
+            android:layout_width="124dp"
+            android:layout_height="36dp"
+            android:background="@drawable/btn_round_to_run_red"
+            android:gravity="center"
+            android:text="Eliminar"
+            android:textSize="13sp"
+            app:backgroundTint="@null"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <Button
+            android:id="@+id/btn_edit_remote_viewer"
+            android:layout_width="124dp"
+            android:layout_height="36dp"
+            android:background="@drawable/btn_rounded_green"
+            android:gravity="center"
+            android:text="Editar"
+            android:textSize="13sp"
+            app:backgroundTint="@null"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

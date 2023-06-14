@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.activities.AddUpdateUserActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_add_update_user"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="@color/white"
+        android:gravity="center"
+        app:title="Agregar usuario"
+        />
+
+    <ScrollView
+        android:id="@+id/sv_user"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_add_update_user">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_create_mixer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_add_update_user"
+            android:padding="10dp">
+
+            <FrameLayout
+                android:id="@+id/fl_user_frameLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:paddingLeft="13dp"
+                android:paddingTop="11dp">
+
+
+                <ImageView
+                    android:id="@+id/iv_user_image"
+                    android:layout_width="310dp"
+                    android:layout_height="410dp"
+                    android:background="@color/color_medium_grey"
+                    android:scaleType="fitXY"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <ImageView
+                    android:id="@+id/iv_add_user_image"
+                    android:layout_width="310dp"
+                    android:layout_height="410dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_add_photo"
+                    android:padding="130dp"/>
+            </FrameLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ti_user_name"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toEndOf="@id/fl_user_frameLayout"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/ti_user_lastname"
+                        android:paddingLeft="@dimen/_5sdp"
+                        android:paddingTop="@dimen/_5sdp"
+                        android:paddingRight="@dimen/_5sdp"
+                        app:boxCornerRadiusBottomStart="7dp"
+                        app:boxCornerRadiusBottomEnd="7dp"
+                        app:boxCornerRadiusTopEnd="7dp"
+                        app:boxCornerRadiusTopStart="7dp">
+
+                        <EditText
+                            android:id="@+id/et_user_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLength="20"
+                            android:inputType="text" android:digits="0123456789qwertyuiopasdfghjklzxcvbnmñQWERTYUIOPASDFGHJKLZXCVBNMÑÇ-_,.:@ "
+                            android:imeOptions="actionDone"
+                            android:hint="@string/ph_user_name"
+                            android:textSize="14sp"
+                            android:textColor="#595959"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ti_user_lastname"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/ti_user_name"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:paddingLeft="@dimen/_5sdp"
+                        android:paddingTop="@dimen/_5sdp"
+                        android:paddingRight="@dimen/_5sdp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        app:boxCornerRadiusBottomStart="7dp"
+                        app:boxCornerRadiusBottomEnd="7dp"
+                        app:boxCornerRadiusTopEnd="7dp"
+                        app:boxCornerRadiusTopStart="7dp">
+
+                        <EditText
+                            android:id="@+id/et_user_lastname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLength="20"
+                            android:inputType="text" android:digits="0123456789qwertyuiopasdfghjklzxcvbnmñQWERTYUIOPASDFGHJKLZXCVBNMÑÇ-_,.:@ "
+                            android:imeOptions="actionDone"
+                            android:hint="@string/ph_user_lastname"
+                            android:textSize="14sp"
+                            android:textColor="#595959"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ti_user_mail"
+                        android:layout_width="0dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toEndOf="@id/fl_user_frameLayout"
+                        app:layout_constraintEnd_toStartOf="@id/ti_role_ref"
+                        app:layout_constraintTop_toBottomOf="@id/ti_user_name"
+                        android:paddingLeft="@dimen/_5sdp"
+                        android:paddingTop="@dimen/_5sdp"
+                        android:paddingRight="@dimen/_5sdp"
+                        app:boxCornerRadiusBottomStart="7dp"
+                        app:boxCornerRadiusBottomEnd="7dp"
+                        app:boxCornerRadiusTopEnd="7dp"
+                        app:boxCornerRadiusTopStart="7dp">
+
+                        <EditText
+                            android:id="@+id/et_user_mail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLength="250"
+                            android:hint="@string/ph_user_mail"
+                            android:textSize="14sp"
+                            android:textColor="#595959"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ti_role_ref"
+                        android:layout_width="0dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ti_user_name"
+                        app:layout_constraintStart_toEndOf="@id/ti_user_mail"
+                        android:paddingLeft="@dimen/_5sdp"
+                        android:paddingTop="@dimen/_5sdp"
+                        android:paddingRight="@dimen/_5sdp"
+                        app:boxCornerRadiusBottomStart="7dp"
+                        app:boxCornerRadiusBottomEnd="7dp"
+                        app:boxCornerRadiusTopEnd="7dp"
+                        app:boxCornerRadiusTopStart="7dp">
+
+                        <EditText
+                            android:id="@+id/et_role_ref"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:inputType="text" android:digits="0123456789qwertyuiopasdfghjklzxcvbnmñQWERTYUIOPASDFGHJKLZXCVBNMÑÇ-_,.:@ "
+                            android:imeOptions="actionDone"
+                            android:cursorVisible="false"
+                            android:focusableInTouchMode="false"
+                            android:hint="@string/ph_role_ref"
+                            android:textSize="14sp"
+                            android:textColor="#595959"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ti_user_password"
+                        android:layout_width="0dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toEndOf="@id/fl_user_frameLayout"
+                        app:layout_constraintEnd_toStartOf="@id/ti_role_ref"
+                        app:layout_constraintTop_toBottomOf="@id/ti_user_mail"
+                        android:paddingLeft="@dimen/_5sdp"
+                        android:paddingTop="@dimen/_5sdp"
+                        android:paddingRight="@dimen/_5sdp"
+                        app:boxCornerRadiusBottomStart="7dp"
+                        app:boxCornerRadiusBottomEnd="7dp"
+                        app:boxCornerRadiusTopEnd="7dp"
+                        app:boxCornerRadiusTopStart="7dp">
+
+                        <EditText
+                            android:id="@+id/et_user_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLength="250"
+                            android:hint="@string/ph_user_password"
+                            android:textSize="14sp"
+                            android:textColor="#595959"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btn_add_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_16sdp"
+                    android:layout_marginBottom="@dimen/_20sdp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/save"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/ll_for_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fl_user_frameLayout" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/view_activity_round_run"
+    tools:context=".view.activities.RoundRunActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_round_run"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:gravity="center"
+                app:title="Agregar ronda"
+                app:titleTextColor="@color/white"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <ImageView
+                android:id="@+id/ib_logo"
+                android:layout_width="160dp"
+                android:layout_height="55dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@drawable/magris_logo_topbar" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+<!--            <com.kofigyan.stateprogressbar.StateProgressBar-->
+<!--                android:id="@+id/sp_round_run"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:spb_animateToCurrentProgressState="true"-->
+<!--                app:spb_checkStateCompleted="true"-->
+<!--                app:spb_currentStateDescriptionColor="@color/color_acent_green"-->
+<!--                app:spb_currentStateNumber="three"-->
+<!--                android:visibility="gone"-->
+<!--                app:spb_maxStateNumber="four"-->
+<!--                app:spb_stateBackgroundColor="@color/color_light_grey"-->
+<!--                app:spb_descriptionTopSpaceIncrementer="5dp"-->
+<!--                app:spb_stateDescriptionColor="@color/color_medium_grey"-->
+<!--                app:spb_stateForegroundColor="@color/color_acent_green"-->
+<!--                app:spb_stateSize="@dimen/_20sdp" />-->
+
+
+
+            <FrameLayout
+                android:id="@+id/fragment_round_run"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/ll_actions"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:layout_marginBottom="10dp"-->
+<!--        android:layout_marginStart="10dp"-->
+<!--        android:layout_marginEnd="10dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent">-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btn_tara_round"-->
+<!--            android:layout_width="140dp"-->
+<!--            android:layout_height="45dp"-->
+<!--            android:background="@drawable/btn_round_rounded_green"-->
+<!--            android:gravity="center"-->
+<!--            android:text="Tara"-->
+<!--            android:textSize="18sp"-->
+<!--            app:backgroundTint="@null"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            />-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btn_back_round"-->
+<!--            android:layout_width="140dp"-->
+<!--            android:layout_height="45dp"-->
+<!--            android:background="@drawable/btn_round_rounded_green"-->
+<!--            android:gravity="center"-->
+<!--            android:text="volver"-->
+<!--            android:textSize="18sp"-->
+<!--            app:backgroundTint="@null"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/btn_pause_round"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btn_pause_round"-->
+<!--            android:layout_width="140dp"-->
+<!--            android:layout_height="45dp"-->
+<!--            android:background="@drawable/btn_round_rounded_green"-->
+<!--            android:gravity="center"-->
+<!--            android:text="pausa"-->
+<!--            android:textSize="18sp"-->
+<!--            app:backgroundTint="@null"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btn_jump_round"-->
+<!--            android:layout_width="140dp"-->
+<!--            android:layout_height="45dp"-->
+<!--            android:background="@drawable/btn_round_rounded_green"-->
+<!--            android:gravity="center"-->
+<!--            android:text="Carga"-->
+<!--            android:textSize="18sp"-->
+<!--            app:backgroundTint="@null"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@id/btn_pause_round" />-->
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.lifecycle:lifecycle-runtime-ktx:2.5.0@aar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../TabletCamion/caches/transforms-3/13bab60e82a705e8c8c16fff7db0dbd1/transformed/jetified-lifecycle-runtime-ktx-2.5.0/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../TabletCamion/caches/transforms-3/13bab60e82a705e8c8c16fff7db0dbd1/transformed/jetified-lifecycle-runtime-ktx-2.5.0/res" />
+      <root url="file://$PROJECT_DIR$/../TabletCamion/caches/transforms-3/13bab60e82a705e8c8c16fff7db0dbd1/transformed/jetified-lifecycle-runtime-ktx-2.5.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/13bab60e82a705e8c8c16fff7db0dbd1/transformed/jetified-lifecycle-runtime-ktx-2.5.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/13bab60e82a705e8c8c16fff7db0dbd1/transformed/jetified-lifecycle-runtime-ktx-2.5.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/13bab60e82a705e8c8c16fff7db0dbd1/transformed/jetified-lifecycle-runtime-ktx-2.5.0/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../TabletCamion/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-runtime-ktx/2.5.0/6d338022f8fa82c24121d5d249fe5daeeb297742/lifecycle-runtime-ktx-2.5.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-runtime-ktx/2.5.0/6d338022f8fa82c24121d5d249fe5daeeb297742/lifecycle-runtime-ktx-2.5.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
