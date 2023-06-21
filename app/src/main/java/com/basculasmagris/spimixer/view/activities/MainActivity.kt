@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
+                R.id.nav_mixer_remoto,
                 R.id.nav_home,
                 R.id.nav_product,
                 R.id.nav_establishment,

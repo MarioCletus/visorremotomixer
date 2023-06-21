@@ -304,11 +304,15 @@
     <string name="msg_delete_round_sincronized_dialog">La ronda está sincronizada. Solo se puede borrar desde el servidor.</string>
     <string name="detener">Detener</string>
     <string name="resumen">Resumen</string>
+    <string name="add_remote_mixer">Añadir Mixer Remoto</string>
+    <string name="screen_remote_mixer_list">Mixers Remotos</string>
+    <string name="screen_remote_mixer_detail">Detalle del Mixer Remoto</string>
+    <string name="screen_remote_mixer_new">Nuevo Mixer Remoto</string>
+
     <string name="add_remote_viewer">Añadir Visor Remoto</string>
     <string name="screen_remote_viewer_list">Visores Remotos</string>
     <string name="screen_remote_viewer_detail">Detalle del  Visor Remoto</string>
     <string name="screen_remote_viewer_new">Nuevo Visor Remoto</string>
-
 
     <string name="title_activity_add_update_remote_viewer">AddUpdateRemoteViewerActivity</string>
     <!-- Strings used for fragments for navigation -->
@@ -333,6 +337,7 @@
     <string name="cantidad_animales">Cantidad de animales</string>
     <string name="alimento_animal">Alimento por animal</string>
     <string name="kg_por_animal">Kg por animal</string>
+    <string name="mixer_remoto">Mixer Remoto</string>
 
 
 </resources>

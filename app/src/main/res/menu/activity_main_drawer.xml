@@ -7,6 +7,10 @@
         android:id="@+id/group_activity"
         android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_mixer_remoto"
+            android:icon="@drawable/ic_tablet_48px"
+            android:title="Mixer Remoto" />
+        <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_route_new"
             android:title="@string/menu_round"/>
