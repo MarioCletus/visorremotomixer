@@ -2,6 +2,7 @@ package com.basculasmagris.visorremotomixer.view.activities
 
 import android.app.Activity
 import android.app.Dialog
+import android.bluetooth.BluetoothDevice
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -16,6 +17,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.core.edit
@@ -30,17 +32,23 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.basculasmagris.visorremotomixer.R
+import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
 import com.basculasmagris.visorremotomixer.databinding.ActivityMainBinding
 import com.basculasmagris.visorremotomixer.model.entities.Mixer
 import com.basculasmagris.visorremotomixer.model.entities.RemoteViewer
 import com.basculasmagris.visorremotomixer.model.entities.RoundRunDetail
 import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
 import com.basculasmagris.visorremotomixer.utils.Helper
+import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
 import com.basculasmagris.visorremotomixer.view.fragments.MixerListFragment
+import com.basculasmagris.visorremotomixer.view.fragments.MixerRemotoFragment
+import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModelFactory
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 val Context.datastore by preferencesDataStore(name = "PREFERENCIAS")
 class MainActivity : AppCompatActivity() {
@@ -59,6 +67,17 @@ class MainActivity : AppCompatActivity() {
     )
     // Bluetooth
     var mService: BluetoothSDKService? = null
+
+    private var selectedMixerInFragment: Mixer? = null
+    private var knowDevices: List<BluetoothDevice>? = null
+
+    // -------------------
+    // Mixer
+    // -------------------
+    private val mMixerViewModel: MixerViewModel by viewModels {
+        MixerViewModelFactory((application as SpiMixerApplication).mixerRepository)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,6 +144,10 @@ class MainActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+
+        mMixerViewModel.allMixerList.observe(this){
+            mService?.LocalBinder()?.getBondedDevices()
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -269,6 +292,44 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun getIdSavedRemoteViewer() = datastore.data.map { preferences->
+        preferences[longPreferencesKey("IDMIXER")]
+    }
+
+    fun getSavedMixer(){
+        lifecycleScope.launch(Dispatchers.IO){
+            Log.i(TAG,"getSavedMixer")
+            val flowLong = getSavedMixerId()
+            flowLong.collect {id->
+                if(id==null){
+                    return@collect
+                }
+                val localKnowDevice = mMixerViewModel.getMixerById(id)
+                lifecycleScope.launch {
+                    withContext(Dispatchers.Main) {
+                        localKnowDevice.observe(this@MainActivity){mixer->
+                            if (mixer != null){
+                                selectedMixerInFragment = mixer
+                                val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
+                                navHost?.let { navFragment ->
+                                    navFragment.childFragmentManager.primaryNavigationFragment?.let {fragment->
+                                        Log.i(TAG,"observe selectedMixerInFragment $selectedMixerInFragment")
+                                        if(fragment is HomeFragment){
+                                            fragment.setMixer(selectedMixerInFragment)
+                                        }
+                                        if(fragment is MixerRemotoFragment){
+                                            fragment.setMixer(selectedMixerInFragment)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getSavedMixerId() = datastore.data.map { preferences->
         preferences[longPreferencesKey("IDMIXER")]
     }
 

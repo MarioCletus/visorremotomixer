@@ -8,18 +8,17 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
-import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,12 +34,12 @@ import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.utils.Helper.Companion.getCurrentUser
 import com.basculasmagris.visorremotomixer.utils.Helper.Companion.setProgressDialog
 import com.basculasmagris.visorremotomixer.view.activities.*
-import com.basculasmagris.visorremotomixer.view.adapter.*
+import com.basculasmagris.visorremotomixer.view.adapter.CustomListItem
+import com.basculasmagris.visorremotomixer.view.adapter.CustomListItemAdapterFragment
+import com.basculasmagris.visorremotomixer.view.adapter.RoundRunAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.basculasmagris.visorremotomixer.viewmodel.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.map
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -54,6 +53,7 @@ class HomeFragment : BottomSheetDialogFragment() {
     private var knowDevices: List<BluetoothDevice>? = null
     var myMenu: Menu? = null
     private var dialog: AlertDialog? = null
+    private var activity : MainActivity? = null
 
     private lateinit var mBinding: FragmentHomeBinding
     private var liveData: MediatorLiveData<MergedLocalData>? = null
@@ -735,7 +735,8 @@ class HomeFragment : BottomSheetDialogFragment() {
         Log.i("run", "onViewCreated")
         mRoundViewModel.allRoundRunProgressDownloadList.observe(this){
             Log.i("run", "OBSERVE allRoundRunProgressDownloadList")
-            (requireActivity() as MainActivity).mLocalDetailRound.clear()
+            activity = (requireActivity() as MainActivity)
+            activity?.mLocalDetailRound?.clear()
             mLocalDetailRound.clear()
             mLocalDetailRoundRunReport.clear()
             mLocalRoundRunProgressDownload = it
@@ -837,7 +838,12 @@ class HomeFragment : BottomSheetDialogFragment() {
         super.onResume()
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
         getLocalData()
-        getSavedMixer()
+        Log.i(TAG,"onResume")
+        activity = this.getActivity() as MainActivity?
+        if(activity is MainActivity){
+            Log.i(TAG,"activity as MainActivity $activity")
+            (activity as MainActivity).getSavedMixer()
+        }
     }
 
     private fun alertMixer(msg: String) {
@@ -1100,33 +1106,6 @@ class HomeFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun getSavedMixer(){
-        lifecycleScope.launch(Dispatchers.IO){
-            val flowLong = getSavedMixerId()
-            flowLong.collect {id->
-                if(id==null){
-                    return@collect
-                }
-                val localKnowDevice = mMixerViewModel.getMixerById(id)
-                lifecycleScope.launch {
-                    withContext(Dispatchers.Main) {
-                        localKnowDevice.observe(this@HomeFragment){mixer->
-                            if (mixer != null){
-                                selectedMixerInFragment = mixer
-                                myMenu?.findItem(R.id.action_change_mixer)?.title = "  " + mixer.name
-                            }
-
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun getSavedMixerId() = (requireActivity() as MainActivity).datastore.data.map { preferences->
-        preferences[longPreferencesKey("IDMIXER")]
-    }
-
     fun connected(){
         val icBTStat = myMenu?.findItem(R.id.bluetooth_mixer_status)
         icBTStat?.icon?.setTint(R.color.white)
@@ -1164,6 +1143,10 @@ class HomeFragment : BottomSheetDialogFragment() {
         alertDialog.setCancelable(false)
         alertDialog.show()
 
+    }
+
+    fun setMixer(mixer : Mixer?) {
+        myMenu?.findItem(R.id.action_change_mixer)?.title = "  " + mixer?.name
     }
 }
 

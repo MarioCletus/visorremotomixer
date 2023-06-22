@@ -1,7 +1,6 @@
 package com.basculasmagris.visorremotomixer.view.fragments
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.bluetooth.BluetoothDevice
 import android.content.DialogInterface
 import android.os.Bundle
@@ -18,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.FragmentMixerRemotoBinding
+import com.basculasmagris.visorremotomixer.model.entities.Mixer
 import com.basculasmagris.visorremotomixer.model.entities.MixerDetail
 import com.basculasmagris.visorremotomixer.model.entities.ProductDetail
 import com.basculasmagris.visorremotomixer.model.entities.RoundRunDetail
@@ -50,7 +50,6 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
     private val TAG: String = "DEBMixerVR"
     private var dialogResto: AlertDialog? = null
     private var targetReachedDialog: AlertDialog? = null
-    private var rotationTimer: Timer? = null
     private var estableTimer: Timer? = null
     private var mixerWeight = 0.0
     private var totalMixerWeight: Double = 0.0
@@ -70,6 +69,9 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
     private var isConnected = false
     private var snackbar: Snackbar? = null
     private var dialogCountDown: AlertDialog? = null
+    private var selectedMixerInFragment: Mixer? = null
+    private var mixerBluetoothDevice : BluetoothDevice? = null
+    private var knowDevices: List<BluetoothDevice>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -131,7 +133,7 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
 
 
         //Conectar bluetooth
-        currentRoundRunDetail?.mixerBluetoothDevice?.let {
+        mixerBluetoothDevice?.let {
             activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
         }
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
@@ -200,8 +202,15 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
 
     override fun onResume() {
         super.onResume()
+        Log.i(TAG,"onResume")
+        activity = this.getActivity() as MainActivity?
+        Log.i(TAG,"activity $activity")
+        if(activity is MainActivity){
+            Log.i(TAG,"activity is MainActivity $activity")
+            activity!!.getSavedMixer()
+        }
 
-        estableTimer= Timer(false)
+        estableTimer = Timer(false)
         timerTask = object : TimerTask() {
             override fun run() {
                 Log.i("RUN", "mixerWeight:$mixerWeight | lastUpdate: $lastUpdate |  Time:${lastUpdate?.until(
@@ -262,20 +271,20 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
 
     private val mBluetoothListener: IBluetoothSDKListener = object : IBluetoothSDKListener {
         override fun onDiscoveryStarted() {
-            Log.i(TAG, "[StepLoad] ACT onDiscoveryStarted")
+            Log.i(TAG, "[MixRem] ACT onDiscoveryStarted")
         }
 
         override fun onDiscoveryStopped() {
-            Log.i(TAG, "[StepLoad] ACT onDiscoveryStopped")
+            Log.i(TAG, "[MixRem] ACT onDiscoveryStopped")
         }
 
         override fun onDeviceDiscovered(device: BluetoothDevice?) {
-            Log.i(TAG, "[StepLoad] ACT onDeviceDiscovered")
+            Log.i(TAG, "[MixRem] ACT onDeviceDiscovered")
         }
 
         override fun onDeviceConnected(device: BluetoothDevice?) {
             deviceConnected()
-            Log.i(TAG, "[StepLoad] ACT onDeviceConnected")
+            Log.i(TAG, "[MixRem] ACT onDeviceConnected")
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
@@ -290,7 +299,7 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
                 lastUpdate = LocalDateTime.now()
             }
             var currentMixerWeight = message?.substring(1, 7)?.toDoubleOrNull()
-            if (currentMixerWeight != null){
+            if (currentMixerWeight != null && currentRoundRunDetail != null){
                 currentMixerWeight = (currentMixerWeight- mixerDetail!!.tara)*mixerDetail!!.calibration
                 totalMixerWeight = currentMixerWeight
                 if(dialogResto!=null && dialogResto!!.isShowing){
@@ -337,28 +346,39 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
                 textView?.text = mBinding.tvCurrentProductWeightPending.text
             }
             mBinding.tvMixerLoaded.text = "${sign}${Helper.getNumberWithDecimals(loaded,0)}Kg"
-            mBinding.tvMixerTarget.text = "${signMixerTarget}${Helper.getNumberWithDecimals (mixerTarget, 0)}Kg"
+            if(currentMixerWeight != null){
+                mBinding.tvMixerTarget.text = "${Helper.getNumberWithDecimals(currentMixerWeight,0)}Kg"
+            }
             val percentage = (getCurrentWeight())*100/getTargetWeight()
             mBinding.pbCurrentMixer.progress = percentage.toInt()
-            (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).updateWeight(mixerWeight)
+//            (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).updateWeight(mixerWeight)
         }
 
         override fun onMessageSent(device: BluetoothDevice?) {
-            Log.i(TAG, "[StepLoad] ACT onMessageSent")
+            Log.i(TAG, "[MixRem] ACT onMessageSent")
         }
 
         override fun onError(message: String?) {
             deviceDisconnected()
-            Log.i(TAG, "[StepLoad] ACT onError")
+            Log.i(TAG, "[MixRem] ACT onError")
         }
 
         override fun onDeviceDisconnected() {
             deviceDisconnected()
-            Log.i(TAG, "[StepLoad]ACT onDeviceDisconnected")
+            Log.i(TAG, "[MixRem]ACT onDeviceDisconnected")
         }
 
         override fun onBondedDevices(device: List<BluetoothDevice>?) {
-            Log.i(TAG, "[StepLoad]ACT onBondedDevices")
+            Log.i(TAG, "[MixRem]ACT onBondedDevices ${device?.size} \n$device")
+            knowDevices = device
+
+            knowDevices?.forEach{
+                Log.i(TAG,"selectedMixerInFragment $selectedMixerInFragment \nbluetoothKnowed $it")
+                if(selectedMixerInFragment !=null && selectedMixerInFragment!!.mac == it.address){
+                    mixerBluetoothDevice = it
+                    Log.i(TAG,"Se seleccionó ${it.name} : ${it.address}")
+                }
+            }
         }
 
     }
@@ -370,8 +390,8 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
     }
 
     private fun cleanAll(){
+        estableTimer?.cancel()
         timerTask?.cancel()
-        rotationTimer?.cancel()
         activity!!.mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
     }
@@ -442,7 +462,7 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
     fun connectDevice(){
         if(!isConnected){
             snackbar?.dismiss()
-            currentRoundRunDetail?.mixerBluetoothDevice?.let { _blueToothDevice->
+            mixerBluetoothDevice?.let { _blueToothDevice->
                 activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(_blueToothDevice)
             }
             activity?.showCustomProgressDialog()
@@ -577,6 +597,9 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
                 deviceDisconnected()
                 if (showSnackbar){
                     showSnackbar = false
+                    if(!mBinding.viewFragmentMixerRemoto.isAttachedToWindow){
+                        return@runOnUiThread
+                    }
                     snackbar =
                         Snackbar.make(mBinding.viewFragmentMixerRemoto, "Se perdió la conexión",
                             BaseTransientBottomBar.LENGTH_INDEFINITE
@@ -584,8 +607,15 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
                     snackbar?.setAction(
                         "Reconectar"
                     ) {
-                        currentRoundRunDetail?.mixerBluetoothDevice?.let {
-                            activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                        Log.i(TAG,"mixerBluetoothDevice ${mixerBluetoothDevice} | selectedMixerInFragment $selectedMixerInFragment")
+                        if(mixerBluetoothDevice != null){
+                            mixerBluetoothDevice?.let {
+                                activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                            }
+                        }else{
+                            selectedMixerInFragment?.let { mixerS ->
+                                Log.i(TAG,"mixerBluetoothDevice null $selectedMixerInFragment")
+                                setMixer(mixerS) }
                         }
                         activity?.showCustomProgressDialog()
                         Timer().schedule(5000) {
@@ -636,5 +666,30 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
         }
         return totalLoadDiff.roundToLong().toDouble()
     }
+
+    fun setMixer(mixerIn: Mixer?) {
+        mixerIn.let {mixer ->
+            selectedMixerInFragment = mixer
+            mixer?.let { mixer1->
+                mixerDetail = MixerDetail(
+                    mixer1.name,
+                    mixer1.description,
+                    mixer1.mac,
+                    mixer1.btBox,
+                    mixer1.tara,
+                    mixer1.calibration,
+                    mixer1.rfid,
+                    mixer1.remoteId,
+                    mixer1.updatedDate,
+                    mixer1.archiveDate,
+                    mixer1.id
+                )
+            }
+            Log.i(TAG,"setMixer $mixer  \nmService ${(requireActivity() as MainActivity).mService}")
+            (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
+        }
+
+    }
+
 
 }
