@@ -2,14 +2,8 @@ package com.basculasmagris.visorremotomixer.view.activities
 
 import android.app.Activity
 import android.app.Dialog
-import android.bluetooth.BluetoothDevice
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.IBinder
 import android.text.TextUtils
 import android.util.Log
 import android.view.*
@@ -18,6 +12,7 @@ import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
@@ -25,9 +20,7 @@ import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
 import com.basculasmagris.visorremotomixer.databinding.ActivityAddUpdateMixerBinding
 import com.basculasmagris.visorremotomixer.model.entities.Mixer
-import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
 import com.basculasmagris.visorremotomixer.utils.Constants
-import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModelFactory
 import kotlinx.coroutines.runBlocking
@@ -39,8 +32,6 @@ class AddUpdateMixerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddUpdateMixerBinding
     private var mMixerDetails: Mixer? = null
     private var mNewMixerDetails: Mixer? = null
-    // Bluetooth
-    private lateinit var mService: BluetoothSDKService
 
     private val mMixerViewModel: MixerViewModel by viewModels {
         MixerViewModelFactory((application as SpiMixerApplication).mixerRepository)
@@ -108,8 +99,6 @@ class AddUpdateMixerActivity : AppCompatActivity() {
             }
         }
 
-        //binding.btnAddMixer.setOnClickListener(this)
-        //bindBluetoothService()
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         window.decorView.systemUiVisibility =
@@ -211,78 +200,6 @@ class AddUpdateMixerActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        //mService.LocalBinder().stopDiscovery()
-    }
-
-    //Bluetooth
-    private fun bindBluetoothService() {
-        // Bind to LocalService
-        Log.i("BLUE", "Se inicia servicio")
-        Intent(
-            this,
-            BluetoothSDKService::class.java
-        ).also { intent ->
-            Log.i("BLUE", "intent Se inicia servicio")
-            this.bindService(
-                intent,
-                connection,
-                Context.BIND_AUTO_CREATE
-            )
-        }
-    }
-
-    private val connection = object : ServiceConnection {
-        override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            val binder = service as BluetoothSDKService.LocalBinder
-            mService = binder.getService()
-            mService.LocalBinder().startDiscovery(this@AddUpdateMixerActivity)
-        }
-        override fun onServiceDisconnected(arg0: ComponentName) {
-            Log.i("BLUE", "[onServiceDisconnected] Se desconecta ")
-        }
-    }
-
-    private val mBluetoothListener: IBluetoothSDKListener = object : IBluetoothSDKListener {
-        override fun onDiscoveryStarted() {
-            Log.i("BLUE", "ACT onDiscoveryStarted")
-        }
-
-        override fun onDiscoveryStopped() {
-            Log.i("BLUE", "ACT onDiscoveryStopped")
-        }
-
-        override fun onDeviceDiscovered(device: BluetoothDevice?) {
-            Log.i("BLUE", "ACT onDeviceDiscovered")
-        }
-
-        override fun onDeviceConnected(device: BluetoothDevice?) {
-            // Do stuff when is connected
-            Log.i("${this.javaClass.name} BLUE", "ACT onDeviceConnected")
-        }
-
-        override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
-            Log.i("${this.javaClass.name} BLUE", "ACT onMessageReceived")
-        }
-
-        override fun onMessageSent(device: BluetoothDevice?) {
-            Log.i("${this.javaClass.name} BLUE", "ACT onMessageSent")
-        }
-
-        override fun onError(message: String?) {
-            Log.i("${this.javaClass.name} BLUE", "ACT onError")
-        }
-
-        override fun onDeviceDisconnected() {
-            Log.i("${this.javaClass.name} BLUE", "ACT onDeviceDisconnected")
-        }
-
-        override fun onBondedDevices(device: List<BluetoothDevice>?) {
-            Log.i("${this.javaClass.name} BLUE", "ACT onBondedDevices")
-        }
-
-    }
 
     fun toggleKeyboard() {
         if(isKeyBoardShowing()){

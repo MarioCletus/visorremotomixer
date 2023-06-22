@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:id="@+id/view_fragment_mixer_remoto"
     tools:context=".view.fragments.MixerRemotoFragment">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_mixer_products_to_load"
@@ -53,7 +50,7 @@
                     android:layout_height="80dp"
                     android:layout_marginEnd="5dp"
                     android:max="100"
-                    android:progressBackgmixerTint="@color/color_progress_bar_back"
+                    android:progressBackgroundTint="@color/color_progress_bar_back"
                     android:progressTint="@color/color_progress_bar"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -100,7 +97,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginEnd="5dp"
                     android:max="100"
-                    android:progressBackgmixerTint="@color/color_progress_bar_back"
+                    android:progressBackgroundTint="@color/color_progress_bar_back"
                     android:progressTint="@color/color_progress_bar"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -171,11 +168,11 @@
                     android:id="@+id/btn_tara"
                     android:layout_width="150dp"
                     android:layout_height="45dp"
-                    android:backgmixer="@drawable/btn_mixer_mixered_green"
+                    android:background="@drawable/btn_round_rounded_green"
                     android:gravity="center"
                     android:text="Tara"
                     android:textSize="18sp"
-                    app:backgmixerTint="@null"
+                    app:backgroundTint="@null"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
@@ -184,14 +181,14 @@
                     android:id="@+id/btn_pause"
                     android:layout_width="150dp"
                     android:layout_height="45dp"
-                    android:backgmixer="@drawable/btn_mixer_mixered_green"
+                    android:background="@drawable/btn_round_rounded_green"
                     android:gravity="center"
                     android:text="Pausa"
                     android:textOff="Pausa"
                     android:textOn="Continuar"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    app:backgmixerTint="@null"
+                    app:backgroundTint="@null"
                     app:layout_constraintStart_toEndOf="@id/btn_tara"
                     app:layout_constraintEnd_toStartOf="@id/btn_jump"
                     app:layout_constraintTop_toTopOf="parent"
@@ -200,11 +197,11 @@
                     android:id="@+id/btn_jump"
                     android:layout_width="150dp"
                     android:layout_height="45dp"
-                    android:backgmixer="@drawable/btn_mixer_mixered_green"
+                    android:background="@drawable/btn_round_rounded_green"
                     android:gravity="center"
                     android:text="Salto"
                     android:textSize="18sp"
-                    app:backgmixerTint="@null"
+                    app:backgroundTint="@null"
                     app:layout_constraintStart_toEndOf="@id/btn_pause"
                     app:layout_constraintEnd_toStartOf="@id/btn_rest"
                     app:layout_constraintTop_toTopOf="parent"
@@ -213,11 +210,11 @@
                     android:id="@+id/btn_rest"
                     android:layout_width="150dp"
                     android:layout_height="45dp"
-                    android:backgmixer="@drawable/btn_mixer_mixered_green"
+                    android:background="@drawable/btn_round_rounded_green"
                     android:gravity="center"
                     android:text="Resto"
                     android:textSize="18sp"
-                    app:backgmixerTint="@null"
+                    app:backgroundTint="@null"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
@@ -226,6 +223,5 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
-    </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

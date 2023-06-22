@@ -1,33 +1,36 @@
 package com.basculasmagris.visorremotomixer.view.fragments
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.bluetooth.BluetoothDevice
-import androidx.lifecycle.ViewModelProvider
+import android.content.DialogInterface
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.basculasmagris.visorremotomixer.viewmodel.MixerRemotoViewModel
 import com.basculasmagris.visorremotomixer.R
-import com.basculasmagris.visorremotomixer.databinding.FragmentStepLoadBinding
+import com.basculasmagris.visorremotomixer.databinding.FragmentMixerRemotoBinding
 import com.basculasmagris.visorremotomixer.model.entities.MixerDetail
 import com.basculasmagris.visorremotomixer.model.entities.ProductDetail
+import com.basculasmagris.visorremotomixer.model.entities.RoundRunDetail
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.utils.MarginItemDecoration
-import com.basculasmagris.visorremotomixer.view.activities.RoundRunActivity
+import com.basculasmagris.visorremotomixer.view.activities.MainActivity
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunProductAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.kofigyan.stateprogressbar.StateProgressBar
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -35,13 +38,15 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.concurrent.schedule
 import kotlin.math.roundToLong
 
 class MixerRemotoFragment : BottomSheetDialogFragment() {
 
 
     private var tick: Long = 0L
-    lateinit var mBinding: FragmentStepLoadBinding
+    lateinit var mBinding: FragmentMixerRemotoBinding
     private val TAG: String = "DEBMixerVR"
     private var dialogResto: AlertDialog? = null
     private var targetReachedDialog: AlertDialog? = null
@@ -53,14 +58,18 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
     private var timerTask: TimerTask? = null
     private var defaultStep = 5.0
     private var lastMessage = ""
-    private var activity: RoundRunActivity? = null
+    private var activity: MainActivity? = null
     private var noPrevAlert : Boolean = true
     private var countGreaterThanTarget: Int = 0
     private var currentProductDetail: ProductDetail? = null
     private var previousProductDetail: ProductDetail? =null
     private var contTara: Int = 0
-    private var stepsDescription = arrayOf("Configuración","Carga", "Descarga", "Fin")
     private var mixerDetail: MixerDetail? = null
+    var currentRoundRunDetail: RoundRunDetail? = null
+    private var showSnackbar = true
+    private var isConnected = false
+    private var snackbar: Snackbar? = null
+    private var dialogCountDown: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,19 +79,18 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity = (requireActivity() as RoundRunActivity)
+        activity = (requireActivity() as MainActivity)
         activity?.showCustomProgressDialog()
-        mBinding.spRoundRunStep.setStateDescriptionData(stepsDescription)
-        mBinding.spRoundRunStep.setCurrentStateNumber(StateProgressBar.StateNumber.TWO)
+
 
         mBinding.btnTara.setOnClickListener{
-            activity?.
+            
             customDialog("Tara","Seguro quiere hacer tara?")
         }
 
         mBinding.btnJump.setOnClickListener{
-            if((mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter).isLastProduct()){
-                targetReachedDialog = activity?.dialogAlertTargetWeight("descarga")
+            if((mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).isLastProduct()){
+                targetReachedDialog = dialogAlertTargetWeight("descarga")
             }else{
                 nextProduct()
             }
@@ -90,27 +98,27 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
 
         mBinding.btnRest.setOnClickListener{
             dialogResto = if(dialogResto==null){
-                activity?.customDialog("Resto","${totalMixerWeight.roundToLong()}Kg",40f, Gravity.CENTER)
+                customDialog("Resto","${totalMixerWeight.roundToLong()}Kg",40f, Gravity.CENTER)
             }else{
                 dialogResto?.dismiss()
                 null
             }
         }
 
-        activity?.currentRoundRunDetail?.round?.diet?.let { dietDetail ->
-            mBinding.rvRoundProductsToLoad.layoutManager = GridLayoutManager(requireActivity(), 1)
+        currentRoundRunDetail?.round?.diet?.let { dietDetail ->
+            mBinding.rvMixerProductsToLoad.layoutManager = GridLayoutManager(requireActivity(), 1)
             val roundRunProductAdapter =  RoundRunProductAdapter(
                 this@MixerRemotoFragment,
                 dietDetail,
                 defaultStep)
-            activity?.currentRoundRunDetail?.round?.diet?.products?.let { products ->
+            currentRoundRunDetail?.round?.diet?.products?.let { products ->
                 roundRunProductAdapter.productList(products)
             }
-            mBinding.rvRoundProductsToLoad.addItemDecoration(MarginItemDecoration(resources.getDimensionPixelSize(R.dimen.margin_recycler)))
-            mBinding.rvRoundProductsToLoad.adapter = roundRunProductAdapter
+            mBinding.rvMixerProductsToLoad.addItemDecoration(MarginItemDecoration(resources.getDimensionPixelSize(R.dimen.margin_recycler)))
+            mBinding.rvMixerProductsToLoad.adapter = roundRunProductAdapter
 
-            activity?.startAutomaticSave()
-            activity?.currentRoundRunDetail?.round?.diet?.products?.let { products ->
+
+            currentRoundRunDetail?.round?.diet?.products?.let { products ->
                 products.forEach{productDetail ->
                     if(productDetail.finalWeight == 0.0){
                         selectProduct(productDetail)
@@ -120,14 +128,14 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
                 }
             }
         }
-        activity?.refreshLogo()
+
 
         //Conectar bluetooth
-        activity?.currentRoundRunDetail?.mixerBluetoothDevice?.let {
+        currentRoundRunDetail?.mixerBluetoothDevice?.let {
             activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
         }
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
-        activity?.currentRoundRunDetail?.state = Constants.STATE_LOAD
+        currentRoundRunDetail?.state = Constants.STATE_LOAD
     }
 
     fun exitFragment(){
@@ -139,11 +147,12 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mBinding = FragmentStepLoadBinding.inflate(inflater, container, false)
+        mBinding = FragmentMixerRemotoBinding.inflate(inflater, container, false)
         return mBinding.root
     }
 
-    fun selectProduct(product: ProductDetail){
+
+    private fun selectProduct(product: ProductDetail){
         val targetProductWeight = product.targetWeight//Helper.getNumberWithDecimals(product.percentage*roundTargetWeight/100,0).toDouble()
         var value = targetProductWeight - (product.currentWeight-product.initialWeight)
         var sign = ""
@@ -151,7 +160,7 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
             sign = "+"
             value *= -1
         }
-        if((mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter).isLastProduct()){
+        if((mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).isLastProduct()){
             lastProduct()
         }else{
             noLastProduct()
@@ -166,16 +175,16 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
                 if(countGreaterThanTarget>10){
                     countGreaterThanTarget = 0
                     noPrevAlert = false
-                    val adapterProduct = (mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter)
+                    val adapterProduct = (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter)
                     val nextProductName = adapterProduct.getProduct(adapterProduct.selectedPosition + 1)?.name
                     targetReachedDialog = if(nextProductName.isNullOrEmpty()){
                         if(adapterProduct.isLastProduct()){
-                            activity?.dialogAlertTargetWeight("descarga")
+                            dialogAlertTargetWeight("descarga")
                         }else{
-                            activity?.dialogAlertTargetWeight()
+                            dialogAlertTargetWeight()
                         }
                     } else{
-                        activity?.dialogAlertTargetWeight(nextProductName)
+                        dialogAlertTargetWeight(nextProductName)
                     }
                 }
             }
@@ -200,7 +209,7 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
                 tick ++
                 if(tick == 3L){
                     MainScope().launch {
-                        activity?.connectDevice()
+                        connectDevice()
                     }
 
                 }
@@ -234,13 +243,13 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
                 if (lastUpdate != null){
                     if (lastUpdate!!.until(LocalDateTime.now(), ChronoUnit.SECONDS) > 5){
                         Log.i("RUN", "Conexión: NO | Tiempo: ${lastUpdate!!.until(LocalDateTime.now(), ChronoUnit.SECONDS)}")
-                        activity?.changeStatusConnection(false)
+                        changeStatusConnection(false)
                         Log.i(TAG,"changeStatusConnection(false) RRA 223")
                     } else {
                         Log.i("RUN", "Conexión: SI | Tiempo: ${lastUpdate!!.until(LocalDateTime.now(), ChronoUnit.SECONDS)}")
                         if(isAdded){
                             Log.i("RUN", "Change status connection rt")
-                            activity?.changeStatusConnection(true)
+                            changeStatusConnection(true)
                         }else{
                             Log.i("RUN", "Conexión: NO | Tiempo: ${lastUpdate!!.until(LocalDateTime.now(), ChronoUnit.SECONDS)}")
                         }
@@ -265,7 +274,7 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
         }
 
         override fun onDeviceConnected(device: BluetoothDevice?) {
-            (activity as RoundRunActivity).deviceConnected()
+            deviceConnected()
             Log.i(TAG, "[StepLoad] ACT onDeviceConnected")
         }
 
@@ -287,7 +296,7 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
                 if(dialogResto!=null && dialogResto!!.isShowing){
                     dialogResto!!.setMessage("${totalMixerWeight.roundToLong()}Kg")
                 }
-                mixerWeight = currentMixerWeight - activity?.currentRoundRunDetail?.customTara!! - activity?.currentRoundRunDetail?.addedBlend!!
+                mixerWeight = currentMixerWeight - currentRoundRunDetail?.customTara!! - currentRoundRunDetail?.addedBlend!!
                 if(previousProductDetail != null && currentProductDetail != null &&
                     previousProductDetail!!.id != currentProductDetail!!.id
                 ){
@@ -295,12 +304,12 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
                             "\n!=\ncurrentProductDetail $currentProductDetail |\ninitialWeight $mixerWeight")
                     previousProductDetail = currentProductDetail
                     currentProductDetail?.initialWeight = mixerWeight
-                    (mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter).updateInicial(mixerWeight)
+                    (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).updateInicial(mixerWeight)
                 }
             }
 
             var actualWeight = 0.0
-            activity?.currentRoundRunDetail?.round?.diet?.products?.forEach {
+            currentRoundRunDetail?.round?.diet?.products?.forEach {
                 actualWeight += it.currentWeight - it.initialWeight
             }
 
@@ -310,14 +319,14 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
             }
 
             lastUpdate = LocalDateTime.now()
-            var loaded = activity!!.getCurrentWeight()// + additional
+            var loaded = getCurrentWeight()// + additional
             var sign = ""
             if(loaded <0 ){
                 loaded *= -1
                 sign = "+"
             }
             var signMixerTarget = ""
-            var mixerTarget =  activity!!.getTargetWeight()
+            var mixerTarget =  getTargetWeight()
             if(mixerTarget<0){
                 mixerTarget *= -1
                 signMixerTarget = "+"
@@ -329,9 +338,9 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
             }
             mBinding.tvMixerLoaded.text = "${sign}${Helper.getNumberWithDecimals(loaded,0)}Kg"
             mBinding.tvMixerTarget.text = "${signMixerTarget}${Helper.getNumberWithDecimals (mixerTarget, 0)}Kg"
-            val percentage = (activity!!.getCurrentWeight())*100/activity!!.getTargetWeight()
+            val percentage = (getCurrentWeight())*100/getTargetWeight()
             mBinding.pbCurrentMixer.progress = percentage.toInt()
-            (mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter).updateWeight(mixerWeight)
+            (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).updateWeight(mixerWeight)
         }
 
         override fun onMessageSent(device: BluetoothDevice?) {
@@ -339,12 +348,12 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
         }
 
         override fun onError(message: String?) {
-            (activity as RoundRunActivity).deviceDisconnected()
+            deviceDisconnected()
             Log.i(TAG, "[StepLoad] ACT onError")
         }
 
         override fun onDeviceDisconnected() {
-            (activity as RoundRunActivity).deviceDisconnected()
+            deviceDisconnected()
             Log.i(TAG, "[StepLoad]ACT onDeviceDisconnected")
         }
 
@@ -360,7 +369,7 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
         Log.i("RUN", "CANCELADO Simular bluetooth")
     }
 
-    fun cleanAll(){
+    private fun cleanAll(){
         timerTask?.cancel()
         rotationTimer?.cancel()
         activity!!.mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
@@ -371,7 +380,7 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
         noPrevAlert = true
         mBinding.btnPause.isChecked = false
         countGreaterThanTarget = 0
-        val adapteProduct =(mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter)
+        val adapteProduct =(mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter)
         mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(activity!!, R.color.white))
         if(adapteProduct.isLastProduct()){
             adapteProduct.lastProductClose()
@@ -387,7 +396,7 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
             Log.i(TAG, "[StepDownload] Tare - Initial: ${currentProductDetail?.initialWeight}    | MixerWeight $mixerWeight  | currentWeight ${currentProductDetail?.currentWeight}" )
             Log.i(TAG, "[StepDownload] Tare - currentProducDetail: $currentProductDetail" )
 
-            activity?.currentRoundRunDetail?.round?.diet?.products?.forEach {
+            currentRoundRunDetail?.round?.diet?.products?.forEach {
                 if(it.id == currentProductDetail?.id){
                     it.currentWeight = mixerWeight
                     Log.i(TAG,"Tare $currentProductDetail initialWeight $mixerWeight")
@@ -395,18 +404,18 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
                     return@forEach
                 }
             }
-            (mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter).tare(mixerWeight)
+            (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).tare(mixerWeight)
             delay(100)
             return@launch
         }
     }
 
-    fun getCurrentProduct(): ProductDetail? {
+    private fun getCurrentProduct(): ProductDetail? {
         return previousProductDetail
     }
 
 
-    fun lastProduct() {
+    private fun lastProduct() {
         mBinding.btnJump.text = getString(R.string.descarga)
     }
 
@@ -420,5 +429,212 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
         selectProduct(product)
     }
 
+
+
+    fun deviceDisconnected() {
+        isConnected = false
+    }
+
+    fun deviceConnected() {
+        isConnected = true
+    }
+
+    fun connectDevice(){
+        if(!isConnected){
+            snackbar?.dismiss()
+            currentRoundRunDetail?.mixerBluetoothDevice?.let { _blueToothDevice->
+                activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(_blueToothDevice)
+            }
+            activity?.showCustomProgressDialog()
+            Timer().schedule(5000) {
+                activity?.hideCustomProgressDialog()
+                showSnackbar = true
+                Log.i(TAG,"changeStatusConnection(false) RRA 727")
+                changeStatusConnection(false)
+            }
+        }
+    }
+
+    private fun customDialog(title: String, message: String, fontSize : Float = 0F, gravity: Int = 0) : AlertDialog? {
+        val dialogBuilder = AlertDialog.Builder(activity?.applicationContext)
+
+        // set message of alert dialog
+        dialogBuilder.setMessage(message)
+            .setCancelable(false)
+            .setPositiveButton("Aceptar") { _, _ ->
+                    tare()
+
+            }
+            .setNegativeButton("Cancelar") { dialog, _ ->
+                dialog.dismiss()
+            }
+        val alert = dialogBuilder.create()
+        alert.setTitle(title)
+        alert.show()
+        if(fontSize>0){
+            val textView : TextView = alert.findViewById(android.R.id.message)
+            textView.textSize = fontSize
+        }
+        if(gravity != Gravity.NO_GRAVITY){
+            val textView : TextView = alert.findViewById(android.R.id.message)
+            textView.gravity = gravity
+        }
+        return alert
+    }
+
+    private fun dialogAlertTargetWeight(nextItem : String ="", strKg :String="") : AlertDialog? {
+        if(dialogCountDown != null && dialogCountDown!!.isShowing ){
+            return dialogCountDown
+        }
+        var title: String? = null
+        var message: String? = null
+        val strkg : String =  strKg
+        if(getCurrentProduct()!=null){
+            title = getCurrentProduct()!!.name
+            message = if(nextItem.isNotEmpty()){
+                "Se pasa a $nextItem"
+            }else{
+                "Se va a pasar al proximo producto! "
+            }
+        }
+
+        val builder = AlertDialog.Builder(activity?.applicationContext)
+            .create()
+        val  view = layoutInflater.inflate(R.layout.dialog_custom_target_weight_reached,null)
+        val  btnAcept = view.findViewById<Button>(R.id.btn_dialog_acept)
+        val  btnCancel = view.findViewById<Button>(R.id.btn_dialog_cancel)
+        val  tvTitle = view.findViewById<TextView>(R.id.tv_dialog_title)
+        val  tvMessage = view.findViewById<TextView>(R.id.tv_dialog_message)
+        val  tvCount = view.findViewById<TextView>(R.id.tv_dialog_count)
+        if(getCurrentProduct()!=null){
+            title = getCurrentProduct()!!.name
+            message = if(nextItem.isNotEmpty()){
+                "Se pasa a $nextItem"
+            }else{
+                "Se va a pasar al proximo producto! "
+            }
+        }
+
+        if(title==null || message == null){
+            return null
+        }
+        builder.setView(view)
+        tvMessage.text = message
+        tvTitle.text = title
+        btnAcept.setOnClickListener {
+            if(getCurrentProduct()!=null){
+                nextProduct()
+            }
+            builder.dismiss()
+        }
+        btnCancel.setOnClickListener {
+            builder.dismiss()
+        }
+        builder.setCanceledOnTouchOutside(false)
+
+        builder.setOnShowListener(object : DialogInterface.OnShowListener {
+            private val AUTO_DISMISS_MILLIS = 10000
+            override fun onShow(dialog: DialogInterface) {
+                (dialog as AlertDialog)
+                object : CountDownTimer(AUTO_DISMISS_MILLIS.toLong(), 100) {
+                    override fun onTick(millisUntilFinished: Long) {
+                        tvCount?.text = String.format(
+                            Locale.getDefault(), "%s (%d)",
+                            strkg,
+                            TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) + 1 //add one so it never displays zero
+                        )
+                    }
+
+                    override fun onFinish() {
+                        if (dialog.isShowing) {
+                            nextProduct()
+                            dialog.dismiss()
+                            dialogCountDown = null
+                        }
+                    }
+                }.start()
+            }
+
+        })
+
+        builder.show()
+        dialogCountDown = builder
+        return dialogCountDown
+    }
+
+    private var antStatus : Boolean = false
+    fun changeStatusConnection(bConnected: Boolean){
+        activity?.runOnUiThread {
+            if(antStatus != bConnected){
+                Log.i(TAG, "changeStatusConnection $bConnected")
+                antStatus = bConnected
+            }
+            if (bConnected) {
+                showSnackbar = true
+                deviceConnected()
+                snackbar?.dismiss()
+            } else {
+                deviceDisconnected()
+                if (showSnackbar){
+                    showSnackbar = false
+                    snackbar =
+                        Snackbar.make(mBinding.viewFragmentMixerRemoto, "Se perdió la conexión",
+                            BaseTransientBottomBar.LENGTH_INDEFINITE
+                        )
+                    snackbar?.setAction(
+                        "Reconectar"
+                    ) {
+                        currentRoundRunDetail?.mixerBluetoothDevice?.let {
+                            activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                        }
+                        activity?.showCustomProgressDialog()
+                        Timer().schedule(5000) {
+                            activity?.hideCustomProgressDialog()
+                            showSnackbar = true
+                            changeStatusConnection(false)
+                            Log.i(TAG,"changeStatusConnection(false) RRF 174")
+                        }
+                    }
+                    snackbar?.show()
+                }
+
+            }
+        }
+    }
+
+
+
+    fun getCurrentWeight() : Double {
+        var currentWeight = 0.0
+        currentRoundRunDetail?.round?.diet?.products?.forEach {
+            currentWeight += it.currentWeight-it.initialWeight
+        }
+        return currentWeight.roundToLong().toDouble()
+    }
+
+    fun getFinalLoad() : Double {
+        var currentWeight = 0.0
+        currentRoundRunDetail?.round?.diet?.products?.forEach {
+            currentWeight += it.finalWeight - it.initialWeight
+        }
+        return currentWeight.roundToLong().toDouble()
+    }
+
+    fun getTargetWeight() : Double {
+        var targetWeight = 0.0
+
+        currentRoundRunDetail?.round?.corrals?.forEach {
+            targetWeight += it.actualTargetWeight
+        }
+        return targetWeight.roundToLong().toDouble()
+    }
+
+    fun getLoadDifference() : Double {
+        var totalLoadDiff = 0.0
+        currentRoundRunDetail?.round?.diet?.products?.forEach { productDetail->
+            totalLoadDiff += ((productDetail.finalWeight-productDetail.initialWeight)-productDetail.targetWeight )
+        }
+        return totalLoadDiff.roundToLong().toDouble()
+    }
 
 }
