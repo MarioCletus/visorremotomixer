@@ -1,6 +1,5 @@
 # Project exclude paths
 /.gradle/
-/app/build/
 /app/build/intermediates/javac/debug/classes/
 *.iml
 .gradle
@@ -12,9 +11,9 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
-/build
 /captures
 .externalNativeBuild
 .cxx
 local.properties
 /app/schemas/com.basculasmagris.visorremotomixer.model.database.SpiMixerRoomDatabase/1.json
+/gradle/
