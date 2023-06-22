@@ -11,14 +11,18 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="DEBHome|DEBConfig|E/A|DEBUG|DEBDow|DEBLoad|DEBRound|DataRoundRunDetail|SERVER" />
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="DEBMixerVR|DEBMain|DEBHome|E/And" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02975933-13bd-409a-9671-b2a930ca064e" name="Changes" comment="Update" />
+    <list default="true" id="02975933-13bd-409a-9671-b2a930ca064e" name="Changes" comment="Update">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -234,27 +238,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1668517987349</updated>
-    </task>
-    <task id="LOCAL-00035" summary="se linkea RoundDetailFragment a la tarjeta de ronda.&#10;Se creo el boton resumen en la tarjeta de ronda y se creo el link. El resumen no está mostrando los datos.">
-      <created>1683476794186</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1683476794186</updated>
-    </task>
-    <task id="LOCAL-00036" summary="Se agrega inicio directo a StepLoadFragment.kt StepDownloadFragment.kt luego de una interrupcion decarga/descarga">
-      <created>1683806520209</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1683806520209</updated>
-    </task>
-    <task id="LOCAL-00037" summary="Se cambió la forma de calculo de pesaje. Ahora el peso de cada uno de los productos o corrales, se calculo conla formula PesoFinal - PesoInicial en carga y PesoInicial - PesoFinal en descarga.">
-      <created>1683979161573</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1683979161573</updated>
     </task>
     <task id="LOCAL-00038" summary="Se arregla ReportFragment.kt">
       <created>1683991862776</created>
@@ -578,7 +561,28 @@
       <option name="project" value="LOCAL" />
       <updated>1687434185148</updated>
     </task>
-    <option name="localTasksCounter" value="84" />
+    <task id="LOCAL-00084" summary="Update">
+      <created>1687442948812</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1687442948812</updated>
+    </task>
+    <task id="LOCAL-00085" summary="Update">
+      <created>1687443782099</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1687443782099</updated>
+    </task>
+    <task id="LOCAL-00086" summary="Update">
+      <created>1687451513457</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1687451513457</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
