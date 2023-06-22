@@ -235,13 +235,6 @@
       <option name="presentableId" value="Default" />
       <updated>1668517987349</updated>
     </task>
-    <task id="LOCAL-00034" summary="correcciones varias en proceso de carga/descarga">
-      <created>1683471926880</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1683471926880</updated>
-    </task>
     <task id="LOCAL-00035" summary="se linkea RoundDetailFragment a la tarjeta de ronda.&#10;Se creo el boton resumen en la tarjeta de ronda y se creo el link. El resumen no está mostrando los datos.">
       <created>1683476794186</created>
       <option name="number" value="00035" />
@@ -578,7 +571,14 @@
       <option name="project" value="LOCAL" />
       <updated>1687433950621</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="Update">
+      <created>1687434185148</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1687434185148</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
