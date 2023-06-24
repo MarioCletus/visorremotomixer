@@ -141,5 +141,7 @@ object Constants {
     const val STATE_FINISH = 10
     const val STATE_INTERRUPT = 11
 
-
+    //Remote comunication protocol
+    val CMD_INIT: Int = 100000
+    val CMD_CRRD: Int = 100001
 }

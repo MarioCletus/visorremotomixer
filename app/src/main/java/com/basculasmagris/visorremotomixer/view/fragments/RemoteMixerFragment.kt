@@ -41,7 +41,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
 
     private var waitInit: Boolean = true
-    private val INIT_CMD: Int = 0x1A3
     private var tick: Long = 0L
     lateinit var mBinding: FragmentRemoteMixerBinding
     private val TAG: String = "DEBMixerVR"
@@ -320,8 +319,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             var currentMixerWeight = message?.substring(1, 7)?.toDoubleOrNull()
             if(currentMixerWeight != null){
                 if(tick - messageTickRecord  > 20){
-                    Log.i(TAG,"Send INIT_CMD")
-                    activity?.mService?.LocalBinder()?.write(INIT_CMD.toString())
+                    val msg = "CMD${Constants.CMD_CRRD}"
+                    Log.i(TAG,"Send INIT_CMD $msg")
+                    activity?.mService?.LocalBinder()?.write(msg.toByteArray())
                     waitInit = true
                     messageTickRecord = tick
                 }

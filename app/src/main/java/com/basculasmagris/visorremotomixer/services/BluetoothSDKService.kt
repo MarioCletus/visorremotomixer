@@ -156,6 +156,9 @@ class BluetoothSDKService : Service() {
             connectThreadWithTransfer?.write(msg)
         }
 
+        fun write(command : ByteArray) {
+            connectThreadWithTransfer?.write(command)
+        }
         // other stuff
     }
 
