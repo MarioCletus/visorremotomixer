@@ -17,11 +17,11 @@ class BluetoothSDKListenerHelper {
         class BluetoothSDKBroadcastReceiver : BroadcastReceiver() {
             private var mGlobalListener: IBluetoothSDKListener? = null
 
-            public fun setBluetoothSDKListener(listener: IBluetoothSDKListener) {
+            fun setBluetoothSDKListener(listener: IBluetoothSDKListener) {
                 mGlobalListener = listener
             }
 
-            public fun removeBluetoothSDKListener(listener: IBluetoothSDKListener): Boolean {
+            fun removeBluetoothSDKListener(listener: IBluetoothSDKListener): Boolean {
                 if (mGlobalListener == listener) {
                     mGlobalListener = null
                 }
@@ -31,7 +31,7 @@ class BluetoothSDKListenerHelper {
 
             override fun onReceive(context: Context?, intent: Intent?) {
 //                Log.i("BLUE", "Helper onReceive: ${intent?.action}")
-                val message = intent!!.getStringExtra(BluetoothUtils.EXTRA_MESSAGE)
+
                 val devices =
                     intent!!.getParcelableArrayListExtra<BluetoothDevice>(BluetoothUtils.EXTRA_DEVICES)
 
@@ -40,7 +40,6 @@ class BluetoothSDKListenerHelper {
                         devices?.let {
                             mGlobalListener!!.onDeviceDiscovered(it[0])
                         }
-
                     }
                     BluetoothUtils.ACTION_DISCOVERY_STARTED -> {
                         mGlobalListener!!.onDiscoveryStarted()
@@ -55,8 +54,16 @@ class BluetoothSDKListenerHelper {
                         }
                     }
                     BluetoothUtils.ACTION_MESSAGE_RECEIVED -> {
+                        val message = intent.getStringExtra(BluetoothUtils.EXTRA_MESSAGE)
                         devices?.let {
                             mGlobalListener!!.onMessageReceived(it[0], message)
+                        }
+                    }
+                    BluetoothUtils.ACTION_COMMAND_RECEIVED -> {
+                        val command = intent.getByteArrayExtra(BluetoothUtils.EXTRA_COMMAND)
+                        Log.i("DEBBTS","ACTION_COMMAND_RECEIVED")
+                        devices?.let {
+                            mGlobalListener!!.onCommandReceived(it[0], command)
                         }
                     }
                     BluetoothUtils.ACTION_MESSAGE_SENT -> {
@@ -65,6 +72,7 @@ class BluetoothSDKListenerHelper {
                         }
                     }
                     BluetoothUtils.ACTION_CONNECTION_ERROR -> {
+                        val message = intent!!.getStringExtra(BluetoothUtils.EXTRA_MESSAGE)
                         mGlobalListener!!.onError(message)
                     }
                     BluetoothUtils.ACTION_DEVICE_DISCONNECTED -> {
@@ -77,7 +85,7 @@ class BluetoothSDKListenerHelper {
             }
         }
 
-        public fun registerBluetoothSDKListener(
+        fun registerBluetoothSDKListener(
             context: Context?,
             listener: IBluetoothSDKListener
         ) {
@@ -93,6 +101,7 @@ class BluetoothSDKListenerHelper {
                     it.addAction(BluetoothUtils.ACTION_DISCOVERY_STOPPED)
                     it.addAction(BluetoothUtils.ACTION_DEVICE_CONNECTED)
                     it.addAction(BluetoothUtils.ACTION_MESSAGE_RECEIVED)
+                    it.addAction(BluetoothUtils.ACTION_COMMAND_RECEIVED)
                     it.addAction(BluetoothUtils.ACTION_MESSAGE_SENT)
                     it.addAction(BluetoothUtils.ACTION_CONNECTION_ERROR)
                     it.addAction(BluetoothUtils.ACTION_DEVICE_DISCONNECTED)
@@ -108,7 +117,7 @@ class BluetoothSDKListenerHelper {
             mBluetoothSDKBroadcastReceiver!!.setBluetoothSDKListener(listener)
         }
 
-        public fun unregisterBluetoothSDKListener(
+        fun unregisterBluetoothSDKListener(
             context: Context?,
             listener: IBluetoothSDKListener
         ) {

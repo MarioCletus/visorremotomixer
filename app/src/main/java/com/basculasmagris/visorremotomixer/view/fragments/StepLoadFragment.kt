@@ -261,6 +261,9 @@ class StepLoadFragment(mixerDetail: MixerDetail) : BottomSheetDialogFragment() {
             Log.i(TAG, "[StepLoad] ACT onDeviceConnected")
         }
 
+        override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
+        }
+
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             lastMessage = "No se están recibiendo datos"
             message?.let{

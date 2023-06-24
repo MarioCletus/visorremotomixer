@@ -152,6 +152,10 @@ class BluetoothSDKService : Service() {
             return connectThreadWithTransfer?.isConnected() ?: false
         }
 
+        fun write(msg : String) {
+            connectThreadWithTransfer?.write(msg)
+        }
+
         // other stuff
     }
 
@@ -283,23 +287,27 @@ class BluetoothSDKService : Service() {
         fun isConnected(): Boolean {
             return connectedThread?.isConnected() ?: false
         }
+
+        fun write(msg : ByteArray){
+            connectedThread?.write(msg)
+        }
+
+        fun write(msg : String){
+            connectedThread?.write(msg)
+        }
     }
 
     private inner class ConnectedThread(private val mmSocket: BluetoothSocket) : Thread() {
         private val mmInStream: InputStream = mmSocket.inputStream
         private val mmOutStream: OutputStream = mmSocket.outputStream
-        private val mmBuffer: ByteArray = ByteArray(1024) // mmBuffer store for the stream
+        private val mmBuffer: ByteArray = ByteArray(4096) // mmBuffer store for the stream
         private var isConnected : Boolean = false
 
         override fun run() {
             Log.i("BLUE", "BEGIN ConnectedThread");
             var numBytes: Int // bytes returned from read()
             // Keep listening to the InputStream until an exception occurs.
-            pushBroadcastMessage(
-                BluetoothUtils.ACTION_DEVICE_CONNECTED,
-                arrayListOf(mmSocket.remoteDevice),
-                null
-            )
+            pushBroadcastMessage(BluetoothUtils.ACTION_DEVICE_CONNECTED,arrayListOf(mmSocket.remoteDevice),null)
             isConnected = true
             while (true) {
                 // Read from the InputStream.
@@ -308,25 +316,24 @@ class BluetoothSDKService : Service() {
                 } catch (e: IOException) {
                     Log.i("BLUE", "Errno Bytes: ${e.message}")
                     isConnected = false
-                    pushBroadcastMessage(
-                        BluetoothUtils.ACTION_CONNECTION_ERROR,
-                        null,
-                        "Input stream was disconnected"
-                    )
+                    pushBroadcastMessage(BluetoothUtils.ACTION_CONNECTION_ERROR,null,"Input stream was disconnected")
                     break
                 }
                 isConnected = true
-                val message = String(mmBuffer, 0, numBytes)
-
-                // Send to broadcast the message
-                pushBroadcastMessage(
-                    BluetoothUtils.ACTION_MESSAGE_RECEIVED,
-                    arrayListOf(mmSocket.remoteDevice),
-                    message
-                )
-
-                serverController.write(message)
+                val arrayCommand : ByteArray = mmBuffer.copyOfRange(3,numBytes)
+                if(numBytes >3 && mmBuffer.copyOfRange(0,3).contentEquals("CMD".toByteArray())){
+                    Log.i("DEBBTS","CMD "+ numBytes)
+                    pushBroadcastCommand(BluetoothUtils.ACTION_COMMAND_RECEIVED, arrayListOf(mmSocket.remoteDevice), arrayCommand)
+                }else{
+                    // Send to broadcast the message
+                    val message = String(mmBuffer, 0, numBytes)
+                    pushBroadcastMessage(BluetoothUtils.ACTION_MESSAGE_RECEIVED, arrayListOf(mmSocket.remoteDevice), message)
+                }
             }
+        }
+
+        fun write(msg: String){
+            write(msg.toByteArray())
         }
 
         // Call this from the main activity to send data to the remote device.
@@ -335,17 +342,9 @@ class BluetoothSDKService : Service() {
                 mmOutStream.write(bytes)
 
                 // Send to broadcast the message
-                pushBroadcastMessage(
-                    BluetoothUtils.ACTION_MESSAGE_SENT,
-                    arrayListOf(mmSocket.remoteDevice),
-                    null
-                )
+                pushBroadcastMessage(BluetoothUtils.ACTION_MESSAGE_SENT, arrayListOf(mmSocket.remoteDevice), null)
             } catch (e: IOException) {
-                pushBroadcastMessage(
-                    BluetoothUtils.ACTION_CONNECTION_ERROR,
-                    null,
-                    "Error occurred when sending data"
-                )
+                pushBroadcastMessage(BluetoothUtils.ACTION_CONNECTION_ERROR, null, "Error occurred when sending data")
                 return
             }
         }
@@ -359,17 +358,14 @@ class BluetoothSDKService : Service() {
                     mmSocket.close()
                 }
             } catch (e: IOException) {
-                pushBroadcastMessage(
-                    BluetoothUtils.ACTION_CONNECTION_ERROR,
-                    null,
-                    "Could not close the connect socket"
-                )
+                pushBroadcastMessage(BluetoothUtils.ACTION_CONNECTION_ERROR, null, "Could not close the connect socket")
             }
         }
 
         fun isConnected(): Boolean {
             return isConnected
         }
+
     }
 
     override fun onDestroy() {
@@ -396,6 +392,21 @@ class BluetoothSDKService : Service() {
 
         if (message != null) {
             intent.putExtra(BluetoothUtils.EXTRA_MESSAGE, message)
+        }
+        LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+    }
+
+    private fun pushBroadcastCommand(action: String, devices: ArrayList<BluetoothDevice>?, command: ByteArray?) {
+        val intent = Intent(action)
+
+        devices?.let {
+            if (it.size > 0) {
+                intent.putParcelableArrayListExtra(BluetoothUtils.EXTRA_DEVICES, devices)
+            }
+        }
+
+        if (command != null) {
+            intent.putExtra(BluetoothUtils.EXTRA_COMMAND, command)
         }
         LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
     }
@@ -461,6 +472,13 @@ class BluetoothSDKService : Service() {
             }
         }
 
+
+        fun write(msg: ByteArray) {
+            bluetoothServerList.forEach{
+                it.write(msg)
+            }
+        }
+
         fun write(message: String?){
             bluetoothServerList.forEach{
                 it.write(message)
@@ -495,6 +513,17 @@ class BluetoothSDKService : Service() {
                 outputStream.close()
                 socket.close()
                 bluetoothServerList.contains(this)
+            }
+        }
+
+
+
+        fun write(message: ByteArray) {
+            try {
+                outputStream.write(message)
+                // Send to broadcast the message
+            } catch (e: IOException) {
+                return
             }
         }
 

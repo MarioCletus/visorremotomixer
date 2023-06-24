@@ -41,7 +41,7 @@ import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
 import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
 import com.basculasmagris.visorremotomixer.view.fragments.MixerListFragment
-import com.basculasmagris.visorremotomixer.view.fragments.MixerRemotoFragment
+import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
 import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModelFactory
 import com.google.android.material.navigation.NavigationView
@@ -316,7 +316,7 @@ class MainActivity : AppCompatActivity() {
                                         if(fragment is HomeFragment){
                                             fragment.setMixer(selectedMixerInFragment)
                                         }
-                                        if(fragment is MixerRemotoFragment){
+                                        if(fragment is RemoteMixerFragment){
                                             fragment.setMixer(selectedMixerInFragment)
                                         }
                                     }

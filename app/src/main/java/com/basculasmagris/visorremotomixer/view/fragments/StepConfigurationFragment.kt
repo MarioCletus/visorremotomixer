@@ -427,6 +427,8 @@ class StepConfigurationFragment(mixerDetail: MixerDetail?) : Fragment() {
             (activity as RoundRunActivity).deviceConnected()
             Log.i(TAG, "[StepConfigurationFragment] ACT onDeviceConnected")
         }
+        override fun onCommandReceived(device: BluetoothDevice?, command: ByteArray?) {
+        }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             lastUpdate = LocalDateTime.now()

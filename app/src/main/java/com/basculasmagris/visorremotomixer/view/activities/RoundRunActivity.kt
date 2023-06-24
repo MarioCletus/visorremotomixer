@@ -176,7 +176,7 @@ class RoundRunActivity : AppCompatActivity() {
                             hideCustomProgressDialog()
                             showSnackbar = true
                             changeStatusConnection(false)
-                            Log.i(TAG,"changeStatusConnection(false) RRF 174")
+                            Log.i(TAG,"changeStatusConnection(false) RRA 179")
                         }
                     }
                     snackbar?.show()
@@ -206,7 +206,7 @@ class RoundRunActivity : AppCompatActivity() {
                         _dialog.dismiss()
 //                        finish()
                         changeStatusConnection(false)
-                        Log.i(TAG,"changeStatusConnection(false) RRA 203")
+                        Log.i(TAG,"changeStatusConnection(false) RRA 209")
                     }
                     builder.show()
                 }
@@ -770,7 +770,7 @@ class RoundRunActivity : AppCompatActivity() {
             Timer().schedule(5000) {
                 hideCustomProgressDialog()
                 showSnackbar = true
-                Log.i(TAG,"changeStatusConnection(false) RRA 727")
+                Log.i(TAG,"changeStatusConnection(false) RRA 773")
                 changeStatusConnection(false)
             }
         }

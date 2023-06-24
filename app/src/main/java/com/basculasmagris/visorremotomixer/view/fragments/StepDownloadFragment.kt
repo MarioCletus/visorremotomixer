@@ -100,7 +100,7 @@ class StepDownloadFragment(mixerDetail: MixerDetail) : Fragment() {
                 if (lastUpdate != null){
                     if (lastUpdate!!.until(LocalDateTime.now(), ChronoUnit.SECONDS) > 5){
                         Log.i("RUN", "Conexión: NO | Tiempo: ${lastUpdate!!.until(LocalDateTime.now(), ChronoUnit.SECONDS)}")
-                        Log.i(TAG,"changeStatusConnection(false) RRA 223")
+                        Log.i(TAG,"changeStatusConnection(false) STD 103")
                         activity?.changeStatusConnection(false)
                     } else {
                         Log.i("RUN", "Conexión: SI | Tiempo: ${lastUpdate!!.until(LocalDateTime.now(), ChronoUnit.SECONDS)}")
@@ -263,6 +263,9 @@ class StepDownloadFragment(mixerDetail: MixerDetail) : Fragment() {
             Log.i(TAG, "[StepDownload] ACT onDeviceConnected")
         }
 
+        override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
+        }
+
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             lastMessage = "No se están recibiendo datos"
             message?.let{
@@ -304,10 +307,10 @@ class StepDownloadFragment(mixerDetail: MixerDetail) : Fragment() {
                     actualProductsWeight += (it.finalWeight - it.initialWeight)
                 }
                 initialMixerWeight = if(actualProductsWeight>0){
-                    Log.i(TAG,"actualProductsWeight ${actualProductsWeight} sum of products")
+                    Log.i(TAG,"actualProductsWeight $actualProductsWeight sum of products")
                     actualProductsWeight
                 }else{
-                    Log.i(TAG,"actualProductsWeight ${mixerWeight} peso actual del mixer")
+                    Log.i(TAG,"actualProductsWeight $mixerWeight peso actual del mixer")
                     mixerWeight
                 }
                 Log.i(TAG, "Primer ingreso\nmixerWeight $mixerWeight | actualProductsWeight $actualProductsWeight | initialMixerWeight $initialMixerWeight ")

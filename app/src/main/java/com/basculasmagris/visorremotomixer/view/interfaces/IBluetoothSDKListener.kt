@@ -29,6 +29,11 @@ interface IBluetoothSDKListener {
     fun onMessageReceived(device: BluetoothDevice?, message: String?)
 
     /**
+     * from action BluetoothUtils.ACTION_COMMAND_RECEIVED
+     */
+    fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?)
+
+    /**
      * from action BluetoothUtils.ACTION_MESSAGE_SENT
      */
     fun onMessageSent(device: BluetoothDevice?)

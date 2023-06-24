@@ -13,28 +13,23 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.basculasmagris.visorremotomixer.R
-import com.basculasmagris.visorremotomixer.databinding.FragmentMixerRemotoBinding
+import com.basculasmagris.visorremotomixer.databinding.FragmentRemoteMixerBinding
 import com.basculasmagris.visorremotomixer.model.entities.Mixer
 import com.basculasmagris.visorremotomixer.model.entities.MixerDetail
 import com.basculasmagris.visorremotomixer.model.entities.ProductDetail
 import com.basculasmagris.visorremotomixer.model.entities.RoundRunDetail
-import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
-import com.basculasmagris.visorremotomixer.utils.Constants
-import com.basculasmagris.visorremotomixer.utils.Helper
-import com.basculasmagris.visorremotomixer.utils.MarginItemDecoration
+import com.basculasmagris.visorremotomixer.utils.*
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunProductAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.NumberFormatException
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import java.util.*
@@ -42,11 +37,13 @@ import java.util.concurrent.TimeUnit
 import kotlin.concurrent.schedule
 import kotlin.math.roundToLong
 
-class MixerRemotoFragment : BottomSheetDialogFragment() {
+class RemoteMixerFragment : BottomSheetDialogFragment() {
 
 
+    private var waitInit: Boolean = true
+    private val INIT_CMD: Int = 0x1A3
     private var tick: Long = 0L
-    lateinit var mBinding: FragmentMixerRemotoBinding
+    lateinit var mBinding: FragmentRemoteMixerBinding
     private val TAG: String = "DEBMixerVR"
     private var dialogResto: AlertDialog? = null
     private var targetReachedDialog: AlertDialog? = null
@@ -72,6 +69,7 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
     private var selectedMixerInFragment: Mixer? = null
     private var mixerBluetoothDevice : BluetoothDevice? = null
     private var knowDevices: List<BluetoothDevice>? = null
+    private var messageTickRecord = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,15 +85,10 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
 
         mBinding.btnTara.setOnClickListener{
             
-            customDialog("Tara","Seguro quiere hacer tara?")
+
         }
 
         mBinding.btnJump.setOnClickListener{
-            if((mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).isLastProduct()){
-                targetReachedDialog = dialogAlertTargetWeight("descarga")
-            }else{
-                nextProduct()
-            }
         }
 
         mBinding.btnRest.setOnClickListener{
@@ -110,7 +103,7 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
         currentRoundRunDetail?.round?.diet?.let { dietDetail ->
             mBinding.rvMixerProductsToLoad.layoutManager = GridLayoutManager(requireActivity(), 1)
             val roundRunProductAdapter =  RoundRunProductAdapter(
-                this@MixerRemotoFragment,
+                this@RemoteMixerFragment,
                 dietDetail,
                 defaultStep)
             currentRoundRunDetail?.round?.diet?.products?.let { products ->
@@ -149,7 +142,7 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mBinding = FragmentMixerRemotoBinding.inflate(inflater, container, false)
+        mBinding = FragmentRemoteMixerBinding.inflate(inflater, container, false)
         return mBinding.root
     }
 
@@ -253,7 +246,6 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
                     if (lastUpdate!!.until(LocalDateTime.now(), ChronoUnit.SECONDS) > 5){
                         Log.i("RUN", "Conexión: NO | Tiempo: ${lastUpdate!!.until(LocalDateTime.now(), ChronoUnit.SECONDS)}")
                         changeStatusConnection(false)
-                        Log.i(TAG,"changeStatusConnection(false) RRA 223")
                     } else {
                         Log.i("RUN", "Conexión: SI | Tiempo: ${lastUpdate!!.until(LocalDateTime.now(), ChronoUnit.SECONDS)}")
                         if(isAdded){
@@ -287,6 +279,32 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
             Log.i(TAG, "[MixRem] ACT onDeviceConnected")
         }
 
+        override fun onCommandReceived(device: BluetoothDevice?, byteArray: ByteArray?) {
+            val convertStringToZip = ConvertStringToZip()
+            if(byteArray == null || byteArray.size<9){
+                Log.i(TAG,"command not enough large (${byteArray?.size})")
+                return
+            }
+            val byteArrayUtil = byteArray.copyOfRange(6,byteArray.size)
+            var arraySize : Int =0
+            try{
+                val strToInt = String(byteArray,0,6)
+                arraySize = strToInt.toInt()
+                Log.i(TAG,"strToInt ${strToInt} - $strToInt")
+            }catch (e: NumberFormatException){
+                Log.i(TAG,"NumberFormatException")
+               return
+            }catch (e:Exception){
+                Log.i(TAG,"Exception")
+                return
+            }
+            val str : String = convertStringToZip.decompress(byteArrayUtil,arraySize)
+            Log.i(TAG,"CMD Received (${str.length}): $str")
+            if(waitInit){
+                    waitInit = false
+            }
+        }
+
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             lastMessage = "No se están recibiendo datos"
             message?.let{
@@ -298,7 +316,17 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
             if (lastUpdate == null){
                 lastUpdate = LocalDateTime.now()
             }
+
             var currentMixerWeight = message?.substring(1, 7)?.toDoubleOrNull()
+            if(currentMixerWeight != null){
+                if(tick - messageTickRecord  > 20){
+                    Log.i(TAG,"Send INIT_CMD")
+                    activity?.mService?.LocalBinder()?.write(INIT_CMD.toString())
+                    waitInit = true
+                    messageTickRecord = tick
+                }
+            }
+
             if (currentMixerWeight != null && currentRoundRunDetail != null){
                 currentMixerWeight = (currentMixerWeight- mixerDetail!!.tara)*mixerDetail!!.calibration
                 totalMixerWeight = currentMixerWeight
@@ -334,12 +362,6 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
                 loaded *= -1
                 sign = "+"
             }
-            var signMixerTarget = ""
-            var mixerTarget =  getTargetWeight()
-            if(mixerTarget<0){
-                mixerTarget *= -1
-                signMixerTarget = "+"
-            }
 
             if(targetReachedDialog !=null && targetReachedDialog!!.isShowing){
                 val textView = targetReachedDialog?.window?.findViewById<TextView>(R.id.tv_dialog_kg)
@@ -351,7 +373,7 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
             }
             val percentage = (getCurrentWeight())*100/getTargetWeight()
             mBinding.pbCurrentMixer.progress = percentage.toInt()
-//            (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).updateWeight(mixerWeight)
+
         }
 
         override fun onMessageSent(device: BluetoothDevice?) {
@@ -397,43 +419,14 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
     }
 
     fun nextProduct() {
-        noPrevAlert = true
-        mBinding.btnPause.isChecked = false
-        countGreaterThanTarget = 0
-        val adapteProduct =(mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter)
-        mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(activity!!, R.color.white))
-        if(adapteProduct.isLastProduct()){
-            adapteProduct.lastProductClose()
-        }else{
-            adapteProduct.nextProduct()
-        }
     }
 
     fun tare() {
-        contTara = 5*35
-        lifecycleScope.launch(Dispatchers.IO) {
-            delay(1000)
-            Log.i(TAG, "[StepDownload] Tare - Initial: ${currentProductDetail?.initialWeight}    | MixerWeight $mixerWeight  | currentWeight ${currentProductDetail?.currentWeight}" )
-            Log.i(TAG, "[StepDownload] Tare - currentProducDetail: $currentProductDetail" )
-
-            currentRoundRunDetail?.round?.diet?.products?.forEach {
-                if(it.id == currentProductDetail?.id){
-                    it.currentWeight = mixerWeight
-                    Log.i(TAG,"Tare $currentProductDetail initialWeight $mixerWeight")
-                    it.initialWeight = mixerWeight
-                    return@forEach
-                }
-            }
-            (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).tare(mixerWeight)
-            delay(100)
-            return@launch
-        }
     }
 
     private fun getCurrentProduct(): ProductDetail? {
         return previousProductDetail
     }
-
 
     private fun lastProduct() {
         mBinding.btnJump.text = getString(R.string.descarga)
@@ -448,8 +441,6 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
         previousProductDetail = product
         selectProduct(product)
     }
-
-
 
     fun deviceDisconnected() {
         isConnected = false
@@ -469,7 +460,7 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
             Timer().schedule(5000) {
                 activity?.hideCustomProgressDialog()
                 showSnackbar = true
-                Log.i(TAG,"changeStatusConnection(false) RRA 727")
+                Log.i(TAG,"changeStatusConnection(false) MRV 453")
                 changeStatusConnection(false)
             }
         }
@@ -622,7 +613,7 @@ class MixerRemotoFragment : BottomSheetDialogFragment() {
                             activity?.hideCustomProgressDialog()
                             showSnackbar = true
                             changeStatusConnection(false)
-                            Log.i(TAG,"changeStatusConnection(false) RRF 174")
+                            Log.i(TAG,"changeStatusConnection(false) MRV 606")
                         }
                     }
                     snackbar?.show()

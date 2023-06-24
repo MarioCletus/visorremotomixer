@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:id="@+id/view_fragment_mixer_remoto"
-    tools:context=".view.fragments.MixerRemotoFragment">
+    tools:context=".view.fragments.RemoteMixerFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_mixer_products_to_load"
