@@ -321,6 +321,11 @@ class RemoteViewerListFragment : Fragment() {
             Log.i("BLUE", "[RemoteViewerListFragment] onDeviceConnected")
         }
 
+
+        override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
+            Log.i("${this.javaClass.name} BLUE", "ACT onCommandReceived")
+        }
+
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             Log.i("BLUE", "[RemoteViewerListFragment] onMessageReceived")
             message?.let{msg->

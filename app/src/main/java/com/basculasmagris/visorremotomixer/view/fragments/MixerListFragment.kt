@@ -278,6 +278,10 @@ class MixerListFragment : Fragment() {
             Log.i("BLUE", "[MixerListFragment] onDeviceConnected")
         }
 
+        override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
+            Log.i("${this.javaClass.name} BLUE", "ACT onCommandReceived")
+        }
+
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             Log.i("BLUE", "[MixerListFragment] onMessageReceived")
             message?.let{

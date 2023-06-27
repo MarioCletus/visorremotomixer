@@ -1062,6 +1062,10 @@ class HomeFragment : BottomSheetDialogFragment() {
             connected()
         }
 
+        override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
+            Log.i("${this.javaClass.name} BLUE", "ACT onCommandReceived")
+        }
+
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             Log.i(TAG, "ACT onMessageReceived DEVICE: ${device?.address} | MSG: $message")
         }

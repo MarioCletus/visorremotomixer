@@ -27,6 +27,7 @@ import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.lang.NumberFormatException
@@ -278,18 +279,18 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             Log.i(TAG, "[MixRem] ACT onDeviceConnected")
         }
 
-        override fun onCommandReceived(device: BluetoothDevice?, byteArray: ByteArray?) {
+        override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
             val convertStringToZip = ConvertStringToZip()
-            if(byteArray == null || byteArray.size<9){
-                Log.i(TAG,"command not enough large (${byteArray?.size})")
+            if(message == null || message.size<9){
+                Log.i(TAG,"command not enough large (${message?.size})")
                 return
             }
-            val byteArrayUtil = byteArray.copyOfRange(6,byteArray.size)
-            var arraySize : Int =0
+            val byteArrayUtil = message.copyOfRange(6,message.size)
+            val arraySize: Int
             try{
-                val strToInt = String(byteArray,0,6)
+                val strToInt = String(message,0,6)
                 arraySize = strToInt.toInt()
-                Log.i(TAG,"strToInt ${strToInt} - $strToInt")
+                Log.i(TAG,"strToInt $strToInt")
             }catch (e: NumberFormatException){
                 Log.i(TAG,"NumberFormatException")
                return
@@ -299,9 +300,16 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             }
             val str : String = convertStringToZip.decompress(byteArrayUtil,arraySize)
             Log.i(TAG,"CMD Received (${str.length}): $str")
+            if(str!=null && str.length>0){
+                val gson = Gson()
+                val roundRunDetail : RoundRunDetail = gson.fromJson(str,  RoundRunDetail::class.java)
+                Log.i(TAG,"roundRunDetail ${roundRunDetail}")
+            }
             if(waitInit){
                     waitInit = false
             }
+
+
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
@@ -598,7 +606,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     snackbar?.setAction(
                         "Reconectar"
                     ) {
-                        Log.i(TAG,"mixerBluetoothDevice ${mixerBluetoothDevice} | selectedMixerInFragment $selectedMixerInFragment")
+                        Log.i(TAG,"mixerBluetoothDevice $mixerBluetoothDevice | selectedMixerInFragment $selectedMixerInFragment")
                         if(mixerBluetoothDevice != null){
                             mixerBluetoothDevice?.let {
                                 activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)

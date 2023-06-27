@@ -7,7 +7,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.text.TextUtils
@@ -18,6 +17,7 @@ import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
@@ -26,7 +26,6 @@ import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
 import com.basculasmagris.visorremotomixer.databinding.ActivityAddUpdateRemoteViewerBinding
 import com.basculasmagris.visorremotomixer.model.entities.RemoteViewer
 import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
-import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.basculasmagris.visorremotomixer.viewmodel.RemoteViewerViewModel
@@ -258,6 +257,10 @@ class AddUpdateRemoteViewerActivity : AppCompatActivity() {
         override fun onDeviceConnected(device: BluetoothDevice?) {
             // Do stuff when is connected
             Log.i("${this.javaClass.name} BLUE", "ACT onDeviceConnected")
+        }
+
+        override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
+            Log.i("${this.javaClass.name} BLUE", "ACT onCommandReceived")
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {

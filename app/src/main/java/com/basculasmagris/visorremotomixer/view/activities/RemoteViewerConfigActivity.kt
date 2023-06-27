@@ -314,6 +314,11 @@ class RemoteViewerConfigActivity : AppCompatActivity(){
             mBinding.bluetoothIcon.setImageDrawable(getDrawable(R.drawable.ic_bluetooth_connected))
         }
 
+
+        override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
+            Log.i("${this.javaClass.name} BLUE", "ACT onCommandReceived")
+        }
+
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             if(message==null){
                 return
