@@ -121,7 +121,7 @@
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/03ecfba7b90f913ad97e7cefd1666696/transformed/jetified-retrofit-2.9.0.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/fceb1d0ac1b0677b9155184272c1a015/transformed/jetified-okhttp-3.14.9.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/986c7f8ec2da07212956ab22f0b51eba/transformed/jetified-okio-1.17.2.jar</arg>
-                <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/6a59aec740adb447c57c9ec0ed836889/transformed/jetified-gson-2.8.5.jar</arg>
+                <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/0caa4bb0a18d8253e1fa7a206f357641/transformed/jetified-gson-2.9.0.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/dbe2f69a9c6f0ad85406fc2b76a39210/transformed/jetified-rxandroid-3.0.0-api.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/228d09ce4d1ea56cc65acea1581caf9f/transformed/jetified-rxjava-3.0.0.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/7370fd414d260afc998062ff2e47bdc1/transformed/jetified-reactive-streams-1.0.3.jar</arg>
@@ -213,7 +213,7 @@
     <orderEntry type="library" name="Gradle: com.squareup.retrofit2:retrofit:2.9.0" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.14.9" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.17.2" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.5" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.9.0" level="project" />
     <orderEntry type="library" name="Gradle: io.reactivex.rxjava3:rxjava:3.0.0" level="project" />
     <orderEntry type="library" name="Gradle: org.reactivestreams:reactive-streams:1.0.3" level="project" />
     <orderEntry type="library" name="Gradle: com.github.bumptech.glide:disklrucache:4.13.0" level="project" />

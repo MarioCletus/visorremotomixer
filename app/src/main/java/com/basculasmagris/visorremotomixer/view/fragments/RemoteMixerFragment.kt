@@ -30,7 +30,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import java.lang.NumberFormatException
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import java.util.*
@@ -100,6 +99,17 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             }
         }
 
+        loadRoundDetail()
+
+        //Conectar bluetooth
+        mixerBluetoothDevice?.let {
+            activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+        }
+        BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
+        currentRoundRunDetail?.state = Constants.STATE_LOAD
+    }
+
+    private fun loadRoundDetail() {
         currentRoundRunDetail?.round?.diet?.let { dietDetail ->
             mBinding.rvMixerProductsToLoad.layoutManager = GridLayoutManager(requireActivity(), 1)
             val roundRunProductAdapter =  RoundRunProductAdapter(
@@ -124,13 +134,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             }
         }
 
-
-        //Conectar bluetooth
-        mixerBluetoothDevice?.let {
-            activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
-        }
-        BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
-        currentRoundRunDetail?.state = Constants.STATE_LOAD
     }
 
     fun exitFragment(){
@@ -281,32 +284,75 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
             val convertStringToZip = ConvertStringToZip()
-            if(message == null || message.size<9){
+            if(message == null || message.size<12){
                 Log.i(TAG,"command not enough large (${message?.size})")
                 return
             }
-            val byteArrayUtil = message.copyOfRange(6,message.size)
-            val arraySize: Int
-            try{
-                val strToInt = String(message,0,6)
-                arraySize = strToInt.toInt()
-                Log.i(TAG,"strToInt $strToInt")
-            }catch (e: NumberFormatException){
-                Log.i(TAG,"NumberFormatException")
-               return
-            }catch (e:Exception){
-                Log.i(TAG,"Exception")
-                return
-            }
-            val str : String = convertStringToZip.decompress(byteArrayUtil,arraySize)
-            Log.i(TAG,"CMD Received (${str.length}): $str")
-            if(str!=null && str.length>0){
-                val gson = Gson()
-                val roundRunDetail : RoundRunDetail = gson.fromJson(str,  RoundRunDetail::class.java)
-                Log.i(TAG,"roundRunDetail ${roundRunDetail}")
-            }
-            if(waitInit){
-                    waitInit = false
+            val comando = String(message.copyOfRange(0,3))
+            Log.i(TAG,"Comando $comando")
+            when (comando){
+                Constants.CMD_INI->{
+                    Log.i(TAG,"CMD_INI")
+                }
+                Constants.CMD_ROUNDDETAIL->{
+                    Log.i(TAG,"CMD_ROUNDDETAIL")
+                    val byteArrayUtil = message.copyOfRange(9,message.size-9)
+                    val arraySize: Int
+                    try{
+                        val strToInt = String(message,3,6)
+                        arraySize = strToInt.toInt()
+                        Log.i(TAG,"strToInt $strToInt")
+                    }catch (e: NumberFormatException){
+                        Log.i(TAG,"NumberFormatException")
+                        return
+                    }catch (e:Exception){
+                        Log.i(TAG,"Exception")
+                        return
+                    }
+                    val str : String = convertStringToZip.decompress(byteArrayUtil,arraySize)
+                    Log.i(TAG,"CMD Received (${str.length}): $str")
+                    if(str.isNotEmpty()){
+                        val gson = Gson()
+                        val roundRunDetail : RoundRunDetail = gson.fromJson(str,  RoundRunDetail::class.java)
+                        currentRoundRunDetail = roundRunDetail
+                        Log.i(TAG,"roundRunDetail $roundRunDetail")
+
+                        currentRoundRunDetail.let {
+                            loadRoundDetail()
+                            it?.mixer.let {mixerDetail->
+                                val mixer = Mixer(
+                                    mixerDetail!!.name,
+                                    mixerDetail.description,
+                                    mixerDetail.mac,
+                                    mixerDetail.btBox,
+                                    mixerDetail.tara,
+                                    mixerDetail.calibration,
+                                    mixerDetail.rfid,
+                                    mixerDetail.remoteId,
+                                    mixerDetail.updatedDate,
+                                    mixerDetail.archiveDate,
+                                    true,
+                                    mixerDetail.id
+                                )
+                                setMixer(mixer)
+                            }
+                        }
+                        waitInit = false
+                    }
+
+                }
+                Constants.CMD_NXTPRODUCT->{
+                    Log.i(TAG,"CMD_NXTPRODUCT")
+                }
+                Constants.CMD_END->{
+                    Log.i(TAG,"CMD_END")
+                }
+                Constants.CMD_UPDATE->{
+                    Log.i(TAG,"CMD_UPDATE")
+                }
+                else->{
+                    Log.i(TAG,"else ${comando.toString()}")
+                }
             }
 
 
@@ -326,19 +372,19 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
             var currentMixerWeight = message?.substring(1, 7)?.toDoubleOrNull()
             if(currentMixerWeight != null){
-                if(tick - messageTickRecord  > 20){
-                    val msg = "CMD${Constants.CMD_CRRD}"
-                    Log.i(TAG,"Send INIT_CMD $msg")
+                if(tick - messageTickRecord  > 20 && waitInit){
+                    val msg = "CMD${Constants.CMD_ROUNDDETAIL}"
+                    Log.i(TAG,"Send CMD_INI $msg")
                     activity?.mService?.LocalBinder()?.write(msg.toByteArray())
-                    waitInit = true
                     messageTickRecord = tick
                 }
             }
 
             if (currentMixerWeight != null && currentRoundRunDetail != null){
-                currentMixerWeight = (currentMixerWeight- mixerDetail!!.tara)*mixerDetail!!.calibration
+                Log.i(TAG,"Paso 1")
+                currentMixerWeight = (currentMixerWeight - mixerDetail!!.tara)*mixerDetail!!.calibration
                 totalMixerWeight = currentMixerWeight
-                if(dialogResto!=null && dialogResto!!.isShowing){
+                if(dialogResto !=null && dialogResto!!.isShowing){
                     dialogResto!!.setMessage("${totalMixerWeight.roundToLong()}Kg")
                 }
                 mixerWeight = currentMixerWeight - currentRoundRunDetail?.customTara!! - currentRoundRunDetail?.addedBlend!!
@@ -365,22 +411,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
             lastUpdate = LocalDateTime.now()
             var loaded = getCurrentWeight()// + additional
-            var sign = ""
-            if(loaded <0 ){
-                loaded *= -1
-                sign = "+"
-            }
+
 
             if(targetReachedDialog !=null && targetReachedDialog!!.isShowing){
                 val textView = targetReachedDialog?.window?.findViewById<TextView>(R.id.tv_dialog_kg)
                 textView?.text = mBinding.tvCurrentProductWeightPending.text
             }
-            mBinding.tvMixerLoaded.text = "${sign}${Helper.getNumberWithDecimals(loaded,0)}Kg"
-            if(currentMixerWeight != null){
-                mBinding.tvMixerTarget.text = "${Helper.getNumberWithDecimals(currentMixerWeight,0)}Kg"
-            }
-            val percentage = (getCurrentWeight())*100/getTargetWeight()
-            mBinding.pbCurrentMixer.progress = percentage.toInt()
 
         }
 
@@ -630,7 +666,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             }
         }
     }
-
 
 
     fun getCurrentWeight() : Double {

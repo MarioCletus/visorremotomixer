@@ -114,13 +114,13 @@
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/c793fc94867633ee2b85f87cd618f1da/transformed/jetified-converter-gson-2.9.0.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/36852ddba770bd2ac38e9ce194a793d3/transformed/jetified-adapter-rxjava3-2.9.0.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/03ecfba7b90f913ad97e7cefd1666696/transformed/jetified-retrofit-2.9.0.jar</arg>
+                <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/0caa4bb0a18d8253e1fa7a206f357641/transformed/jetified-gson-2.9.0.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/7ed740929603d9517c3affcbcc0ea4be/transformed/jetified-sdp-android-1.0.6-api.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/dbe2f69a9c6f0ad85406fc2b76a39210/transformed/jetified-rxandroid-3.0.0-api.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/228d09ce4d1ea56cc65acea1581caf9f/transformed/jetified-rxjava-3.0.0.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/0f1957ab3397affcd3ac27a91cd49e6a/transformed/jetified-tableview-0.8.9.4-api.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/329acc490102ed6cf5abb8c33f215046/transformed/jetified-annotation-experimental-1.1.0-api.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/fceb1d0ac1b0677b9155184272c1a015/transformed/jetified-okhttp-3.14.9.jar</arg>
-                <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/6a59aec740adb447c57c9ec0ed836889/transformed/jetified-gson-2.8.5.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/7370fd414d260afc998062ff2e47bdc1/transformed/jetified-reactive-streams-1.0.3.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/21e953fd3db0979a02e394d1bfe25acf/transformed/jetified-disklrucache-4.13.0.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/fdf89cc5490b22a6f067c421b69fe1a9/transformed/jetified-annotations-4.13.0.jar</arg>
@@ -225,9 +225,9 @@
     <orderEntry type="library" scope="TEST" name="Gradle: com.squareup.retrofit2:converter-gson:2.9.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.squareup.retrofit2:adapter-rxjava3:2.9.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.squareup.retrofit2:retrofit:2.9.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.google.code.gson:gson:2.9.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: io.reactivex.rxjava3:rxjava:3.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.squareup.okhttp3:okhttp:3.14.9" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.google.code.gson:gson:2.8.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.reactivestreams:reactive-streams:1.0.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.github.bumptech.glide:disklrucache:4.13.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.github.bumptech.glide:annotations:4.13.0" level="project" />
