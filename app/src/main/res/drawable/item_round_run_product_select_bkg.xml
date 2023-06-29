@@ -3,7 +3,7 @@
     <stroke android:color="@color/color_deep_green"
         android:width="4dp"/>
     <corners android:radius="6dp"/>
-    <size android:height="50dp"
+    <size android:height="60dp"
         android:width="310dp"/>
     <solid android:color="@color/color_card_product_bkg"/>
 </shape>

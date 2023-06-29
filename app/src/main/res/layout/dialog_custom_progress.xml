@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:text="@string/conectando_la_balanza"
+        android:text="@string/conectando_el_mixer"
         android:textSize="@dimen/_16sdp"
         />
 

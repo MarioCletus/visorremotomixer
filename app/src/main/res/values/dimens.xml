@@ -10,6 +10,7 @@
     <dimen name="row_header_width">55dp</dimen>
     <dimen name="text_size">12sp</dimen>
     <dimen name="margin_recycler">4dp</dimen>
+    <dimen name="margin_recycler_horizontal">2dp</dimen>
 
     <!-- Overriding the default values of the tableView -->
     <dimen name="default_row_header_width">55dp</dimen>

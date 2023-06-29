@@ -147,5 +147,9 @@ object Constants {
     val CMD_NXTPRODUCT = "NXP"
     val CMD_END = "END"
     val CMD_UPDATE = "UPD"
+    val CMD_ACK = "ACK"
+    val CMD_USER = "USR"
+    val CMD_TARA = "TAR"
+    val CMD_PAUSE = "PAU"
 
 }
