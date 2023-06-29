@@ -41,6 +41,7 @@ import kotlin.math.roundToLong
 class RemoteMixerFragment : BottomSheetDialogFragment() {
 
 
+    private val indexAnterior: Int = 0
     private var waitInit: Boolean = true
     private var tick: Long = 0L
     lateinit var mBinding: FragmentRemoteMixerBinding
@@ -308,6 +309,32 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 Constants.CMD_INI->{
                     Log.i(TAG,"CMD_INI")
                 }
+
+//                Constants.CMD_WEIGHT->{
+//                    activity?.hideCustomProgressDialog()
+//                    try{
+//                        val peso= String(message,3,6).toLong()
+//                        val percent= String(message,9,2).toInt()
+//                        val index= String(message,11,2).toInt()
+//                        if(currentRoundRunDetail != null){
+//                            val product : ProductDetail = currentRoundRunDetail!!.round.diet.products.get(index)
+//                            mBinding.tvCurrentProduct.text = product.name
+//                        }
+//                        mBinding.tvCurrentProductWeightPending.text = "${peso}Kg"
+//                        mBinding.pbCurrentProduct.progress =percent
+//                    }catch (e: NumberFormatException){
+//                        Log.i(TAG,"NumberFormatException $e")
+//                        return
+//                    }catch (e:StringIndexOutOfBoundsException){
+//                        Log.i(TAG,"StringIndexOutOfBoundsException $e")
+//                        return
+//                    }catch (e:Exception){
+//                        Log.i(TAG,"Exception $e")
+//                        return
+//                    }
+//
+//                }
+
                 Constants.CMD_ROUNDDETAIL->{
                     Log.i(TAG,"CMD_ROUNDDETAIL")
                     val byteArrayUtil = message.copyOfRange(9,message.size-9)
@@ -315,7 +342,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     try{
                         val strToInt = String(message,3,6)
                         arraySize = strToInt.toInt()
-                        Log.i(TAG,"strToInt $strToInt")
                     }catch (e: NumberFormatException){
                         Log.i(TAG,"NumberFormatException")
                         return
@@ -324,7 +350,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         return
                     }
                     val str : String = convertStringToZip.decompress(byteArrayUtil,arraySize)
-                    Log.i(TAG,"CMD Received (${str.length}): $str")
                     if(str.isNotEmpty()){
                         val gson = Gson()
                         val roundRunDetail : RoundRunDetail = gson.fromJson(str,  RoundRunDetail::class.java)
@@ -355,6 +380,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     }
 
                 }
+
                 Constants.CMD_NXTPRODUCT->{
                     Log.i(TAG,"CMD_NXTPRODUCT")
                     nextProduct()
@@ -374,66 +400,99 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
-            lastMessage = "No se están recibiendo datos"
-            message?.let{
-                lastMessage = it.replace("\n", "")
-                if (it.length > 3){
+            if(message == null || message.length<13){
+                Log.i(TAG,"command not enough large (${message?.length})")
+                return
+            }
+            val comando = message.substring(0,3)
+            when(comando){
+                Constants.CMD_WEIGHT->{
                     activity?.hideCustomProgressDialog()
+                    try{
+                        val peso= message.substring(3,9).toLong()
+                        val percent= message.substring(9,11).toInt()
+                        val index= message.substring(11,13).toInt()
+                        if(currentRoundRunDetail != null){
+                            val product : ProductDetail = currentRoundRunDetail!!.round.diet.products.get(index)
+                            mBinding.tvCurrentProduct.text = product.name
+                        }
+                        mBinding.tvCurrentProductWeightPending.text = "${peso}Kg"
+                        mBinding.pbCurrentProduct.progress =percent
+                    }catch (e: NumberFormatException){
+                        Log.i(TAG,"NumberFormatException $e")
+                        return
+                    }catch (e:StringIndexOutOfBoundsException){
+                        Log.i(TAG,"StringIndexOutOfBoundsException $e")
+                        return
+                    }catch (e:Exception){
+                        Log.i(TAG,"Exception $e")
+                        return
+                    }
+
                 }
             }
 
-            if (lastUpdate == null){
-                lastUpdate = LocalDateTime.now()
-            }
 
-            var currentMixerWeight = message?.substring(1, 7)?.toDoubleOrNull()
-            if(currentMixerWeight != null){
-                if(tick - messageTickRecord  > 20 && waitInit){
-                    val msg = "CMD${Constants.CMD_ROUNDDETAIL}"
-                    Log.i(TAG,"Send CMD_INI $msg")
-                    activity?.mService?.LocalBinder()?.write(msg.toByteArray())
-                    messageTickRecord = tick
-                }
-            }
-
-            if (currentMixerWeight != null && currentRoundRunDetail != null){
-                currentMixerWeight = (currentMixerWeight - mixerDetail!!.tara)*mixerDetail!!.calibration
-                totalMixerWeight = currentMixerWeight
-                if(dialogResto !=null && dialogResto!!.isShowing){
-                    dialogResto!!.setMessage("${totalMixerWeight.roundToLong()}Kg")
-                }
-                mixerWeight = currentMixerWeight - currentRoundRunDetail?.customTara!! - currentRoundRunDetail?.addedBlend!!
-                if(previousProductDetail != null && currentProductDetail != null &&
-                    previousProductDetail!!.id != currentProductDetail!!.id){
-                    Log.i(TAG,"previousProductDetail $previousProductDetail" +
-                            "\n!=\ncurrentProductDetail $currentProductDetail |\ninitialWeight $mixerWeight")
-                    previousProductDetail = currentProductDetail
-                    currentProductDetail?.initialWeight = mixerWeight
-                    (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).updateInicial(mixerWeight)
-                }
-            }
-
-            var actualWeight = 0.0
-            currentRoundRunDetail?.round?.diet?.products?.forEach {
-                actualWeight += it.currentWeight - it.initialWeight
-            }
-
-            if(contTara > 0){
-                contTara--
-                Log.i(TAG,"actualWeight: $actualWeight | mixerWeight: $mixerWeight | additional: ${currentProductDetail?.currentWeight}")
-            }
-
-            lastUpdate = LocalDateTime.now()
-            var loaded = getCurrentWeight()// + additional
-
-
-            if(targetReachedDialog !=null && targetReachedDialog!!.isShowing){
-                val textView = targetReachedDialog?.window?.findViewById<TextView>(R.id.tv_dialog_kg)
-                textView?.text = mBinding.tvCurrentProductWeightPending.text
-            }
-            if(currentRoundRunDetail!=null && mBinding != null && mBinding.rvMixerProductsToLoad.adapter != null){
-                (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).updateWeight(mixerWeight)
-            }
+//            lastMessage = "No se están recibiendo datos"
+//            message?.let{
+//                lastMessage = it.replace("\n", "")
+//                if (it.length > 3){
+//                    activity?.hideCustomProgressDialog()
+//                }
+//            }
+//
+//            if (lastUpdate == null){
+//                lastUpdate = LocalDateTime.now()
+//            }
+//
+//            var currentMixerWeight = message?.substring(1, 7)?.toDoubleOrNull()
+//            if(currentMixerWeight != null){
+//                if(tick - messageTickRecord  > 20 && waitInit){
+//                    val msg = "CMD${Constants.CMD_ROUNDDETAIL}"
+//                    Log.i(TAG,"Send CMD_INI $msg")
+//                    activity?.mService?.LocalBinder()?.write(msg.toByteArray())
+//                    messageTickRecord = tick
+//                }
+//            }
+//
+//            if (currentMixerWeight != null && currentRoundRunDetail != null){
+//                currentMixerWeight = (currentMixerWeight - mixerDetail!!.tara)*mixerDetail!!.calibration
+//                totalMixerWeight = currentMixerWeight
+//                if(dialogResto !=null && dialogResto!!.isShowing){
+//                    dialogResto!!.setMessage("${totalMixerWeight.roundToLong()}Kg")
+//                }
+//                mixerWeight = currentMixerWeight - currentRoundRunDetail?.customTara!! - currentRoundRunDetail?.addedBlend!!
+//                if(previousProductDetail != null && currentProductDetail != null &&
+//                    previousProductDetail!!.id != currentProductDetail!!.id){
+//                    Log.i(TAG,"previousProductDetail $previousProductDetail" +
+//                            "\n!=\ncurrentProductDetail $currentProductDetail |\ninitialWeight $mixerWeight")
+//                    previousProductDetail = currentProductDetail
+//                    currentProductDetail?.initialWeight = mixerWeight
+//                    (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).updateInicial(mixerWeight)
+//                }
+//            }
+//
+//            var actualWeight = 0.0
+//            currentRoundRunDetail?.round?.diet?.products?.forEach {
+//                actualWeight += it.currentWeight - it.initialWeight
+//            }
+//
+//            if(contTara > 0){
+//                contTara--
+//                Log.i(TAG,"actualWeight: $actualWeight | mixerWeight: $mixerWeight | additional: ${currentProductDetail?.currentWeight}")
+//            }
+//
+//            lastUpdate = LocalDateTime.now()
+//            var loaded = getCurrentWeight()// + additional
+//
+//
+//            if(targetReachedDialog !=null && targetReachedDialog!!.isShowing){
+//                val textView = targetReachedDialog?.window?.findViewById<TextView>(R.id.tv_dialog_kg)
+//                textView?.text = mBinding.tvCurrentProductWeightPending.text
+//            }
+//            if(currentRoundRunDetail!=null && mBinding != null && mBinding.rvMixerProductsToLoad.adapter != null){
+//                (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).updateWeight(mixerWeight)
+//            }
 
         }
 
@@ -498,11 +557,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         mBinding.btnJump.text = getString(R.string.salto)
     }
 
-    fun setProduct(product: ProductDetail) {
-        currentProductDetail = product
-        previousProductDetail = product
-        selectProduct(product)
-    }
+//    fun setProduct(product: ProductDetail) {
+//        currentProductDetail = product
+//        previousProductDetail = product
+//        selectProduct(product)
+//    }
 
     fun deviceDisconnected() {
         isConnected = false

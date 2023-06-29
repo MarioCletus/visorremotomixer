@@ -151,5 +151,6 @@ object Constants {
     val CMD_USER = "USR"
     val CMD_TARA = "TAR"
     val CMD_PAUSE = "PAU"
+    val CMD_WEIGHT = "WGT"
 
 }

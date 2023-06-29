@@ -350,7 +350,7 @@ class RoundRunActivity : AppCompatActivity() {
             if (roundRunDetail.id != 0L){
 
                 runBlocking {
-                    Log.i(TAG, "[ConfigFragment] Save... Mixer: ${roundRunDetail.mixer!!.id} | customPercentage: ${roundRunDetail.customPercentage}")
+//                    Log.i(TAG, "[ConfigFragment] Save... Mixer: ${roundRunDetail.mixer!!.id} | customPercentage: ${roundRunDetail.customPercentage}")
                     mRoundViewModel.updateRoundRunSync(
                         roundRunDetail.id,
                         roundRunDetail.mixer!!.id,
@@ -363,7 +363,7 @@ class RoundRunActivity : AppCompatActivity() {
                     // Productos de dieta (carga)
                     roundRunDetail.round.diet.products.forEach { productDetail ->
                         productDetail.targetWeight = (productDetail.percentage*roundRunDetail.round.corrals.sumOf { corral -> corral.customTargetWeight }/100)
-                        Log.i(TAG ,"Se actualiza [RunId: ${roundRunDetail.id} | DietId:${roundRunDetail.round.diet.id} | ProductId:${productDetail.id} | Initial Weight:${productDetail.initialWeight} | Actual Weight:${productDetail.currentWeight}")
+//                        Log.i(TAG ,"Se actualiza [RunId: ${roundRunDetail.id} | DietId:${roundRunDetail.round.diet.id} | ProductId:${productDetail.id} | Initial Weight:${productDetail.initialWeight} | Actual Weight:${productDetail.currentWeight}")
                         mRoundViewModel.updateProgressLoad(
                             roundRunDetail.id,
                             roundRunDetail.round.diet.id,

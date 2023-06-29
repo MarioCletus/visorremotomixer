@@ -13,6 +13,7 @@ import com.basculasmagris.visorremotomixer.model.entities.DietDetail
 import com.basculasmagris.visorremotomixer.model.entities.ProductDetail
 import com.basculasmagris.visorremotomixer.utils.Helper
 import android.util.Log
+import com.basculasmagris.visorremotomixer.view.activities.MainActivity
 import com.basculasmagris.visorremotomixer.view.activities.RoundRunActivity
 import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
 import com.basculasmagris.visorremotomixer.view.fragments.StepLoadFragment
@@ -69,20 +70,20 @@ class RoundRunProductAdapter (
                 }
             }
 
-            if (fragment is RemoteMixerFragment) {
-                holder.itemView.setOnClickListener {
-                    if(position + 1 == selectedPosition &&
-                        (filteredProducts[position].finalWeight.minus(filteredProducts[position].initialWeight))-filteredProducts[position].targetWeight<RUIDO  &&
-                        filteredProducts[selectedPosition].currentWeight.minus(filteredProducts[selectedPosition].initialWeight)<RUIDO &&
-                        filteredProducts[selectedPosition].currentWeight.minus(filteredProducts[selectedPosition].initialWeight)>-1*RUIDO ){
-                        selectedPosition = position
-                        lastProduct = false
-                        product.finalWeight = 0.0
-                        fragment.setProduct(product)
-                        notifyDataSetChanged()
-                    }
-                }
-            }
+//            if (fragment is RemoteMixerFragment) {
+//                holder.itemView.setOnClickListener {
+//                    if(position + 1 == selectedPosition &&
+//                        (filteredProducts[position].finalWeight.minus(filteredProducts[position].initialWeight))-filteredProducts[position].targetWeight<RUIDO  &&
+//                        filteredProducts[selectedPosition].currentWeight.minus(filteredProducts[selectedPosition].initialWeight)<RUIDO &&
+//                        filteredProducts[selectedPosition].currentWeight.minus(filteredProducts[selectedPosition].initialWeight)>-1*RUIDO ){
+//                        selectedPosition = position
+//                        lastProduct = false
+//                        product.finalWeight = 0.0
+//                        fragment.setProduct(product)
+//                        notifyDataSetChanged()
+//                    }
+//                }
+//            }
 
             if(selectedPosition == position) {
                 holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_select_bkg)
@@ -226,6 +227,11 @@ class RoundRunProductAdapter (
                         }
                     }
 
+                }
+                if(fragment.requireActivity() is MainActivity){
+                    if (selectedPosition < filteredProducts.size-1){
+                        selectedPosition += 1
+                    }
                 }
             }
             notifyDataSetChanged()
