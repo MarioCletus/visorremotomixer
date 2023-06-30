@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.FragmentRemoteMixerBinding
@@ -41,7 +40,8 @@ import kotlin.math.roundToLong
 class RemoteMixerFragment : BottomSheetDialogFragment() {
 
 
-    private val indexAnterior: Int = 0
+    private var targetWeight: Double = 0.0
+    private var indexAnterior: Int = -1
     private var waitInit: Boolean = true
     private var tick: Long = 0L
     lateinit var mBinding: FragmentRemoteMixerBinding
@@ -54,13 +54,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private var lastUpdate: LocalDateTime? = null
     private var timerTask: TimerTask? = null
     private var defaultStep = 5.0
-    private var lastMessage = ""
     private var activity: MainActivity? = null
     private var noPrevAlert : Boolean = true
     private var countGreaterThanTarget: Int = 0
     private var currentProductDetail: ProductDetail? = null
     private var previousProductDetail: ProductDetail? =null
-    private var contTara: Int = 0
     private var mixerDetail: MixerDetail? = null
     var currentRoundRunDetail: RoundRunDetail? = null
     private var showSnackbar = true
@@ -70,7 +68,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private var selectedMixerInFragment: Mixer? = null
     private var mixerBluetoothDevice : BluetoothDevice? = null
     private var knowDevices: List<BluetoothDevice>? = null
-    private var messageTickRecord = 0L
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,6 +110,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
 
         loadRoundDetail()
+        mBinding.rvMixerProductsToLoad.addItemDecoration(MarginItemDecorationHorizontal(resources.getDimensionPixelSize(R.dimen.margin_recycler_horizontal)))
 
         //Conectar bluetooth
         mixerBluetoothDevice?.let {
@@ -131,7 +130,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             currentRoundRunDetail?.round?.diet?.products?.let { products ->
                 roundRunProductAdapter.productList(products)
             }
-            mBinding.rvMixerProductsToLoad.addItemDecoration(MarginItemDecorationHorizontal(resources.getDimensionPixelSize(R.dimen.margin_recycler_horizontal)))
             mBinding.rvMixerProductsToLoad.adapter = roundRunProductAdapter
 
 
@@ -292,9 +290,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         override fun onDeviceConnected(device: BluetoothDevice?) {
             deviceConnected()
             Log.i(TAG, "[MixRem] ACT onDeviceConnected")
-            val msg = "CMD${Constants.CMD_ROUNDDETAIL}"
-            Log.i(TAG,"Send CMD_INI $msg")
-            activity?.mService?.LocalBinder()?.write(msg.toByteArray())
+            requestRoundRunDetail()
         }
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
@@ -309,31 +305,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 Constants.CMD_INI->{
                     Log.i(TAG,"CMD_INI")
                 }
-
-//                Constants.CMD_WEIGHT->{
-//                    activity?.hideCustomProgressDialog()
-//                    try{
-//                        val peso= String(message,3,6).toLong()
-//                        val percent= String(message,9,2).toInt()
-//                        val index= String(message,11,2).toInt()
-//                        if(currentRoundRunDetail != null){
-//                            val product : ProductDetail = currentRoundRunDetail!!.round.diet.products.get(index)
-//                            mBinding.tvCurrentProduct.text = product.name
-//                        }
-//                        mBinding.tvCurrentProductWeightPending.text = "${peso}Kg"
-//                        mBinding.pbCurrentProduct.progress =percent
-//                    }catch (e: NumberFormatException){
-//                        Log.i(TAG,"NumberFormatException $e")
-//                        return
-//                    }catch (e:StringIndexOutOfBoundsException){
-//                        Log.i(TAG,"StringIndexOutOfBoundsException $e")
-//                        return
-//                    }catch (e:Exception){
-//                        Log.i(TAG,"Exception $e")
-//                        return
-//                    }
-//
-//                }
 
                 Constants.CMD_ROUNDDETAIL->{
                     Log.i(TAG,"CMD_ROUNDDETAIL")
@@ -384,10 +355,17 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 Constants.CMD_NXTPRODUCT->{
                     Log.i(TAG,"CMD_NXTPRODUCT")
                     nextProduct()
+                    requestRoundRunDetail()
                 }
                 Constants.CMD_END->{
                     Log.i(TAG,"CMD_END")
                     (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).endLoad = true
+                }
+                Constants.CMD_UPDATE->{
+                    Log.i(TAG,"CMD_UPDATE")
+                }
+                Constants.CMD_ACK->{
+                    Log.i(TAG,"CMD_ACK")
                 }
                 Constants.CMD_UPDATE->{
                     Log.i(TAG,"CMD_UPDATE")
@@ -400,24 +378,31 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
-            if(message == null || message.length<13){
+            if(message == null || message.length<11){
                 Log.i(TAG,"command not enough large (${message?.length})")
                 return
             }
-            val comando = message.substring(0,3)
-            when(comando){
+
+
+            when(message.substring(0,3)){
                 Constants.CMD_WEIGHT->{
                     activity?.hideCustomProgressDialog()
                     try{
-                        val peso= message.substring(3,9).toLong()
-                        val percent= message.substring(9,11).toInt()
-                        val index= message.substring(11,13).toInt()
-                        if(currentRoundRunDetail != null){
-                            val product : ProductDetail = currentRoundRunDetail!!.round.diet.products.get(index)
+                        val currentProductWeight= message.substring(3,9).toLong()
+                        val index= message.substring(9,11).toInt()
+                        if(currentRoundRunDetail != null && index != indexAnterior){
+                            indexAnterior = index
+                            val product : ProductDetail = currentRoundRunDetail!!.round.diet.products[index]
                             mBinding.tvCurrentProduct.text = product.name
+                            targetWeight = product.targetWeight
+                            requestRoundRunDetail()
                         }
-                        mBinding.tvCurrentProductWeightPending.text = "${peso}Kg"
-                        mBinding.pbCurrentProduct.progress =percent
+                        val percentage = (targetWeight-currentProductWeight)*100/targetWeight
+                        mBinding.tvCurrentProductWeightPending.text =   if(currentProductWeight<0)
+                                                                            "+${-1*currentProductWeight}Kg"
+                                                                        else
+                                                                            "${currentProductWeight}Kg"
+                        mBinding.pbCurrentProduct.progress = percentage.toInt()
                     }catch (e: NumberFormatException){
                         Log.i(TAG,"NumberFormatException $e")
                         return
@@ -428,7 +413,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         Log.i(TAG,"Exception $e")
                         return
                     }
-
+                    lastUpdate = LocalDateTime.now()
                 }
             }
 
@@ -523,6 +508,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             }
         }
 
+    }
+
+    private fun requestRoundRunDetail() {
+        val msg = "CMD${Constants.CMD_ROUNDDETAIL}"
+        Log.i(TAG,"Send CMD_INI $msg")
+        activity?.mService?.LocalBinder()?.write(msg.toByteArray())
     }
 
     override fun onDestroyView() {
