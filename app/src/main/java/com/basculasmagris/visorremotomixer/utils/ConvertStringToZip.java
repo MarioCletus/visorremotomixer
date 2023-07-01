@@ -43,7 +43,6 @@ public class ConvertStringToZip {
             // Encode a String into bytes
 
             // Compress the bytes
-            Log.i(TAG,"output lenght: " + lenght );
             // Decompress the bytes
             Inflater decompresser = new Inflater();
             decompresser.setInput(output);

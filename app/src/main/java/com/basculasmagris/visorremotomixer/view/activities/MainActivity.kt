@@ -333,8 +333,13 @@ class MainActivity : AppCompatActivity() {
         preferences[longPreferencesKey("IDMIXER")]
     }
 
+    fun changeActionBarTitle(title: String) {
+        setSupportActionBar(binding.appBarMain.toolbar)
+        supportActionBar?.let {
+            it.title = title
+        }
 
-
+    }
 }
 
 class CancellableNavigationView(context: Context, attrs: AttributeSet) :
