@@ -54,37 +54,6 @@ class RoundRunProductAdapter (
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val product = filteredProducts[position]
         fragment.context?.let {
-
-            if (fragment is StepLoadFragment) {
-                holder.itemView.setOnClickListener {
-                    if(position + 1 == selectedPosition &&
-                        (filteredProducts[position].finalWeight.minus(filteredProducts[position].initialWeight))-filteredProducts[position].targetWeight<RUIDO  &&
-                        filteredProducts[selectedPosition].currentWeight.minus(filteredProducts[selectedPosition].initialWeight)<RUIDO &&
-                        filteredProducts[selectedPosition].currentWeight.minus(filteredProducts[selectedPosition].initialWeight)>-1*RUIDO ){
-                        selectedPosition = position
-                        lastProduct = false
-                        product.finalWeight = 0.0
-                        fragment.setProduct(product)
-                        notifyDataSetChanged()
-                    }
-                }
-            }
-
-//            if (fragment is RemoteMixerFragment) {
-//                holder.itemView.setOnClickListener {
-//                    if(position + 1 == selectedPosition &&
-//                        (filteredProducts[position].finalWeight.minus(filteredProducts[position].initialWeight))-filteredProducts[position].targetWeight<RUIDO  &&
-//                        filteredProducts[selectedPosition].currentWeight.minus(filteredProducts[selectedPosition].initialWeight)<RUIDO &&
-//                        filteredProducts[selectedPosition].currentWeight.minus(filteredProducts[selectedPosition].initialWeight)>-1*RUIDO ){
-//                        selectedPosition = position
-//                        lastProduct = false
-//                        product.finalWeight = 0.0
-//                        fragment.setProduct(product)
-//                        notifyDataSetChanged()
-//                    }
-//                }
-//            }
-
             if(selectedPosition == position) {
                 holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_select_bkg)
                 if (fragment is StepLoadFragment){

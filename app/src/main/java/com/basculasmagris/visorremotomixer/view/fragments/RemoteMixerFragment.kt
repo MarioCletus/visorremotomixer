@@ -173,7 +173,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 if(countGreaterThanTarget>10){
                     countGreaterThanTarget = 0
                     noPrevAlert = false
-
                 }
             }
         }
@@ -294,10 +293,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         val strToInt = String(message,3,6)
                         arraySize = strToInt.toInt()
                     }catch (e: NumberFormatException){
-                        Log.i(TAG,"NumberFormatException")
+                        Log.i(TAG,"NumberFormatException $e")
                         return
                     }catch (e:Exception){
-                        Log.i(TAG,"Exception")
+                        Log.i(TAG,"Exception $e")
                         return
                     }
                     val str : String = convertStringToZip.decompress(byteArrayUtil,arraySize)
@@ -306,7 +305,22 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         val roundRunDetail : RoundRunDetail = gson.fromJson(str,  RoundRunDetail::class.java)
                         if(currentRoundRunDetail != null && currentRoundRunDetail!!.id == roundRunDetail.id){
                             Log.i(TAG,"notifyDataSetChanged roundRunDetail $roundRunDetail")
-                            currentRoundRunDetail = roundRunDetail
+                            currentRoundRunDetail!!.copy(
+                                userId = roundRunDetail.userId,
+                                userDisplayName = roundRunDetail.userDisplayName,
+                                round = roundRunDetail.round,
+                                mixer = roundRunDetail.mixer,
+                                mixerBluetoothDevice = roundRunDetail.mixerBluetoothDevice,
+                                startDate = roundRunDetail.startDate,
+                                updatedDate = roundRunDetail.updatedDate,
+                                endDate = roundRunDetail.endDate,
+                                remoteId = roundRunDetail.remoteId,
+                                customPercentage = roundRunDetail.customPercentage,
+                                customTara = roundRunDetail.customTara,
+                                addedBlend = roundRunDetail.addedBlend,
+                                state = roundRunDetail.state,
+                                id = roundRunDetail.id
+                            )
                             mBinding.rvMixerProductsToLoad.adapter?.notifyDataSetChanged()
                         }else{
                             Log.i(TAG,"new roundRunDetail $roundRunDetail")
@@ -346,6 +360,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 Constants.CMD_END->{
                     Log.i(TAG,"CMD_END")
                     (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).endLoad = true
+                    (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).notifyDataSetChanged()
                 }
                 Constants.CMD_UPDATE->{
                     Log.i(TAG,"CMD_UPDATE")
@@ -374,13 +389,14 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         val productIndexInRound= message.substring(9,11).toInt()
                         val currentProductWeight= message.substring(11,17).toLong()
                         if((currentRoundRunDetail == null || (currentRoundRunDetail != null && currentRoundRunDetail?.id != roundIndex)) && tick - tickCounterMessages > 3){
-                            Log.i(TAG,"message $message\nNot match roundIndex $roundIndex currentRoundRunDetail $currentRoundRunDetail")
+                            Log.i(TAG,"message $message\nNot match roundIndex $roundIndex currentRoundRunDetail.id ${currentRoundRunDetail?.id}")
                             requestRoundRunDetail()
                             tickCounterMessages = tick
                             return
                         }
 
-                        if(currentRoundRunDetail != null && productIndexInRound != indexAnterior){
+                        if(currentRoundRunDetail != null && productIndexInRound != indexAnterior && tick - tickCounterMessages > 0){
+                            Log.i(TAG,"productIndexInRound $productIndexInRound not match indexAnterio $indexAnterior ")
                             indexAnterior = productIndexInRound
                             val product : ProductDetail = currentRoundRunDetail!!.round.diet.products[productIndexInRound]
                             mBinding.tvCurrentProduct.text = product.name
@@ -407,7 +423,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     lastUpdate = LocalDateTime.now()
                 }
             }
-
 
         }
 
