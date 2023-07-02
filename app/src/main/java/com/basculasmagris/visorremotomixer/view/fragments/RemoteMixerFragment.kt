@@ -279,7 +279,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 return
             }
             val comando = String(message.copyOfRange(0,3))
-            Log.i(TAG,"Comando $comando")
             when (comando){
                 Constants.CMD_INI->{
                     Log.i(TAG,"CMD_INI")
@@ -368,28 +367,15 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 Constants.CMD_ACK->{
                     Log.i(TAG,"CMD_ACK")
                 }
-                else->{
-                    Log.i(TAG,"else $comando")
-                }
-            }
-
-        }
-
-        override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
-            if(message == null || message.length<17){
-                Log.i(TAG,"command not enough large (${message?.length})")
-                return
-            }
-
-            when(message.substring(0,3)){
                 Constants.CMD_WEIGHT->{
                     activity?.hideCustomProgressDialog()
                     try{
-                        val roundIndex= message.substring(3,9).toLong()
-                        val productIndexInRound= message.substring(9,11).toInt()
-                        val currentProductWeight= message.substring(11,17).toLong()
+                        val messageStr = String(message)
+                        val roundIndex= messageStr.substring(3,9).toLong()
+                        val productIndexInRound= messageStr.substring(9,11).toInt()
+                        val currentProductWeight= messageStr.substring(11,17).toLong()
                         if((currentRoundRunDetail == null || (currentRoundRunDetail != null && currentRoundRunDetail?.id != roundIndex)) && tick - tickCounterMessages > 3){
-                            Log.i(TAG,"message $message\nNot match roundIndex $roundIndex currentRoundRunDetail.id ${currentRoundRunDetail?.id}")
+                            Log.i(TAG,"message $messageStr\nNot match roundIndex $roundIndex currentRoundRunDetail.id ${currentRoundRunDetail?.id}")
                             requestRoundRunDetail()
                             tickCounterMessages = tick
                             return
@@ -406,9 +392,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         }
                         val percentage = (targetWeight-currentProductWeight)*100/targetWeight
                         mBinding.tvCurrentProductWeightPending.text =   if(currentProductWeight<0)
-                                                                            "+${-1*currentProductWeight}Kg"
-                                                                        else
-                                                                            "${currentProductWeight}Kg"
+                            "+${-1*currentProductWeight}Kg"
+                        else
+                            "${currentProductWeight}Kg"
                         mBinding.pbCurrentProduct.progress = percentage.toInt()
                     }catch (e: NumberFormatException){
                         Log.i(TAG,"NumberFormatException $e")
@@ -422,8 +408,14 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     }
                     lastUpdate = LocalDateTime.now()
                 }
+                else->{
+                    Log.i(TAG,"else $comando")
+                }
             }
 
+        }
+
+        override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
         }
 
         override fun onMessageSent(device: BluetoothDevice?) {
