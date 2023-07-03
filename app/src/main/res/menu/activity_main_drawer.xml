@@ -47,10 +47,10 @@
             android:id="@+id/nav_mixer"
             android:icon="@drawable/ic_mixer"
             android:title="@string/menu_mixer" />
-        <item
-            android:id="@+id/nav_visor_remoto"
-            android:icon="@drawable/ic_tablet_48px"
-            android:title="Visor Remoto" />
+<!--        <item-->
+<!--            android:id="@+id/nav_visor_remoto"-->
+<!--            android:icon="@drawable/ic_tablet_48px"-->
+<!--            android:title="Visor Remoto" />-->
         <item
             android:id="@+id/nav_round"
             android:icon="@drawable/ic_route"

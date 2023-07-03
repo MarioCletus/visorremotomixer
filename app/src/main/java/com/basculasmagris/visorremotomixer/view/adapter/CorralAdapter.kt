@@ -1,12 +1,10 @@
 package com.basculasmagris.visorremotomixer.view.adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
@@ -14,8 +12,6 @@ import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
 import com.basculasmagris.visorremotomixer.databinding.ItemCorralLayoutBinding
 import com.basculasmagris.visorremotomixer.model.entities.Corral
-import com.basculasmagris.visorremotomixer.utils.Constants
-import com.basculasmagris.visorremotomixer.view.activities.AddUpdateCorralActivity
 import com.basculasmagris.visorremotomixer.view.fragments.CorralListFragment
 import com.basculasmagris.visorremotomixer.view.fragments.EstablishmentDetailFragment
 import com.basculasmagris.visorremotomixer.viewmodel.EstablishmentViewModel
@@ -77,36 +73,36 @@ class CorralAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<Cor
             }
         }
 
-        holder.ibMore.setOnClickListener{
-            val popup =  PopupMenu(fragment.context, holder.ibMore)
-            popup.menuInflater.inflate(R.menu.menu_adapter_corral, popup.menu)
+//        holder.ibMore.setOnClickListener{
+//            val popup =  PopupMenu(fragment.context, holder.ibMore)
+//            popup.menuInflater.inflate(R.menu.menu_adapter_corral, popup.menu)
+//
+//            // Si el corralo está sincronizado no se permite el borrado.
+//            if (corral.remoteId != 0L) {
+//                popup.menu.getItem(1).isVisible = false
+//            }
+//
+//            popup.setOnMenuItemClickListener {
+//                if (it.itemId  == R.id.action_edit_corral){
+//                    val intent = Intent(fragment.requireActivity(), AddUpdateCorralActivity::class.java)
+//                    intent.putExtra(Constants.EXTRA_CORRAL_DETAILS, corral)
+//                    fragment.requireActivity().startActivity(intent)
+//                } else if (it.itemId == R.id.action_delete_corral){
+//                    if (fragment is CorralListFragment) {
+//                        fragment.deleteCorral(corral)
+//                    }
+//                }
+//                true
+//            }
+//
+//            popup.show()
+//        }
 
-            // Si el corralo está sincronizado no se permite el borrado.
-            if (corral.remoteId != 0L) {
-                popup.menu.getItem(1).isVisible = false
-            }
-
-            popup.setOnMenuItemClickListener {
-                if (it.itemId  == R.id.action_edit_corral){
-                    val intent = Intent(fragment.requireActivity(), AddUpdateCorralActivity::class.java)
-                    intent.putExtra(Constants.EXTRA_CORRAL_DETAILS, corral)
-                    fragment.requireActivity().startActivity(intent)
-                } else if (it.itemId == R.id.action_delete_corral){
-                    if (fragment is CorralListFragment) {
-                        fragment.deleteCorral(corral)
-                    }
-                }
-                true
-            }
-
-            popup.show()
-        }
-
-        holder.btnEditCorral.setOnClickListener{
-            val intent = Intent(fragment.requireActivity(), AddUpdateCorralActivity::class.java)
-            intent.putExtra(Constants.EXTRA_CORRAL_DETAILS, corral)
-            fragment.requireActivity().startActivity(intent)
-        }
+//        holder.btnEditCorral.setOnClickListener{
+//            val intent = Intent(fragment.requireActivity(), AddUpdateCorralActivity::class.java)
+//            intent.putExtra(Constants.EXTRA_CORRAL_DETAILS, corral)
+//            fragment.requireActivity().startActivity(intent)
+//        }
 
         holder.btnDeleteCorral.setOnClickListener{
             if (fragment is CorralListFragment) {

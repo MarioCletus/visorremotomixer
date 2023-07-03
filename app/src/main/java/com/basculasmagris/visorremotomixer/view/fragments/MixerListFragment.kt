@@ -104,46 +104,46 @@ class MixerListFragment : Fragment() {
         getLocalData()
         getLocalMixer()
         // Navigation Menu
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                // Add menu items here
-                myMenu = menu
-                menuInflater.inflate(R.menu.menu_mixer_list, menu)
-
-                // Associate searchable configuration with the SearchView
-                val search = menu.findItem(R.id.search_mixer)
-                val searchView = search.actionView as SearchView
-                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        (mBinding.rvMixersList.adapter as MixerAdapter).filter.filter(query)
-                        return false
-                    }
-                    override fun onQueryTextChange(newText: String?): Boolean {
-                        (mBinding.rvMixersList.adapter as MixerAdapter).filter.filter(newText)
-                        return true
-                    }
-                })
-            }
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                // Handle the menu selection
-                return when (menuItem.itemId) {
-                    R.id.action_add_mixer -> {
-                        (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
-                        val intent = Intent(requireActivity(), MixerConfigActivity::class.java)
-                        startActivity(intent)
-                        return true
-                    }
-                    else -> false
-                }
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-
-        // Bluethoot
-        Log.i("BLUE", "Se inicia la búsqueda de dispositivos asociados")
-        getSavedMixer()
-        BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireActivity(), mBluetoothListener)
-        selectedMixer?.let { connectDevice(it) }
+//        val menuHost: MenuHost = requireActivity()
+//        menuHost.addMenuProvider(object : MenuProvider {
+//            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+//                // Add menu items here
+//                myMenu = menu
+//                menuInflater.inflate(R.menu.menu_mixer_list, menu)
+//
+//                // Associate searchable configuration with the SearchView
+//                val search = menu.findItem(R.id.search_mixer)
+//                val searchView = search.actionView as SearchView
+//                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//                    override fun onQueryTextSubmit(query: String?): Boolean {
+//                        (mBinding.rvMixersList.adapter as MixerAdapter).filter.filter(query)
+//                        return false
+//                    }
+//                    override fun onQueryTextChange(newText: String?): Boolean {
+//                        (mBinding.rvMixersList.adapter as MixerAdapter).filter.filter(newText)
+//                        return true
+//                    }
+//                })
+//            }
+//            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+//                // Handle the menu selection
+//                return when (menuItem.itemId) {
+//                    R.id.action_add_mixer -> {
+//                        (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
+//                        val intent = Intent(requireActivity(), MixerConfigActivity::class.java)
+//                        startActivity(intent)
+//                        return true
+//                    }
+//                    else -> false
+//                }
+//            }
+//        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+//
+//        // Bluethoot
+//        Log.i("BLUE", "Se inicia la búsqueda de dispositivos asociados")
+//        getSavedMixer()
+//        BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireActivity(), mBluetoothListener)
+//        selectedMixer?.let { connectDevice(it) }
     }
 
     private fun getLocalMixer(){

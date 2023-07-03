@@ -25,11 +25,11 @@
         android:orderInCategory="102"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/action_add_round"
-        android:icon="@drawable/ic_add"
-        android:title="@string/add_round"
-        android:orderInCategory="103"
-        app:showAsAction="always"
-        />
+<!--    <item-->
+<!--        android:id="@+id/action_add_round"-->
+<!--        android:icon="@drawable/ic_add"-->
+<!--        android:title="@string/add_round"-->
+<!--        android:orderInCategory="103"-->
+<!--        app:showAsAction="always"-->
+<!--        />-->
 </menu>

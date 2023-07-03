@@ -120,30 +120,30 @@ class RoundAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<Roun
             }
         }
 
-        holder.ibMore.setOnClickListener{
-            val popup =  PopupMenu(fragment.context, holder.ibMore)
-            popup.menuInflater.inflate(R.menu.menu_adapter_round, popup.menu)
-
-            // Si el roundo está sincronizado no se permite el borrado.
-            if (round.remoteId != 0L) {
-                popup.menu.getItem(1).isVisible = false
-            }
-
-            popup.setOnMenuItemClickListener {
-                if (it.itemId  == R.id.action_edit_round){
-                    val intent = Intent(fragment.requireActivity(), AddUpdateRoundActivity::class.java)
-                    intent.putExtra(Constants.EXTRA_ROUND_DETAILS, round)
-                    fragment.requireActivity().startActivity(intent)
-                } else if (it.itemId == R.id.action_delete_round){
-                    if (fragment is RoundListFragment) {
-                        fragment.deleteRound(round)
-                    }
-                }
-                true
-            }
-
-            popup.show()
-        }
+//        holder.ibMore.setOnClickListener{
+//            val popup =  PopupMenu(fragment.context, holder.ibMore)
+//            popup.menuInflater.inflate(R.menu.menu_adapter_round, popup.menu)
+//
+//            // Si el roundo está sincronizado no se permite el borrado.
+//            if (round.remoteId != 0L) {
+//                popup.menu.getItem(1).isVisible = false
+//            }
+//
+//            popup.setOnMenuItemClickListener {
+//                if (it.itemId  == R.id.action_edit_round){
+//                    val intent = Intent(fragment.requireActivity(), AddUpdateRoundActivity::class.java)
+//                    intent.putExtra(Constants.EXTRA_ROUND_DETAILS, round)
+//                    fragment.requireActivity().startActivity(intent)
+//                } else if (it.itemId == R.id.action_delete_round){
+//                    if (fragment is RoundListFragment) {
+//                        fragment.deleteRound(round)
+//                    }
+//                }
+//                true
+//            }
+//
+//            popup.show()
+//        }
 
         if (fragment is RoundListFragment) {
             holder.ibMore.visibility = View.VISIBLE

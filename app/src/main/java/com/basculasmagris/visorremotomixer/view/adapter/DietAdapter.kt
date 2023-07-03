@@ -114,41 +114,41 @@ class DietAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<DietA
             }
         }
 
-        holder.ibMore.setOnClickListener{
-            val popup =  PopupMenu(fragment.context, holder.ibMore)
-            popup.menuInflater.inflate(R.menu.menu_adapter_diet, popup.menu)
-
-            // Si el dieto está sincronizado no se permite el borrado.
-            if (diet.remoteId != 0L) {
-                popup.menu.getItem(1).isVisible = false
-            }
-
-            popup.setOnMenuItemClickListener {
-                if (it.itemId  == R.id.action_edit_diet){
-                    val intent = Intent(fragment.requireActivity(), AddUpdateDietActivity::class.java)
-                    intent.putExtra(Constants.EXTRA_DIET_DETAILS, diet)
-                    fragment.requireActivity().startActivity(intent)
-                } else if (it.itemId == R.id.action_delete_diet){
-                    if (fragment is DietListFragment) {
-                        fragment.deleteDiet(diet)
-                    }
-                }
-                true
-            }
-
-            popup.show()
-        }
-
-            holder.btnEditDiet.setOnClickListener{
-                val intent = Intent(fragment.requireActivity(), AddUpdateDietActivity::class.java)
-                intent.putExtra(Constants.EXTRA_DIET_DETAILS, diet)
-                fragment.requireActivity().startActivity(intent)
-            }
-            holder.btnDeleteDiet.setOnClickListener{
-                if (fragment is DietListFragment) {
-                    fragment.deleteDiet(diet)
-                }
-            }
+//        holder.ibMore.setOnClickListener{
+//            val popup =  PopupMenu(fragment.context, holder.ibMore)
+//            popup.menuInflater.inflate(R.menu.menu_adapter_diet, popup.menu)
+//
+//            // Si el dieto está sincronizado no se permite el borrado.
+//            if (diet.remoteId != 0L) {
+//                popup.menu.getItem(1).isVisible = false
+//            }
+//
+//            popup.setOnMenuItemClickListener {
+//                if (it.itemId  == R.id.action_edit_diet){
+//                    val intent = Intent(fragment.requireActivity(), AddUpdateDietActivity::class.java)
+//                    intent.putExtra(Constants.EXTRA_DIET_DETAILS, diet)
+//                    fragment.requireActivity().startActivity(intent)
+//                } else if (it.itemId == R.id.action_delete_diet){
+//                    if (fragment is DietListFragment) {
+//                        fragment.deleteDiet(diet)
+//                    }
+//                }
+//                true
+//            }
+//
+//            popup.show()
+//        }
+//
+//            holder.btnEditDiet.setOnClickListener{
+//                val intent = Intent(fragment.requireActivity(), AddUpdateDietActivity::class.java)
+//                intent.putExtra(Constants.EXTRA_DIET_DETAILS, diet)
+//                fragment.requireActivity().startActivity(intent)
+//            }
+//            holder.btnDeleteDiet.setOnClickListener{
+//                if (fragment is DietListFragment) {
+//                    fragment.deleteDiet(diet)
+//                }
+//            }
     }
 
     override fun getItemCount(): Int {

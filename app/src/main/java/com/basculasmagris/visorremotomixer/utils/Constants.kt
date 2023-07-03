@@ -153,5 +153,6 @@ object Constants {
     val CMD_PAUSE = "PAU"
     val CMD_WEIGHT = "WGT"
     val CMD_REFRESH = "RFH"
+    val CMD_INITROUND = "INR"
 
 }

@@ -157,6 +157,7 @@ class BluetoothSDKService : Service() {
         }
 
         fun write(command : ByteArray) {
+            Log.i("BLE","write")
             connectThreadWithTransfer?.write(command)
         }
         // other stuff

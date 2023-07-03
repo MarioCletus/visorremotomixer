@@ -60,36 +60,36 @@ class ProductAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<Pr
         }
 
 
-        holder.itemView.setOnClickListener {
-            if (fragment is ProductListFragment){
-                fragment.goToProductDetails(product)
-            }
-        }
+//        holder.itemView.setOnClickListener {
+//            if (fragment is ProductListFragment){
+//                fragment.goToProductDetails(product)
+//            }
+//        }
 
-        holder.ibMore.setOnClickListener{
-            val popup =  PopupMenu(fragment.context, holder.ibMore)
-            popup.menuInflater.inflate(R.menu.menu_adapter, popup.menu)
-
-            // Si el producto está sincronizado no se permite el borrado.
-            if (product.remoteId != 0L) {
-                popup.menu.getItem(1).isVisible = false
-            }
-
-            popup.setOnMenuItemClickListener {
-                if (it.itemId  == R.id.action_edit_product){
-                    val intent = Intent(fragment.requireActivity(), AddUpdateProductActivity::class.java)
-                    intent.putExtra(Constants.EXTRA_PRODUCT_DETAILS, product)
-                    fragment.requireActivity().startActivity(intent)
-                } else if (it.itemId == R.id.action_delete_product){
-                    if (fragment is ProductListFragment) {
-                        fragment.deleteProduct(product)
-                    }
-                }
-                true
-            }
-
-            popup.show()
-        }
+//        holder.ibMore.setOnClickListener{
+//            val popup =  PopupMenu(fragment.context, holder.ibMore)
+//            popup.menuInflater.inflate(R.menu.menu_adapter, popup.menu)
+//
+//            // Si el producto está sincronizado no se permite el borrado.
+//            if (product.remoteId != 0L) {
+//                popup.menu.getItem(1).isVisible = false
+//            }
+//
+//            popup.setOnMenuItemClickListener {
+//                if (it.itemId  == R.id.action_edit_product){
+//                    val intent = Intent(fragment.requireActivity(), AddUpdateProductActivity::class.java)
+//                    intent.putExtra(Constants.EXTRA_PRODUCT_DETAILS, product)
+//                    fragment.requireActivity().startActivity(intent)
+//                } else if (it.itemId == R.id.action_delete_product){
+//                    if (fragment is ProductListFragment) {
+//                        fragment.deleteProduct(product)
+//                    }
+//                }
+//                true
+//            }
+//
+//            popup.show()
+//        }
 
         if (fragment is ProductListFragment) {
             holder.ibMore.visibility = View.VISIBLE

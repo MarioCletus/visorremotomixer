@@ -48,35 +48,35 @@ class UserAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<UserA
         holder.tvUserTitle.text = user.name + ' ' + user.lastname
         holder.tvUserDescription.text = roles.first { role -> role.first == user.codeRole}.second + "\n" + user.mail
 
-        holder.ibMore.setOnClickListener{
-            val popup =  PopupMenu(fragment.context, holder.ibMore)
-            popup.menuInflater.inflate(R.menu.menu_adapter_user, popup.menu)
+//        holder.ibMore.setOnClickListener{
+//            val popup =  PopupMenu(fragment.context, holder.ibMore)
+//            popup.menuInflater.inflate(R.menu.menu_adapter_user, popup.menu)
+//
+//            // Si el usero está sincronizado no se permite el borrado.
+//            if (user.remoteId != 0L) {
+//                popup.menu.getItem(1).isVisible = false
+//            }
+//
+//            popup.setOnMenuItemClickListener {
+//                if (it.itemId  == R.id.action_edit_user){
+//                    val intent = Intent(fragment.requireActivity(), AddUpdateUserActivity::class.java)
+//                    intent.putExtra(Constants.EXTRA_USER_DETAILS, user)
+//                    fragment.requireActivity().startActivity(intent)
+//                } else if (it.itemId == R.id.action_delete_user){
+//                    if (fragment is UserListFragment) {
+//                        fragment.deleteUser(user)
+//                    }
+//                }
+//                true
+//            }
+//            popup.show()
+//        }
 
-            // Si el usero está sincronizado no se permite el borrado.
-            if (user.remoteId != 0L) {
-                popup.menu.getItem(1).isVisible = false
-            }
-
-            popup.setOnMenuItemClickListener {
-                if (it.itemId  == R.id.action_edit_user){
-                    val intent = Intent(fragment.requireActivity(), AddUpdateUserActivity::class.java)
-                    intent.putExtra(Constants.EXTRA_USER_DETAILS, user)
-                    fragment.requireActivity().startActivity(intent)
-                } else if (it.itemId == R.id.action_delete_user){
-                    if (fragment is UserListFragment) {
-                        fragment.deleteUser(user)
-                    }
-                }
-                true
-            }
-            popup.show()
-        }
-
-        holder.btnEditUser.setOnClickListener {
-            val intent = Intent(fragment.requireActivity(), AddUpdateUserActivity::class.java)
-            intent.putExtra(Constants.EXTRA_USER_DETAILS, user)
-            fragment.requireActivity().startActivity(intent)
-        }
+//        holder.btnEditUser.setOnClickListener {
+//            val intent = Intent(fragment.requireActivity(), AddUpdateUserActivity::class.java)
+//            intent.putExtra(Constants.EXTRA_USER_DETAILS, user)
+//            fragment.requireActivity().startActivity(intent)
+//        }
 
         holder.btnDeleteUser.setOnClickListener {
             if (fragment is UserListFragment) {

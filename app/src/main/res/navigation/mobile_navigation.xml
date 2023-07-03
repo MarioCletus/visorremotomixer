@@ -36,6 +36,9 @@
         <action
             android:id="@+id/actionNavHomeToRoundDetailFragment"
             app:destination="@id/roundDetailFragment" />
+        <action
+            android:id="@+id/actionNavHomeToRemoteMixerFragment"
+            app:destination="@id/nav_mixer_remoto" />
     </fragment>
 
     <!-- PRODUCTS -->

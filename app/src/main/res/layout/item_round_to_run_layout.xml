@@ -146,6 +146,7 @@
                 android:text="@string/detener"
                 android:textSize="13sp"
                 app:backgroundTint="@null"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -173,6 +174,7 @@
             android:src="@drawable/ic_vector_edit_big"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:visibility="invisible"
             app:tint="@color/color_acent_green" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

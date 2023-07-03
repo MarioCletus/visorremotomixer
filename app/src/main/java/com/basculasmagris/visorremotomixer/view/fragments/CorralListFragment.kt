@@ -117,15 +117,16 @@ class CorralListFragment : Fragment() {
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
-                return when (menuItem.itemId) {
-                    R.id.action_add_corral -> {
-                        // clearCompletedTasks()
-                        //startActivity(Intent(requireActivity(), AddUpdateCorralActivity::class.java))
-                        goToAddUpdateCorral()
-                        return true
-                    }
-                    else -> false
-                }
+//                return when (menuItem.itemId) {
+//                    R.id.action_add_corral -> {
+//                        // clearCompletedTasks()
+//                        //startActivity(Intent(requireActivity(), AddUpdateCorralActivity::class.java))
+//                        goToAddUpdateCorral()
+//                        return true
+//                    }
+//                    else -> false
+//                }
+                return false
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 

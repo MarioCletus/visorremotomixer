@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private var mProgressDialog: Dialog? = null
+    var currentRoundRunDetail : RoundRunDetail? = null
     var mLocalDetailRound: MutableList<RoundRunDetail> = ArrayList()
     private var roles: ArrayList<Pair<Int, String>> = arrayListOf(
         Pair(1, "Administrador"),

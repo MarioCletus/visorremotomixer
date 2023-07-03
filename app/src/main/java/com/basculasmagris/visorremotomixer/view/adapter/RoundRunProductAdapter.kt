@@ -54,7 +54,7 @@ class RoundRunProductAdapter (
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val product = filteredProducts[position]
         fragment.context?.let {
-            if(selectedPosition == position) {
+            if(selectedPosition == position && !endLoad) {
                 holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_select_bkg)
                 if (fragment is StepLoadFragment){
                     fragment.selectProduct(product)

@@ -26,6 +26,7 @@ import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.utils.Helper.Companion.getCurrentUser
 import com.basculasmagris.visorremotomixer.view.activities.AddUpdateRoundActivity
+import com.basculasmagris.visorremotomixer.view.activities.MainActivity
 import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
 import com.basculasmagris.visorremotomixer.view.fragments.HomeFragmentDirections
 import com.basculasmagris.visorremotomixer.viewmodel.RoundViewModel
@@ -151,7 +152,7 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
             holder.tvRoundRunDescription.text = getCurrentStatus(roundToRun)
             holder.pbRoundRun.progress = getProgress(roundToRun)
             holder.tvRoundRunPercentage.text = "${holder.pbRoundRun.progress}%"
-            holder.btnStopRound.visibility = VISIBLE
+//            holder.btnStopRound.visibility = VISIBLE
             holder.btnStopRound.text = fragment.resources.getString(R.string.detener)
             holder.btnStopRound.background = fragment.context?.let { getDrawable(it,R.drawable.btn_round_to_run_red) }
             holder.llProgressBar.visibility = VISIBLE
@@ -171,7 +172,7 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
                 holder.tvRoundStartDate.setTextColor(Color.BLACK)
                 holder.tvRoundName.setTextColor(Color.BLACK)
                 holder.tvRoundRunDescription.setTextColor(R.color.color_deep_green)
-                holder.btnStopRound.visibility = VISIBLE
+//                holder.btnStopRound.visibility = VISIBLE
                 holder.btnStopRound.text = fragment.resources.getString(R.string.resumen)
                 holder.btnStopRound.background = fragment.context?.let { getDrawable(it,R.drawable.btn_round_rounded_blue) }
             }
@@ -191,65 +192,48 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
 
         }
 
-        holder.ibMoreRoundRun.setOnClickListener{
-            val popup =  PopupMenu(fragment.context, holder.ibMoreRoundRun)
-            popup.menuInflater.inflate(R.menu.menu_adapter_round, popup.menu)
-
-            // Si el roundo está sincronizado no se permite el borrado.
-            if (roundToRun.remoteId != 0L) {
-                popup.menu.getItem(1).isVisible = false
-            }
-
-            popup.setOnMenuItemClickListener {menuItem ->
-                if (menuItem.itemId  == R.id.action_edit_round){
-                    val ldRound = mRoundViewModel.getRoundById(roundToRun.round.id)
-                    ldRound.observeOnce(fragment.requireActivity()){round->
-                        val intent = Intent(fragment.requireActivity(), AddUpdateRoundActivity::class.java)
-                        intent.putExtra(Constants.EXTRA_ROUND_DETAILS, round)
-                        fragment.requireActivity().startActivity(intent)
-                    }
-                } else if (menuItem.itemId == R.id.action_delete_round){
-                    if (fragment is HomeFragment) {
-                        val localRow = mRoundViewModel.getRoundById(roundToRun.round.id)
-                        fragment.lifecycleScope.launch {
-                            withContext(Dispatchers.Main) {
-                                localRow.observeOnce(fragment){round->
-                                    fragment.deleteRound(round)
-                                }
-                            }
-                        }
-
-                    }
-                }
-                true
-            }
-
-            popup.show()
-        }
+//        holder.ibMoreRoundRun.setOnClickListener{
+//            val popup =  PopupMenu(fragment.context, holder.ibMoreRoundRun)
+//            popup.menuInflater.inflate(R.menu.menu_adapter_round, popup.menu)
+//
+//            // Si el roundo está sincronizado no se permite el borrado.
+//            if (roundToRun.remoteId != 0L) {
+//                popup.menu.getItem(1).isVisible = false
+//            }
+//
+//            popup.setOnMenuItemClickListener {menuItem ->
+//                if (menuItem.itemId  == R.id.action_edit_round){
+//                    val ldRound = mRoundViewModel.getRoundById(roundToRun.round.id)
+//                    ldRound.observeOnce(fragment.requireActivity()){round->
+//                        val intent = Intent(fragment.requireActivity(), AddUpdateRoundActivity::class.java)
+//                        intent.putExtra(Constants.EXTRA_ROUND_DETAILS, round)
+//                        fragment.requireActivity().startActivity(intent)
+//                    }
+//                } else if (menuItem.itemId == R.id.action_delete_round){
+//                    if (fragment is HomeFragment) {
+//                        val localRow = mRoundViewModel.getRoundById(roundToRun.round.id)
+//                        fragment.lifecycleScope.launch {
+//                            withContext(Dispatchers.Main) {
+//                                localRow.observeOnce(fragment){round->
+//                                    fragment.deleteRound(round)
+//                                }
+//                            }
+//                        }
+//
+//                    }
+//                }
+//                true
+//            }
+//
+//            popup.show()
+//        }
 
         holder.btnStartRound.setOnClickListener{
             if (fragment is HomeFragment){
-                if(roundToRun.startDate.isEmpty() && roundToRun.endDate.isEmpty()){
-                    //Ronda nueva
-                    fragment.goToRoundRun(roundToRun,1)
-                }
-                else if (roundToRun.startDate.isNotEmpty() && roundToRun.endDate.isNotEmpty()){
-                    //Ronda finalizada
-                    fragment.goToRoundRun(roundToRun,4)
-                }else if (roundToRun.startDate.isNotEmpty() && roundToRun.endDate.isEmpty()){
-                    //Ronda comenzada
-                    roundToRun.round.diet.products.forEach {
-                        if(it.finalWeight.isNaN() || it.finalWeight.roundToLong() == 0L){
-                            fragment.goToRoundRun(roundToRun,2)
-                            return@setOnClickListener
-                        }
-                    }
-                    fragment.goToRoundRun(roundToRun,3)
-                }else if(roundToRun.startDate.isEmpty() && roundToRun.endDate.isNotEmpty()){
-                    Log.i("DEBUG","Este estado no debería existir")
-                    fragment.goToRoundRun(roundToRun,1)
-                }
-
+                Log.i("ROUNDRUNADAPTER","btnStart")
+                val rounRunId = String.format("%06d",roundToRun.id)
+                val msg = "CMD${Constants.CMD_INITROUND}${rounRunId}"
+                (fragment.requireActivity() as MainActivity).mService?.LocalBinder()?.write(msg.toByteArray())
             }
         }
 
@@ -275,7 +259,7 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
         if (fragment is HomeFragment) {
             val currentUser = getCurrentUser(fragment.requireActivity())
             if(currentUser.role.code == 1)
-                holder.ibMoreRoundRun.visibility = VISIBLE
+//                holder.ibMoreRoundRun.visibility = VISIBLE
             holder.cvRoundIcon.visibility = GONE
         } else {
             holder.ibMoreRoundRun.visibility = GONE

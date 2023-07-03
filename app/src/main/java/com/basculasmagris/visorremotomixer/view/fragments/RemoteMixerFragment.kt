@@ -35,6 +35,7 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.schedule
+import kotlin.math.round
 import kotlin.math.roundToLong
 
 class RemoteMixerFragment : BottomSheetDialogFragment() {
@@ -59,10 +60,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private var currentProductDetail: ProductDetail? = null
     private var previousProductDetail: ProductDetail? =null
     private var mixerDetail: MixerDetail? = null
-    var currentRoundRunDetail: RoundRunDetail? = null
-    private var showSnackbar = true
+
+//    private var showSnackbar = true
     private var isConnected = false
-    private var snackbar: Snackbar? = null
+//    private var snackbar: Snackbar? = null
     private var selectedMixerInFragment: Mixer? = null
     private var mixerBluetoothDevice : BluetoothDevice? = null
     private var knowDevices: List<BluetoothDevice>? = null
@@ -117,23 +118,23 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
         }
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
-        currentRoundRunDetail?.state = Constants.STATE_LOAD
+        activity?.currentRoundRunDetail?.state = Constants.STATE_LOAD
     }
 
     private fun loadRoundDetail() {
-        currentRoundRunDetail?.round?.diet?.let { dietDetail ->
+        activity?.currentRoundRunDetail?.round?.diet?.let { dietDetail ->
             mBinding.rvMixerProductsToLoad.layoutManager = LinearLayoutManager(requireActivity(),0,false)
             val roundRunProductAdapter =  RoundRunProductAdapter(
                 this@RemoteMixerFragment,
                 dietDetail,
                 defaultStep)
-            currentRoundRunDetail?.round?.diet?.products?.let { products ->
+            activity?.currentRoundRunDetail?.round?.diet?.products?.let { products ->
                 roundRunProductAdapter.productList(products)
             }
             mBinding.rvMixerProductsToLoad.adapter = roundRunProductAdapter
 
 
-            currentRoundRunDetail?.round?.diet?.products?.let { products ->
+            activity?.currentRoundRunDetail?.round?.diet?.products?.let { products ->
                 products.forEach{productDetail ->
                     if(productDetail.finalWeight == 0.0){
                         selectProduct(productDetail)
@@ -308,30 +309,29 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     if(str.isNotEmpty()){
                         val gson = Gson()
                         val roundRunDetail : RoundRunDetail = gson.fromJson(str,  RoundRunDetail::class.java)
-                        if(currentRoundRunDetail != null && currentRoundRunDetail!!.id == roundRunDetail.id){
+                        if(activity?.currentRoundRunDetail != null && activity?.currentRoundRunDetail!!.id == roundRunDetail.id){
                             Log.i(TAG,"notifyDataSetChanged roundRunDetail $roundRunDetail")
-                            currentRoundRunDetail = roundRunDetail
-//                            currentRoundRunDetail!!.copy(
-//                                userId = roundRunDetail.userId,
-//                                userDisplayName = roundRunDetail.userDisplayName,
-//                                round = roundRunDetail.round,
-//                                mixer = roundRunDetail.mixer,
-//                                mixerBluetoothDevice = roundRunDetail.mixerBluetoothDevice,
-//                                startDate = roundRunDetail.startDate,
-//                                updatedDate = roundRunDetail.updatedDate,
-//                                endDate = roundRunDetail.endDate,
-//                                remoteId = roundRunDetail.remoteId,
-//                                customPercentage = roundRunDetail.customPercentage,
-//                                customTara = roundRunDetail.customTara,
-//                                addedBlend = roundRunDetail.addedBlend,
-//                                state = roundRunDetail.state,
-//                                id = roundRunDetail.id
-//                            )
+                            activity?.currentRoundRunDetail = roundRunDetail
+
+                            val product = roundRunDetail.round.diet.products.firstOrNull{ productDetail->
+                                productDetail.id == currentProductDetail?.id
+                            }
+                            if (product != null) {
+                                currentProductDetail?.initialWeight = product.initialWeight
+                                (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).updateInicial(product.initialWeight)
+                            }
                             mBinding.rvMixerProductsToLoad.adapter?.notifyDataSetChanged()
                         }else{
                             Log.i(TAG,"new roundRunDetail $roundRunDetail")
-                            currentRoundRunDetail = roundRunDetail
-                            currentRoundRunDetail.let {
+                            activity?.currentRoundRunDetail = roundRunDetail
+                            activity?.currentRoundRunDetail.let { it ->
+                                val product = roundRunDetail.round.diet.products.firstOrNull{ productDetail->
+                                    productDetail.id == currentProductDetail?.id
+                                }
+                                if (product != null) {
+                                    currentProductDetail?.initialWeight = product.initialWeight
+                                    (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).updateInicial(product.initialWeight)
+                                }
                                 loadRoundDetail()
                                 it?.mixer.let {mixerDetail->
                                     val mixer = Mixer(
@@ -378,20 +378,20 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         val roundIndex= messageStr.substring(3,9).toLong()
                         val productIndexInRound= messageStr.substring(9,11).toInt()
                         val currentProductWeight= messageStr.substring(11,17).toLong()
-                        if((currentRoundRunDetail == null || (currentRoundRunDetail != null && currentRoundRunDetail?.id != roundIndex)) && tick - tickCounterMessages > 3){
-                            Log.i(TAG,"message $messageStr\nNot match roundIndex $roundIndex currentRoundRunDetail.id ${currentRoundRunDetail?.id}")
+                        if((activity?.currentRoundRunDetail == null || (activity?.currentRoundRunDetail != null && activity?.currentRoundRunDetail?.id != roundIndex)) && tick - tickCounterMessages > 3){
+                            Log.i(TAG,"message $messageStr\nNot match roundIndex $roundIndex activity?.currentRoundRunDetail.id ${activity?.currentRoundRunDetail?.id}")
                             requestRoundRunDetail()
                             tickCounterMessages = tick
                             return
                         }
 
-                        if(currentRoundRunDetail != null && productIndexInRound != indexAnterior && tick - tickCounterMessages > 0){
+                        if(activity?.currentRoundRunDetail != null && productIndexInRound != indexAnterior && tick - tickCounterMessages > 0){
                             Log.i(TAG,"productIndexInRound $productIndexInRound not match indexAnterio $indexAnterior ")
                             indexAnterior = productIndexInRound
-                            val product : ProductDetail = currentRoundRunDetail!!.round.diet.products[productIndexInRound]
+                            val product : ProductDetail = activity?.currentRoundRunDetail!!.round.diet.products[productIndexInRound]
                             mBinding.tvCurrentProduct.text = product.name
                             targetWeight = product.targetWeight
-                            activity?.changeActionBarTitle("${getString(R.string.mixer_remoto)} - ${currentRoundRunDetail!!.round.name}: ${currentRoundRunDetail!!.round.diet.name}")
+                            activity?.changeActionBarTitle("${getString(R.string.mixer_remoto)} - ${activity?.currentRoundRunDetail!!.round.name}: ${activity?.currentRoundRunDetail!!.round.diet.name}")
                             requestRoundRunDetail()
                         }
                         val percentage = (targetWeight-currentProductWeight)*100/targetWeight
@@ -415,7 +415,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                 Constants.CMD_REFRESH->{
                     refresh = true
-                    Log.i(TAG,"CMD_INI")
+//                    Log.i(TAG,"CMD_REFRESH")
                 }
 
                 else->{
@@ -436,13 +436,13 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             var currentMixerWeight = message.substring(1, 7).toDoubleOrNull()
 
 
-            if (currentMixerWeight != null && currentRoundRunDetail != null){
+            if (currentMixerWeight != null && activity?.currentRoundRunDetail != null){
                 currentMixerWeight = (currentMixerWeight- mixerDetail!!.tara)*mixerDetail!!.calibration
                 totalMixerWeight = currentMixerWeight
                 if(dialogResto!=null && dialogResto!!.isShowing){
                     dialogResto!!.setMessage("${totalMixerWeight.roundToLong()}Kg")
                 }
-                mixerWeight = currentMixerWeight - currentRoundRunDetail?.customTara!! - currentRoundRunDetail?.addedBlend!!
+                mixerWeight = currentMixerWeight - activity?.currentRoundRunDetail?.customTara!! - activity?.currentRoundRunDetail?.addedBlend!!
                 if(previousProductDetail != null && currentProductDetail != null &&
                     previousProductDetail!!.id != currentProductDetail!!.id
                 ){
@@ -455,7 +455,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             }
 
             var actualWeight = 0.0
-            currentRoundRunDetail?.round?.diet?.products?.forEach {
+            activity?.currentRoundRunDetail?.round?.diet?.products?.forEach {
                 actualWeight += it.currentWeight - it.initialWeight
             }
 
@@ -546,14 +546,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
     fun connectDevice(){
         if(!isConnected){
-            snackbar?.dismiss()
             mixerBluetoothDevice?.let { _blueToothDevice->
                 activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(_blueToothDevice)
             }
             activity?.showCustomProgressDialog()
             Timer().schedule(5000) {
                 activity?.hideCustomProgressDialog()
-                showSnackbar = true
                 Log.i(TAG,"changeStatusConnection(false) MRV 453")
                 changeStatusConnection(false)
             }
@@ -595,43 +593,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 antStatus = bConnected
             }
             if (bConnected) {
-                showSnackbar = true
                 deviceConnected()
-                snackbar?.dismiss()
             } else {
                 deviceDisconnected()
-                if (showSnackbar){
-                    showSnackbar = false
-                    if(!mBinding.viewFragmentMixerRemoto.isAttachedToWindow){
-                        return@runOnUiThread
-                    }
-                    snackbar =
-                        Snackbar.make(mBinding.viewFragmentMixerRemoto, "Se perdió la conexión",
-                            BaseTransientBottomBar.LENGTH_INDEFINITE
-                        )
-                    snackbar?.setAction(
-                        "Reconectar"
-                    ) {
-                        Log.i(TAG,"mixerBluetoothDevice $mixerBluetoothDevice | selectedMixerInFragment $selectedMixerInFragment")
-                        if(mixerBluetoothDevice != null){
-                            mixerBluetoothDevice?.let {
-                                activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
-                            }
-                        }else{
-                            selectedMixerInFragment?.let { mixerS ->
-                                Log.i(TAG,"mixerBluetoothDevice null $selectedMixerInFragment")
-                                setMixer(mixerS) }
-                        }
-                        activity?.showCustomProgressDialog()
-                        Timer().schedule(5000) {
-                            activity?.hideCustomProgressDialog()
-                            showSnackbar = true
-                            changeStatusConnection(false)
-                            Log.i(TAG,"changeStatusConnection(false) MRV 606")
-                        }
-                    }
-                    snackbar?.show()
-                }
+
 
             }
         }
@@ -659,10 +624,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             Log.i(TAG,"setMixer $mixer  \nmService ${(requireActivity() as MainActivity).mService}")
             (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
         }
-
     }
-
-
 
     fun dialogAlertTargetWeight(nextItem : String ="",strKg :String="") : AlertDialog? {
         if(dialogCountDown != null && dialogCountDown!!.isShowing ){

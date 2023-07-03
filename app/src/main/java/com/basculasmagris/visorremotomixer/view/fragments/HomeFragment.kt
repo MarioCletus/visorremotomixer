@@ -30,6 +30,7 @@ import com.basculasmagris.visorremotomixer.databinding.FragmentHomeBinding
 import com.basculasmagris.visorremotomixer.model.entities.*
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
+import com.basculasmagris.visorremotomixer.utils.ConvertStringToZip
 import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.utils.Helper.Companion.getCurrentUser
 import com.basculasmagris.visorremotomixer.utils.Helper.Companion.setProgressDialog
@@ -37,9 +38,11 @@ import com.basculasmagris.visorremotomixer.view.activities.*
 import com.basculasmagris.visorremotomixer.view.adapter.CustomListItem
 import com.basculasmagris.visorremotomixer.view.adapter.CustomListItemAdapterFragment
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunAdapter
+import com.basculasmagris.visorremotomixer.view.adapter.RoundRunProductAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.basculasmagris.visorremotomixer.viewmodel.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.gson.Gson
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -54,6 +57,7 @@ class HomeFragment : BottomSheetDialogFragment() {
     var myMenu: Menu? = null
     private var dialog: AlertDialog? = null
     private var activity : MainActivity? = null
+    private var mixerBluetoothDevice : BluetoothDevice? = null
 
     private lateinit var mBinding: FragmentHomeBinding
     private var liveData: MediatorLiveData<MergedLocalData>? = null
@@ -680,53 +684,53 @@ class HomeFragment : BottomSheetDialogFragment() {
         }
 
         // Navigation Menu
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                // Add menu items here
-                myMenu = menu
-                menuInflater.inflate(R.menu.menu_home, menu)
-                val changeMixer = menu.findItem(R.id.action_change_mixer)
-                val selectedMixer = getSelectedMixer()
-                if (selectedMixer != null){
-                    changeMixer.title = "   "+ selectedMixer.name
-                } else {
-                    changeMixer.title = "   "+ "Elegir Mixer"
-                }
-
-                val search = menu.findItem(R.id.search_round)
-                val searchView = search.actionView as SearchView
-                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        (mBinding.rvLastRounds.adapter as RoundRunAdapter).filter.filter(query)
-                        return false
-                    }
-                    override fun onQueryTextChange(newText: String?): Boolean {
-                        (mBinding.rvLastRounds.adapter as RoundRunAdapter).filter.filter(newText)
-                        return true
-                    }
-                })
-
-            }
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                // Handle the menu selection
-                return when (menuItem.itemId) {
-                    R.id.action_change_mixer -> {
-                        if (mLocalMixersCustomList.size > 0){
-                            customItemsLDialog("Mixer", mLocalMixersCustomList,Constants.MIXER_REF)
-                        } else {
-                            alertMixer("No hay ningún mixer vinculado en el dispositvo.")
-                        }
-                        return true
-                    }
-                    R.id.action_add_round -> {
-                        goToAddUpdateRound()
-                        return true
-                    }
-                    else -> false
-                }
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+//        val menuHost: MenuHost = requireActivity()
+//        menuHost.addMenuProvider(object : MenuProvider {
+//            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+//                // Add menu items here
+//                myMenu = menu
+//                menuInflater.inflate(R.menu.menu_home, menu)
+//                val changeMixer = menu.findItem(R.id.action_change_mixer)
+//                val selectedMixer = getSelectedMixer()
+//                if (selectedMixer != null){
+//                    changeMixer.title = "   "+ selectedMixer.name
+//                } else {
+//                    changeMixer.title = "   "+ "Elegir Mixer"
+//                }
+//
+//                val search = menu.findItem(R.id.search_round)
+//                val searchView = search.actionView as SearchView
+//                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//                    override fun onQueryTextSubmit(query: String?): Boolean {
+//                        (mBinding.rvLastRounds.adapter as RoundRunAdapter).filter.filter(query)
+//                        return false
+//                    }
+//                    override fun onQueryTextChange(newText: String?): Boolean {
+//                        (mBinding.rvLastRounds.adapter as RoundRunAdapter).filter.filter(newText)
+//                        return true
+//                    }
+//                })
+//
+//            }
+//            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+//                // Handle the menu selection
+//                return when (menuItem.itemId) {
+//                    R.id.action_change_mixer -> {
+//                        if (mLocalMixersCustomList.size > 0){
+//                            customItemsLDialog("Mixer", mLocalMixersCustomList,Constants.MIXER_REF)
+//                        } else {
+//                            alertMixer("No hay ningún mixer vinculado en el dispositvo.")
+//                        }
+//                        return true
+//                    }
+//                    R.id.action_add_round -> {
+////                        goToAddUpdateRound()
+//                        return true
+//                    }
+//                    else -> false
+//                }
+//            }
+//        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
         return mBinding.root
     }
 
@@ -832,6 +836,13 @@ class HomeFragment : BottomSheetDialogFragment() {
             }
             setAdapters()
         }
+
+        mixerBluetoothDevice?.let {
+            activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+        }
+        BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
+        activity?.currentRoundRunDetail?.state = Constants.STATE_NONE
+
     }
 
     override fun onResume() {
@@ -867,6 +878,10 @@ class HomeFragment : BottomSheetDialogFragment() {
         findNavController().navigate(HomeFragmentDirections.actionNavHomeToRoundDetailFragment(
             round
         ))
+    }
+
+    fun goToRemoteMixerFragment(){
+        findNavController().navigate(HomeFragmentDirections.actionNavHomeToAddUpdateRoundActivity())
     }
 
     fun goToAddUpdateRound(){
@@ -1064,6 +1079,79 @@ class HomeFragment : BottomSheetDialogFragment() {
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
             Log.i("${this.javaClass.name} BLUE", "ACT onCommandReceived")
+            val convertStringToZip = ConvertStringToZip()
+            if(message == null || message.size<9){
+                Log.i(TAG,"command not enough large (${message?.size})")
+                return
+            }
+            when (String(message.copyOfRange(0,3))){
+                Constants.CMD_INI->{
+                    Log.i(TAG,"CMD_INI")
+                }
+
+                Constants.CMD_ROUNDDETAIL->{
+                    Log.i(TAG,"CMD_ROUNDDETAIL")
+                    val byteArrayUtil = message.copyOfRange(9,message.size-9)
+                    val arraySize: Int
+                    try{
+                        val strToInt = String(message,3,6)
+                        arraySize = strToInt.toInt()
+                    }catch (e: NumberFormatException){
+                        Log.i(TAG,"NumberFormatException $e")
+                        return
+                    }catch (e:Exception){
+                        Log.i(TAG,"Exception $e")
+                        return
+                    }
+                    val str : String = convertStringToZip.decompress(byteArrayUtil,arraySize)
+                    if(str.isNotEmpty()){
+                        val gson = Gson()
+                        val roundRunDetail : RoundRunDetail = gson.fromJson(str,  RoundRunDetail::class.java)
+                        Log.i(TAG,"notifyDataSetChanged roundRunDetail $roundRunDetail")
+                        activity?.currentRoundRunDetail = roundRunDetail
+                        activity?.currentRoundRunDetail.let {
+                            it?.mixer.let {mixerDetail->
+                                val mixer = Mixer(
+                                    mixerDetail!!.name,
+                                    mixerDetail.description,
+                                    mixerDetail.mac,
+                                    mixerDetail.btBox,
+                                    mixerDetail.tara,
+                                    mixerDetail.calibration,
+                                    mixerDetail.rfid,
+                                    mixerDetail.remoteId,
+                                    mixerDetail.updatedDate,
+                                    mixerDetail.archiveDate,
+                                    true,
+                                    mixerDetail.id
+                                )
+                                setMixer(mixer)
+                            }
+                        }
+                    }
+                }
+
+                Constants.CMD_NXTPRODUCT->{
+                }
+                Constants.CMD_END->{
+                }
+                Constants.CMD_UPDATE->{
+                }
+                Constants.CMD_ACK->{
+                }
+                Constants.CMD_WEIGHT->{
+                }
+
+                Constants.CMD_REFRESH->{
+                }
+
+                Constants.CMD_INITROUND->{
+                    goToRemoteMixerFragment()
+                }
+
+                else->{
+                }
+            }
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
@@ -1085,29 +1173,42 @@ class HomeFragment : BottomSheetDialogFragment() {
         }
 
         override fun onBondedDevices(device: List<BluetoothDevice>?) {
-            Log.i(TAG, "ACT onBondedDevices")
-            Log.i(TAG,"selectedMixerInFragment $selectedMixerInFragment")
-            knowDevices?.forEach {
-                Log.i(TAG, "knowDevices: ${it.name} | ${it.address}")
-            }
+            Log.i(TAG, "[MixRem]ACT onBondedDevices ${device?.size} \n$device")
             knowDevices = device
-            val selectedMixer = getSelectedMixer()
-            if (selectedMixer != null){
-                myMenu?.findItem(R.id.action_change_mixer)?.title = "   " +selectedMixer.name
-            }
 
-            mLocalMixers?.forEach {
-                val alreadyExist = mLocalMixersCustomList.firstOrNull {  customItem ->
-                    customItem.id == it.id
-                }
-
-                val isLinked = knowDevices?.any { knowDevice -> knowDevice.address == it.mac } == true
-                if (alreadyExist == null && isLinked){
-                    val customList = CustomListItem(it.id, it.remoteId, it.name)
-                    mLocalMixersCustomList.add(customList)
+            knowDevices?.forEach{
+                Log.i(TAG,"selectedMixerInFragment $selectedMixerInFragment \nbluetoothKnowed $it")
+                if(selectedMixerInFragment !=null && selectedMixerInFragment!!.mac == it.address){
+                    mixerBluetoothDevice = it
+                    Log.i(TAG,"Se seleccionó ${it.name} : ${it.address}")
                 }
             }
         }
+
+//        override fun onBondedDevices(device: List<BluetoothDevice>?) {
+//            Log.i(TAG, "ACT onBondedDevices")
+//            Log.i(TAG,"selectedMixerInFragment $selectedMixerInFragment")
+//            knowDevices?.forEach {
+//                Log.i(TAG, "knowDevices: ${it.name} | ${it.address}")
+//            }
+//            knowDevices = device
+//            val selectedMixer = getSelectedMixer()
+//            if (selectedMixer != null){
+//                myMenu?.findItem(R.id.action_change_mixer)?.title = "   " +selectedMixer.name
+//            }
+//
+//            mLocalMixers?.forEach {
+//                val alreadyExist = mLocalMixersCustomList.firstOrNull {  customItem ->
+//                    customItem.id == it.id
+//                }
+//
+//                val isLinked = knowDevices?.any { knowDevice -> knowDevice.address == it.mac } == true
+//                if (alreadyExist == null && isLinked){
+//                    val customList = CustomListItem(it.id, it.remoteId, it.name)
+//                    mLocalMixersCustomList.add(customList)
+//                }
+//            }
+//        }
     }
 
     fun connected(){

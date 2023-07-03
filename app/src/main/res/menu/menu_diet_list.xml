@@ -8,12 +8,12 @@
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/action_add_diet"
-        android:icon="@drawable/ic_add"
-        android:title="@string/add_diet"
-        android:orderInCategory="101"
-        app:showAsAction="always"
-        />
+<!--    <item-->
+<!--        android:id="@+id/action_add_diet"-->
+<!--        android:icon="@drawable/ic_add"-->
+<!--        android:title="@string/add_diet"-->
+<!--        android:orderInCategory="101"-->
+<!--        app:showAsAction="always"-->
+<!--        />-->
 
 </menu>

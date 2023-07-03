@@ -83,39 +83,39 @@ class RoundListFragment : Fragment() {
         getLocalRound()
 
         // Navigation Menu
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                // Add menu items here
-                menuInflater.inflate(R.menu.menu_round_list, menu)
-
-                // Associate searchable configuration with the SearchView
-                val search = menu.findItem(R.id.search_round)
-                val searchView = search.actionView as SearchView
-                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        (mBinding.rvRoundsList.adapter as RoundAdapter).filter.filter(query)
-                        return false
-                    }
-                    override fun onQueryTextChange(newText: String?): Boolean {
-                        (mBinding.rvRoundsList.adapter as RoundAdapter).filter.filter(newText)
-                        return true
-                    }
-                })
-            }
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                // Handle the menu selection
-                return when (menuItem.itemId) {
-                    R.id.action_add_round -> {
-                        // clearCompletedTasks()
-                        //startActivity(Intent(requireActivity(), AddUpdateRoundActivity::class.java))
-                        goToAddUpdateRound()
-                        return true
-                    }
-                    else -> false
-                }
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+//        val menuHost: MenuHost = requireActivity()
+//        menuHost.addMenuProvider(object : MenuProvider {
+//            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+//                // Add menu items here
+//                menuInflater.inflate(R.menu.menu_round_list, menu)
+//
+//                // Associate searchable configuration with the SearchView
+//                val search = menu.findItem(R.id.search_round)
+//                val searchView = search.actionView as SearchView
+//                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//                    override fun onQueryTextSubmit(query: String?): Boolean {
+//                        (mBinding.rvRoundsList.adapter as RoundAdapter).filter.filter(query)
+//                        return false
+//                    }
+//                    override fun onQueryTextChange(newText: String?): Boolean {
+//                        (mBinding.rvRoundsList.adapter as RoundAdapter).filter.filter(newText)
+//                        return true
+//                    }
+//                })
+//            }
+//            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+//                // Handle the menu selection
+//                return when (menuItem.itemId) {
+//                    R.id.action_add_round -> {
+//                        // clearCompletedTasks()
+//                        //startActivity(Intent(requireActivity(), AddUpdateRoundActivity::class.java))
+//                        goToAddUpdateRound()
+//                        return true
+//                    }
+//                    else -> false
+//                }
+//            }
+//        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
     }
 

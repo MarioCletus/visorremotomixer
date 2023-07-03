@@ -231,8 +231,8 @@ class SyncFragment : Fragment() {
             val totalRoundRun= mLocalRoundRun!!.filter {
                 it.remoteId == 0L && it.endDate.isNotEmpty() //TODO
             }.size
-            mBinding.pbReports.progress = 0
-            mBinding.tvReportsPercentage.text = Helper.getNumberWithDecimals(0.0, 2) + "% (0 / $totalRoundRun)"
+//            mBinding.pbReports.progress = 0
+//            mBinding.tvReportsPercentage.text = Helper.getNumberWithDecimals(0.0, 2) + "% (0 / $totalRoundRun)"
 
         }
 
@@ -507,13 +507,13 @@ class SyncFragment : Fragment() {
 
         Log.i("SYNC", "      Cargando establecimientos: ${itemsToAddOrUpdate.size}")
 
-        itemsToAddOrUpdate.forEach{ item ->
-            currentProcessedItem += 1
-            percentageValue = (currentProcessedItem)*100.0/totalSize
-            mBinding.pbEstablishments.progress = percentageValue.roundToInt()
-            mBinding.tvEstablishmentsPercentage.text = Helper.getNumberWithDecimals(percentageValue, 2) + "% ($currentProcessedItem / $totalSize)"
-            saveLocalEstablishmentInServer(item)
-        }
+//        itemsToAddOrUpdate.forEach{ item ->
+//            currentProcessedItem += 1
+//            percentageValue = (currentProcessedItem)*100.0/totalSize
+//            mBinding.pbEstablishments.progress = percentageValue.roundToInt()
+//            mBinding.tvEstablishmentsPercentage.text = Helper.getNumberWithDecimals(percentageValue, 2) + "% ($currentProcessedItem / $totalSize)"
+//            saveLocalEstablishmentInServer(item)
+//        }
         Log.i("SYNC", "      --------------------------------")
     }
 
@@ -564,27 +564,28 @@ class SyncFragment : Fragment() {
 
     }
 
-    private fun saveLocalEstablishmentInServer(establishment: Establishment){
+//    private fun saveLocalEstablishmentInServer(establishment: Establishment){
+//
+//            // Si no tiene remoteID significa que es un establishmento que
+//            // fue generado desde la APP pero que nunca pudo ser sincronizado
+//            if (establishment.remoteId == 0L) {
+//                Log.i(
+//                    "SYNC",
+//                    "        - Added: ${establishment.id} (${establishment.name})"
+//                )
+//                mEstablishmentViewModelRemote?.addEstablishmentFromAPI(establishment)
+//            } else if (establishment.updatedDate.isNotEmpty()) {
+//                // Si no tiene updatedDate significa que es un establishmento que
+//                // fue actualizado desde la APP pero que no pudieron sincronizarse los cambios.
+//
+//                Log.i(
+//                    "SYNC",
+//                    "        - Updated: ${establishment.id} (${establishment.name})"
+//                )
+//                mEstablishmentViewModelRemote?.updateEstablishmentFromAPI(establishment)
+//            }
+//    }
 
-            // Si no tiene remoteID significa que es un establishmento que
-            // fue generado desde la APP pero que nunca pudo ser sincronizado
-            if (establishment.remoteId == 0L) {
-                Log.i(
-                    "SYNC",
-                    "        - Added: ${establishment.id} (${establishment.name})"
-                )
-                mEstablishmentViewModelRemote?.addEstablishmentFromAPI(establishment)
-            } else if (establishment.updatedDate.isNotEmpty()) {
-                // Si no tiene updatedDate significa que es un establishmento que
-                // fue actualizado desde la APP pero que no pudieron sincronizarse los cambios.
-
-                Log.i(
-                    "SYNC",
-                    "        - Updated: ${establishment.id} (${establishment.name})"
-                )
-                mEstablishmentViewModelRemote?.updateEstablishmentFromAPI(establishment)
-            }
-    }
     private suspend fun saveRemoteEstablishmentInDatabase(remoteEstablishment: EstablishmentRemote){
 
         val localEstablishment = mLocalEstablishments?.filter {
@@ -707,13 +708,13 @@ class SyncFragment : Fragment() {
         }
 
         Log.i("SYNC", "      Cargando Corrales: ${itemsToAddOrUpdate.size}")
-        itemsToAddOrUpdate.forEach{ item ->
-            currentProcessedItem += 1
-            percentageValue = (currentProcessedItem)*100.0/totalSize
-            mBinding.pbCorrals.progress = percentageValue.roundToInt()
-            mBinding.tvCorralsPercentage.text = Helper.getNumberWithDecimals(percentageValue, 2) + "% ($currentProcessedItem / $totalSize)"
-            saveLocalCorralInServer(item)
-        }
+//        itemsToAddOrUpdate.forEach{ item ->
+//            currentProcessedItem += 1
+//            percentageValue = (currentProcessedItem)*100.0/totalSize
+//            mBinding.pbCorrals.progress = percentageValue.roundToInt()
+//            mBinding.tvCorralsPercentage.text = Helper.getNumberWithDecimals(percentageValue, 2) + "% ($currentProcessedItem / $totalSize)"
+//            saveLocalCorralInServer(item)
+//        }
     }
     private fun corralViewModelRemoteObserver(){
 
@@ -754,36 +755,37 @@ class SyncFragment : Fragment() {
             }
     }
 
-    private fun saveLocalCorralInServer(corral: Corral){
+//    private fun saveLocalCorralInServer(corral: Corral){
+//
+//            // Se actualiza el ID Remoto de la dependencia
+//            val localEstablishment = mLocalEstablishments?.firstOrNull {
+//                it.id == corral.establishmentId
+//            }
+//            localEstablishment?.let {
+//                corral.establishmentRemoteId = it.remoteId
+//            }
+//
+//            // Si no tiene remoteID significa que es un corralo que
+//            // fue generado desde la APP pero que nunca pudo ser sincronizado
+//            if (corral.remoteId == 0L) {
+//                Log.i(
+//                    "SYNC",
+//                    "        - Added: ${corral.id} (${corral.name}) | Est. ${corral.establishmentId}/${corral.establishmentRemoteId}"
+//                )
+//                mCorralViewModelRemote?.addCorralFromAPI(corral)
+//            }
+//
+//            // Si no tiene updatedDate significa que es un corralo que
+//            // fue actualizado desde la APP pero que no pudieron sincronizarse los cambios.
+//            if (corral.updatedDate.isNotEmpty()){
+//                Log.i(
+//                    "SYNC",
+//                    "        - Updated: ${corral.id} (${corral.name})"
+//                )
+//                mCorralViewModelRemote?.updateCorralFromAPI(corral)
+//            }
+//    }
 
-            // Se actualiza el ID Remoto de la dependencia
-            val localEstablishment = mLocalEstablishments?.firstOrNull {
-                it.id == corral.establishmentId
-            }
-            localEstablishment?.let {
-                corral.establishmentRemoteId = it.remoteId
-            }
-
-            // Si no tiene remoteID significa que es un corralo que
-            // fue generado desde la APP pero que nunca pudo ser sincronizado
-            if (corral.remoteId == 0L) {
-                Log.i(
-                    "SYNC",
-                    "        - Added: ${corral.id} (${corral.name}) | Est. ${corral.establishmentId}/${corral.establishmentRemoteId}"
-                )
-                mCorralViewModelRemote?.addCorralFromAPI(corral)
-            }
-
-            // Si no tiene updatedDate significa que es un corralo que
-            // fue actualizado desde la APP pero que no pudieron sincronizarse los cambios.
-            if (corral.updatedDate.isNotEmpty()){
-                Log.i(
-                    "SYNC",
-                    "        - Updated: ${corral.id} (${corral.name})"
-                )
-                mCorralViewModelRemote?.updateCorralFromAPI(corral)
-            }
-    }
     private suspend fun saveRemoteCorralInDatabase(remoteCorral: CorralRemote){
 
         val localCorral = mLocalCorrals?.filter {
@@ -927,13 +929,13 @@ class SyncFragment : Fragment() {
 
         Log.i("SYNC", "      Cargando productos: ${productsToAddOrUpdate.size}")
 
-        productsToAddOrUpdate.forEach{ product ->
-            currentProcessedItem += 1
-            percentageValue = (currentProcessedItem)*100.0/totalSize
-            mBinding.pbProducts.progress = percentageValue.roundToInt()
-            mBinding.tvProductsPercentage.text = Helper.getNumberWithDecimals(percentageValue, 2) + "% ($currentProcessedItem / $totalSize)"
-            saveLocalProductInServer(product)
-        }
+//        productsToAddOrUpdate.forEach{ product ->
+//            currentProcessedItem += 1
+//            percentageValue = (currentProcessedItem)*100.0/totalSize
+//            mBinding.pbProducts.progress = percentageValue.roundToInt()
+//            mBinding.tvProductsPercentage.text = Helper.getNumberWithDecimals(percentageValue, 2) + "% ($currentProcessedItem / $totalSize)"
+//            saveLocalProductInServer(product)
+//        }
     }
     private fun productViewModelRemoteObserver(){
         mProductViewModelRemote?.productsResponse?.observe(viewLifecycleOwner) { remoteProduct ->
@@ -986,26 +988,26 @@ class SyncFragment : Fragment() {
 
     }
 
-    private fun saveLocalProductInServer(product: Product){
-
-        // Si no tiene remoteID significa que es un producto que
-        // fue generado desde la APP pero que nunca pudo ser sincronizado
-        if (product.remoteId == 0L) {
-            Log.i(
-                "SYNC",
-                "        - Added: ${product.id} (${product.name})"
-            )
-            mProductViewModelRemote?.addProductFromAPI(product)
-        } else if (product.updatedDate.isNotEmpty()){
-            // Si no tiene updatedDate significa que es un producto que
-            // fue actualizado desde la APP pero que no pudieron sincronizarse los cambios.
-            Log.i(
-                "SYNC",
-                "        - Updated: ${product.id} (${product.name})"
-            )
-            mProductViewModelRemote?.updateProductFromAPI(product)
-        }
-    }
+//    private fun saveLocalProductInServer(product: Product){
+//
+//        // Si no tiene remoteID significa que es un producto que
+//        // fue generado desde la APP pero que nunca pudo ser sincronizado
+//        if (product.remoteId == 0L) {
+//            Log.i(
+//                "SYNC",
+//                "        - Added: ${product.id} (${product.name})"
+//            )
+//            mProductViewModelRemote?.addProductFromAPI(product)
+//        } else if (product.updatedDate.isNotEmpty()){
+//            // Si no tiene updatedDate significa que es un producto que
+//            // fue actualizado desde la APP pero que no pudieron sincronizarse los cambios.
+//            Log.i(
+//                "SYNC",
+//                "        - Updated: ${product.id} (${product.name})"
+//            )
+//            mProductViewModelRemote?.updateProductFromAPI(product)
+//        }
+//    }
 
     private suspend fun saveRemoteProductInDatabase(remoteProduct: ProductRemote){
 
@@ -1148,13 +1150,13 @@ class SyncFragment : Fragment() {
         }
 
         Log.i("SYNC", "      Cargando Mixer: ${itemsToAddOrUpdate.size}")
-        itemsToAddOrUpdate.forEach{ item ->
-            currentProcessedItem += 1
-            percentageValue = (currentProcessedItem)*100.0/totalSize
-            mBinding.pbMixers.progress = percentageValue.roundToInt()
-            mBinding.tvMixersPercentage.text = Helper.getNumberWithDecimals(percentageValue, 2) + "% ($currentProcessedItem / $totalSize)"
-            saveLocalMixerInServer(item)
-        }
+//        itemsToAddOrUpdate.forEach{ item ->
+//            currentProcessedItem += 1
+//            percentageValue = (currentProcessedItem)*100.0/totalSize
+//            mBinding.pbMixers.progress = percentageValue.roundToInt()
+//            mBinding.tvMixersPercentage.text = Helper.getNumberWithDecimals(percentageValue, 2) + "% ($currentProcessedItem / $totalSize)"
+//            saveLocalMixerInServer(item)
+//        }
     }
     private fun mixerViewModelRemoteObserver(){
 
@@ -1195,29 +1197,29 @@ class SyncFragment : Fragment() {
             }
     }
 
-    private fun saveLocalMixerInServer(mixer: Mixer){
-
-            // Si no tiene remoteID significa que es un mixero que
-            // fue generado desde la APP pero que nunca pudo ser sincronizado
-            if (mixer.remoteId == 0L) {
-                Log.i(
-                    "SYNC",
-                    "        - Added: ${mixer.id} (${mixer.name})"
-                )
-                mMixerViewModelRemote?.addMixerFromAPI(mixer)
-            }
-
-            // Si no tiene updatedDate significa que es un mixero que
-            // fue actualizado desde la APP pero que no pudieron sincronizarse los cambios.
-            if (mixer.updatedDate.isNotEmpty()){
-                Log.i(
-                    "SYNC",
-                    "        - Updated: ${mixer.id} (${mixer.name})"
-                )
-                mMixerViewModelRemote?.updateMixerFromAPI(mixer)
-            }
-
-    }
+//    private fun saveLocalMixerInServer(mixer: Mixer){
+//
+//            // Si no tiene remoteID significa que es un mixero que
+//            // fue generado desde la APP pero que nunca pudo ser sincronizado
+//            if (mixer.remoteId == 0L) {
+//                Log.i(
+//                    "SYNC",
+//                    "        - Added: ${mixer.id} (${mixer.name})"
+//                )
+//                mMixerViewModelRemote?.addMixerFromAPI(mixer)
+//            }
+//
+//            // Si no tiene updatedDate significa que es un mixero que
+//            // fue actualizado desde la APP pero que no pudieron sincronizarse los cambios.
+//            if (mixer.updatedDate.isNotEmpty()){
+//                Log.i(
+//                    "SYNC",
+//                    "        - Updated: ${mixer.id} (${mixer.name})"
+//                )
+//                mMixerViewModelRemote?.updateMixerFromAPI(mixer)
+//            }
+//
+//    }
     private suspend fun saveRemoteMixerInDatabase(remoteMixer: MixerRemote){
 
         val localMixer = mLocalMixers?.filter {
@@ -1361,55 +1363,55 @@ class SyncFragment : Fragment() {
 
         Log.i("SYNC", "      Cargando Dietas: ${itemsToAddOrUpdate.size}")
 
-        itemsToAddOrUpdate.forEach{ item ->
-            currentProcessedItem += 1
-            percentageValue = (currentProcessedItem)*100.0/totalSize
-            mBinding.pbDiets.progress = percentageValue.roundToInt()
-            mBinding.tvDietsPercentage.text = Helper.getNumberWithDecimals(percentageValue, 2) + "% ($currentProcessedItem / $totalSize)"
-
-            val dietRemote = DietRemote(
-                item.name,
-                item.description,
-                item.remoteId,item.id,"","",
-                item.usePercentage, ArrayList()
-            )
-
-            val dietProducts = mLocalDietProducts?.filter {
-                it.dietId == item.id
-            }
-
-            dietProducts?.forEach {
-
-                //Busca el ID remoto del producto
-                val localProduct = mLocalProducts?.firstOrNull { localProduct ->
-                    localProduct.id == it.productId
-                }
-
-                //Busca el ID remoto de la dieta
-                val localDiet = mLocalDiets?.firstOrNull { localDiet ->
-                    localDiet.id == it.dietId
-                }
-
-                if (localProduct != null && localDiet != null){
-                    val dpd = DietProductDetail(
-                        it.productId,
-                        localProduct.remoteId,
-                        "",
-                        "",
-                        it.dietId,
-                        localDiet.remoteId,
-                        it.percentage,
-                        it.weight,
-                        it.order)
-
-                    dietRemote.products.add(dpd)
-                }
-
-
-            }
-
-            saveLocalDietInServer(dietRemote, (dietRemote.id == 0L))
-        }
+//        itemsToAddOrUpdate.forEach{ item ->
+//            currentProcessedItem += 1
+//            percentageValue = (currentProcessedItem)*100.0/totalSize
+//            mBinding.pbDiets.progress = percentageValue.roundToInt()
+//            mBinding.tvDietsPercentage.text = Helper.getNumberWithDecimals(percentageValue, 2) + "% ($currentProcessedItem / $totalSize)"
+//
+//            val dietRemote = DietRemote(
+//                item.name,
+//                item.description,
+//                item.remoteId,item.id,"","",
+//                item.usePercentage, ArrayList()
+//            )
+//
+//            val dietProducts = mLocalDietProducts?.filter {
+//                it.dietId == item.id
+//            }
+//
+//            dietProducts?.forEach {
+//
+//                //Busca el ID remoto del producto
+//                val localProduct = mLocalProducts?.firstOrNull { localProduct ->
+//                    localProduct.id == it.productId
+//                }
+//
+//                //Busca el ID remoto de la dieta
+//                val localDiet = mLocalDiets?.firstOrNull { localDiet ->
+//                    localDiet.id == it.dietId
+//                }
+//
+//                if (localProduct != null && localDiet != null){
+//                    val dpd = DietProductDetail(
+//                        it.productId,
+//                        localProduct.remoteId,
+//                        "",
+//                        "",
+//                        it.dietId,
+//                        localDiet.remoteId,
+//                        it.percentage,
+//                        it.weight,
+//                        it.order)
+//
+//                    dietRemote.products.add(dpd)
+//                }
+//
+//
+//            }
+//
+//            saveLocalDietInServer(dietRemote, (dietRemote.id == 0L))
+//        }
     }
     private fun dietViewModelRemoteObserver(){
             // Get observers
@@ -1451,35 +1453,35 @@ class SyncFragment : Fragment() {
             }
     }
 
-    private fun saveLocalDietInServer(diet: DietRemote, isNew: Boolean){
-
-            // Si no tiene remoteID significa que es un mixero que
-            // fue generado desde la APP pero que nunca pudo ser sincronizado
-            if (isNew) {
-                Log.i(
-                    "SYNC",
-                    "        - Added: (${diet.name}) | Desc: (${diet.description})"
-                )
-                diet.products.forEach {
-                    Log.i("SYNC",
-                        "            - Product in diet: ${it.productId} | ${it.remoteProductId}")
-                }
-                mDietViewModelRemote?.addDietFromAPI(diet)
-            } else {
-                Log.i(
-                    "SYNC",
-                    "        - Updated: (${diet.name}) | Desc: (${diet.description})"
-                )
-                diet.products.forEach {
-                    Log.i(
-                        "SYNC",
-                        "            - Product in diet: ${it.productId} | ${it.remoteProductId}"
-                    )
-
-                }
-                mDietViewModelRemote?.updateDietFromAPI(diet)
-            }
-    }
+//    private fun saveLocalDietInServer(diet: DietRemote, isNew: Boolean){
+//
+//            // Si no tiene remoteID significa que es un mixero que
+//            // fue generado desde la APP pero que nunca pudo ser sincronizado
+//            if (isNew) {
+//                Log.i(
+//                    "SYNC",
+//                    "        - Added: (${diet.name}) | Desc: (${diet.description})"
+//                )
+//                diet.products.forEach {
+//                    Log.i("SYNC",
+//                        "            - Product in diet: ${it.productId} | ${it.remoteProductId}")
+//                }
+//                mDietViewModelRemote?.addDietFromAPI(diet)
+//            } else {
+//                Log.i(
+//                    "SYNC",
+//                    "        - Updated: (${diet.name}) | Desc: (${diet.description})"
+//                )
+//                diet.products.forEach {
+//                    Log.i(
+//                        "SYNC",
+//                        "            - Product in diet: ${it.productId} | ${it.remoteProductId}"
+//                    )
+//
+//                }
+//                mDietViewModelRemote?.updateDietFromAPI(diet)
+//            }
+//    }
 
     private fun saveRemoteDietProductInDatabase(localDietId: Long, remoteDietId: Long, localProductId: Long, remoteProductId: Long, remoteProduct: DietProductDetail){
         val dietProduct = DietProduct(
@@ -1694,63 +1696,63 @@ class SyncFragment : Fragment() {
 
         Log.i("SYNC", "      Cargando Rondas: ${itemsToAddOrUpdate.size}")
 
-        itemsToAddOrUpdate.forEach{ item ->
-            currentProcessedItem += 1
-            percentageValue = (currentProcessedItem)*100.0/totalSize
-            mBinding.pbRounds.progress = percentageValue.roundToInt()
-            mBinding.tvRoundsPercentage.text = Helper.getNumberWithDecimals(percentageValue, 2) + "% ($currentProcessedItem / $totalSize)"
-
-            val roundRemote = RoundRemote(
-                item.name,
-                item.description,
-                item.remoteId,
-                item.id,
-                "",
-                "",
-                item.weight,
-                item.usePercentage,
-                item.customPercentage,
-                item.remoteDietId,
-                ArrayList()
-            )
-
-            val roundCorrals = mLocalRoundCorrals?.filter {
-                it.roundId == item.id
-            }
-
-            roundCorrals?.forEach {
-
-                //Busca el ID remoto del corral
-                val localCorral = mLocalCorrals?.firstOrNull { localCorral ->
-                    localCorral.id == it.corralId
-                }
-
-                //Busca el ID remoto de la ronda
-                val localRound = mLocalRounds?.firstOrNull { localRound ->
-                    localRound.id == it.roundId
-                }
-
-                if (localCorral != null && localRound != null){
-                    val rcd = RoundCorralDetail(
-                        it.corralId,
-                        localCorral.remoteId,
-                        "",
-                        "",
-                        it.roundId,
-                        localRound.remoteId,
-                        it.percentage,
-                        it.weight,
-                        it.order,
-                        localCorral.animalQuantity)
-
-                    roundRemote.corrals.add(rcd)
-                }
-
-
-            }
-
-            saveLocalRoundInServer(roundRemote, (roundRemote.id == 0L))
-        }
+//        itemsToAddOrUpdate.forEach{ item ->
+//            currentProcessedItem += 1
+//            percentageValue = (currentProcessedItem)*100.0/totalSize
+//            mBinding.pbRounds.progress = percentageValue.roundToInt()
+//            mBinding.tvRoundsPercentage.text = Helper.getNumberWithDecimals(percentageValue, 2) + "% ($currentProcessedItem / $totalSize)"
+//
+//            val roundRemote = RoundRemote(
+//                item.name,
+//                item.description,
+//                item.remoteId,
+//                item.id,
+//                "",
+//                "",
+//                item.weight,
+//                item.usePercentage,
+//                item.customPercentage,
+//                item.remoteDietId,
+//                ArrayList()
+//            )
+//
+//            val roundCorrals = mLocalRoundCorrals?.filter {
+//                it.roundId == item.id
+//            }
+//
+//            roundCorrals?.forEach {
+//
+//                //Busca el ID remoto del corral
+//                val localCorral = mLocalCorrals?.firstOrNull { localCorral ->
+//                    localCorral.id == it.corralId
+//                }
+//
+//                //Busca el ID remoto de la ronda
+//                val localRound = mLocalRounds?.firstOrNull { localRound ->
+//                    localRound.id == it.roundId
+//                }
+//
+//                if (localCorral != null && localRound != null){
+//                    val rcd = RoundCorralDetail(
+//                        it.corralId,
+//                        localCorral.remoteId,
+//                        "",
+//                        "",
+//                        it.roundId,
+//                        localRound.remoteId,
+//                        it.percentage,
+//                        it.weight,
+//                        it.order,
+//                        localCorral.animalQuantity)
+//
+//                    roundRemote.corrals.add(rcd)
+//                }
+//
+//
+//            }
+//
+//            saveLocalRoundInServer(roundRemote, (roundRemote.id == 0L))
+//        }
     }
     private fun roundViewModelRemoteObserver(){
         // Get observers
@@ -1791,34 +1793,34 @@ class SyncFragment : Fragment() {
         }
     }
 
-    private fun saveLocalRoundInServer(round: RoundRemote, isNew: Boolean){
-
-        // Si no tiene remoteID significa que es un mixero que
-        // fue generado desde la APP pero que nunca pudo ser sincronizado
-        if (isNew) {
-            Log.i(
-                "SYNC",
-                "        - Added: (${round.name}) | Desc: (${round.description})"
-            )
-            round.corrals.forEach {
-                Log.i("SYNC",
-                    "            - Corral in round: ${it.corralId} | ${it.remoteCorralId}")
-
-            }
-            mRoundViewModelRemote?.addRoundFromAPI(round)
-        } else {
-            Log.i(
-                "SYNC",
-                "        - Updated: (${round.name}) | Desc: (${round.description})"
-            )
-            round.corrals.forEach {
-                Log.i("SYNC",
-                    "            - Corral in round: ${it.corralId} | ${it.remoteCorralId}")
-
-            }
-            mRoundViewModelRemote?.updateRoundFromAPI(round)
-        }
-    }
+//    private fun saveLocalRoundInServer(round: RoundRemote, isNew: Boolean){
+//
+//        // Si no tiene remoteID significa que es un mixero que
+//        // fue generado desde la APP pero que nunca pudo ser sincronizado
+//        if (isNew) {
+//            Log.i(
+//                "SYNC",
+//                "        - Added: (${round.name}) | Desc: (${round.description})"
+//            )
+//            round.corrals.forEach {
+//                Log.i("SYNC",
+//                    "            - Corral in round: ${it.corralId} | ${it.remoteCorralId}")
+//
+//            }
+//            mRoundViewModelRemote?.addRoundFromAPI(round)
+//        } else {
+//            Log.i(
+//                "SYNC",
+//                "        - Updated: (${round.name}) | Desc: (${round.description})"
+//            )
+//            round.corrals.forEach {
+//                Log.i("SYNC",
+//                    "            - Corral in round: ${it.corralId} | ${it.remoteCorralId}")
+//
+//            }
+//            mRoundViewModelRemote?.updateRoundFromAPI(round)
+//        }
+//    }
 
     private fun saveRemoteRoundCorralInDatabase(localRoundId: Long, remoteRoundId: Long, localCorralId: Long, remoteCorralId: Long, remoteCorral: RoundCorralDetail){
         val roundCorral = RoundCorral(
@@ -2018,13 +2020,13 @@ class SyncFragment : Fragment() {
         }
 
         Log.i("SYNC", "      Cargando User: ${itemsToAddOrUpdate.size}")
-        itemsToAddOrUpdate.forEach{ item ->
-            currentProcessedItem += 1
-            percentageValue = (currentProcessedItem)*100.0/totalSize
-            mBinding.pbUsers.progress = percentageValue.roundToInt()
-            mBinding.tvUsersPercentage.text = Helper.getNumberWithDecimals(percentageValue, 2) + "% ($currentProcessedItem / $totalSize)"
-            saveLocalUserInServer(item)
-        }
+//        itemsToAddOrUpdate.forEach{ item ->
+//            currentProcessedItem += 1
+//            percentageValue = (currentProcessedItem)*100.0/totalSize
+//            mBinding.pbUsers.progress = percentageValue.roundToInt()
+//            mBinding.tvUsersPercentage.text = Helper.getNumberWithDecimals(percentageValue, 2) + "% ($currentProcessedItem / $totalSize)"
+//            saveLocalUserInServer(item)
+//        }
     }
     private fun userViewModelRemoteObserver(){
 
@@ -2065,29 +2067,30 @@ class SyncFragment : Fragment() {
         }
     }
 
-    private fun saveLocalUserInServer(user: User){
+//    private fun saveLocalUserInServer(user: User){
+//
+//        // Si no tiene remoteID significa que es un usero que
+//        // fue generado desde la APP pero que nunca pudo ser sincronizado
+//        if (user.remoteId == 0L) {
+//            Log.i(
+//                "SYNC",
+//                "        - Added: ${user.id} (${user.name}) | $user"
+//            )
+//            mUserViewModelRemote?.addUserFromAPI(user)
+//        }
+//
+//        // Si no tiene updatedDate significa que es un usero que
+//        // fue actualizado desde la APP pero que no pudieron sincronizarse los cambios.
+//        if (user.updatedDate.isNotEmpty()){
+//            Log.i(
+//                "SYNC",
+//                "        - Updated: ${user.id} (${user.name})"
+//            )
+//            mUserViewModelRemote?.updateUserFromAPI(user)
+//        }
+//
+//    }
 
-        // Si no tiene remoteID significa que es un usero que
-        // fue generado desde la APP pero que nunca pudo ser sincronizado
-        if (user.remoteId == 0L) {
-            Log.i(
-                "SYNC",
-                "        - Added: ${user.id} (${user.name}) | $user"
-            )
-            mUserViewModelRemote?.addUserFromAPI(user)
-        }
-
-        // Si no tiene updatedDate significa que es un usero que
-        // fue actualizado desde la APP pero que no pudieron sincronizarse los cambios.
-        if (user.updatedDate.isNotEmpty()){
-            Log.i(
-                "SYNC",
-                "        - Updated: ${user.id} (${user.name})"
-            )
-            mUserViewModelRemote?.updateUserFromAPI(user)
-        }
-
-    }
     private suspend fun saveRemoteUserInDatabase(remoteUser: UserRemote){
 
         val localUser = mLocalUsers?.filter {
@@ -2180,40 +2183,40 @@ class SyncFragment : Fragment() {
         Log.i("SYNC", "-----> Start RoundRun")
 
         /* RoundRun */
-        val totalSize: Int
-        var currentProcessedItem = 0
-        var percentageValue: Double
-        var itemsToAddOrUpdate : List<RoundRun> = ArrayList()
+//        val totalSize: Int
+//        var currentProcessedItem = 0
+//        var percentageValue: Double
+//        var itemsToAddOrUpdate : List<RoundRun> = ArrayList()
+//
+//        // Solo tenemos en cuenta las ejecuciones que están finalizadas y aún no se han sicronizado
+//        // Para determinar si se sincrinizó o no nos fijamos en la fecha de fin
+//        mLocalRoundRun?.let {
+//            itemsToAddOrUpdate = it.filter { report ->
+//                report.remoteId == 0L && report.endDate.isNotEmpty() //TODO
+//            }
+//        }
+//
+//        Log.i("SYNC", "      Descargando RoundRun: NO APLICA")
 
-        // Solo tenemos en cuenta las ejecuciones que están finalizadas y aún no se han sicronizado
-        // Para determinar si se sincrinizó o no nos fijamos en la fecha de fin
-        mLocalRoundRun?.let {
-            itemsToAddOrUpdate = it.filter { report ->
-                report.remoteId == 0L && report.endDate.isNotEmpty() //TODO
-            }
-        }
 
-        Log.i("SYNC", "      Descargando RoundRun: NO APLICA")
-
-
-        Log.i("SYNC", "      Cargando Report: ${itemsToAddOrUpdate.size}")
-        totalSize = itemsToAddOrUpdate.size
-        itemsToAddOrUpdate.forEach{ item ->
-            currentProcessedItem += 1
-            percentageValue = (currentProcessedItem)*100.0/totalSize
-            mBinding.pbReports.progress = percentageValue.roundToInt()
-            mBinding.tvReportsPercentage.text = Helper.getNumberWithDecimals(percentageValue, 2) + "% ($currentProcessedItem / $totalSize)"
-
-            val roundRunLoadProgress = mLocalRoundRunProgressLoad?.filter { roundRunProgressLoad ->
-                roundRunProgressLoad.roundRunId == item.id
-            }?.toMutableList() ?: ArrayList()
-
-            val roundRunDownloadProgress = mLocalRoundRunProgressDownload?.filter {  roundRunProgressDownload ->
-                roundRunProgressDownload.roundRunId == item.id
-            }?.toMutableList() ?: ArrayList()
-
-            saveLocalRoundRunInServer(item, roundRunLoadProgress, roundRunDownloadProgress)
-        }
+//        Log.i("SYNC", "      Cargando Report: ${itemsToAddOrUpdate.size}")
+//        totalSize = itemsToAddOrUpdate.size
+//        itemsToAddOrUpdate.forEach{ item ->
+//            currentProcessedItem += 1
+//            percentageValue = (currentProcessedItem)*100.0/totalSize
+////            mBinding.pbReports.progress = percentageValue.roundToInt()
+////            mBinding.tvReportsPercentage.text = Helper.getNumberWithDecimals(percentageValue, 2) + "% ($currentProcessedItem / $totalSize)"
+//
+//            val roundRunLoadProgress = mLocalRoundRunProgressLoad?.filter { roundRunProgressLoad ->
+//                roundRunProgressLoad.roundRunId == item.id
+//            }?.toMutableList() ?: ArrayList()
+//
+//            val roundRunDownloadProgress = mLocalRoundRunProgressDownload?.filter {  roundRunProgressDownload ->
+//                roundRunProgressDownload.roundRunId == item.id
+//            }?.toMutableList() ?: ArrayList()
+//
+//            saveLocalRoundRunInServer(item, roundRunLoadProgress, roundRunDownloadProgress)
+//        }
     }
 
     private fun roundRunViewModelRemoteObserver(){
@@ -2232,26 +2235,26 @@ class SyncFragment : Fragment() {
         }
     }
 
-    private fun saveLocalRoundRunInServer(
-        roundRun: RoundRun,
-        roundRunProgressLoad: List<RoundRunProgressLoad>,
-        roundRunProgressDownload: List<RoundRunProgressDownload>){
-
-        // Si no tiene remoteID significa que es un reporto que
-        // fue generado desde la APP pero que nunca pudo ser sincronizado
-        if (roundRun.remoteId == 0L) { //TODO
-            Log.i(
-                "SYNC",
-                "        - Added: ${roundRun.id} (${roundRun.startDate})"
-            )
-            val roundRunBody = RoundRunBody(
-                roundRun,
-                roundRunProgressLoad,
-                roundRunProgressDownload
-            )
-            mRoundViewModelRemote?.addRoundRunFromAPI(roundRunBody)
-        }
-    }
+//    private fun saveLocalRoundRunInServer(
+//        roundRun: RoundRun,
+//        roundRunProgressLoad: List<RoundRunProgressLoad>,
+//        roundRunProgressDownload: List<RoundRunProgressDownload>){
+//
+//        // Si no tiene remoteID significa que es un reporto que
+//        // fue generado desde la APP pero que nunca pudo ser sincronizado
+//        if (roundRun.remoteId == 0L) { //TODO
+//            Log.i(
+//                "SYNC",
+//                "        - Added: ${roundRun.id} (${roundRun.startDate})"
+//            )
+//            val roundRunBody = RoundRunBody(
+//                roundRun,
+//                roundRunProgressLoad,
+//                roundRunProgressDownload
+//            )
+//            mRoundViewModelRemote?.addRoundRunFromAPI(roundRunBody)
+//        }
+//    }
     private fun updateRoundRunRemoteId(id: Long, remoteId: Long){
         mRoundViewModel.setUpdatedRemoteRoundRunId(id, remoteId)
 

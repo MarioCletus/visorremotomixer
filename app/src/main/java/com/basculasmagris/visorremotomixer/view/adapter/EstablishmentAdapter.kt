@@ -99,36 +99,36 @@ class EstablishmentAdapter (private  val fragment: Fragment) : RecyclerView.Adap
             }
         }
 
-        holder.ibMore.setOnClickListener{
-            val popup =  PopupMenu(fragment.context, holder.ibMore)
-            popup.menuInflater.inflate(R.menu.menu_adapter_establishment, popup.menu)
-
-            // Si el establishmento está sincronizado no se permite el borrado.
-            if (establishment.remoteId != 0L) {
-                popup.menu.getItem(1).isVisible = false
-            }
-
-            popup.setOnMenuItemClickListener {
-                if (it.itemId  == R.id.action_edit_establishment){
-                    val intent = Intent(fragment.requireActivity(), AddUpdateEstablishmentActivity::class.java)
-                    intent.putExtra(Constants.EXTRA_ESTABLISHMENT_DETAILS, establishment)
-                    fragment.requireActivity().startActivity(intent)
-                } else if (it.itemId == R.id.action_delete_establishment){
-                    if (fragment is EstablishmentListFragment) {
-                        fragment.deleteEstablishment(establishment)
-                    }
-                }
-                true
-            }
-
-            popup.show()
-        }
-
-        holder.btnEditEstablishment.setOnClickListener{
-            val intent = Intent(fragment.requireActivity(), AddUpdateEstablishmentActivity::class.java)
-            intent.putExtra(Constants.EXTRA_ESTABLISHMENT_DETAILS, establishment)
-            fragment.requireActivity().startActivity(intent)
-        }
+//        holder.ibMore.setOnClickListener{
+//            val popup =  PopupMenu(fragment.context, holder.ibMore)
+//            popup.menuInflater.inflate(R.menu.menu_adapter_establishment, popup.menu)
+//
+//            // Si el establishmento está sincronizado no se permite el borrado.
+//            if (establishment.remoteId != 0L) {
+//                popup.menu.getItem(1).isVisible = false
+//            }
+//
+//            popup.setOnMenuItemClickListener {
+//                if (it.itemId  == R.id.action_edit_establishment){
+//                    val intent = Intent(fragment.requireActivity(), AddUpdateEstablishmentActivity::class.java)
+//                    intent.putExtra(Constants.EXTRA_ESTABLISHMENT_DETAILS, establishment)
+//                    fragment.requireActivity().startActivity(intent)
+//                } else if (it.itemId == R.id.action_delete_establishment){
+//                    if (fragment is EstablishmentListFragment) {
+//                        fragment.deleteEstablishment(establishment)
+//                    }
+//                }
+//                true
+//            }
+//
+//            popup.show()
+//        }
+//
+//        holder.btnEditEstablishment.setOnClickListener{
+//            val intent = Intent(fragment.requireActivity(), AddUpdateEstablishmentActivity::class.java)
+//            intent.putExtra(Constants.EXTRA_ESTABLISHMENT_DETAILS, establishment)
+//            fragment.requireActivity().startActivity(intent)
+//        }
 
         holder.btnDeleteEstablishment.setOnClickListener{
             if (fragment is EstablishmentListFragment) {

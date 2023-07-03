@@ -112,6 +112,7 @@
             android:background="@drawable/btn_round_to_run_red"
             android:gravity="center"
             android:text="Eliminar"
+            android:visibility="invisible"
             android:textSize="13sp"
             app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"
