@@ -21,12 +21,11 @@ import com.basculasmagris.visorremotomixer.model.entities.MixerDetail
 import com.basculasmagris.visorremotomixer.model.entities.ProductDetail
 import com.basculasmagris.visorremotomixer.model.entities.RoundRunDetail
 import com.basculasmagris.visorremotomixer.utils.*
+import com.basculasmagris.visorremotomixer.utils.Helper.Companion.getCurrentUser
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunProductAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -35,7 +34,6 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.schedule
-import kotlin.math.round
 import kotlin.math.roundToLong
 
 class RemoteMixerFragment : BottomSheetDialogFragment() {
@@ -61,7 +59,13 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private var previousProductDetail: ProductDetail? =null
     private var mixerDetail: MixerDetail? = null
 
-//    private var showSnackbar = true
+    private var bSyncroSequence: Boolean = false
+    private var bSyncroUser: Boolean = false
+    private var bSyncroMixer: Boolean = false
+    private var bSyncroRound: Boolean = false
+
+
+    //    private var showSnackbar = true
     private var isConnected = false
 //    private var snackbar: Snackbar? = null
     private var selectedMixerInFragment: Mixer? = null
@@ -212,8 +216,26 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     MainScope().launch {
                         connectDevice()
                     }
+                }
+                if(!bSyncroSequence){
+                    if(!bSyncroUser){
+                        val userRemote = getCurrentUser(requireActivity())
+                        val userIdStr = String.format("%06d",userRemote.id)
+                        val userName = userRemote.displayName
+                        val userNameLenght = String.format("%02d",userName.length)
+                        val msg = "CMD${Constants.CMD_USER}$userIdStr$userNameLenght$userName"
+                        activity?.mService?.LocalBinder()?.write(msg.toByteArray())
+                    }else if(!bSyncroMixer){
+                        val msg = "CMD${Constants.CMD_MIXER}"
+                        activity?.mService?.LocalBinder()?.write(msg.toByteArray())
+                    }else if(!bSyncroRound){
+                        requestRoundRunDetail()
+                    }else{
+                        bSyncroSequence = true
+                    }
 
                 }
+
                 if(currentProductDetail!=null && activity!=null){
                     if(currentProductDetail!!.currentWeight-currentProductDetail!!.initialWeight > currentProductDetail!!.targetWeight*0.9){
                         if(mBinding.tvCurrentProductWeightPending.currentTextColor== ContextCompat.getColor(activity!!, R.color.white)){
@@ -276,7 +298,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         override fun onDeviceConnected(device: BluetoothDevice?) {
             deviceConnected()
             Log.i(TAG, "[MixRem] ACT onDeviceConnected")
-            requestRoundRunDetail()
+//            requestRoundRunDetail()
         }
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
@@ -293,11 +315,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                 Constants.CMD_ROUNDDETAIL->{
                     Log.i(TAG,"CMD_ROUNDDETAIL")
-                    val byteArrayUtil = message.copyOfRange(9,message.size-9)
+                    val byteArrayUtil = message.copyOfRange(9,message.size-1)
                     val arraySize: Int
                     try{
-                        val strToInt = String(message,3,6)
-                        arraySize = strToInt.toInt()
+                        arraySize = String(message,3,6).toInt()
                     }catch (e: NumberFormatException){
                         Log.i(TAG,"NumberFormatException $e")
                         return
@@ -349,9 +370,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                                         mixerDetail.id
                                     )
                                     setMixer(mixer)
+                                    bSyncroMixer = true
                                 }
                             }
                         }
+                        bSyncroRound = true
                     }
                 }
 
@@ -370,7 +393,31 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
                 Constants.CMD_ACK->{
                     Log.i(TAG,"CMD_ACK")
+                    when(String(message,3,3)){
+                        Constants.CMD_USER-> {
+                            Log.i(TAG,"CMD_USER ACK")
+                            bSyncroUser = true
+                        }
+                    }
                 }
+
+                Constants.CMD_MIXER ->{
+                    Log.i(TAG,"CMD_MIXER")
+                    try{
+                        val json = convertStringToZip.decompress(message.copyOfRange(7,message.size-1),String(message,3,4).toInt())
+                        val gson = Gson()
+                        mixerDetail = gson.fromJson(json,  MixerDetail::class.java)
+                        Log.i(TAG,"mixer receibe $mixerDetail")
+                        bSyncroMixer = true
+                    }catch (e: NumberFormatException){
+                        Log.i(TAG,"NumberFormatException $e")
+                        return
+                    }catch (e:Exception){
+                        Log.i(TAG,"Exception $e")
+                        return
+                    }
+                }
+
                 Constants.CMD_WEIGHT->{
                     activity?.hideCustomProgressDialog()
                     try{
@@ -380,7 +427,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         val currentProductWeight= messageStr.substring(11,17).toLong()
                         if((activity?.currentRoundRunDetail == null || (activity?.currentRoundRunDetail != null && activity?.currentRoundRunDetail?.id != roundIndex)) && tick - tickCounterMessages > 3){
                             Log.i(TAG,"message $messageStr\nNot match roundIndex $roundIndex activity?.currentRoundRunDetail.id ${activity?.currentRoundRunDetail?.id}")
-                            requestRoundRunDetail()
+//                            requestRoundRunDetail()
                             tickCounterMessages = tick
                             return
                         }
@@ -392,7 +439,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                             mBinding.tvCurrentProduct.text = product.name
                             targetWeight = product.targetWeight
                             activity?.changeActionBarTitle("${getString(R.string.mixer_remoto)} - ${activity?.currentRoundRunDetail!!.round.name}: ${activity?.currentRoundRunDetail!!.round.diet.name}")
-                            requestRoundRunDetail()
+//                            requestRoundRunDetail()
                         }
                         val percentage = (targetWeight-currentProductWeight)*100/targetWeight
                         mBinding.tvCurrentProductWeightPending.text =   if(currentProductWeight<0)
@@ -465,7 +512,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 val textView = targetReachedDialog?.window?.findViewById<TextView>(R.id.tv_dialog_kg)
                 textView?.text = mBinding.tvCurrentProductWeightPending.text
             }
-            if(refresh && mixerWeight != null && mBinding!=null && (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter) != null){
+            if(refresh && (mBinding.rvMixerProductsToLoad.adapter) != null){
                 (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).updateWeight(mixerWeight)
                 refresh = false
             }

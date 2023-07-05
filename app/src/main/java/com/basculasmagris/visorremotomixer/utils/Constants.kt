@@ -154,5 +154,6 @@ object Constants {
     val CMD_WEIGHT = "WGT"
     val CMD_REFRESH = "RFH"
     val CMD_INITROUND = "INR"
+    val CMD_MIXER = "MIX"
 
 }

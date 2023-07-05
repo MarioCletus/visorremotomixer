@@ -16,18 +16,60 @@
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/fragment_home_visor_remoto.xml" value="0.168359375" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/fragment_mixer_remoto.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/fragment_remote_mixer.xml" value="0.264" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/fragment_report.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/fragment_round_detail.xml" value="0.25052083333333336" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/fragment_round_list.xml" value="0.1734375" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/fragment_seleccion_calibracion.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/fragment_step_configuration.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/fragment_step_download.xml" value="0.25052083333333336" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/fragment_step_load.xml" value="0.264" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/fragment_step_resume.xml" value="0.25052083333333336" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/fragment_sync.xml" value="0.1734375" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/fragment_user_list.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/fragment_value_input_dialog.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_corral_layout.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_custom_list.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_diet_layout.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_establishment_layout.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_line_diet_product.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_line_report.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_line_round_corral.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_line_round_run_corral.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_line_round_run_corral_config.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_line_round_run_corral_download.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_line_round_run_corral_report.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_line_round_run_corral_resume.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_line_round_run_product.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_line_round_run_product_report.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_line_round_run_product_resume.xml" value="0.25052083333333336" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_line_round_run_product_step_load.xml" value="0.11822916666666666" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_line_round_run_report.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_line_round_run_report_table_load.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_mixer_layout.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_product_layout.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_remote_viewer_layout.xml" value="0.25052083333333336" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_round_layout.xml" value="0.1734375" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_round_to_run_layout.xml" value="0.1734375" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/item_user_layout.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/nav_header_main.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/spinner_dropdown_tolva.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/table_view_cell_layout.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/table_view_column_header_layout.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/table_view_corner_layout.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/table_view_image_cell_layout.xml" value="0.25052083333333336" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/table_view_row_header_layout.xml" value="0.25052083333333336" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/menu/activity_main_drawer.xml" value="0.536" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/menu/main.xml" value="0.1734375" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/menu/menu_adapter.xml" value="0.1734375" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/menu/menu_adapter_corral.xml" value="0.1734375" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/menu/menu_adapter_diet.xml" value="0.1734375" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/menu/menu_adapter_establishment.xml" value="0.1765625" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/menu/menu_adapter_mixer.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/menu/menu_adapter_round.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/menu/menu_adapter_user.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/menu/menu_add_update_diet.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/menu/menu_add_update_round.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/menu/menu_corral_list.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/menu/menu_diet_list.xml" value="0.1734375" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/menu/menu_establishment_list.xml" value="0.1734375" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/menu/menu_home.xml" value="0.1734375" />
