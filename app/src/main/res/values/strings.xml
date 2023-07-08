@@ -339,6 +339,7 @@
     <string name="kg_por_animal">Kg por animal</string>
     <string name="mixer_remoto">Mixer Remoto</string>
     <string name="menu_exit">Salir</string>
+    <string name="carga_total">Total cargado</string>
 
 
 </resources>

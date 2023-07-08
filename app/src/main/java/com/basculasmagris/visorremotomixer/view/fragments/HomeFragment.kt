@@ -7,16 +7,15 @@ import android.bluetooth.BluetoothDevice
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.SearchView
+import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
@@ -38,7 +37,6 @@ import com.basculasmagris.visorremotomixer.view.activities.*
 import com.basculasmagris.visorremotomixer.view.adapter.CustomListItem
 import com.basculasmagris.visorremotomixer.view.adapter.CustomListItemAdapterFragment
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunAdapter
-import com.basculasmagris.visorremotomixer.view.adapter.RoundRunProductAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.basculasmagris.visorremotomixer.viewmodel.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -1087,6 +1085,7 @@ class HomeFragment : BottomSheetDialogFragment() {
             when (String(message.copyOfRange(0,3))){
                 Constants.CMD_INI->{
                     Log.i(TAG,"CMD_INI")
+                    goToRemoteMixerFragment()
                 }
 
                 Constants.CMD_ROUNDDETAIL->{
@@ -1135,19 +1134,10 @@ class HomeFragment : BottomSheetDialogFragment() {
                 }
                 Constants.CMD_END->{
                 }
-                Constants.CMD_UPDATE->{
-                }
+
                 Constants.CMD_ACK->{
                 }
-                Constants.CMD_WEIGHT->{
-                }
 
-                Constants.CMD_REFRESH->{
-                }
-
-                Constants.CMD_INITROUND->{
-                    goToRemoteMixerFragment()
-                }
 
                 else->{
                 }

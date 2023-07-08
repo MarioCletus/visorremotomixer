@@ -232,7 +232,7 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
             if (fragment is HomeFragment){
                 Log.i("ROUNDRUNADAPTER","btnStart")
                 val rounRunId = String.format("%06d",roundToRun.id)
-                val msg = "CMD${Constants.CMD_INITROUND}${rounRunId}"
+                val msg = "CMD${Constants.CMD_INI}${rounRunId}"
                 (fragment.requireActivity() as MainActivity).mService?.LocalBinder()?.write(msg.toByteArray())
             }
         }
