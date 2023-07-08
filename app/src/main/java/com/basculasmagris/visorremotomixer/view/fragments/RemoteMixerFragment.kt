@@ -128,6 +128,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
         activity?.currentRoundRunDetail?.state = Constants.STATE_LOAD
+        Log.i(TAG,"onViewCreated ready")
     }
 
     private fun loadRoundDetail() {
@@ -167,24 +168,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
 
     fun selectProduct(product: ProductDetail){
-        /*
-        val targetProductWeight = product.targetWeight//Helper.getNumberWithDecimals(product.percentage*roundTargetWeight/100,0).toDouble()
-        var value = targetProductWeight - (product.currentWeight-product.initialWeight)
-        var sign = ""
-        if(value < 0){
-            sign = "+"
-            value *= -1
-        }
-        if((mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).isLastProduct()){
-            lastProduct()
-        }else{
-            noLastProduct()
-        }
-        mBinding.tvCurrentProductWeightPending.text = "${sign}${Helper.getNumberWithDecimals (value, 0)}Kg"
-        mBinding.tvCurrentProduct.text = product.name
-        val percentage = (product.currentWeight-product.initialWeight)*100/targetProductWeight
-        mBinding.pbCurrentProduct.progress = percentage.toInt()
-
         if(currentProductDetail!=null && activity!=null){
             if(currentProductDetail!!.currentWeight-currentProductDetail!!.initialWeight >= currentProductDetail!!.targetWeight){
                 if(countGreaterThanTarget>10){
@@ -200,7 +183,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             previousProductDetail = product
         }
         currentProductDetail = product
-         */
+
     }
 
     override fun onResume() {
@@ -235,6 +218,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     }else if(!bSyncroMixer){
                         requestMixer()
                     }else if(!bSyncroRound && bInLoad){
+                        Log.i(TAG,"bSyncroRound = false")
                         requestRoundRunDetail()
                     }else if(!bSyncroProduct && bInLoad){
                         requestProduct()
@@ -349,7 +333,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         if(activity?.currentRoundRunDetail != null && activity?.currentRoundRunDetail!!.id == roundRunDetail.id){
                             Log.i(TAG,"notifyDataSetChanged roundRunDetail $roundRunDetail")
                             activity?.currentRoundRunDetail = roundRunDetail
-
                             val product = roundRunDetail.round.diet.products.firstOrNull{ productDetail->
                                 productDetail.id == currentProductDetail?.id
                             }
@@ -400,9 +383,20 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_NXTPRODUCT->{
+                    try{
+                        val productIndex = messageStr.substring(3,11).toLong()
+                        if(productDetail?.remoteId == productIndex){
+                            return
+                        }
+                        nextProduct()
+                        requestRoundRunDetail()
+                    }catch(e :  NumberFormatException){
+                        Log.i(TAG,"CMD_NXTPRODUCT NumberFormatException $e ")
+                    }catch ( e : Exception){
+                        Log.i(TAG,"CMD_NXTPRODUCT Exception $e ")
+                    }
                     Log.i(TAG,"CMD_NXTPRODUCT")
-                    nextProduct()
-                    requestRoundRunDetail()
+
                 }
 
                 Constants.CMD_END->{
@@ -443,6 +437,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         Log.i(TAG,"mixer receibe $mixerDetail")
                         bSyncroMixer = true
                         if(!bSyncroRound){
+                            Log.i(TAG,"CMD_MIXER y !bSybcroRound")
                             requestRoundRunDetail()
                         }
                         val title : String = "Mixer: ${mixerDetail?.name}"
@@ -495,9 +490,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         mBinding.tvCurrentProductWeightPending.text = "${Helper.getNumberWithDecimals(totalWeightLoaded,0)}Kg"
                         mBinding.tvCurrentProduct.text = getString(R.string.carga_total)
                     }else{
-                        mBinding.tvCurrentProductWeightPending.text = "${Helper.getNumberWithDecimals(productDetail?.finalWeight!!-productDetail?.initialWeight!!,0)}Kg"
-                        mBinding.tvCurrentProduct.text = "${productDetail?.name}"
+                        if(productDetail!=null){
+                            mBinding.tvCurrentProductWeightPending.text = "Total: ${Helper.getNumberWithDecimals(previousProductDetail?.finalWeight!!-previousProductDetail?.initialWeight!!,0)}Kg"
+                            mBinding.tvCurrentProduct.text = "Resumen: ${previousProductDetail?.name}"
+                        }
                     }
+                    bInLoad = false
                     return
                 }
                 bShowResume = false
@@ -510,6 +508,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             }
 
             if(bInLoad && bSyncroSequence &&  currentMixerWeight != null && productDetail != null){
+                currentMixerWeight = (currentMixerWeight - mixerDetail!!.tara)*mixerDetail!!.calibration
+                mixerWeight = currentMixerWeight - activity?.currentRoundRunDetail?.customTara!! - activity?.currentRoundRunDetail?.addedBlend!!
                 var value = productDetail?.targetWeight?.minus(mixerWeight - productDetail?.initialWeight!!)!!
                 productDetail?.currentWeight = mixerWeight
                 val percentage = (productDetail?.targetWeight!!-value)*100/ productDetail?.targetWeight!!
@@ -519,13 +519,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     sign = "+"
                     value *= -1
                 }
-                mixerWeight = currentMixerWeight - activity?.currentRoundRunDetail?.customTara!! - activity?.currentRoundRunDetail?.addedBlend!!
-
                 mBinding.tvCurrentProduct.text = productDetail?.name
                 mBinding.tvCurrentProductWeightPending.text = "$sign${Helper.getNumberWithDecimals(value,0 )}Kg"
-                bInLoad = false
+                (mBinding.rvMixerProductsToLoad.adapter as RoundRunProductAdapter).updateWeight(mixerWeight)
             }
-
+            bInLoad = false
 
         }
 

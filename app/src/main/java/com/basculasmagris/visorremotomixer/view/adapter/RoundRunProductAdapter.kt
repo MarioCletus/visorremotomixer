@@ -94,8 +94,6 @@ class RoundRunProductAdapter (
     fun updateWeight(weight: Double){
         MainScope().launch {
             withContext(Dispatchers.Default) {
-                //products[selectedPosition].currentWeight += weight
-//                Log.i("BLUE", "Se actualiza posición $selectedPosition con $weight")
                 filteredProducts[selectedPosition].currentWeight = weight
             }
             notifyDataSetChanged()
@@ -103,8 +101,6 @@ class RoundRunProductAdapter (
     }
 
     fun updateInicial(weight: Double){
-//        filteredProducts[selectedPosition].initialWeight = weight
-//        notifyDataSetChanged()
         MainScope().launch {
             withContext(Dispatchers.Default) {
                 filteredProducts[selectedPosition].initialWeight = weight
@@ -164,7 +160,7 @@ class RoundRunProductAdapter (
 
     fun nextProduct(){
         val product = filteredProducts[selectedPosition]
-        Log.i(TAG, "Select next product ${product.name} | ${product.targetWeight} + ${product.currentWeight} + ${product.initialWeight}")
+        Log.i(TAG, "Select next product ${product.name} | ${product.targetWeight} | ${product.currentWeight} - ${product.initialWeight}")
         if(lastProduct){
             Log.i(TAG, "No deberia pasar")
             (fragment.requireActivity() as RoundRunActivity).changeStep(1)
