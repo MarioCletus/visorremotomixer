@@ -103,7 +103,15 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         mBinding.btnJump.setOnClickListener{
             Log.i(TAG, "btnJump")
-            targetReachedDialog = dialogAlertTargetWeight("descarga")
+            val position = roundRunProductAdapter?.selectedPosition?.plus(1)
+            if(position != null && roundRunProductAdapter != null && position < roundRunProductAdapter!!.itemCount){
+                val nextItem = currentRoundRunDetail?.round?.diet?.products?.get(position)
+                nextItem.let {product->
+                    targetReachedDialog = dialogAlertTargetWeight(product!!.name)
+                }
+            }else{
+                targetReachedDialog = dialogAlertTargetWeight("descarga")
+            }
         }
 
         mBinding.btnPause.setOnClickListener{
@@ -217,7 +225,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 if(productDetail!=null && activity!=null){
-                    if(productDetail!!.currentWeight-productDetail!!.initialWeight > productDetail!!.targetWeight*0.9){
+                    if(productDetail!!.currentWeight-productDetail!!.initialWeight > productDetail!!.targetWeight*0.9 && bInLoad){
                         if(mBinding.tvCurrentProductWeightPending.currentTextColor== ContextCompat.getColor(activity!!, R.color.white)){
                             if(productDetail!!.currentWeight-productDetail!!.initialWeight > productDetail!!.targetWeight){
                                 mBinding.tvCurrentProductWeightPending.setTextColor(
@@ -375,8 +383,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                 Constants.CMD_NXTPRODUCT->{
                     try{
-                        val productPosition = messageStr.substring(3,7).toLong().toInt()
+                        Log.i(TAG,"CMD_NXTPRODUCT $messageStr")
+                        val productPosition = messageStr.substring(3,7).toInt()
                         val productIndex = messageStr.substring(7,15).toLong()
+                        val totalLoaded = messageStr.substring(15,23).toLong()
+                        Log.i(TAG,"${productDetail?.name} total loaded $totalLoaded Next product productPosition $productPosition productIndex $productIndex")
                         if(productDetail?.remoteId == productIndex){
                             return
                         }
@@ -385,6 +396,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         bSyncroRound = false
                         countResume = tick
                         bShowResume = true
+                        mBinding.tvCurrentProductWeightPending.text = "Total: ${totalLoaded}Kg"
+                        mBinding.tvCurrentProduct.text = "Resumen ${productDetail?.name}"
                         roundRunProductAdapter?.selectProduct(productPosition)
                         requestRoundRunDetail()
                     }catch(e :  NumberFormatException){
@@ -397,18 +410,31 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_END->{
-                    Log.i(TAG,"CMD_END")
+                    Log.i(TAG,"CMD_END $messageStr")
+                    val msg = "CMD${Constants.CMD_ACK}${Constants.CMD_END}"
+                    activity?.mService?.LocalBinder()?.write(msg.toByteArray())
                     roundRunProductAdapter?.endLoad = true
-                    roundRunProductAdapter?.notifyDataSetChanged()
                     totalWeightLoaded = 0.0
                     currentRoundRunDetail?.round?.diet?.products?.forEach { product ->
                         totalWeightLoaded += (product.finalWeight - product.initialWeight)
+                        Log.i(TAG,"product $product totalWeightLoaded $totalWeightLoaded final ${product.finalWeight} inicial ${product.initialWeight}")
+                    }
+                    bShowResume = true
+                    try{
+                        val totalLoaded = messageStr.substring(3,11).toLong()
+                        mBinding.tvCurrentProductWeightPending.text = "Total: ${totalLoaded}Kg"
+                        mBinding.tvCurrentProduct.text = "Total cargado"
+                        }catch(e :  NumberFormatException){
+                        Log.i(TAG,"CMD_END NumberFormatException $e ")
+                    }catch ( e : Exception){
+                        Log.i(TAG,"CMD_END Exception $e ")
                     }
                     totalWeightLoaded = totalWeightLoaded.roundToLong().toDouble()
                     bSyncroSequence = false
                     bSyncroProduct = false
-                    bShowResume = true
+
                     countResume = tick
+                    roundRunProductAdapter?.notifyDataSetChanged()
                 }
 
                 Constants.CMD_ACK->{
@@ -490,15 +516,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
             if(bShowResume){
                 if(tick - countResume < 5){
-                    if(roundRunProductAdapter?.endLoad == true){
-                        mBinding.tvCurrentProductWeightPending.text = "${Helper.getNumberWithDecimals(totalWeightLoaded,0)}Kg"
-                        mBinding.tvCurrentProduct.text = getString(R.string.carga_total)
-                    }else{
-                        if(productDetail!=null && previousProductDetail != null){
-                            mBinding.tvCurrentProductWeightPending.text = "Total: ${Helper.getNumberWithDecimals(previousProductDetail?.finalWeight!!-previousProductDetail?.initialWeight!!,0)}Kg"
-                            mBinding.tvCurrentProduct.text = "Resumen: ${previousProductDetail?.name}"
-                        }
-                    }
                     bInLoad = false
                     return
                 }
