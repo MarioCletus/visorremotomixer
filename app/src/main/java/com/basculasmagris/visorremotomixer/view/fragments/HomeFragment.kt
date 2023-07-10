@@ -56,6 +56,7 @@ class HomeFragment : BottomSheetDialogFragment() {
     private var dialog: AlertDialog? = null
     private var activity : MainActivity? = null
     private var mixerBluetoothDevice : BluetoothDevice? = null
+    var currentRoundRunDetail : RoundRunDetail? = null
 
     private lateinit var mBinding: FragmentHomeBinding
     private var liveData: MediatorLiveData<MergedLocalData>? = null
@@ -839,7 +840,7 @@ class HomeFragment : BottomSheetDialogFragment() {
             activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
         }
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
-        activity?.currentRoundRunDetail?.state = Constants.STATE_NONE
+        currentRoundRunDetail?.state = Constants.STATE_NONE
 
     }
 
@@ -1107,8 +1108,8 @@ class HomeFragment : BottomSheetDialogFragment() {
                         val gson = Gson()
                         val roundRunDetail : RoundRunDetail = gson.fromJson(str,  RoundRunDetail::class.java)
                         Log.i(TAG,"notifyDataSetChanged roundRunDetail $roundRunDetail")
-                        activity?.currentRoundRunDetail = roundRunDetail
-                        activity?.currentRoundRunDetail.let {
+                        currentRoundRunDetail = roundRunDetail
+                        currentRoundRunDetail.let {
                             it?.mixer.let {mixerDetail->
                                 val mixer = Mixer(
                                     mixerDetail!!.name,

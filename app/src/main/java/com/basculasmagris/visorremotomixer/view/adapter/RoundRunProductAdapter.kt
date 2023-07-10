@@ -13,6 +13,7 @@ import com.basculasmagris.visorremotomixer.model.entities.DietDetail
 import com.basculasmagris.visorremotomixer.model.entities.ProductDetail
 import com.basculasmagris.visorremotomixer.utils.Helper
 import android.util.Log
+import com.basculasmagris.visorremotomixer.model.entities.RoundRunDetail
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
 import com.basculasmagris.visorremotomixer.view.activities.RoundRunActivity
 import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
@@ -57,9 +58,6 @@ class RoundRunProductAdapter (
             if(selectedPosition == position && !endLoad) {
                 holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_select_bkg)
                 if (fragment is StepLoadFragment){
-                    fragment.selectProduct(product)
-                }
-                if (fragment is RemoteMixerFragment){
                     fragment.selectProduct(product)
                 }
             }
@@ -158,49 +156,59 @@ class RoundRunProductAdapter (
         }
     }
 
-    fun nextProduct(){
-        val product = filteredProducts[selectedPosition]
-        Log.i(TAG, "Select next product ${product.name} | ${product.targetWeight} | ${product.currentWeight} - ${product.initialWeight}")
-        if(lastProduct){
-            Log.i(TAG, "No deberia pasar")
-            (fragment.requireActivity() as RoundRunActivity).changeStep(1)
-            if(fragment is StepLoadFragment){
-                fragment.cleanAll()
-            }
-            return
+    fun selectProduct(position : Int){
+        if(position < filteredProducts.size){
+            selectedPosition = position
         }
+    }
 
-        MainScope().launch {
-            withContext(Dispatchers.Default) {
-                filteredProducts[selectedPosition].finalWeight = filteredProducts[selectedPosition].currentWeight
-                if(fragment.requireActivity() is RoundRunActivity){
-                    (fragment.requireActivity() as RoundRunActivity).currentRoundRunDetail?.round?.diet?.products?.firstOrNull{
-                        it.id == filteredProducts[selectedPosition].id
-                    }?.finalWeight = filteredProducts[selectedPosition].currentWeight
-                    (fragment.requireActivity() as RoundRunActivity).saveRoundLoadStatus()
-                    selectedPosition += 1
-                    if (selectedPosition < filteredProducts.size-1){
-                        Log.i(TAG, "selected position $selectedPosition  product: ${filteredProducts[selectedPosition]}")
-                    } else {
-                        Log.i(TAG, "Es el último producto")
-                        when (fragment) {
-                            is StepLoadFragment -> {
-                                fragment.lastProduct()
-                                lastProduct = true
-                            }
-                            else -> {}
-                        }
-                    }
-
-                }
-                if(fragment.requireActivity() is MainActivity){
-                    if (selectedPosition < filteredProducts.size-1){
-                        selectedPosition += 1
-                    }
-                }
-            }
+    fun nextProduct(){
+        if(selectedPosition < filteredProducts.size-1){
+            selectedPosition += 1
             notifyDataSetChanged()
         }
+//        val product = filteredProducts[selectedPosition]
+//        Log.i(TAG, "Select next product ${product.name} | ${product.targetWeight} | ${product.currentWeight} - ${product.initialWeight}")
+//        if(lastProduct){
+//            Log.i(TAG, "No deberia pasar")
+//            (fragment.requireActivity() as RoundRunActivity).changeStep(1)
+//            if(fragment is StepLoadFragment){
+//                fragment.cleanAll()
+//            }
+//            return
+//        }
+//
+//        MainScope().launch {
+//            withContext(Dispatchers.Default) {
+//                filteredProducts[selectedPosition].finalWeight = filteredProducts[selectedPosition].currentWeight
+//                if(fragment.requireActivity() is RoundRunActivity){
+//                    (fragment.requireActivity() as RoundRunActivity).currentRoundRunDetail?.round?.diet?.products?.firstOrNull{
+//                        it.id == filteredProducts[selectedPosition].id
+//                    }?.finalWeight = filteredProducts[selectedPosition].currentWeight
+//                    (fragment.requireActivity() as RoundRunActivity).saveRoundLoadStatus()
+//                    selectedPosition += 1
+//                    if (selectedPosition < filteredProducts.size-1){
+//                        Log.i(TAG, "selected position $selectedPosition  product: ${filteredProducts[selectedPosition]}")
+//                    } else {
+//                        Log.i(TAG, "Es el último producto")
+//                        when (fragment) {
+//                            is StepLoadFragment -> {
+//                                fragment.lastProduct()
+//                                lastProduct = true
+//                            }
+//                            else -> {}
+//                        }
+//                    }
+//
+//                }
+//                if(fragment.requireActivity() is MainActivity){
+//                    if (selectedPosition < filteredProducts.size-1){
+//                        selectedPosition += 1
+//                    }
+//                }
+//            }
+//            notifyDataSetChanged()
+//        }
     }
 
     fun isLastProduct(): Boolean {
@@ -227,6 +235,16 @@ class RoundRunProductAdapter (
             notifyDataSetChanged()
         }
 
+    }
+
+    fun updateRound(roundRunDetail: RoundRunDetail) {
+        var position : Int = 0
+        filteredProducts.forEach{productDetail ->
+            productDetail.initialWeight = roundRunDetail.round.diet.products[position].initialWeight
+            productDetail.finalWeight = roundRunDetail.round.diet.products[position].finalWeight
+            productDetail.currentWeight = roundRunDetail.round.diet.products[position].currentWeight
+            position++
+        }
     }
 
 }
