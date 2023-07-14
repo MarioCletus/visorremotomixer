@@ -2,7 +2,6 @@ package com.basculasmagris.visorremotomixer.view.activities
 
 import android.app.Activity
 import android.app.Dialog
-import android.bluetooth.BluetoothDevice
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -69,7 +68,6 @@ class MainActivity : AppCompatActivity() {
     var mService: BluetoothSDKService? = null
 
     private var selectedMixerInFragment: Mixer? = null
-    private var knowDevices: List<BluetoothDevice>? = null
 
     // -------------------
     // Mixer
@@ -137,6 +135,19 @@ class MainActivity : AppCompatActivity() {
                         .show()
                     drawerLayout.close()
                 }
+                R.id.nav_exit ->{
+                    android.app.AlertDialog.Builder(this)
+                        .setMessage("¿Desea cerrar la aplicación?")
+                        .setPositiveButton("Sí")
+                        { _, _ ->
+                            Helper.logOut(this)
+                            finish()
+                        }
+                        .setNegativeButton("No") { _, _ ->
+                        }
+                        .show()
+                    drawerLayout.close()
+                }
             }
             outPut
         }
@@ -158,6 +169,9 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         bindBluetoothService()
+    }
+
+    fun refreshLogo() {
     }
 
     @Deprecated("Deprecated in Java")
@@ -338,7 +352,6 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.let {
             it.title = title
         }
-
     }
 }
 

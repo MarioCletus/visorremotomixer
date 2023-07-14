@@ -1,7 +1,9 @@
 package com.basculasmagris.visorremotomixer.view.adapter
 import android.util.Log
-import android.view.*
-import android.widget.*
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +29,8 @@ class RoundRunCorralDownloadAdapter (
     private var filteredRoundCorrals: MutableList<CorralDetail> = ArrayList()
     var selectedPosition = 0
     private var lastCorral: Boolean = false
-    private val RUIDO: Int = 2
+    var endLoad = false
+
 
     class ViewHolder (view: ItemLineRoundRunCorralDownloadBinding) : RecyclerView.ViewHolder(view.root){
         val tvCorralName = view.tvCorralName
@@ -39,62 +42,32 @@ class RoundRunCorralDownloadAdapter (
         val binding: ItemLineRoundRunCorralDownloadBinding = ItemLineRoundRunCorralDownloadBinding.inflate(
             LayoutInflater.from(fragment.requireActivity()), parent, false)
         return ViewHolder(binding)
-
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val roundCorral = roundCorrals[position]
-
-        if (fragment is StepDownloadFragment) {
-            holder.itemView.setOnClickListener {
-                val isPrevPosition = selectedPosition == position + 1
-                val pendienteEnHolderPrevio = (roundCorrals[position].initialWeight.minus(roundCorrals[position].finalWeight))-roundCorrals[position].actualTargetWeight
-                val descargadoEnHolderActual = roundCorrals[selectedPosition].initialWeight.minus(roundCorrals[selectedPosition].currentWeight)
-                Log.i("DEBUG","itemView.setOnClick isPrevPosition $isPrevPosition  " +
-                        "\nRestante en el corral previo $pendienteEnHolderPrevio " +
-                        "\nDescargado en el corral actual $descargadoEnHolderActual" +
-                        "\nroundCorrals[$position].initialWeight ${roundCorrals[position].initialWeight} roundCorrals[$position].finalWeight ${roundCorrals[position].finalWeight}  roundCorrals[$position].targetWeight ${roundCorrals[position].actualTargetWeight} "+
-                        "\nroundCorrals[$selectedPosition].initialWeight ${roundCorrals[selectedPosition].initialWeight} roundCorrals[$selectedPosition].finalWeight ${roundCorrals[selectedPosition].finalWeight}  roundCorrals[$selectedPosition].targetWeight ${roundCorrals[selectedPosition].actualTargetWeight} ")
-                if(isPrevPosition &&
-                    pendienteEnHolderPrevio < RUIDO &&
-                    descargadoEnHolderActual<RUIDO
-                    && descargadoEnHolderActual >-1*RUIDO ){
-                    Log.i("DEBUG","Corral previo $position " +
-                            "\nroundCorral.initialWeight ${roundCorral.initialWeight} " +
-                            "\nroundCorral.currentWeight ${roundCorral.currentWeight} " +
-                            "\nroundCorral.finalWeight ${roundCorral.finalWeight} " +
-                            "")
-                    selectedPosition = position
-                    lastCorral = false
-                    roundCorral.finalWeight = 0.0
-                    fragment.setCorral(roundCorral)
-                    notifyDataSetChanged()
+        val corral = filteredRoundCorrals[position]
+        fragment.context?.let {
+            if(selectedPosition == position && !endLoad) {
+                holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_select_bkg)
+                if (fragment is StepDownloadFragment){
+                    fragment.selectCorral(corral)
                 }
             }
+            else if( position < selectedPosition || endLoad){
+                holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_ready_bkg)
+                val value = (corral.initialWeight - corral.currentWeight) - corral.actualTargetWeight
+                if(value >= 1){
+                    holder.tvDiffWeight.text = "+${Helper.getNumberWithDecimals(value, 0)}Kg"
+                }else {
+                    holder.tvDiffWeight.text = "${Helper.getNumberWithDecimals(value, 0)}Kg"
+                }
+            }else{
+                holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_bkg)
+            }
+            holder.tvCorralName.text = corral.name
+            holder.tvCurrentWeight.text = "${Helper.getNumberWithDecimals(corral.actualTargetWeight, 0)}Kg"
         }
 
-        fragment.context?.let{
-            if (fragment is StepDownloadFragment) {
-                if(selectedPosition == position) {
-                    holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_select_bkg)
-                    fragment.selectCorral(roundCorral)
-                }
-                else if( position < selectedPosition){
-                    holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_ready_bkg)
-                    val value = (roundCorral.initialWeight-roundCorral.currentWeight) - roundCorral.actualTargetWeight
-                    if(value >= 1){
-                        holder.tvDiffWeight.text = "+${Helper.getNumberWithDecimals(value, 0)}Kg"
-                    }else {
-                        holder.tvDiffWeight.text = "${Helper.getNumberWithDecimals(value, 0)}Kg"
-                    }
-                }else{
-                    holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_bkg)
-                }
-            holder.tvCorralName.text = roundCorral.name
-            }
-        }
-        holder.tvCorralName.text = roundCorral.name
-        holder.tvCurrentWeight.text = "${Helper.getNumberWithDecimals(roundCorral.actualTargetWeight, 0)}Kg"
     }
 
     fun updateCorralTargetWeight(){
@@ -138,6 +111,19 @@ class RoundRunCorralDownloadAdapter (
             notifyDataSetChanged()
         }
 
+    }
+
+    fun selectCorral(position : Int){
+        if(position < filteredRoundCorrals.size){
+            selectedPosition = position
+        }
+    }
+
+    fun nextCorral(){
+        if(selectedPosition < filteredRoundCorrals.size-1){
+            selectedPosition += 1
+            notifyDataSetChanged()
+        }
     }
 
     fun selectNextCorral(){

@@ -167,48 +167,6 @@ class RoundRunProductAdapter (
             selectedPosition += 1
             notifyDataSetChanged()
         }
-//        val product = filteredProducts[selectedPosition]
-//        Log.i(TAG, "Select next product ${product.name} | ${product.targetWeight} | ${product.currentWeight} - ${product.initialWeight}")
-//        if(lastProduct){
-//            Log.i(TAG, "No deberia pasar")
-//            (fragment.requireActivity() as RoundRunActivity).changeStep(1)
-//            if(fragment is StepLoadFragment){
-//                fragment.cleanAll()
-//            }
-//            return
-//        }
-//
-//        MainScope().launch {
-//            withContext(Dispatchers.Default) {
-//                filteredProducts[selectedPosition].finalWeight = filteredProducts[selectedPosition].currentWeight
-//                if(fragment.requireActivity() is RoundRunActivity){
-//                    (fragment.requireActivity() as RoundRunActivity).currentRoundRunDetail?.round?.diet?.products?.firstOrNull{
-//                        it.id == filteredProducts[selectedPosition].id
-//                    }?.finalWeight = filteredProducts[selectedPosition].currentWeight
-//                    (fragment.requireActivity() as RoundRunActivity).saveRoundLoadStatus()
-//                    selectedPosition += 1
-//                    if (selectedPosition < filteredProducts.size-1){
-//                        Log.i(TAG, "selected position $selectedPosition  product: ${filteredProducts[selectedPosition]}")
-//                    } else {
-//                        Log.i(TAG, "Es el último producto")
-//                        when (fragment) {
-//                            is StepLoadFragment -> {
-//                                fragment.lastProduct()
-//                                lastProduct = true
-//                            }
-//                            else -> {}
-//                        }
-//                    }
-//
-//                }
-//                if(fragment.requireActivity() is MainActivity){
-//                    if (selectedPosition < filteredProducts.size-1){
-//                        selectedPosition += 1
-//                    }
-//                }
-//            }
-//            notifyDataSetChanged()
-//        }
     }
 
     fun isLastProduct(): Boolean {

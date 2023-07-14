@@ -143,6 +143,8 @@ object Constants {
 
     //Remote comunication protocol
     val CMD_INI  = "INI"
+    val CMD_START_LOAD  = "STL"
+    val CMD_START_DOWNLOAD  = "STD"
     val CMD_ROUNDDETAIL = "RRD"
     val CMD_NXTPRODUCT = "NXP"
     val CMD_END = "END"
@@ -152,5 +154,7 @@ object Constants {
     val CMD_PAUSE = "PAU"
     val CMD_MIXER = "MIX"
     val CMD_PRODUCT = "PRO"
-    val CMD_INLOAD = "INL"
+    val CMD_CORRAL = "COR"
+    val CMD_NXTCORRAL = "NXC"
+    val CMD_WEIGHT = "WEI"
 }
