@@ -497,6 +497,13 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                                 bInLoad = false
                                 mBinding.tvCurrentProduct.text = corralDetail?.name
                             }
+                            " "->{
+                                mBinding.tvCurrentProductWeightPending.text = "${String(message,4,1)}${weight}Kg"
+                                mBinding.pbCurrentProduct.progress = progress
+                                bInLoad = false
+                                bInDownload = false
+                                mBinding.tvCurrentProduct.text = getString(R.string.mixer)
+                            }
                             else->{
                                 bInLoad = false
                                 bInDownload = false
