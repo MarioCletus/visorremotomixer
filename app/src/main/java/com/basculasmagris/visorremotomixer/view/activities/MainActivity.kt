@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         navView.setNavigationItemSelectedPreviewListener { item ->
-            Log.d("TAG", "got item: ${item.itemId}")
+            Log.d(TAG, "got item: ${item.itemId}")
             var outPut = true
             when (item.itemId) {
                 R.id.nav_logout -> {
@@ -352,6 +352,10 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.let {
             it.title = title
         }
+    }
+
+    fun isCustomProgresDialogShowing(): Boolean {
+        return mProgressDialog?.isShowing == true
     }
 }
 

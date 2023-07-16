@@ -425,7 +425,7 @@ class MixerConfigActivity : AppCompatActivity(),ConfirmDialogFragment.OnConfirmL
         }
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
-            Log.i("${this.javaClass.name} BLUE", "ACT onCommandReceived")
+            Log.i("TAG BLUE", "ACT onCommandReceived")
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
@@ -455,9 +455,14 @@ class MixerConfigActivity : AppCompatActivity(),ConfirmDialogFragment.OnConfirmL
             }
         }
 
-        override fun onMessageSent(device: BluetoothDevice?) {
-            Log.i(TAG, "[MixerConfigActivity] onMessageSent")
+        override fun onMessageSent(device: BluetoothDevice?,message: String?) {
+            Log.i(TAG, "onMessageSent $message")
         }
+
+        override fun onCommandSent(device: BluetoothDevice?,command: ByteArray?) {
+            Log.i(TAG, "onCommandSent ${command?.let { String(it) }}")
+        }
+
 
         override fun onError(message: String?) {
             changeStatusConnection(false)

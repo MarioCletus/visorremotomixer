@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Service
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
 import android.content.*
 import android.os.Binder
@@ -18,7 +17,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class BluetoothSDKService : Service() {
@@ -28,8 +26,6 @@ class BluetoothSDKService : Service() {
 
     // Bluetooth stuff
     private lateinit var bluetoothAdapter: BluetoothAdapter
-    private lateinit var serverController: BluetoothSDKService.BluetoothServerController
-    private var bluetoothServerList: ArrayList<BluetoothServer> = ArrayList()
     private lateinit var pairedDevices: MutableSet<BluetoothDevice>
     private var connectedDevice: BluetoothDevice? = null
     private val MY_UUID = "00001101-0000-1000-8000-00805F9B34FB"
@@ -51,8 +47,6 @@ class BluetoothSDKService : Service() {
             Log.i("BLUE", "No soportadoo ********")
         }
 
-        serverController = BluetoothServerController()
-        serverController.start()
     }
 
     fun isConnected(): Boolean {
@@ -108,7 +102,7 @@ class BluetoothSDKService : Service() {
         }
 
         fun connectKnowDeviceWithTransfer(bluetoothDevice: BluetoothDevice) {
-            Log.i("BLUE", "***Se CONECTA el servicio TR")
+            Log.i("BLUE", "***Se CONECTA el servicio TR ${bluetoothDevice.name}")
             connectThreadWithTransfer = ConnectThreadWithTransfer(bluetoothDevice)
             connectThreadWithTransfer?.start()
         }
@@ -253,12 +247,11 @@ class BluetoothSDKService : Service() {
         override fun run() {
 
             try {
-                Log.i("BLUE", "**** uniqueID: ${MY_UUID} | socket: ${mmSocket?.toString()}")
                 // Cancel discovery because it otherwise slows down the connection.
-                bluetoothAdapter?.cancelDiscovery()
+                bluetoothAdapter.cancelDiscovery()
 
                 mmSocket?.let { socket ->
-                    Log.i("BLUE", "**** uniqueID: ${MY_UUID} | socket: ${socket?.toString()}")
+                    Log.i("BLUE", "**** uniqueID: ${MY_UUID} | socket: ${socket.toString()}")
                     // Connect to the remote device through the socket. This call blocks
                     // until it succeeds or throws an exception.
                     socket.connect()
@@ -269,7 +262,7 @@ class BluetoothSDKService : Service() {
                     //mAcceptThread = AcceptThread()
                     //mAcceptThread?.start()
                     connectedThread?.start()
-                    Log.i("BLUE", "***Transfer connectedThread: ${connectedThread}")
+                    Log.i("BLUE", "***Transfer connectedThread: $connectedThread")
                 }
             } catch (e: IOException) {
                 Log.e("BLUE", "Error in socket.connect", e)
@@ -308,7 +301,7 @@ class BluetoothSDKService : Service() {
         private var isConnected : Boolean = false
 
         override fun run() {
-            Log.i("BLUE", "BEGIN ConnectedThread");
+            Log.i("BLUE", "BEGIN ConnectedThread ${mmSocket}");
             var numBytes: Int // bytes returned from read()
             // Keep listening to the InputStream until an exception occurs.
             pushBroadcastMessage(BluetoothUtils.ACTION_DEVICE_CONNECTED,arrayListOf(mmSocket.remoteDevice),null)
@@ -322,6 +315,10 @@ class BluetoothSDKService : Service() {
                     isConnected = false
                     pushBroadcastMessage(BluetoothUtils.ACTION_CONNECTION_ERROR,null,"Input stream was disconnected")
                     break
+                }
+                if(numBytes<3){
+                    Log.i("PING","Ping: ${String(mmBuffer,0,numBytes)}")
+                    continue
                 }
                 isConnected = true
                 val arrayCommand : ByteArray = mmBuffer.copyOfRange(3,numBytes)
@@ -433,113 +430,6 @@ class BluetoothSDKService : Service() {
             }
         }
         return uniqueID
-    }
-
-
-    inner class BluetoothServerController() : Thread() {
-
-        private var cancelled: Boolean
-        private val serverSocket: BluetoothServerSocket?
-
-
-        init {
-            Log.i("SERVER","init")
-            serverSocket = bluetoothAdapter.listenUsingRfcommWithServiceRecord("test", UUID.fromString(MY_UUID)) // 1
-            this.cancelled = serverSocket == null
-
-        }
-
-        override fun run() {
-            var socket: BluetoothSocket
-
-            while(true) {
-                if (this.cancelled) {
-                    break
-                }
-
-                try {
-                    Log.i("SERVER","Wait accept")
-                    socket = serverSocket!!.accept()  // 2
-                    Log.i("SERVER","Accept")
-                } catch(e: IOException) {
-                    Log.i("SERVER","Break")
-                    break
-                }
-
-                if (!this.cancelled && socket != null) {
-                    Log.i("SERVER", "Connecting")
-                    val bluetoothServer  = BluetoothServer(socket) //
-                    bluetoothServer.start()// 3
-                    bluetoothServerList.add(bluetoothServer)
-
-                }
-            }
-        }
-
-
-        fun write(msg: ByteArray) {
-            bluetoothServerList.forEach{
-                it.write(msg)
-            }
-        }
-
-        fun write(message: String?){
-            bluetoothServerList.forEach{
-                it.write(message)
-            }
-        }
-
-        fun cancel() {
-            this.cancelled = true
-            this.serverSocket!!.close()
-        }
-    }
-
-    inner class BluetoothServer(private val socket: BluetoothSocket): Thread() {
-        private val inputStream = this.socket.inputStream
-        private val outputStream = this.socket.outputStream
-        override fun run() {
-            try {
-                while(true){
-                    val available = inputStream.available()
-                    if(available>0){
-                        val bytes = ByteArray(available)
-                        Log.i("SERVER", "Reading")
-                        inputStream.read(bytes, 0, available)
-                        val commandReceived = String(bytes)
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e("SERVER", "Cannot read data", e)
-            } finally {
-                Log.e("SERVER", "Close socket")
-                inputStream.close()
-                outputStream.close()
-                socket.close()
-                bluetoothServerList.contains(this)
-            }
-        }
-
-
-
-        fun write(message: ByteArray) {
-            try {
-                outputStream.write(message)
-                // Send to broadcast the message
-            } catch (e: IOException) {
-                return
-            }
-        }
-
-        fun write(message: String?) {
-            try {
-                outputStream.write(message?.toByteArray())
-                // Send to broadcast the message
-            } catch (e: IOException) {
-                return
-            }
-        }
-
     }
 
 }

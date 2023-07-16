@@ -58,7 +58,6 @@ class RemoteViewerConfigActivity : AppCompatActivity(){
     private var knowDevices: List<BluetoothDevice>? = null
     private var mRemoteViewerDetails: RemoteViewer? = null
 
-
     // Bluetooth
     var mService: BluetoothSDKService? = null
     private var bluetoothDevices: MutableList<BluetoothDevice> = ArrayList()
@@ -135,7 +134,6 @@ class RemoteViewerConfigActivity : AppCompatActivity(){
                 }
             }
         }, this, Lifecycle.State.RESUMED)
-
 
         if(bIsDetail){
             mBinding.etRemoteViewerName.isEnabled  = false
@@ -278,7 +276,6 @@ class RemoteViewerConfigActivity : AppCompatActivity(){
         }
     }
 
-
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
             val binder = service as BluetoothSDKService.LocalBinder
@@ -316,7 +313,7 @@ class RemoteViewerConfigActivity : AppCompatActivity(){
 
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
-            Log.i("${this.javaClass.name} BLUE", "ACT onCommandReceived")
+            Log.i("TAG BLUE", "ACT onCommandReceived")
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
@@ -334,8 +331,12 @@ class RemoteViewerConfigActivity : AppCompatActivity(){
             }
         }
 
-        override fun onMessageSent(device: BluetoothDevice?) {
-            Log.i(TAG, "[RemoteViewerConfigActivity] onMessageSent")
+        override fun onMessageSent(device: BluetoothDevice?,message: String?) {
+            Log.i(TAG, "onMessageSent $message")
+        }
+
+        override fun onCommandSent(device: BluetoothDevice?,command: ByteArray?) {
+            Log.i(TAG, "onCommandSent ${command?.let { String(it) }}")
         }
 
         override fun onError(message: String?) {
@@ -613,7 +614,6 @@ class RemoteViewerConfigActivity : AppCompatActivity(){
         }
     }
 
-
     fun deleteRemoteViewer(remote_viewer: RemoteViewer){
         val builder = AlertDialog.Builder(this)
         builder.setTitle(resources.getString(R.string.title_delete_remote_viewer))
@@ -641,6 +641,7 @@ class RemoteViewerConfigActivity : AppCompatActivity(){
             showKeyboard()
         }
     }
+
     fun Activity.hideSoftKeyboard() {
         val view = mBinding.root
         view.let { _view ->
@@ -661,7 +662,6 @@ class RemoteViewerConfigActivity : AppCompatActivity(){
         val view: View = mBinding.root
         return view.rootWindowInsets.isVisible(WindowInsetsCompat.Type.ime())
     }
-
 
     private fun setupActionBar(){
         setSupportActionBar(mBinding.toolbarConfigRemoteViewer)

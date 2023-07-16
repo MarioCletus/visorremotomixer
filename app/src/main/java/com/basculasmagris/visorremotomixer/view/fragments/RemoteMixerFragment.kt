@@ -78,6 +78,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
     private var tick: Long = 0L
     private var tickCountMessages : Long = 0L
+    private var tickConnection: Long = 0L
     private var totalWeightLoaded: Double = 0.0
 
     //    private var showSnackbar = true
@@ -123,8 +124,14 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         mBinding.btnPause.setOnClickListener{
             Log.i(TAG, "btnPause")
-            val msg = "CMD${Constants.CMD_PAUSE}"
-            activity?.mService?.LocalBinder()?.write(msg.toByteArray())
+//            val msg = "CMD${Constants.CMD_PAUSE}"
+//            activity?.mService?.LocalBinder()?.write(msg.toByteArray())
+            if(mixerBluetoothDevice != null ){
+                mixerBluetoothDevice?.let {
+                    Log.i("CONEXION","Reconectando $mixerBluetoothDevice")
+                    activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                }
+            }
         }
 
         mBinding.btnRest.setOnClickListener{
@@ -195,9 +202,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         countCorralPosition++
                     }
                 }
-            }else{
-
-            }
+            }else{}
 
         }
 
@@ -287,7 +292,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 Log.i("RUN", "mixerWeight:$mixerWeight | lastUpdate: $lastUpdate |  Time:${lastUpdate?.until(
                     LocalDateTime.now(), ChronoUnit.SECONDS)}")
                 tick ++
-                if(tick == 3L){
+                if(tick - tickConnection == 10L){
                     MainScope().launch {
                         connectDevice()
                     }
@@ -369,13 +374,14 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 //Check connection
 
                 if (tick - tickCountMessages > 5){
-                    tickCountMessages = tick
-                    Log.i("CONEXION", "Conexión: NO Aca? | Tiempo: ${lastUpdate}")
-                    changeStatusConnection(false)
-                    if(mixerBluetoothDevice != null ){
-                        mixerBluetoothDevice?.let {
-                            Log.i("CONEXION","Reconectando $mixerBluetoothDevice")
-                            activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                    if(tick%10 == 0L && !isConnected){
+                        Log.i("CONEXION", "Conexión: NO ${lastUpdate} ${activity?.isCustomProgresDialogShowing()}")
+                        changeStatusConnection(false)
+                        if(mixerBluetoothDevice != null && activity?.isCustomProgresDialogShowing() == false){
+                            mixerBluetoothDevice?.let {
+                                Log.i("CONEXION","Reconectando $mixerBluetoothDevice")
+                                activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                            }
                         }
                     }
                 } else {
@@ -408,7 +414,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         override fun onDeviceConnected(device: BluetoothDevice?) {
             deviceConnected()
-            Log.i(TAG, "[MixRem] ACT onDeviceConnected")
+            Log.i(TAG, "onDeviceConnected ${device?.name} ${device?.address}")
         }
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
@@ -758,8 +764,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 */
         }
 
-        override fun onMessageSent(device: BluetoothDevice?) {
-            Log.i(TAG, "[MixRem] ACT onMessageSent")
+        override fun onMessageSent(device: BluetoothDevice?,message: String?) {
+            Log.i(TAG, "onMessageSent ${device?.address} $message")
+        }
+
+        override fun onCommandSent(device: BluetoothDevice?,command: ByteArray?) {
+            Log.i(TAG, "onCommandSent ${device?.address} ${command?.let { String(it) }}")
         }
 
         override fun onError(message: String?) {
@@ -805,17 +815,22 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     }
 
     fun deviceDisconnected() {
+        Log.i(TAG,"deviceDisconnected")
         isConnected = false
+        tickConnection = tick
     }
 
     fun deviceConnected() {
+        Log.i(TAG,"deviceConnected")
         isConnected = true
     }
 
     fun connectDevice(){
         if(!isConnected){
-            mixerBluetoothDevice?.let { _blueToothDevice->
-                activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(_blueToothDevice)
+            if(activity?.mService != null && mixerBluetoothDevice != null){
+                    activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(mixerBluetoothDevice!!)
+            }else{
+                tickConnection = tick
             }
             activity?.showCustomProgressDialog()
             Timer().schedule(5000) {
@@ -855,17 +870,17 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
     private var antStatus : Boolean = false
     fun changeStatusConnection(bConnected: Boolean){
-        activity?.runOnUiThread {
-            if(antStatus != bConnected){
-                Log.i(TAG, "changeStatusConnection $bConnected")
-                antStatus = bConnected
-            }
-            if (bConnected) {
-                deviceConnected()
-            } else {
-                deviceDisconnected()
-            }
-        }
+//        activity?.runOnUiThread {
+//            if(antStatus != bConnected){
+//                Log.i(TAG, "changeStatusConnection $bConnected")
+//                antStatus = bConnected
+//            }
+//            if (bConnected) {
+//                deviceConnected()
+//            } else {
+//                deviceDisconnected()
+//            }
+//        }
     }
 
 

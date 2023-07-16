@@ -329,8 +329,12 @@ class StepLoadFragment(mixerDetail: MixerDetail) : BottomSheetDialogFragment() {
             (mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter).updateWeight(mixerWeight)
         }
 
-        override fun onMessageSent(device: BluetoothDevice?) {
-            Log.i(TAG, "[StepLoad] ACT onMessageSent")
+        override fun onMessageSent(device: BluetoothDevice?,message: String?) {
+            Log.i(TAG, "onMessageSent $message")
+        }
+
+        override fun onCommandSent(device: BluetoothDevice?,command: ByteArray?) {
+            Log.i(TAG, "onCommandSent ${command?.let { String(it) }}")
         }
 
         override fun onError(message: String?) {

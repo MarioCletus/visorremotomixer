@@ -67,8 +67,15 @@ class BluetoothSDKListenerHelper {
                         }
                     }
                     BluetoothUtils.ACTION_MESSAGE_SENT -> {
+                        val message = intent.getStringExtra(BluetoothUtils.EXTRA_MESSAGE)
                         devices?.let {
-                            mGlobalListener!!.onMessageSent(it[0])
+                            mGlobalListener!!.onMessageSent(it[0],message)
+                        }
+                    }
+                    BluetoothUtils.ACTION_COMMAND_SENT -> {
+                        val command = intent.getByteArrayExtra(BluetoothUtils.EXTRA_COMMAND)
+                        devices?.let {
+                            mGlobalListener!!.onCommandSent(it[0],command)
                         }
                     }
                     BluetoothUtils.ACTION_CONNECTION_ERROR -> {

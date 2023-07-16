@@ -323,13 +323,13 @@ class RemoteViewerListFragment : Fragment() {
 
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
-            Log.i("${this.javaClass.name} BLUE", "ACT onCommandReceived")
+            Log.i("TAG BLUE", "ACT onCommandReceived")
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             Log.i("BLUE", "[RemoteViewerListFragment] onMessageReceived")
             message?.let{msg->
-                if (msg.length > 3){
+                if (msg.length > 8){
                     readCount += 1
                     val currentRemoteViewerWeight = msg.substring(1, 7).toDoubleOrNull()
                     currentRemoteViewerWeight?.let {
@@ -350,8 +350,12 @@ class RemoteViewerListFragment : Fragment() {
             }
         }
 
-        override fun onMessageSent(device: BluetoothDevice?) {
-            Log.i("BLUE", "[RemoteViewerListFragment] onMessageSent")
+        override fun onMessageSent(device: BluetoothDevice?,message: String?) {
+            Log.i("${this.javaClass.name}", "onMessageSent $message")
+        }
+
+        override fun onCommandSent(device: BluetoothDevice?,command: ByteArray?) {
+            Log.i("${this.javaClass.name}", "onCommandSent ${command?.let { String(it) }}")
         }
 
         override fun onError(message: String?) {

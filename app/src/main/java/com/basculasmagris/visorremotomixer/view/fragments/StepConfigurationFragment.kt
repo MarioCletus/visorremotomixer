@@ -457,8 +457,12 @@ class StepConfigurationFragment(mixerDetail: MixerDetail?) : Fragment() {
             }
         }
 
-        override fun onMessageSent(device: BluetoothDevice?) {
-            Log.i(TAG, "[StepConfigurationFragment] ACT onMessageSent")
+        override fun onMessageSent(device: BluetoothDevice?,message: String?) {
+            Log.i(TAG, "onMessageSent $message")
+        }
+
+        override fun onCommandSent(device: BluetoothDevice?,command: ByteArray?) {
+            Log.i(TAG, "onCommandSent ${command?.let { String(it) }}")
         }
 
         override fun onError(message: String?) {

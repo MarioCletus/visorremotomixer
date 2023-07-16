@@ -256,31 +256,35 @@ class AddUpdateRemoteViewerActivity : AppCompatActivity() {
 
         override fun onDeviceConnected(device: BluetoothDevice?) {
             // Do stuff when is connected
-            Log.i("${this.javaClass.name} BLUE", "ACT onDeviceConnected")
+            Log.i("${this.javaClass.name}", "ACT onDeviceConnected")
         }
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
-            Log.i("${this.javaClass.name} BLUE", "ACT onCommandReceived")
+            Log.i("${this.javaClass.name}", "ACT onCommandReceived")
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
-            Log.i("${this.javaClass.name} BLUE", "ACT onMessageReceived")
+            Log.i("${this.javaClass.name}", "ACT onMessageReceived")
         }
 
-        override fun onMessageSent(device: BluetoothDevice?) {
-            Log.i("${this.javaClass.name} BLUE", "ACT onMessageSent")
+        override fun onMessageSent(device: BluetoothDevice?,message: String?) {
+            Log.i("${this.javaClass.name}", "onMessageSent $message")
+        }
+
+        override fun onCommandSent(device: BluetoothDevice?,command: ByteArray?) {
+            Log.i("${this.javaClass.name}", "onCommandSent ${command?.let { String(it) }}")
         }
 
         override fun onError(message: String?) {
-            Log.i("${this.javaClass.name} BLUE", "ACT onError")
+            Log.i("${this.javaClass.name}", "ACT onError")
         }
 
         override fun onDeviceDisconnected() {
-            Log.i("${this.javaClass.name} BLUE", "ACT onDeviceDisconnected")
+            Log.i("${this.javaClass.name}", "ACT onDeviceDisconnected")
         }
 
         override fun onBondedDevices(device: List<BluetoothDevice>?) {
-            Log.i("${this.javaClass.name} BLUE", "ACT onBondedDevices")
+            Log.i("${this.javaClass.name}", "ACT onBondedDevices")
         }
 
     }
