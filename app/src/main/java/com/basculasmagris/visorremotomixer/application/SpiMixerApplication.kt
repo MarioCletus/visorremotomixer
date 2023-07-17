@@ -2,7 +2,7 @@ package com.basculasmagris.visorremotomixer.application
 
 import android.app.Application
 import com.basculasmagris.visorremotomixer.model.database.*
-import com.basculasmagris.visorremotomixer.model.database.RemoteViewerRepository
+import com.basculasmagris.visorremotomixer.model.database.TabletMixerRepository
 
 class SpiMixerApplication: Application() {
     private  val database by lazy { SpiMixerRoomDatabase.getDatabase((this@SpiMixerApplication))}
@@ -13,7 +13,7 @@ class SpiMixerApplication: Application() {
     val productRepository by lazy { ProductRepository(database.productDao()) }
     val userRepository by lazy { UserRepository(database.userDao())}
     val roundRepository by lazy { RoundRepository(database.roundDao())}
-    val remoteViewerRepository by lazy { RemoteViewerRepository(database.remoteViewerDao()) }
+    val tabletMixerRepository by lazy { TabletMixerRepository(database.remoteViewerDao()) }
 
     //val roundRunReportRepository by lazy { RoundRunReportRepository(database.roundRunReportDao())}
 }

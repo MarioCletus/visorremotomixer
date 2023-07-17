@@ -1058,7 +1058,7 @@
         ]
       },
       {
-        "tableName": "remote_viewer",
+        "tableName": "tablet_mixer",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `description` TEXT NOT NULL, `mac` TEXT NOT NULL, `bt_box` TEXT NOT NULL, `remote_id` INTEGER NOT NULL, `updated_date` TEXT NOT NULL, `archive_date` TEXT, `linked` INTEGER, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {

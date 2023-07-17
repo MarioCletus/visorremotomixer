@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_mixer_remoto">
+    app:startDestination="@+id/nav_tablet_mixer">
 
     <!-- HOME -->
     <fragment
@@ -11,15 +11,6 @@
         android:name="com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment"
         android:label="@string/mixer_remoto"
         tools:layout="@layout/fragment_remote_mixer" >
-        <action
-            android:id="@+id/action_nav_home_to_roundRunActivity"
-            app:destination="@id/roundRunActivity" />
-        <action
-            android:id="@+id/action_nav_home_to_addUpdateRoundActivity"
-            app:destination="@id/addUpdateRoundActivity" />
-        <action
-            android:id="@+id/actionNavHomeToRoundDetailFragment"
-            app:destination="@id/roundDetailFragment" />
     </fragment>
 
     <fragment
@@ -150,26 +141,26 @@
 
 
     <activity
-        android:id="@+id/addUpdateRemoteViewerActivity"
-        android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateRemoteViewerActivity"
+        android:id="@+id/addUpdateTabletMixerActivity"
+        android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateTabletMixerActivity"
         android:label="@string/screen_remote_viewer_new"
-        tools:layout="@layout/activity_add_update_remote_viewer" />
+        tools:layout="@layout/activity_add_update_tablet_mixer" />
 <!---->
     <fragment
-        android:id="@+id/nav_visor_remoto"
-        android:name="com.basculasmagris.visorremotomixer.view.fragments.RemoteViewerListFragment"
-        android:label="@string/screen_remote_viewer_list"
-        tools:layout="@layout/fragment_remote_viewer_list" >
+        android:id="@+id/nav_tablet_mixer"
+        android:name="com.basculasmagris.visorremotomixer.view.fragments.TabletMixerListFragment"
+        android:label="@string/screen_tablet_mixer_list"
+        tools:layout="@layout/fragment_tablet_mixer_list" >
         <action
-            android:id="@+id/action_remoteViewerListFragment_to_addUpdateRemoteViewerActivity"
+            android:id="@+id/action_tablet_mixerListFragment_to_addUpdateTabletMixerActivity"
             app:destination="@id/addUpdateRemoteViewActivity" />
     </fragment>
 
     <activity
         android:id="@+id/addUpdateRemoteViewActivity"
-        android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateRemoteViewerActivity"
+        android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateTabletMixerActivity"
         android:label="@string/screen_remote_viewer_new"
-        tools:layout="@layout/activity_add_update_remote_viewer" />
+        tools:layout="@layout/activity_add_update_tablet_mixer" />
 
 <!--    -->
 

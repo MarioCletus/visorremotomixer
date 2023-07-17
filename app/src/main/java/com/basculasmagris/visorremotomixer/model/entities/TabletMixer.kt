@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-@Entity(tableName = "remote_viewer")
-data class RemoteViewer(
+@Entity(tableName = "tablet_mixer")
+data class TabletMixer(
     @ColumnInfo var name: String,
     @ColumnInfo val description: String,
     @ColumnInfo var mac: String,

@@ -5,7 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.basculasmagris.visorremotomixer.model.entities.*
-import com.basculasmagris.visorremotomixer.model.database.RemoteViewerDao
 
 @Database(
     entities = [
@@ -21,8 +20,8 @@ import com.basculasmagris.visorremotomixer.model.database.RemoteViewerDao
         RoundRunProgressLoad::class,
         RoundRunProgressDownload::class,
         RoundRun::class,
-        RemoteViewer::class],
-    version = 11)
+        TabletMixer::class],
+    version = 12)
 
 abstract class SpiMixerRoomDatabase: RoomDatabase() {
 
@@ -33,7 +32,7 @@ abstract class SpiMixerRoomDatabase: RoomDatabase() {
     abstract fun corralDao() : CorralDao
     abstract fun dietDao() : DietDao
     abstract fun roundDao() : RoundDao
-    abstract fun remoteViewerDao() : RemoteViewerDao
+    abstract fun remoteViewerDao() : TabletMixerDao
     //abstract fun roundRunReportDao() : RoundRunReportDao
 
     companion object {

@@ -13,7 +13,6 @@
           <stringArguments>
             <stringArg name="classpath">
               <args>
-                <arg>$MODULE_DIR$/../../../app/build/intermediates/compile_and_runtime_not_namespaced_r_class_jar/debug/R.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/bf9ab412edd74796f10068738f67d5f9/transformed/jetified-viewbinding-7.0.4-api.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/6437562db75720f39c05ae418129bad4/transformed/navigation-fragment-ktx-2.5.0-api.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/8852960a2753a4ad80c3a26adad8fecb/transformed/navigation-fragment-2.5.0-api.jar</arg>

@@ -23,27 +23,27 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
-import com.basculasmagris.visorremotomixer.databinding.ActivityAddUpdateRemoteViewerBinding
-import com.basculasmagris.visorremotomixer.model.entities.RemoteViewer
+import com.basculasmagris.visorremotomixer.databinding.ActivityAddUpdateTabletMixerBinding
+import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
-import com.basculasmagris.visorremotomixer.viewmodel.RemoteViewerViewModel
-import com.basculasmagris.visorremotomixer.viewmodel.RemoteViewerViewModelFactory
+import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModelFactory
 import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddUpdateRemoteViewerActivity : AppCompatActivity() {
+class AddUpdateTabletMixerActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityAddUpdateRemoteViewerBinding
-    private var mRemoteViewerDetails: RemoteViewer? = null
-    private var mNewRemoteViewerDetails: RemoteViewer? = null
+    private lateinit var binding: ActivityAddUpdateTabletMixerBinding
+    private var mTabletMixerDetails: TabletMixer? = null
+    private var mNewTabletMixerDetails: TabletMixer? = null
     // Bluetooth
     private lateinit var mService: BluetoothSDKService
 
-    private val mRemoteViewerViewModel: RemoteViewerViewModel by viewModels {
-        RemoteViewerViewModelFactory((application as SpiMixerApplication).remoteViewerRepository)
+    private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
+        TabletMixerViewModelFactory((application as SpiMixerApplication).tabletMixerRepository)
     }
 
     private var mProgressDialog: Dialog? = null
@@ -65,11 +65,11 @@ class AddUpdateRemoteViewerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAddUpdateRemoteViewerBinding.inflate(layoutInflater)
+        binding = ActivityAddUpdateTabletMixerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.btnAddRemoteViewer.visibility = GONE
+        binding.btnAddTabletMixer.visibility = GONE
         if (intent.hasExtra(Constants.EXTRA_MIXER_DETAILS)){
-            mRemoteViewerDetails = intent.getParcelableExtra(Constants.EXTRA_MIXER_DETAILS)
+            mTabletMixerDetails = intent.getParcelableExtra(Constants.EXTRA_MIXER_DETAILS)
         }
 
         setupActionBar()
@@ -100,18 +100,18 @@ class AddUpdateRemoteViewerActivity : AppCompatActivity() {
             }
         }, this, Lifecycle.State.RESUMED)
 
-        mRemoteViewerDetails?.let {
+        mTabletMixerDetails?.let {
             if (it.id != 0L){
-                binding.tiRemoteViewerName.setText(it.name)
-                binding.tiRemoteViewerDescription.setText(it.description)
-                binding.btnAddRemoteViewer.text = resources.getString(R.string.lbl_update_remote_viewer)
+                binding.tiTabletMixerName.setText(it.name)
+                binding.tiTabletMixerDescription.setText(it.description)
+                binding.btnAddTabletMixer.text = resources.getString(R.string.lbl_update_remote_viewer)
                 binding.etBtBox.setText(it.btBox)
                 binding.etMac.setText(it.mac)
 
             }
         }
 
-        //binding.btnAddRemoteViewer.setOnClickListener(this)
+        //binding.btnAddTabletMixer.setOnClickListener(this)
         //bindBluetoothService()
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -121,10 +121,10 @@ class AddUpdateRemoteViewerActivity : AppCompatActivity() {
     }
 
     private fun setupActionBar(){
-        setSupportActionBar(binding.toolbarAddUpdateRemoteViewer)
+        setSupportActionBar(binding.toolbarAddUpdateTabletMixer)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        if (mRemoteViewerDetails != null && mRemoteViewerDetails!!.id != 0L){
+        if (mTabletMixerDetails != null && mTabletMixerDetails!!.id != 0L){
             supportActionBar?.let {
                 it.title = resources.getString(R.string.title_edit_remote_viewer)
             }
@@ -134,7 +134,7 @@ class AddUpdateRemoteViewerActivity : AppCompatActivity() {
             }
         }
 
-        binding.toolbarAddUpdateRemoteViewer.setNavigationOnClickListener {
+        binding.toolbarAddUpdateTabletMixer.setNavigationOnClickListener {
             hideSoftKeyboard()
             onBackPressed()
         }
@@ -147,20 +147,20 @@ class AddUpdateRemoteViewerActivity : AppCompatActivity() {
 
     fun saveMremoteViewer(){
 
-        val remoteViewerName = binding.tiRemoteViewerName.text.toString().trim { it <= ' ' }
-        val remoteViewerDescription = binding.tiRemoteViewerDescription.text.toString().trim { it <= ' ' }
+        val remoteViewerName = binding.tiTabletMixerName.text.toString().trim { it <= ' ' }
+        val remoteViewerDescription = binding.tiTabletMixerDescription.text.toString().trim { it <= ' ' }
         var remoteId = 0L
         var remoteViewerMac = binding.etMac.text.toString().trim { it <= ' ' }
         var remoteViewerBtBox = binding.etBtBox.text.toString().trim { it <= ' ' }
 
-        mRemoteViewerDetails?.let {
+        mTabletMixerDetails?.let {
             remoteId = it.remoteId
         }
 
         when {
             TextUtils.isEmpty(remoteViewerName) -> {
                 Toast.makeText(
-                    this@AddUpdateRemoteViewerActivity,
+                    this@AddUpdateTabletMixerActivity,
                     resources.getString(R.string.err_msg_remote_viewer_name),
                     Toast.LENGTH_SHORT
                 ).show()
@@ -172,7 +172,7 @@ class AddUpdateRemoteViewerActivity : AppCompatActivity() {
                 var updatedDate = ""
                 var linked = false
 
-                mRemoteViewerDetails?.let {
+                mTabletMixerDetails?.let {
                     if (it.id != 0L){
                         remoteViewerId = it.id
                         updatedDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
@@ -180,7 +180,7 @@ class AddUpdateRemoteViewerActivity : AppCompatActivity() {
                     }
                 }
 
-                val remoteViewer = RemoteViewer(
+                val tabletMixer = TabletMixer(
                     remoteViewerName,
                     remoteViewerDescription,
                     remoteViewerMac,
@@ -192,15 +192,15 @@ class AddUpdateRemoteViewerActivity : AppCompatActivity() {
                     remoteViewerId
                 )
 
-                mNewRemoteViewerDetails = remoteViewer
+                mNewTabletMixerDetails = tabletMixer
 
                 runBlocking {
                     if (remoteViewerId == 0L){
-                        mRemoteViewerViewModel.insertSync(remoteViewer)
+                        mTabletMixerViewModel.insertSync(tabletMixer)
                     } else {
-                        mRemoteViewerViewModel.updateSync(remoteViewer)
+                        mTabletMixerViewModel.updateSync(tabletMixer)
                     }
-                    Log.i("SYNC", "Se actualiza remoteViewer con fecha ${remoteViewer.updatedDate}")
+                    Log.i("SYNC", "Se actualiza remoteViewer con fecha ${tabletMixer.updatedDate}")
                     finish()
                 }
 
@@ -234,7 +234,7 @@ class AddUpdateRemoteViewerActivity : AppCompatActivity() {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
             val binder = service as BluetoothSDKService.LocalBinder
             mService = binder.getService()
-            mService.LocalBinder().startDiscovery(this@AddUpdateRemoteViewerActivity)
+            mService.LocalBinder().startDiscovery(this@AddUpdateTabletMixerActivity)
         }
         override fun onServiceDisconnected(arg0: ComponentName) {
             Log.i("BLUE", "[onServiceDisconnected] Se desconecta ")

@@ -23,7 +23,7 @@ data class EstablishmentData(val establishments: MutableList<Establishment>): Me
 data class CorralData(val corrals: MutableList<Corral>): MergedLocalData()
 data class ProductData(val products: MutableList<Product>): MergedLocalData()
 data class MixerData(val mixers: MutableList<Mixer>): MergedLocalData()
-data class RemoteViewerData(val remoteViewers: MutableList<RemoteViewer>): MergedLocalData()
+data class TabletMixerData(val tabletMixers: MutableList<TabletMixer>): MergedLocalData()
 data class DietData(val diets: MutableList<Diet>): MergedLocalData()
 data class DietProductDetailData(val dietProductsDetail: MutableList<DietProductDetail>): MergedLocalData()
 data class DietProductData(val dietProducts: MutableList<DietProduct>): MergedLocalData()

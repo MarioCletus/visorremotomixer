@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class RemoteViewerRemote (
+data class TabletMixerRemote (
     val name: String,
     val description: String,
     val mac: String,

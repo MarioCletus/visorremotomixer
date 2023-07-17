@@ -214,33 +214,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val permission1 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH)
-        val permission2 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_ADMIN)
-        val permission3 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
-        val permission4 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-        val permission5 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_SCAN)
-        val permission6 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_CONNECT)
-        if (permission1 != PackageManager.PERMISSION_GRANTED
-            || permission2 != PackageManager.PERMISSION_GRANTED
-            || permission3 != PackageManager.PERMISSION_GRANTED
-            || permission4 != PackageManager.PERMISSION_GRANTED
-            || permission5 != PackageManager.PERMISSION_GRANTED
-            || permission6 != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(requireActivity(),
-                arrayOf(
-                    Manifest.permission.BLUETOOTH,
-                    Manifest.permission.BLUETOOTH_ADMIN,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.BLUETOOTH_SCAN,
-                    Manifest.permission.BLUETOOTH_CONNECT
-                ),
-                642)
-        } else {
-            Log.d("BLUE", "Permissions Granted")
-        }
-
+        permission()
         mBinding = FragmentRemoteMixerBinding.inflate(inflater, container, false)
 
 
@@ -274,6 +248,35 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         return mBinding.root
     }
 
+    private fun permission() {
+        val permission1 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH)
+        val permission2 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_ADMIN)
+        val permission3 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+        val permission4 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+        val permission5 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_SCAN)
+        val permission6 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_CONNECT)
+        if (permission1 != PackageManager.PERMISSION_GRANTED
+            || permission2 != PackageManager.PERMISSION_GRANTED
+            || permission3 != PackageManager.PERMISSION_GRANTED
+            || permission4 != PackageManager.PERMISSION_GRANTED
+            || permission5 != PackageManager.PERMISSION_GRANTED
+            || permission6 != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(requireActivity(),
+                arrayOf(
+                    Manifest.permission.BLUETOOTH,
+                    Manifest.permission.BLUETOOTH_ADMIN,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.BLUETOOTH_SCAN,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ),
+                642)
+        } else {
+            Log.d("BLUE", "Permissions Granted")
+        }
+
+    }
 
 
     override fun onResume() {
@@ -839,12 +842,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             }else{
                 tickConnection = tick
             }
-            activity?.showCustomProgressDialog()
-            Timer().schedule(5000) {
-                activity?.hideCustomProgressDialog()
-                Log.i(TAG,"changeStatusConnection(false) MRV 453")
-                changeStatusConnection(false)
-            }
+//            activity?.showCustomProgressDialog()
+//            Timer().schedule(5000) {
+//                activity?.hideCustomProgressDialog()
+//                Log.i(TAG,"changeStatusConnection(false) MRV 453")
+//                changeStatusConnection(false)
+//            }
         }
     }
 

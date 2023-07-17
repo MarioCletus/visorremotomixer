@@ -122,7 +122,7 @@
     <string name="action_delete_mixer">Borrar Mixer</string>
     <string name="action_config_mixer">Configurar Mixer</string>
     <string name="tv_no_mixer_list">No hay mixers cargados</string>
-    <string name="tv_no_remote_viewer_list">No hay visores remotos cargados</string>
+    <string name="tv_no_tablet_mixer_list">No hay visores remotos cargados</string>
     <string name="alert_msg_no_establishment_sync">No se pudo sincronizar el corral porque falta el establecimiento asociado</string>
     <string name="alert_msg_no_establishment_sync_all">No hay establecimientos cargados. No se pueden sincronizar los corrales.</string>
 
@@ -314,7 +314,7 @@
     <string name="screen_remote_viewer_detail">Detalle del  Visor Remoto</string>
     <string name="screen_remote_viewer_new">Nuevo Visor Remoto</string>
 
-    <string name="title_activity_add_update_remote_viewer">AddUpdateRemoteViewerActivity</string>
+    <string name="title_activity_add_update_remote_viewer">AddUpdateTabletMixerActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -323,7 +323,7 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="title_activity_remote_viewer_config">RemoteViewerConfigActivity</string>
+    <string name="title_activity_remote_viewer_config">TabletMixerConfigActivity</string>
     <string name="caja_bluetooth_asociada">Caja Bluetooth asociada</string>
     <string name="eliminar">Eliminar</string>
     <string name="carga">Carga</string>
@@ -343,6 +343,10 @@
     <string name="ajustes">Ajustes</string>
     <string name="cargar">Cargar</string>
     <string name="descargar">Descargar en</string>
+    <string name="add_tablet_mixer">Añadir Tablet de Mixer</string>
+    <string name="ph_tablet_mixer_name">Nombre</string>
+    <string name="ph_tablet_mixer_description">Descripcion</string>
+    <string name="screen_tablet_mixer_list">Tablets de mixer</string>
 
 
 </resources>

@@ -1,13 +1,17 @@
 package com.basculasmagris.visorremotomixer.view.fragments
 
+import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -21,28 +25,28 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
 import com.basculasmagris.visorremotomixer.databinding.DialogCustomListBinding
-import com.basculasmagris.visorremotomixer.databinding.FragmentRemoteViewerListBinding
-import com.basculasmagris.visorremotomixer.model.entities.RemoteViewer
+import com.basculasmagris.visorremotomixer.databinding.FragmentTabletMixerListBinding
+import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.Helper.Companion.setProgressDialog
 import com.basculasmagris.visorremotomixer.view.activities.*
 import com.basculasmagris.visorremotomixer.view.adapter.CustomDynamicListItemAdapterFragment
 import com.basculasmagris.visorremotomixer.view.adapter.CustomListItem
-import com.basculasmagris.visorremotomixer.view.adapter.RemoteViewerAdapter
+import com.basculasmagris.visorremotomixer.view.adapter.TabletMixerAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
-import com.basculasmagris.visorremotomixer.viewmodel.RemoteViewerRemoteViewModel
-import com.basculasmagris.visorremotomixer.viewmodel.RemoteViewerViewModel
-import com.basculasmagris.visorremotomixer.viewmodel.RemoteViewerViewModelFactory
+import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerRemoteViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModelFactory
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import kotlin.math.roundToInt
 
 
-class RemoteViewerListFragment : Fragment() {
+class TabletMixerListFragment : Fragment() {
 
     var menu: Menu? = null
-    private lateinit var mBinding: FragmentRemoteViewerListBinding
+    private lateinit var mBinding: FragmentTabletMixerListBinding
     private var bluetoothDevices: MutableList<BluetoothDevice> = ArrayList()
     private var allBluetoothDevice: MutableList<BluetoothDevice> = ArrayList()
     private var selectedBluetoothDevice : BluetoothDevice? = null
@@ -50,12 +54,12 @@ class RemoteViewerListFragment : Fragment() {
     private val allBluetoothDeviceCustomList: java.util.ArrayList<CustomListItem> =
         java.util.ArrayList<CustomListItem>()
 
-    private val mRemoteViewerViewModel: RemoteViewerViewModel by viewModels {
-        RemoteViewerViewModelFactory((requireActivity().application as SpiMixerApplication).remoteViewerRepository)
+    private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
+        TabletMixerViewModelFactory((requireActivity().application as SpiMixerApplication).tabletMixerRepository)
     }
-    private var mRemoteViewerViewModelRemote: RemoteViewerRemoteViewModel? = null
-    private var mLocalRemoteViewers: List<RemoteViewer>? = null
-    private var likingRemoteViewer: RemoteViewer? = null
+    private var mTabletMixerViewModelRemote: TabletMixerRemoteViewModel? = null
+    private var mLocalTabletMixers: List<TabletMixer>? = null
+    private var likingTabletMixer: TabletMixer? = null
     private var accumulatedWight = 0.0
     private var readCount = 0
 
@@ -66,9 +70,9 @@ class RemoteViewerListFragment : Fragment() {
 
     private fun fetchLocalData(): MediatorLiveData<MergedLocalData> {
         val liveDataMerger = MediatorLiveData<MergedLocalData>()
-        liveDataMerger.addSource(mRemoteViewerViewModel.allRemoteViewerList) {
+        liveDataMerger.addSource(mTabletMixerViewModel.allTabletMixerList) {
             if (it != null) {
-                liveDataMerger.value = RemoteViewerData(it)
+                liveDataMerger.value = TabletMixerData(it)
             }
         }
         return liveDataMerger
@@ -79,11 +83,11 @@ class RemoteViewerListFragment : Fragment() {
         liveData.observe(viewLifecycleOwner, object : Observer<MergedLocalData> {
             override fun onChanged(it: MergedLocalData?) {
                 when (it) {
-                    is RemoteViewerData -> mLocalRemoteViewers = it.remoteViewers
+                    is TabletMixerData -> mLocalTabletMixers = it.tabletMixers
                     else -> {}
                 }
 
-                if (mLocalRemoteViewers != null) {
+                if (mLocalTabletMixers != null) {
                     (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
                     liveData.removeObserver(this)
                 }
@@ -96,7 +100,8 @@ class RemoteViewerListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding = FragmentRemoteViewerListBinding.inflate(inflater, container, false)
+        permission()
+        mBinding = FragmentTabletMixerListBinding.inflate(inflater, container, false)
         return mBinding.root
     }
 
@@ -105,13 +110,13 @@ class RemoteViewerListFragment : Fragment() {
 
         // Start Sync
         getLocalData()
-        getLocalRemoteViewer()
+        getLocalTabletMixer()
         // Navigation Menu
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 // Add menu items here
-                this@RemoteViewerListFragment.menu = menu
+                this@TabletMixerListFragment.menu = menu
                 menuInflater.inflate(R.menu.menu_remote_viewer_list, menu)
 
                 // Associate searchable configuration with the SearchView
@@ -119,11 +124,11 @@ class RemoteViewerListFragment : Fragment() {
                 val searchView = search.actionView as SearchView
                 searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
-                        (mBinding.rvRemoteViewersList.adapter as RemoteViewerAdapter).filter.filter(query)
+                        (mBinding.rvTabletMixersList.adapter as TabletMixerAdapter).filter.filter(query)
                         return false
                     }
                     override fun onQueryTextChange(newText: String?): Boolean {
-                        (mBinding.rvRemoteViewersList.adapter as RemoteViewerAdapter).filter.filter(newText)
+                        (mBinding.rvTabletMixersList.adapter as TabletMixerAdapter).filter.filter(newText)
                         return true
                     }
                 })
@@ -133,8 +138,8 @@ class RemoteViewerListFragment : Fragment() {
                 return when (menuItem.itemId) {
                     R.id.action_add_remote_viewer -> {
                         // clearCompletedTasks()
-                        startActivity(Intent(requireActivity(), AddUpdateRemoteViewerActivity::class.java))
-                        goToAddUpdateRemoteViewer()
+                        startActivity(Intent(requireActivity(), AddUpdateTabletMixerActivity::class.java))
+                        goToAddUpdateTabletMixer()
                         return true
                     }
                     else -> false
@@ -147,17 +152,17 @@ class RemoteViewerListFragment : Fragment() {
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireActivity(), mBluetoothListener)
     }
 
-    private fun getLocalRemoteViewer(){
-        mBinding.rvRemoteViewersList.layoutManager = GridLayoutManager(requireActivity(), 3)
-        val remoteViewerAdapter =  RemoteViewerAdapter(this@RemoteViewerListFragment)
-        mBinding.rvRemoteViewersList.adapter = remoteViewerAdapter
-        mRemoteViewerViewModel.allRemoteViewerList.observe(viewLifecycleOwner) { remoteViewers ->
+    private fun getLocalTabletMixer(){
+        mBinding.rvTabletMixersList.layoutManager = GridLayoutManager(requireActivity(), 3)
+        val tabletMixerAdapter =  TabletMixerAdapter(this@TabletMixerListFragment)
+        mBinding.rvTabletMixersList.adapter = tabletMixerAdapter
+        mTabletMixerViewModel.allTabletMixerList.observe(viewLifecycleOwner) { remoteViewers ->
             remoteViewers.let{ _remote_viewers ->
                 if (_remote_viewers.isNotEmpty()){
-                    mBinding.rvRemoteViewersList.visibility = View.VISIBLE
+                    mBinding.rvTabletMixersList.visibility = View.VISIBLE
                     mBinding.tvNoData.visibility = View.GONE
 
-                    remoteViewerAdapter.remoteViewerList(_remote_viewers.filter { remoteViewer ->
+                    tabletMixerAdapter.tabletMixerList(_remote_viewers.filter { remoteViewer ->
                         remoteViewer.archiveDate.isNullOrEmpty()
                     }.toMutableList())
 
@@ -165,28 +170,28 @@ class RemoteViewerListFragment : Fragment() {
                         val isLinked = bluetoothDevices.firstOrNull { bluetoothDevice ->
                             bluetoothDevice.address == remoteViewer.mac
                         }
-                        Log.i("BLUE", "[RemoteViewerListFragment] RemoteViewer ${remoteViewer.name}: ${isLinked!=null}")
-                        (mBinding.rvRemoteViewersList.adapter as RemoteViewerAdapter).statusConnexion(remoteViewer, isLinked!=null)
+                        Log.i("BLUE", "[TabletMixerListFragment] TabletMixer ${remoteViewer.name}: ${isLinked!=null}")
+                        (mBinding.rvTabletMixersList.adapter as TabletMixerAdapter).statusConnexion(remoteViewer, isLinked!=null)
                     }
                 } else {
-                    mBinding.rvRemoteViewersList.visibility = View.GONE
+                    mBinding.rvTabletMixersList.visibility = View.GONE
                     mBinding.tvNoData.visibility = View.VISIBLE
                 }
             }
         }
     }
 
-    fun goToAddUpdateRemoteViewer(){
-        findNavController().navigate(RemoteViewerListFragmentDirections.actionRemoteViewerListFragmentToAddUpdateRemoteViewerActivity())
+    fun goToAddUpdateTabletMixer(){
+        findNavController().navigate(TabletMixerListFragmentDirections.actionTabletMixerListFragmentToAddUpdateTabletMixerActivity())
     }
 
-    fun deleteRemoteViewer(remoteViewer: RemoteViewer){
+    fun deleteTabletMixer(tabletMixer: TabletMixer){
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(resources.getString(R.string.title_delete_mixer))
-        builder.setMessage(resources.getString(R.string.msg_delete_remote_viewer_dialog, remoteViewer.name))
+        builder.setMessage(resources.getString(R.string.msg_delete_remote_viewer_dialog, tabletMixer.name))
         builder.setIcon(android.R.drawable.ic_dialog_alert)
         builder.setPositiveButton(resources.getString(R.string.lbl_yes)){ dialogInterface, _ ->
-            mRemoteViewerViewModel.delete(remoteViewer)
+            mTabletMixerViewModel.delete(tabletMixer)
             dialogInterface.dismiss()
         }
 
@@ -200,16 +205,16 @@ class RemoteViewerListFragment : Fragment() {
 
     }
 
-    fun linkDevice(remoteViewer: RemoteViewer){
-        likingRemoteViewer = remoteViewer
-        dialog = setProgressDialog(requireActivity(), "Buscando un remoteViewer...")
+    fun linkDevice(tabletMixer: TabletMixer){
+        likingTabletMixer = tabletMixer
+        dialog = setProgressDialog(requireActivity(), "Buscando un tabletMixer...")
         dialog?.show()
         (requireActivity() as MainActivity).mService?.LocalBinder()?.startDiscovery(requireActivity())
     }
 
     fun bluetoothConnectionError(){
-        Log.i("BLUEFAT", "RemoteViewerlist")
-        Snackbar.make(mBinding.remoteViewerListView, "No se pudo conectar con el dispositivo",
+        Log.i("BLUEFAT", "TabletMixerlist")
+        Snackbar.make(mBinding.tabletMixerListView, "No se pudo conectar con el dispositivo",
             BaseTransientBottomBar.LENGTH_SHORT
         ).show()
 
@@ -219,26 +224,26 @@ class RemoteViewerListFragment : Fragment() {
     fun bluetoothConnectionSuccess(){
 
         selectedBluetoothDevice?.let { selectedDevice ->
-            likingRemoteViewer?.let {
+            likingTabletMixer?.let {
                 bluetoothDevices.add(selectedDevice)
-                mRemoteViewerViewModel.setUpdatedMacAddress(it.id, selectedDevice.address)
-                (mBinding.rvRemoteViewersList.adapter as RemoteViewerAdapter).statusConnexion(it, true)
+                mTabletMixerViewModel.setUpdatedMacAddress(it.id, selectedDevice.address)
+                (mBinding.rvTabletMixersList.adapter as TabletMixerAdapter).statusConnexion(it, true)
             }
         }
 
-        Snackbar.make(mBinding.remoteViewerListView, "Dispositivo vinculado",
+        Snackbar.make(mBinding.tabletMixerListView, "Dispositivo vinculado",
             BaseTransientBottomBar.LENGTH_SHORT
         ).show()
         mCustomListDialog.dismiss()
     }
 
-    fun calibrateDevice(remoteViewer: RemoteViewer){
-        likingRemoteViewer = remoteViewer
-        //dialog = setProgressDialog(requireActivity(), "Calibrando remoteViewer...")
+    fun calibrateDevice(tabletMixer: TabletMixer){
+        likingTabletMixer = tabletMixer
+        //dialog = setProgressDialog(requireActivity(), "Calibrando tabletMixer...")
         //dialog?.show()
         Log.i("BLUE", "Cantidad: ${bluetoothDevices.size}")
         val deviceBluetooth = bluetoothDevices.firstOrNull { bd->
-            bd.address == remoteViewer.mac
+            bd.address == tabletMixer.mac
         }
 
         if (deviceBluetooth != null){
@@ -252,12 +257,12 @@ class RemoteViewerListFragment : Fragment() {
 
     private val mBluetoothListener: IBluetoothSDKListener = object : IBluetoothSDKListener {
         override fun onDiscoveryStarted() {
-            Log.i("BLUE", "[RemoteViewerListFragment] onDiscoveryStarted")
+            Log.i("BLUE", "[TabletMixerListFragment] onDiscoveryStarted")
             customItemsDialog("Dispositivos disponibles", ArrayList(), Constants.DEVICE_REF)
         }
 
         override fun onDiscoveryStopped() {
-            Log.i("BLUE", "[RemoteViewerListFragment] onDiscoveryStopped")
+            Log.i("BLUE", "[TabletMixerListFragment] onDiscoveryStopped")
             dialog?.cancel()
 
             /*
@@ -274,7 +279,7 @@ class RemoteViewerListFragment : Fragment() {
 
             /*
             if (!isFound) {
-                Toast.makeText(requireActivity(), "No se encontraron remoteViewers cercanos", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireActivity(), "No se encontraron tabletMixers cercanos", Toast.LENGTH_SHORT).show()
             }
             */
 
@@ -285,7 +290,7 @@ class RemoteViewerListFragment : Fragment() {
 
 
         override fun onDeviceDiscovered(device: BluetoothDevice?) {
-            val alreadyLinked = mLocalRemoteViewers?.firstOrNull {
+            val alreadyLinked = mLocalTabletMixers?.firstOrNull {
                 it.mac == device?.address
             }
 
@@ -306,10 +311,10 @@ class RemoteViewerListFragment : Fragment() {
                 isFound = true
                 dialog?.cancel()
                 (requireActivity() as MainActivity).mService?.LocalBinder()?.connectKnowDevice(device)
-                likingRemoteViewer?.let {
+                likingTabletMixer?.let {
                     bluetoothDevice.add(device)
-                    mRemoteViewerViewModel.setUpdatedMacAddress(it.id, device?.address)
-                    (mBinding.rvRemoteViewersList.adapter as RemoteViewerAdapter).statusConnexion(it, true)
+                    mTabletMixerViewModel.setUpdatedMacAddress(it.id, device?.address)
+                    (mBinding.rvTabletMixersList.adapter as TabletMixerAdapter).statusConnexion(it, true)
                 }
             }
             */
@@ -318,7 +323,7 @@ class RemoteViewerListFragment : Fragment() {
 
         override fun onDeviceConnected(device: BluetoothDevice?) {
             // Do stuff when is connected
-            Log.i("BLUE", "[RemoteViewerListFragment] onDeviceConnected")
+            Log.i("BLUE", "[TabletMixerListFragment] onDeviceConnected")
         }
 
 
@@ -327,12 +332,12 @@ class RemoteViewerListFragment : Fragment() {
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
-            Log.i("BLUE", "[RemoteViewerListFragment] onMessageReceived")
+            Log.i("BLUE", "[TabletMixerListFragment] onMessageReceived")
             message?.let{msg->
                 if (msg.length > 8){
                     readCount += 1
-                    val currentRemoteViewerWeight = msg.substring(1, 7).toDoubleOrNull()
-                    currentRemoteViewerWeight?.let {
+                    val currentTabletMixerWeight = msg.substring(1, 7).toDoubleOrNull()
+                    currentTabletMixerWeight?.let {
                         accumulatedWight += it
                     }
 
@@ -340,7 +345,7 @@ class RemoteViewerListFragment : Fragment() {
                         (requireActivity() as MainActivity).hideCustomProgressDialog()
                         val average = (accumulatedWight/readCount).roundToInt()
 
-                        likingRemoteViewer?.let {
+                        likingTabletMixer?.let {
 
                             Toast.makeText(requireActivity(), "Se calibró el remoteViewer con un valor de ${average.toDouble()}Kg", Toast.LENGTH_SHORT).show()
                         }
@@ -359,25 +364,25 @@ class RemoteViewerListFragment : Fragment() {
         }
 
         override fun onError(message: String?) {
-            Log.i("BLUE", "[RemoteViewerListFragment] onError")
+            Log.i("BLUE", "[TabletMixerListFragment] onError")
         }
 
         override fun onDeviceDisconnected() {
-            Log.i("BLUE", "[RemoteViewerListFragment] onDeviceDisconnected")
+            Log.i("BLUE", "[TabletMixerListFragment] onDeviceDisconnected")
         }
 
         override fun onBondedDevices(device: List<BluetoothDevice>?) {
-            Log.i("BLUE", "[RemoteViewerListFragment] onBondedDevices: ${device?.size} | Local RemoteViewers: ${mLocalRemoteViewers?.size}")
+            Log.i("BLUE", "[TabletMixerListFragment] onBondedDevices: ${device?.size} | Local TabletMixers: ${mLocalTabletMixers?.size}")
             device?.let { bdList ->
                 bluetoothDevices = bdList.toMutableList()
             }
 
-            mLocalRemoteViewers?.forEach { remoteViewer ->
+            mLocalTabletMixers?.forEach { remoteViewer ->
                 val isLinked = device?.firstOrNull { bluetoothDevice ->
                     bluetoothDevice.address == remoteViewer.mac
                 }
-                Log.i("BLUE", "[RemoteViewerListFragment] RemoteViewer ${remoteViewer.name}: ${isLinked!=null}")
-                (mBinding.rvRemoteViewersList.adapter as RemoteViewerAdapter).statusConnexion(remoteViewer, isLinked!=null)
+                Log.i("BLUE", "[TabletMixerListFragment] TabletMixer ${remoteViewer.name}: ${isLinked!=null}")
+                (mBinding.rvTabletMixersList.adapter as TabletMixerAdapter).statusConnexion(remoteViewer, isLinked!=null)
             }
         }
 
@@ -420,35 +425,64 @@ class RemoteViewerListFragment : Fragment() {
     }
 
     private fun cleanObservers(){
-        mRemoteViewerViewModelRemote?.remoteViewersResponse?.value = null
-        mRemoteViewerViewModelRemote?.remoteViewersLoadingError?.value = null
-        mRemoteViewerViewModelRemote?.loadRemoteViewer?.value = null
-        mRemoteViewerViewModelRemote?.addRemoteViewersResponse?.value = null
-        mRemoteViewerViewModelRemote?.addRemoteViewerErrorResponse?.value = null
-        mRemoteViewerViewModelRemote?.addRemoteViewersLoad?.value = null
-        mRemoteViewerViewModelRemote?.updateRemoteViewersResponse?.value = null
-        mRemoteViewerViewModelRemote?.updateRemoteViewersErrorResponse?.value = null
-        mRemoteViewerViewModelRemote?.updateRemoteViewersLoad?.value = null
+        mTabletMixerViewModelRemote?.remoteViewersResponse?.value = null
+        mTabletMixerViewModelRemote?.remoteViewersLoadingError?.value = null
+        mTabletMixerViewModelRemote?.loadTabletMixer?.value = null
+        mTabletMixerViewModelRemote?.addTabletMixersResponse?.value = null
+        mTabletMixerViewModelRemote?.addTabletMixerErrorResponse?.value = null
+        mTabletMixerViewModelRemote?.addTabletMixersLoad?.value = null
+        mTabletMixerViewModelRemote?.updateTabletMixersResponse?.value = null
+        mTabletMixerViewModelRemote?.updateTabletMixersErrorResponse?.value = null
+        mTabletMixerViewModelRemote?.updateTabletMixersLoad?.value = null
 
-        mRemoteViewerViewModelRemote = null
-        mLocalRemoteViewers = null
+        mTabletMixerViewModelRemote = null
+        mLocalTabletMixers = null
     }
 
-    fun configRemoteViewer(remoteViewer: RemoteViewer, mode :Boolean = false):Boolean {
-        Log.i("BLUE", "Cantidad: ${bluetoothDevices.size} remoteViewer.mac: ${remoteViewer.mac}")
+    fun configTabletMixer(tabletMixer: TabletMixer, mode :Boolean = false):Boolean {
+        Log.i("BLUE", "Cantidad: ${bluetoothDevices.size} tabletMixer.mac: ${tabletMixer.mac}")
         val deviceBluetooth = bluetoothDevices.firstOrNull { bd->
-            bd.address == remoteViewer.mac
+            bd.address == tabletMixer.mac
         }
-        val intent = Intent(requireActivity(), RemoteViewerConfigActivity::class.java)
-        intent.putExtra(Constants.EXTRA_REMOTE_VIEWER_DETAILS, remoteViewer)
-        intent.putExtra(Constants.EXTRA_REMOTE_VIEWER_MODE, mode)
+        val intent = Intent(requireActivity(), TabletMixerConfigActivity::class.java)
+        intent.putExtra(Constants.EXTRA_TABLET_MIXER_DETAILS, tabletMixer)
+        intent.putExtra(Constants.EXTRA_TABLET_MIXER_MODE, mode)
         intent.putExtra("BTDEVICE",deviceBluetooth)
         startActivity(intent)
 
 
-//        startActivity(Intent(requireActivity(), AddUpdateRemoteViewerActivity::class.java))
-//        goToAddUpdateRemoteViewer()
+//        startActivity(Intent(requireActivity(), AddUpdateTabletMixerActivity::class.java))
+//        goToAddUpdateTabletMixer()
         return true
     }
 
+    private fun permission() {
+        val permission1 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH)
+        val permission2 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_ADMIN)
+        val permission3 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+        val permission4 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+        val permission5 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_SCAN)
+        val permission6 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_CONNECT)
+        if (permission1 != PackageManager.PERMISSION_GRANTED
+            || permission2 != PackageManager.PERMISSION_GRANTED
+            || permission3 != PackageManager.PERMISSION_GRANTED
+            || permission4 != PackageManager.PERMISSION_GRANTED
+            || permission5 != PackageManager.PERMISSION_GRANTED
+            || permission6 != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(requireActivity(),
+                arrayOf(
+                    Manifest.permission.BLUETOOTH,
+                    Manifest.permission.BLUETOOTH_ADMIN,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.BLUETOOTH_SCAN,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ),
+                642)
+        } else {
+            Log.d("BLUE", "Permissions Granted")
+        }
+
+    }
 }

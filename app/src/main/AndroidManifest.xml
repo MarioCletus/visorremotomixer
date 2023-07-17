@@ -27,12 +27,12 @@
         android:theme="@style/Theme.Spimixer"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".view.activities.RemoteViewerConfigActivity"
+            android:name=".view.activities.TabletMixerConfigActivity"
             android:exported="false"
             android:label="@string/title_activity_remote_viewer_config"
             android:theme="@style/Theme.Spimixer.NoActionBar" />
         <activity
-            android:name=".view.activities.AddUpdateRemoteViewerActivity"
+            android:name=".view.activities.AddUpdateTabletMixerActivity"
             android:exported="false"
             android:label="@string/title_activity_add_update_remote_viewer"
             android:theme="@style/Theme.Spimixer.NoActionBar" />

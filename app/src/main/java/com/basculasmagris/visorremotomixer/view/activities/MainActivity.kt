@@ -34,7 +34,7 @@ import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
 import com.basculasmagris.visorremotomixer.databinding.ActivityMainBinding
 import com.basculasmagris.visorremotomixer.model.entities.Mixer
-import com.basculasmagris.visorremotomixer.model.entities.RemoteViewer
+import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.model.entities.RoundRunDetail
 import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
 import com.basculasmagris.visorremotomixer.utils.Helper
@@ -292,20 +292,20 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun saveRemoteViewer(remoteViewer: RemoteViewer){
+    fun saveTabletMixer(tabletMixer: TabletMixer){
         lifecycleScope.launch(Dispatchers.IO){
-            saveRemoteViewer(remoteViewer.id)
+            saveTabletMixer(tabletMixer.id)
         }
     }
 
-    private suspend fun saveRemoteViewer(idRemoteViewer: Long){
+    private suspend fun saveTabletMixer(idTabletMixer: Long){
         datastore.edit { preferences->
-            preferences[longPreferencesKey("IDMIXER")] = idRemoteViewer
+            preferences[longPreferencesKey("IDMIXER")] = idTabletMixer
         }
     }
 
 
-    private fun getIdSavedRemoteViewer() = datastore.data.map { preferences->
+    private fun getIdSavedTabletMixer() = datastore.data.map { preferences->
         preferences[longPreferencesKey("IDMIXER")]
     }
 

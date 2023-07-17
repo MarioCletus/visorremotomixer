@@ -26,7 +26,7 @@
             app:tint="@color/color_dark_grey"/>
 
         <TextView
-            android:id="@+id/tv_remote_viewer_title"
+            android:id="@+id/tv_table_mixer_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
@@ -36,7 +36,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="RemoteViewer 1">
+            tools:text="TabletMixer 1">
 
         </TextView>
         <TextView
@@ -49,12 +49,12 @@
             android:textStyle="normal"
             android:layout_marginRight="@dimen/_10sdp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_remote_viewer_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_table_mixer_title"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="MAC99229JSJSJSA"
             android:visibility="gone"/>
         <TextView
-            android:id="@+id/et_remote_viewer_description"
+            android:id="@+id/et_tablet_mixer_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="left"
@@ -64,7 +64,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_mac"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="Descripción RemoteViewer">
+            tools:text="Descripción Tablet Mixer">
 
         </TextView>
 
@@ -83,7 +83,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_remote_viewer_description"
+            app:layout_constraintTop_toBottomOf="@id/et_tablet_mixer_description"
             />
 
         <TextView
@@ -110,7 +110,7 @@
             app:tint="@color/color_acent_green"
             android:layout_marginStart="10dp"
             app:layout_constraintTop_toTopOf="@id/iv_calibration"
-            app:layout_constraintStart_toStartOf="@id/btn_edit_remote_viewer"
+            app:layout_constraintStart_toStartOf="@id/btn_edit_tablet_mixer"
             />
 
         <TextView
@@ -126,7 +126,7 @@
             app:layout_constraintStart_toEndOf="@id/iv_tara"/>
 
         <Button
-            android:id="@+id/btn_delete_remote_viewer"
+            android:id="@+id/btn_delete_tablet_mixer"
             android:layout_width="124dp"
             android:layout_height="36dp"
             android:background="@drawable/btn_round_to_run_red"
@@ -140,7 +140,7 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <Button
-            android:id="@+id/btn_edit_remote_viewer"
+            android:id="@+id/btn_edit_tablet_mixer"
             android:layout_width="124dp"
             android:layout_height="36dp"
             android:background="@drawable/btn_rounded_green"

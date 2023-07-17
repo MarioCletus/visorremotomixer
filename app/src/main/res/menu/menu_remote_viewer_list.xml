@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_selected_remote_viewer"
+        android:id="@+id/menu_selected_tabler_mixer"
         android:icon="@drawable/ic_tablet_48px"
         android:title="    Visor Remoto"
         app:showAsAction="ifRoom|withText"
