@@ -29,12 +29,12 @@
         <activity
             android:name=".view.activities.TabletMixerConfigActivity"
             android:exported="false"
-            android:label="@string/title_activity_remote_viewer_config"
+            android:label="@string/title_activity_tablet_mixer_config"
             android:theme="@style/Theme.Spimixer.NoActionBar" />
         <activity
             android:name=".view.activities.AddUpdateTabletMixerActivity"
             android:exported="false"
-            android:label="@string/title_activity_add_update_remote_viewer"
+            android:label="@string/title_activity_add_update_tablet_mixer"
             android:theme="@style/Theme.Spimixer.NoActionBar" />
         <activity
             android:name=".view.activities.AddUpdateUserActivity"

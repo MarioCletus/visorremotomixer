@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item android:id="@+id/bluetooth_tablet_mixer"
+        android:title=""
+        android:icon="@drawable/ic_bluetooth_24dp"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_selected_remote_mixer"
+        android:icon="@drawable/ic_tablet_48px"
+        android:title="    Tablet de Mixer"
+        app:showAsAction="ifRoom|withText"
+        />
+
+    <item
+        android:id="@+id/step_immage"
+        android:title="                                          "
+        app:showAsAction="always"
+        android:orderInCategory="102"
+        />
+</menu>

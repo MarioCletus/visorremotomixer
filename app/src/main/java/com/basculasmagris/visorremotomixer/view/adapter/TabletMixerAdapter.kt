@@ -44,9 +44,7 @@ class TabletMixerAdapter (private  val fragment: Fragment) : RecyclerView.Adapte
 
         holder.itemView.setOnClickListener {
             if (fragment is TabletMixerListFragment) {
-                if(!fragment.configTabletMixer(tabletMixer,true)){
-                    fragment.linkDevice(tabletMixer)
-                }
+                fragment.goToRemoteMixerFragment(tabletMixer)
             }
         }
 

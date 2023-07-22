@@ -19,6 +19,8 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.size
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -41,8 +43,11 @@ import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
 import com.basculasmagris.visorremotomixer.view.fragments.MixerListFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
+import com.basculasmagris.visorremotomixer.view.fragments.TabletMixerListFragment
 import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModelFactory
+import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModelFactory
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
@@ -57,6 +62,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private var mProgressDialog: Dialog? = null
+    private var isConnected: Boolean = false
     var mLocalDetailRound: MutableList<RoundRunDetail> = ArrayList()
     private var roles: ArrayList<Pair<Int, String>> = arrayListOf(
         Pair(1, "Administrador"),
@@ -67,7 +73,8 @@ class MainActivity : AppCompatActivity() {
     // Bluetooth
     var mService: BluetoothSDKService? = null
 
-    private var selectedMixerInFragment: Mixer? = null
+    private var selectedMixerInActivity: Mixer? = null
+    private var selectedTabletMixerInActivity: TabletMixer? = null
 
     // -------------------
     // Mixer
@@ -76,13 +83,16 @@ class MainActivity : AppCompatActivity() {
         MixerViewModelFactory((application as SpiMixerApplication).mixerRepository)
     }
 
+    private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
+        TabletMixerViewModelFactory((application as SpiMixerApplication).tabletMixerRepository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
-        setSupportActionBar(binding.appBarMain.toolbar)
+        setSupportActionBar(binding.appBarMain.toolbarMain)
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: CancellableNavigationView = binding.navView
@@ -101,6 +111,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
+                R.id.nav_tablet_mixer,
                 R.id.nav_mixer_remoto,
                 R.id.nav_home,
                 R.id.nav_product,
@@ -159,6 +170,9 @@ class MainActivity : AppCompatActivity() {
         mMixerViewModel.allMixerList.observe(this){
             mService?.LocalBinder()?.getBondedDevices()
         }
+
+        refreshLogo()
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -172,6 +186,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun refreshLogo() {
+        binding.appBarMain.ibLogoMain.setImageDrawable(getDrawable(R.drawable.magris_logo_topbar))
     }
 
     @Deprecated("Deprecated in Java")
@@ -298,15 +313,74 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun saveTabletMixer(idTabletMixer: Long){
+    private suspend fun saveTabletMixer(idTablet: Long){
         datastore.edit { preferences->
-            preferences[longPreferencesKey("IDMIXER")] = idTabletMixer
+            preferences[longPreferencesKey("IDTABLET")] = idTablet
         }
     }
 
 
-    private fun getIdSavedTabletMixer() = datastore.data.map { preferences->
-        preferences[longPreferencesKey("IDMIXER")]
+    fun getSavedTabletMixer(){
+        lifecycleScope.launch(Dispatchers.IO){
+            Log.i(TAG,"getSavedTabletMixer")
+            val flowLong = getSavedMixerTabletId()
+            flowLong.collect {id->
+                if(id==null){
+                    return@collect
+                }
+                val localKnowDevice = mTabletMixerViewModel.getTabletMixerById(id)
+                lifecycleScope.launch {
+                    withContext(Dispatchers.Main) {
+                        localKnowDevice.observe(this@MainActivity){tabletMixer->
+                            if (tabletMixer != null){
+                                selectedTabletMixerInActivity = tabletMixer
+                                val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
+                                navHost?.let { navFragment ->
+                                    navFragment.childFragmentManager.primaryNavigationFragment?.let {fragment->
+                                        Log.i(TAG,"observe selectedMixerInFragment $selectedTabletMixerInActivity")
+                                        if(selectedTabletMixerInActivity != null){
+                                            when (fragment){
+                                                is RemoteMixerFragment->{
+                                                    fragment.setTabletMixer(selectedTabletMixerInActivity!!)
+                                                }
+                                                is TabletMixerListFragment->{
+                                                    fragment.setTabletMixer(selectedTabletMixerInActivity!!)
+                                                    fragment.connect(selectedTabletMixerInActivity!!)
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+    fun deviceDisconnected() {
+        if(isConnected && binding.appBarMain.toolbarMain.menu.size>0){
+            Log.i(TAG,"main disconnected icon off")
+            binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon = ContextCompat.getDrawable(this,R.drawable.ic_bluetooth_disconnected_24px)
+            binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon?.setTint(getColor(R.color.white))
+            isConnected = false
+        }
+
+    }
+
+    fun deviceConnected() {
+        hideCustomProgressDialog()
+        if(!isConnected && binding.appBarMain.toolbarMain.menu.size>0){
+            Log.i(TAG,"main connected icon on")
+            binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon = ContextCompat.getDrawable(this,R.drawable.ic_bluetooth_connected_24px)
+            binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon?.setTint(getColor(R.color.white))
+            isConnected = true
+        }
     }
 
     fun getSavedMixer(){
@@ -322,16 +396,13 @@ class MainActivity : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         localKnowDevice.observe(this@MainActivity){mixer->
                             if (mixer != null){
-                                selectedMixerInFragment = mixer
+                                selectedMixerInActivity = mixer
                                 val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
                                 navHost?.let { navFragment ->
                                     navFragment.childFragmentManager.primaryNavigationFragment?.let {fragment->
-                                        Log.i(TAG,"observe selectedMixerInFragment $selectedMixerInFragment")
+                                        Log.i(TAG,"observe selectedMixerInFragment $selectedMixerInActivity")
                                         if(fragment is HomeFragment){
-                                            fragment.setMixer(selectedMixerInFragment)
-                                        }
-                                        if(fragment is RemoteMixerFragment){
-                                            fragment.setMixer(selectedMixerInFragment)
+                                            fragment.setMixer(selectedMixerInActivity)
                                         }
                                     }
                                 }
@@ -343,12 +414,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    private fun getSavedMixerTabletId() = datastore.data.map { preferences->
+        preferences[longPreferencesKey("IDTABLET")]
+    }
+
     private fun getSavedMixerId() = datastore.data.map { preferences->
         preferences[longPreferencesKey("IDMIXER")]
     }
 
     fun changeActionBarTitle(title: String) {
-        setSupportActionBar(binding.appBarMain.toolbar)
         supportActionBar?.let {
             it.title = title
         }
@@ -357,6 +432,7 @@ class MainActivity : AppCompatActivity() {
     fun isCustomProgresDialogShowing(): Boolean {
         return mProgressDialog?.isShowing == true
     }
+
 }
 
 class CancellableNavigationView(context: Context, attrs: AttributeSet) :

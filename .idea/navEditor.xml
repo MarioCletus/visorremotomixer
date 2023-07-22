@@ -80,18 +80,6 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="addUpdateRemoteViewerActivity">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
                   <entry key="addUpdateRoundActivity">
                     <value>
                       <LayoutPositions>
@@ -99,6 +87,18 @@
                           <Point>
                             <option name="x" value="1312" />
                             <option name="y" value="1436" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="addUpdateTabletMixerActivity">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -277,6 +277,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="actionNavHomeToRemoteMixerFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="actionNavHomeToRoundDetailFragment">
                               <value>
                                 <LayoutPositions />
@@ -331,25 +336,6 @@
                             <option name="x" value="12" />
                             <option name="y" value="12" />
                           </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="actionNavHomeToRoundDetailFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                            <entry key="action_nav_home_to_addUpdateRoundActivity">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                            <entry key="action_nav_home_to_roundRunActivity">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -442,6 +428,27 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="nav_tablet_mixer">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_tablet_mixerListFragment_to_addUpdateTabletMixerActivity">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="nav_user">
                     <value>
                       <LayoutPositions>
@@ -454,27 +461,6 @@
                         <option name="myPositions">
                           <map>
                             <entry key="action_userListFragment_to_addUpdateUserActivity">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="nav_visor_remoto">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="368" />
-                          </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_remoteViewerListFragment_to_addUpdateRemoteViewerActivity">
                               <value>
                                 <LayoutPositions />
                               </value>

@@ -146,7 +146,7 @@
             app:layout_constraintGuide_percent="1.0" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/lay_remote_viewer_name"
+            android:id="@+id/lay_tablet_mixer_name"
             android:layout_width="0dp"
             android:layout_height="70dp"
             android:layout_marginEnd="5dp"
@@ -154,7 +154,7 @@
             android:background="@drawable/border_sync"
             app:layout_constraintTop_toTopOf="@id/item_detail"
             app:layout_constraintStart_toStartOf="@id/item_detail"
-            app:layout_constraintEnd_toStartOf="@id/lay_remote_viewer_model"
+            app:layout_constraintEnd_toStartOf="@id/lay_tablet_mixer_model"
             android:orientation="vertical">
 
             <ImageView
@@ -166,8 +166,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/icon_mixers_sel"
-                app:layout_constraintTop_toTopOf="@id/lay_remote_viewer_name"
-                app:layout_constraintStart_toStartOf="@id/lay_remote_viewer_name"/>
+                app:layout_constraintTop_toTopOf="@id/lay_tablet_mixer_name"
+                app:layout_constraintStart_toStartOf="@id/lay_tablet_mixer_name"/>
 
             <TextView
                 android:id="@+id/titNombre"
@@ -201,19 +201,19 @@
                 android:textColor="@color/color_acent_green"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="@id/titNombre"
-                app:layout_constraintBottom_toBottomOf="@id/lay_remote_viewer_name">
+                app:layout_constraintBottom_toBottomOf="@id/lay_tablet_mixer_name">
             </EditText>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/lay_remote_viewer_model"
+            android:id="@+id/lay_tablet_mixer_model"
             android:layout_width="0dp"
             android:layout_height="70dp"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:background="@drawable/border_sync"
-            app:layout_constraintTop_toTopOf="@id/lay_remote_viewer_name"
-            app:layout_constraintStart_toEndOf="@id/lay_remote_viewer_name"
+            app:layout_constraintTop_toTopOf="@id/lay_tablet_mixer_name"
+            app:layout_constraintStart_toEndOf="@id/lay_tablet_mixer_name"
             app:layout_constraintEnd_toStartOf="@id/lay_capacity"
             android:orientation="vertical">
 
@@ -225,8 +225,8 @@
                 android:layout_marginTop="13dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/icon_mixers_sel"
-                app:layout_constraintTop_toTopOf="@id/lay_remote_viewer_model"
-                app:layout_constraintStart_toStartOf="@id/lay_remote_viewer_model"/>
+                app:layout_constraintTop_toTopOf="@id/lay_tablet_mixer_model"
+                app:layout_constraintStart_toStartOf="@id/lay_tablet_mixer_model"/>
 
             <TextView
                 android:id="@+id/titModelo"
@@ -241,7 +241,7 @@
                 android:textSize="14sp"
                 android:textAllCaps="true"
                 android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="@id/lay_remote_viewer_model"
+                app:layout_constraintTop_toTopOf="@id/lay_tablet_mixer_model"
                 app:layout_constraintStart_toEndOf="@id/iconCirc1"/>
 
             <EditText
@@ -260,7 +260,7 @@
                 android:textColor="@color/color_acent_green"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="@id/titModelo"
-                app:layout_constraintBottom_toBottomOf="@id/lay_remote_viewer_model">
+                app:layout_constraintBottom_toBottomOf="@id/lay_tablet_mixer_model">
             </EditText>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -272,9 +272,9 @@
             android:layout_marginStart="5dp"
             android:background="@drawable/border_sync"
             android:orientation="vertical"
-            app:layout_constraintStart_toEndOf="@id/lay_remote_viewer_model"
+            app:layout_constraintStart_toEndOf="@id/lay_tablet_mixer_model"
             app:layout_constraintEnd_toEndOf="@id/item_detail"
-            app:layout_constraintTop_toTopOf="@id/lay_remote_viewer_name">
+            app:layout_constraintTop_toTopOf="@id/lay_tablet_mixer_name">
 
             <ImageView
                 android:id="@+id/iconCirc3"
@@ -340,7 +340,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:background="@drawable/border_sync"
-            app:layout_constraintTop_toBottomOf="@id/lay_remote_viewer_name"
+            app:layout_constraintTop_toBottomOf="@id/lay_tablet_mixer_name"
             app:layout_constraintStart_toStartOf="@id/item_detail"
             app:layout_constraintEnd_toStartOf="@id/layDatoRecibido"
             android:orientation="vertical">
@@ -400,7 +400,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
-            app:layout_constraintTop_toBottomOf="@id/lay_remote_viewer_name"
+            app:layout_constraintTop_toBottomOf="@id/lay_tablet_mixer_name"
             app:layout_constraintEnd_toStartOf="@id/layTabletMixerTara"
             app:layout_constraintStart_toEndOf="@id/lay_weight"
             android:orientation="vertical">
@@ -459,7 +459,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="5dp"
             android:background="@drawable/border_sync"
-            app:layout_constraintTop_toBottomOf="@id/lay_remote_viewer_name"
+            app:layout_constraintTop_toBottomOf="@id/lay_tablet_mixer_name"
             app:layout_constraintStart_toEndOf="@id/layDatoRecibido"
             app:layout_constraintEnd_toEndOf="@id/item_detail"
             android:orientation="vertical">

@@ -76,8 +76,8 @@ class LoginActivity : AppCompatActivity() {
         sharedpreferences = getSharedPreferences(PREF_LOGIN, Context.MODE_PRIVATE);
 
         //TEST
-        binding.username.setText("fernando.ariel.tello")
-        binding.password.setText("spimixer")
+//        binding.username.setText("fernando.ariel.tello")
+//        binding.password.setText("spimixer")
         binding.tiUsersRef.visibility = GONE
         binding.username.visibility = VISIBLE
         binding.llLoginNoData.visibility = GONE

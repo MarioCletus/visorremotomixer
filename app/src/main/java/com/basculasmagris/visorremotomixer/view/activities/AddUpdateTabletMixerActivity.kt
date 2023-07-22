@@ -104,7 +104,7 @@ class AddUpdateTabletMixerActivity : AppCompatActivity() {
             if (it.id != 0L){
                 binding.tiTabletMixerName.setText(it.name)
                 binding.tiTabletMixerDescription.setText(it.description)
-                binding.btnAddTabletMixer.text = resources.getString(R.string.lbl_update_remote_viewer)
+                binding.btnAddTabletMixer.text = resources.getString(R.string.lbl_update_tablet_mixer)
                 binding.etBtBox.setText(it.btBox)
                 binding.etMac.setText(it.mac)
 
@@ -126,11 +126,11 @@ class AddUpdateTabletMixerActivity : AppCompatActivity() {
 
         if (mTabletMixerDetails != null && mTabletMixerDetails!!.id != 0L){
             supportActionBar?.let {
-                it.title = resources.getString(R.string.title_edit_remote_viewer)
+                it.title = resources.getString(R.string.title_edit_tablet_mixer)
             }
         } else {
             supportActionBar?.let {
-                it.title = resources.getString(R.string.title_add_remote_viewer)
+                it.title = resources.getString(R.string.title_add_tablet_mixer)
             }
         }
 
@@ -161,7 +161,7 @@ class AddUpdateTabletMixerActivity : AppCompatActivity() {
             TextUtils.isEmpty(remoteViewerName) -> {
                 Toast.makeText(
                     this@AddUpdateTabletMixerActivity,
-                    resources.getString(R.string.err_msg_remote_viewer_name),
+                    resources.getString(R.string.err_msg_tablet_mixer_name),
                     Toast.LENGTH_SHORT
                 ).show()
             }

@@ -222,11 +222,11 @@ class TabletMixerConfigActivity : AppCompatActivity(){
         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(applicationContext, mBluetoothListener)
     }
 
-    private fun linkDevice(remote_viewer: TabletMixer){
+    private fun linkDevice(tablet_mixer: TabletMixer){
         if(isSearching)
             return
-        likingTabletMixer = remote_viewer
-        dialog = Helper.setProgressDialog(this, "Buscando remote_viewer...")
+        likingTabletMixer = tablet_mixer
+        dialog = Helper.setProgressDialog(this, "Buscando tablet_mixer...")
         dialog?.show()
         this.mService?.LocalBinder()?.startDiscovery(this)
         Timer().schedule(5000){
@@ -240,15 +240,15 @@ class TabletMixerConfigActivity : AppCompatActivity(){
     }
 
     fun getSelectedTabletMixerBluetoothDevice() : BluetoothDevice? {
-        Log.i(TAG, "[getSelectedTabletMixerBluetoothDevice] Local remote_viewer: ${bluetoothDevices.size} | mLocalTabletMixers: ${mLocalTabletMixers?.size}")
+        Log.i(TAG, "[getSelectedTabletMixerBluetoothDevice] Local tablet_mixer: ${bluetoothDevices.size} | mLocalTabletMixers: ${mLocalTabletMixers?.size}")
         if(!firstIn)
             mService?.LocalBinder()?.getBondedDevices()
 
         bluetoothDevices.forEach { bluetoothDevice ->
 
-            val localTabletMixer = mLocalTabletMixers?.firstOrNull{ remote_viewer ->
-                Log.i(TAG, "[getSelectedTabletMixerBluetoothDevice] remote_viewer: ${remote_viewer.mac} | knowDevices: ${bluetoothDevice.address}")
-                remote_viewer.mac == bluetoothDevice.address
+            val localTabletMixer = mLocalTabletMixers?.firstOrNull{ tablet_mixer ->
+                Log.i(TAG, "[getSelectedTabletMixerBluetoothDevice] tablet_mixer: ${tablet_mixer.mac} | knowDevices: ${bluetoothDevice.address}")
+                tablet_mixer.mac == bluetoothDevice.address
             }
 
             Log.i(TAG, "[getSelectedTabletMixerBluetoothDevice] localTabletMixer: ${localTabletMixer?.name}")
@@ -566,7 +566,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
             TextUtils.isEmpty(remoteViewerName) -> {
                 Toast.makeText(
                     this@TabletMixerConfigActivity,
-                    resources.getString(R.string.err_msg_remote_viewer_name),
+                    resources.getString(R.string.err_msg_tablet_mixer_name),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -607,20 +607,20 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                         mTabletMixerViewModel.updateSync(tabletMixer)
                         Toast.makeText(this@TabletMixerConfigActivity, "TabletMixer actualizado", Toast.LENGTH_SHORT).show()
                     }
-                    Log.i("SYNC", "Se actualiza remote_viewer con fecha ${tabletMixer.updatedDate}")
+                    Log.i("SYNC", "Se actualiza tablet_mixer con fecha ${tabletMixer.updatedDate}")
                 }
 
             }
         }
     }
 
-    fun deleteTabletMixer(remote_viewer: TabletMixer){
+    fun deleteTabletMixer(tablet_mixer: TabletMixer){
         val builder = AlertDialog.Builder(this)
-        builder.setTitle(resources.getString(R.string.title_delete_remote_viewer))
-        builder.setMessage(resources.getString(R.string.msg_delete_remote_viewer_dialog, remote_viewer.name))
+        builder.setTitle(resources.getString(R.string.title_delete_tablet_mixer))
+        builder.setMessage(resources.getString(R.string.msg_delete_tablet_mixer_dialog, tablet_mixer.name))
         builder.setIcon(android.R.drawable.ic_dialog_alert)
         builder.setPositiveButton(resources.getString(R.string.lbl_yes)){ dialogInterface, _ ->
-            mTabletMixerViewModel.delete(remote_viewer)
+            mTabletMixerViewModel.delete(tablet_mixer)
             dialogInterface.dismiss()
         }
 
@@ -668,7 +668,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         supportActionBar?.let {
-            it.title = resources.getString(R.string.screen_remote_viewer_detail)
+            it.title = resources.getString(R.string.screen_tablet_mixer_detail)
         }
 
         mBinding.toolbarConfigTabletMixer.setNavigationOnClickListener {

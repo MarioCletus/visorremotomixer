@@ -109,12 +109,12 @@
     <string name="title_delete_mixer">Borrar Mixer</string>
     <string name="msg_delete_mixer_dialog">¿Está seguro que quiere borrar el mixer %1$s?</string>
 
-    <string name="lbl_update_remote_viewer">Actualizar Visor Remoto</string>
-    <string name="title_edit_remote_viewer">Editar Visor Remoto</string>
-    <string name="title_add_remote_viewer">Agregar Visor Remoto</string>
-    <string name="err_msg_remote_viewer_name">El nombre del Visor Remoto es obligatorio</string>
-    <string name="title_delete_remote_viewer">Borrar Visor Remoto</string>
-    <string name="msg_delete_remote_viewer_dialog">¿Está seguro que quiere borrar el visor remoto %1$s?</string>
+    <string name="lbl_update_tablet_mixer">Actualizar Visor Remoto</string>
+    <string name="title_edit_tablet_mixer">Editar Visor Remoto</string>
+    <string name="title_add_tablet_mixer">Agregar Visor Remoto</string>
+    <string name="err_msg_tablet_mixer_name">El nombre del Visor Remoto es obligatorio</string>
+    <string name="title_delete_tablet_mixer">Borrar Visor Remoto</string>
+    <string name="msg_delete_tablet_mixer_dialog">¿Está seguro que quiere borrar el visor remoto %1$s?</string>
 
     <string name="tv_no_additional_data_mixer">No hay mixers cargados</string>
     <string name="add_mixer">Agregar Mixer</string>
@@ -145,9 +145,6 @@
     <string name="ph_tara">Tara</string>
     <string name="ph_bt_box">BT Box</string>
     <string name="ph_calibration">Calibración</string>
-
-    <string name="ph_remote_viewer_name">Nombre</string>
-    <string name="ph_remote_viewer_description">Descripción</string>
 
 
     <!-- SCREEN NAME -->
@@ -309,12 +306,10 @@
     <string name="screen_remote_mixer_detail">Detalle del Mixer Remoto</string>
     <string name="screen_remote_mixer_new">Nuevo Mixer Remoto</string>
 
-    <string name="add_remote_viewer">Añadir Visor Remoto</string>
-    <string name="screen_remote_viewer_list">Visores Remotos</string>
-    <string name="screen_remote_viewer_detail">Detalle del  Visor Remoto</string>
-    <string name="screen_remote_viewer_new">Nuevo Visor Remoto</string>
+    <string name="screen_tablet_mixer_detail">Detalle del  Visor Remoto</string>
+    <string name="screen_tablet_mixer_new">Nuevo Visor Remoto</string>
 
-    <string name="title_activity_add_update_remote_viewer">AddUpdateTabletMixerActivity</string>
+    <string name="title_activity_add_update_tablet_mixer">AddUpdateTabletMixerActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -323,7 +318,7 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="title_activity_remote_viewer_config">TabletMixerConfigActivity</string>
+    <string name="title_activity_tablet_mixer_config">TabletMixerConfigActivity</string>
     <string name="caja_bluetooth_asociada">Caja Bluetooth asociada</string>
     <string name="eliminar">Eliminar</string>
     <string name="carga">Carga</string>
@@ -346,7 +341,8 @@
     <string name="add_tablet_mixer">Añadir Tablet de Mixer</string>
     <string name="ph_tablet_mixer_name">Nombre</string>
     <string name="ph_tablet_mixer_description">Descripcion</string>
-    <string name="screen_tablet_mixer_list">Tablets de mixer</string>
+    <string name="screen_tablet_mixer_list">Tablet de mixer 1</string>
+    <string name="menu_tablet_mixer">Tablet de mixer 0</string>
 
 
 </resources>

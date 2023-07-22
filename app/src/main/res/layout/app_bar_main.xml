@@ -1,73 +1,83 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/view_activity_main"
     tools:context=".view.activities.MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Theme.Spimixer.AppBarOverlay">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.Spimixer.PopupOverlay" >
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_main"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:gravity="center"
+                app:title="Agregar ronda"
+                app:titleTextColor="@color/white"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
+            <ImageView
+                android:id="@+id/ib_logo_main"
+                android:layout_width="160dp"
+                android:layout_height="55dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@drawable/magris_logo_topbar" />
 
-            <!--
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:orientation="horizontal"
-                >
-                <ImageView
-                    android:id="@+id/iv_calibration"
-                    android:layout_gravity="right"
-                    android:layout_width="@dimen/_10sdp"
-                    android:layout_height="@dimen/_10sdp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_blender"
-                    android:text="@string/lbl_animal_quantity"
-                    android:visibility="visible"
-                    app:tint="@color/white" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:gravity="center_vertical"
-                    android:layout_gravity="center"
-                    android:id="@+id/et_mixer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:textColor="@color/white"
-                    android:inputType="text" android:digits="0123456789qwertyuiopasdfghjklzxcvbnmñQWERTYUIOPASDFGHJKLZXCVBNMÑÇ-_,.:@ "
-                    android:text="Mixer 1"
-                    android:focusableInTouchMode="false"
-                    android:hint="Mixer" />
-            </LinearLayout>
--->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+            <include layout="@layout/content_main"/>
+        </LinearLayout>
 
-        </androidx.appcompat.widget.Toolbar>
+    </LinearLayout>
 
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.google.android.material.appbar.AppBarLayout>
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    tools:context=".view.activities.MainActivity">-->
 
-    <include layout="@layout/content_main" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="16dp"
-        android:visibility="invisible"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+<!--        android:background="?attr/colorPrimary"-->
+<!--        app:popupTheme="@style/Theme.Spimixer.PopupOverlay"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
+<!--            <ImageView-->
+<!--                android:id="@+id/ib_logo"-->
+<!--                android:layout_width="160dp"-->
+<!--                android:layout_height="55dp"-->
+<!--                android:layout_marginEnd="10dp"-->
+<!--                android:layout_gravity="end"-->
+<!--                tools:srcCompat="@drawable/magris_logo_topbar" />-->
+<!--    </androidx.appcompat.widget.Toolbar>-->
+<!--    <include layout="@layout/content_main"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/toolbar"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"/>-->
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
