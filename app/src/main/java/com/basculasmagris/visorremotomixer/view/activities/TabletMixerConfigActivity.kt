@@ -313,10 +313,11 @@ class TabletMixerConfigActivity : AppCompatActivity(){
 
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
-            Log.i("TAG BLUE", "ACT onCommandReceived")
+            Log.i("command", "TabletMixerConfigActivity onCommandReceived ${message?.let { String(it) }}")
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
+            Log.i("command", "TabletMixerConfigActivity onMessageReceived $message")
             if(message==null){
                 return
             }

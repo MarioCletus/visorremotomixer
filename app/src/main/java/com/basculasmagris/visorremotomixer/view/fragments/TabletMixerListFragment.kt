@@ -46,6 +46,7 @@ import kotlin.math.roundToInt
 
 class TabletMixerListFragment : BottomSheetDialogFragment() {
 
+    private var bConexionClosed: Boolean = false
     private val TAG : String = "DEBTML"
     var menu: Menu? = null
     private lateinit var mBinding: FragmentTabletMixerListBinding
@@ -193,7 +194,17 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
 
     fun goToRemoteMixerFragment(tabletMixer: TabletMixer){
         (activity as MainActivity).saveTabletMixer(tabletMixer)
+        closeConnection()
         findNavController().navigate(TabletMixerListFragmentDirections.actionTabletMixerListFragmentToRemoteMixerFragment())
+    }
+
+    private fun closeConnection() {
+        Log.i(TAG,"closeconnection $bConexionClosed")
+        if(!bConexionClosed){
+            (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
+            BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireActivity(), mBluetoothListener)
+        }
+        bConexionClosed = true
     }
 
     fun deleteTabletMixer(tabletMixer: TabletMixer){
@@ -339,13 +350,13 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
 
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
-            Log.i("TAG BLUE", "ACT onCommandReceived")
+            Log.i("command", "TabletMixerListFragment onCommandReceived ${message?.let { String(it) }}")
             (requireActivity() as MainActivity).deviceConnected()
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             (requireActivity() as MainActivity).deviceConnected()
-            Log.i(TAG, "[TabletMixerListFragment] onMessageReceived")
+            Log.i("message", "TabletMixerListFragment onMessageReceived $message")
             message?.let{msg->
                 if (msg.length > 8){
                     readCount += 1
@@ -439,9 +450,8 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
     }
 
     override fun onDestroyView() {
+        Log.i(TAG,"onDestroy view")
         super.onDestroyView()
-        (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
-        BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireActivity(), mBluetoothListener)
         cleanObservers()
     }
 
@@ -455,9 +465,9 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
         mTabletMixerViewModelRemote?.updateTabletMixersResponse?.value = null
         mTabletMixerViewModelRemote?.updateTabletMixersErrorResponse?.value = null
         mTabletMixerViewModelRemote?.updateTabletMixersLoad?.value = null
-
         mTabletMixerViewModelRemote = null
         mLocalTabletMixers = null
+        closeConnection()
     }
 
     fun configTabletMixer(tabletMixer: TabletMixer, mode :Boolean = false):Boolean {

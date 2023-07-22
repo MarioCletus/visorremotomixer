@@ -4,21 +4,18 @@ import android.Manifest
 import android.app.AlertDialog
 import android.bluetooth.BluetoothDevice
 import android.content.DialogInterface
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.*
 import android.widget.Button
-import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
-import androidx.core.view.size
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -31,18 +28,15 @@ import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertStringToZip
 import com.basculasmagris.visorremotomixer.utils.Helper.Companion.getCurrentUser
 import com.basculasmagris.visorremotomixer.utils.MarginItemDecorationHorizontal
-import com.basculasmagris.visorremotomixer.view.activities.AddUpdateTabletMixerActivity
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunCorralDownloadAdapter
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunProductAdapter
-import com.basculasmagris.visorremotomixer.view.adapter.TabletMixerAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToLong
@@ -85,7 +79,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
     private var tick: Long = 0L
     private var tickCountMessages : Long = 0L
-    private var tickConnection: Long = 0L
     private var totalWeightLoaded: Double = 0.0
 
     //    private var showSnackbar = true
@@ -100,7 +93,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private var dialogCountDown: AlertDialog? = null
 //    private var tabletMixer : TabletMixer? = null
 
+    private var countConection : Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i(TAG,"onCreate")
         super.onCreate(savedInstanceState)
         arguments?.let {
         }
@@ -136,13 +132,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
 
         mBinding.btnPause.setOnClickListener{
-            Log.i(TAG, "btnPause")
-            if(tabletMixerBluetoothDevice != null ){
-                tabletMixerBluetoothDevice?.let {
-                    Log.i("CONEXION","Reconectando $tabletMixerBluetoothDevice")
-                    activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
-                }
-            }
         }
 
         mBinding.btnRest.setOnClickListener{
@@ -158,10 +147,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         mBinding.rvMixerProductsToLoad.addItemDecoration(MarginItemDecorationHorizontal(resources.getDimensionPixelSize(R.dimen.margin_recycler_horizontal)))
 
         //Conectar bluetooth
-        tabletMixerBluetoothDevice?.let {
-            activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
-        }
-
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
         currentRoundRunDetail?.state = Constants.STATE_LOAD
         Log.i(TAG,"onViewCreated ready")
@@ -288,25 +273,37 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     }
 
 
+    var countInResume = 0
     override fun onResume() {
         super.onResume()
-        Log.i(TAG,"onResume")
         activity = this.getActivity() as MainActivity?
-        Log.i(TAG,"activity $activity")
+        Log.i(TAG,"onResume fragment: $this")
         if(activity is MainActivity){
             Log.i(TAG,"activity is MainActivity $activity")
             activity!!.getSavedTabletMixer()
         }
 
+        if(estableTimer != null ){
+            Log.i(TAG,"estableTimer != null $estableTimer")
+            return
+        }
         estableTimer = Timer(false)
         timerTask = object : TimerTask() {
+            init {
+                Log.i(TAG,"init timerTask ${countInResume++}: $timerTask estableTimer $estableTimer")
+            }
             override fun run() {
-                Log.i("RUN", "mixerWeight:$mixerWeight | lastUpdate: $lastUpdate |  Time:${lastUpdate?.until(
-                    LocalDateTime.now(), ChronoUnit.SECONDS)}")
+//                Log.i("timer", "REMOTE MIXER mixerWeight:$mixerWeight | lastUpdate: $lastUpdate |  Time:${tick}   timerTask : ${timerTask}          estableTimer:${estableTimer}")
                 tick ++
-                if(tick - tickConnection == 10L){
+                if(tick == 5L){
                     MainScope().launch {
-                        connectDevice()
+                        if(!isConnected){
+                            if(activity?.mService != null && tabletMixerBluetoothDevice != null){
+                                Log.i(TAG,"connectKnowDeviceWithTransfer L815 ${countConection++}")
+                                activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(tabletMixerBluetoothDevice!!)
+                            }
+
+                        }
                     }
                 }
                 if(!bSyncroSequence){
@@ -392,11 +389,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         if(tabletMixerBluetoothDevice != null && activity?.isCustomProgresDialogShowing() == false){
                             tabletMixerBluetoothDevice?.let {
                                 Log.i("CONEXION","Reconectando $tabletMixerBluetoothDevice")
+                                Log.i(TAG,"connectKnowDeviceWithTransfer L386 ${countConection++}")
                                 activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
                             }
                         }
                             }
-                } else {
+                } else if(tick>5){
                     Log.i("CONSTATUS", "Conexión: SI | Tiempo: ${lastUpdate}  ${tick-tickCountMessages}  $tick")
                     if(isAdded){
                         Log.i("CONSTATUS", "Change status connection rt")
@@ -634,15 +632,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         Log.i(TAG,"product $product totalWeightLoaded $totalWeightLoaded final ${product.finalWeight} inicial ${product.initialWeight}")
                     }
 
-                    try{
-                        val totalLoaded = messageStr.substring(3,11).toLong()
-//                        mBinding.tvCurrentProductWeightPending.text = "Total: ${totalLoaded}Kg"
-//                        mBinding.tvCurrentProduct.text = "Total cargado"
-                        }catch(e :  NumberFormatException){
-                        Log.i(TAG,"CMD_END NumberFormatException $e ")
-                    }catch ( e : Exception){
-                        Log.i(TAG,"CMD_END Exception $e ")
-                    }
                     totalWeightLoaded = totalWeightLoaded.roundToLong().toDouble()
                     bSyncroSequence = false
                     bSyncroProduct = false
@@ -746,21 +735,22 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
+            Log.i("message","message $message")
             deviceConnected()
             tickCountMessages = tick
         }
 
         override fun onMessageSent(device: BluetoothDevice?,message: String?) {
-            Log.i(TAG, "onMessageSent ${device?.address} $message")
+            Log.i("sent", "onMessageSent ${device?.address} $message")
         }
 
         override fun onCommandSent(device: BluetoothDevice?,command: ByteArray?) {
-            Log.i(TAG, "onCommandSent ${device?.address} ${command?.let { String(it) }}")
+            Log.i("sent", "onCommandSent ${device?.address} ${command?.let { String(it) }}")
         }
 
         override fun onError(message: String?) {
-            deviceDisconnected()
             Log.i(TAG, "[MixRem] ACT onError")
+            deviceDisconnected()
         }
 
         override fun onDeviceDisconnected() {
@@ -769,21 +759,19 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
 
         override fun onBondedDevices(device: List<BluetoothDevice>?) {
-            Log.i(TAG, "[MixRem]ACT onBondedDevices ${device?.size} \n$device")
+            Log.i(TAG, "[MixRem]onBondedDevices ${device?.size} \n$device")
             knowDevices = device
-
-
-
             knowDevices?.forEach{
                 Log.i(TAG,"selectedTabletMixerInFragment $selectedTabletMixerInFragment \nbluetoothKnowed $it")
                 if(selectedTabletMixerInFragment !=null && selectedTabletMixerInFragment!!.mac == it.address){
-                    tabletMixerBluetoothDevice = it
                     Log.i(TAG,"Se seleccionó ${it.name} : ${it.address}")
+                    if(tabletMixerBluetoothDevice != it){
+                        connectTable(selectedTabletMixerInFragment!!)
+                    }
+                    tabletMixerBluetoothDevice = it
                 }
             }
-            if(selectedTabletMixerInFragment != null){
-                connect(selectedTabletMixerInFragment!!)
-            }
+
 
         }
 
@@ -792,12 +780,16 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         cleanAll()
-        Log.i("RUN", "CANCELADO Simular bluetooth")
+        Log.i(TAG, "on destroy")
     }
 
     private fun cleanAll(){
+        Log.i(TAG,"clean all estableTimer: $estableTimer timerTask: $timerTask")
+        estableTimer?.purge()
         estableTimer?.cancel()
-        timerTask?.cancel()
+        estableTimer = null
+        timerTask = null
+        Log.i(TAG,"disconnectKnowDeviceWithTransfer L800")
         activity!!.mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
     }
@@ -823,21 +815,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         activity?.hideCustomProgressDialog()
     }
 
-    fun connectDevice(){
-        if(!isConnected){
-            if(activity?.mService != null && tabletMixerBluetoothDevice != null){
-                    activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(tabletMixerBluetoothDevice!!)
-            }else{
-                tickConnection = tick
-            }
-//            activity?.showCustomProgressDialog()
-//            Timer().schedule(5000) {
-//                activity?.hideCustomProgressDialog()
-//                Log.i(TAG,"changeStatusConnection(false) MRV 453")
-//                changeStatusConnection(false)
-//            }
-        }
-    }
 
     private fun customDialog(title: String, message: String, fontSize : Float = 0F, gravity: Int = 0) : AlertDialog? {
         val dialogBuilder = AlertDialog.Builder(requireActivity() as MainActivity)
@@ -1032,7 +1009,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
     }
 
-    fun connect(tabletMixer: TabletMixer){
+    fun connectTable(tabletMixer: TabletMixer){
         Log.i(TAG, "Cantidad: ${knowDevices?.size}")
         val deviceBluetooth = knowDevices?.firstOrNull { bd->
             bd.address == tabletMixer.mac
@@ -1040,7 +1017,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         if (deviceBluetooth != null){
             Log.i(TAG,"Try to connect with ${deviceBluetooth}")
+            tickCountMessages = tick
             (requireActivity() as MainActivity).showCustomProgressDialog()
+            Log.i(TAG,"connectKnowDeviceWithTransfer L1022 ${countConection++}")
             (requireActivity() as MainActivity).mService?.LocalBinder()?.connectKnowDeviceWithTransfer(deviceBluetooth)
         } else {
             Toast.makeText(requireActivity(), "No se pudo conectar", Toast.LENGTH_SHORT).show()

@@ -146,13 +146,19 @@ class BluetoothSDKService : Service() {
             return connectThreadWithTransfer?.isConnected() ?: false
         }
 
-        fun write(msg : String) {
-            connectThreadWithTransfer?.write(msg)
+        fun write(msg : String) : Int{
+            return connectThreadWithTransfer?.write(msg) ?: -1
         }
 
-        fun write(command : ByteArray) {
-            Log.i("BLE","write")
-            connectThreadWithTransfer?.write(command)
+        fun write(command : ByteArray) : Int{
+            try {
+                val retornoDelWrite : Int = connectThreadWithTransfer?.write(command) ?: -1
+                Log.i("BLE","write command ${String(command)} $retornoDelWrite $connectThreadWithTransfer")
+                return retornoDelWrite
+            }catch (e :Exception){
+                Log.i("BLE","write command Exception $e")
+                return -1
+            }
         }
         // other stuff
     }
@@ -265,7 +271,7 @@ class BluetoothSDKService : Service() {
                     Log.i("BLUE", "***Transfer connectedThread: $connectedThread")
                 }
             } catch (e: IOException) {
-                Log.e("BLUE", "Error in socket.connect", e)
+                Log.e("BLUE", "Error in socket.connect ${mmSocket}", e)
             }
 
         }
@@ -285,12 +291,12 @@ class BluetoothSDKService : Service() {
             return connectedThread?.isConnected() ?: false
         }
 
-        fun write(msg : ByteArray){
-            connectedThread?.write(msg)
+        fun write(msg : ByteArray) : Int{
+            return connectedThread?.write(msg) ?: -1
         }
 
-        fun write(msg : String){
-            connectedThread?.write(msg)
+        fun write(msg : String) : Int {
+            return connectedThread?.write(msg) ?: -1
         }
     }
 
@@ -333,20 +339,20 @@ class BluetoothSDKService : Service() {
             }
         }
 
-        fun write(msg: String){
-            write(msg.toByteArray())
+        fun write(msg: String) : Int{
+            return write(msg.toByteArray())
         }
 
         // Call this from the main activity to send data to the remote device.
-        fun write(bytes: ByteArray) {
-            try {
+        fun write(bytes: ByteArray) : Int{
+            return try {
                 mmOutStream.write(bytes)
-
                 // Send to broadcast the message
                 pushBroadcastMessage(BluetoothUtils.ACTION_MESSAGE_SENT, arrayListOf(mmSocket.remoteDevice), null)
+                bytes.size
             } catch (e: IOException) {
                 pushBroadcastMessage(BluetoothUtils.ACTION_CONNECTION_ERROR, null, "Error occurred when sending data")
-                return
+                -1
             }
         }
 

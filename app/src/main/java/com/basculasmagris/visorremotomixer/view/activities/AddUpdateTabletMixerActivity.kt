@@ -260,11 +260,15 @@ class AddUpdateTabletMixerActivity : AppCompatActivity() {
         }
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
-            Log.i("${this.javaClass.name}", "ACT onCommandReceived")
+            Log.i("command", "AddUpdateTabletMixerActivity onCommandReceived ${message?.let {
+                String(
+                    it
+                )
+            }}")
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
-            Log.i("${this.javaClass.name}", "ACT onMessageReceived")
+            Log.i("message", "AddUpdateTabletMixerActivity onMessageReceived $message")
         }
 
         override fun onMessageSent(device: BluetoothDevice?,message: String?) {

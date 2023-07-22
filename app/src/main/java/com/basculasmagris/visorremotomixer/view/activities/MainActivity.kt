@@ -337,7 +337,7 @@ class MainActivity : AppCompatActivity() {
                                 val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
                                 navHost?.let { navFragment ->
                                     navFragment.childFragmentManager.primaryNavigationFragment?.let {fragment->
-                                        Log.i(TAG,"observe selectedMixerInFragment $selectedTabletMixerInActivity")
+                                        Log.i(TAG,"observe selectedTableMixerInFragment $selectedTabletMixerInActivity")
                                         if(selectedTabletMixerInActivity != null){
                                             when (fragment){
                                                 is RemoteMixerFragment->{

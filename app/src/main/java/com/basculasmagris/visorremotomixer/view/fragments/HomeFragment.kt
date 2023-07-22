@@ -1077,7 +1077,7 @@ class HomeFragment : BottomSheetDialogFragment() {
         }
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
-            Log.i("TAG BLUE", "ACT onCommandReceived")
+            Log.i("command", "HomeFragment onCommandReceived ${message?.let { String(it) }}" )
             val convertStringToZip = ConvertStringToZip()
             if(message == null || message.size<9){
                 Log.i(TAG,"command not enough large (${message?.size})")
@@ -1146,7 +1146,7 @@ class HomeFragment : BottomSheetDialogFragment() {
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
-            Log.i(TAG, "ACT onMessageReceived DEVICE: ${device?.address} | MSG: $message")
+            Log.i("message", "HomeFragment onMessageReceived DEVICE: ${device?.address} | MSG: $message")
         }
 
 

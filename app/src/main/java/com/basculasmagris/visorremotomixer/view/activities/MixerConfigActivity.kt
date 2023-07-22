@@ -425,10 +425,11 @@ class MixerConfigActivity : AppCompatActivity(),ConfirmDialogFragment.OnConfirmL
         }
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
-            Log.i("TAG BLUE", "ACT onCommandReceived")
+            Log.i("command", "MixerConfigActtivity onCommandReceived")
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
+            Log.i("message", "MixerConfigActtivity onCommandReceived")
             if(message==null){
                 return
             }
