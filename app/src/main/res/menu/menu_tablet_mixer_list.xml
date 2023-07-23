@@ -13,7 +13,7 @@
     <item
         android:id="@+id/menu_selected_tabler_mixer"
         android:icon="@drawable/ic_tablet_48px"
-        android:title="    Visor Remoto"
+        android:title="    Tablet Remota"
         app:showAsAction="always|withText"
         android:orderInCategory="101"
         />

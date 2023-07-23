@@ -322,8 +322,11 @@ class BluetoothSDKService : Service() {
                     pushBroadcastMessage(BluetoothUtils.ACTION_CONNECTION_ERROR,null,"Input stream was disconnected")
                     break
                 }
-                if(numBytes<3){
-                    Log.i("PING","Ping: ${String(mmBuffer,0,numBytes)}")
+                if(numBytes<3 ){
+                    if(numBytes == 1 && mmBuffer[0] == "*".toByteArray()[0]){
+                        Log.i("PING","Ping: ${String(mmBuffer,0,numBytes)}")
+                        pushBroadcastMessage(BluetoothUtils.ACTION_MESSAGE_RECEIVED, arrayListOf(mmSocket.remoteDevice), "*")
+                    }
                     continue
                 }
                 isConnected = true

@@ -62,7 +62,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private var mProgressDialog: Dialog? = null
-    private var isConnected: Boolean = false
     var mLocalDetailRound: MutableList<RoundRunDetail> = ArrayList()
     private var roles: ArrayList<Pair<Int, String>> = arrayListOf(
         Pair(1, "Administrador"),
@@ -360,26 +359,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
-
     fun deviceDisconnected() {
-        if(isConnected && binding.appBarMain.toolbarMain.menu.size>0){
-            Log.i(TAG,"main disconnected icon off")
+        if(binding.appBarMain.toolbarMain.menu.size>0){
             binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon = ContextCompat.getDrawable(this,R.drawable.ic_bluetooth_disconnected_24px)
             binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon?.setTint(getColor(R.color.white))
-            isConnected = false
         }
 
     }
 
     fun deviceConnected() {
         hideCustomProgressDialog()
-        if(!isConnected && binding.appBarMain.toolbarMain.menu.size>0){
-            Log.i(TAG,"main connected icon on")
+        if(binding.appBarMain.toolbarMain.menu.size > 0 ){
             binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon = ContextCompat.getDrawable(this,R.drawable.ic_bluetooth_connected_24px)
             binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon?.setTint(getColor(R.color.white))
-            isConnected = true
         }
     }
 

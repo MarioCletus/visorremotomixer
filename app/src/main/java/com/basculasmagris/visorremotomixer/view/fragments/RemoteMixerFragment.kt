@@ -47,11 +47,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private val TAG: String = "DEBMixerVR"
     var menu: Menu? = null
     private var dialogResto: AlertDialog? = null
-    private var estableTimer: Timer? = null
     private var mixerWeight = 0.0
     private var totalMixerWeight: Double = 0.0
     private var lastUpdate: LocalDateTime? = null
     private var timerTask: TimerTask? = null
+    private var estableTimer: Timer? = null
     private var defaultStep = 5.0
     private var activity: MainActivity? = null
     private var noPrevAlert : Boolean = true
@@ -386,6 +386,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     if(tick%10 == 0L){
                         Log.i("CONEXION", "Conexión: NO ${lastUpdate} ${activity?.isCustomProgresDialogShowing()}")
                         changeStatusConnection(false)
+                        MainScope().launch {
+                            isConnected = true
+                            deviceDisconnected()
+                        }
                         if(tabletMixerBluetoothDevice != null && activity?.isCustomProgresDialogShowing() == false){
                             tabletMixerBluetoothDevice?.let {
                                 Log.i("CONEXION","Reconectando $tabletMixerBluetoothDevice")
@@ -427,6 +431,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
 
         override fun onDeviceConnected(device: BluetoothDevice?) {
+            isConnected = false
             deviceConnected()
             Log.i(TAG, "onDeviceConnected ${device?.name} ${device?.address}")
         }
@@ -736,8 +741,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             Log.i("message","message $message")
-            deviceConnected()
-            tickCountMessages = tick
+            if(message != null && message.equals("*")){
+                deviceConnected()
+                tickCountMessages = tick
+            }
         }
 
         override fun onMessageSent(device: BluetoothDevice?,message: String?) {

@@ -380,11 +380,11 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
         }
 
         override fun onMessageSent(device: BluetoothDevice?,message: String?) {
-            Log.i("${this.javaClass.name}", "onMessageSent $message")
+            Log.i("send", "${this.javaClass.name} onMessageSent $message")
         }
 
         override fun onCommandSent(device: BluetoothDevice?,command: ByteArray?) {
-            Log.i("${this.javaClass.name}", "onCommandSent ${command?.let { String(it) }}")
+            Log.i("send", "${this.javaClass.name} onCommandSent ${command?.let { String(it) }}")
         }
 
         override fun onError(message: String?) {
@@ -519,7 +519,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
 
     fun setTabletMixer(tabletMixerIn: TabletMixer) {
         tabletMixerIn.let { tabletMixer ->
-            Log.i(TAG,"setTabletMixer ${tabletMixerIn}")
+            Log.i(TAG,"setTabletMixer $tabletMixer")
             menu?.findItem(R.id.menu_selected_tabler_mixer)?.title = "  " + tabletMixer.name
             selectedTabletMixerInFragment = tabletMixer
             (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
