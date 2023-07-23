@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.ItemLineRoundRunCorralDownloadBinding
 import com.basculasmagris.visorremotomixer.model.entities.CorralDetail
+import com.basculasmagris.visorremotomixer.model.entities.RoundRunDetail
 import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.view.activities.RoundRunActivity
 import com.basculasmagris.visorremotomixer.view.fragments.StepDownloadFragment
@@ -55,7 +56,7 @@ class RoundRunCorralDownloadAdapter (
             }
             else if( position < selectedPosition || endLoad){
                 holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_ready_bkg)
-                val value = (corral.initialWeight - corral.currentWeight) - corral.actualTargetWeight
+                val value = (corral.initialWeight - corral.finalWeight) - corral.actualTargetWeight
                 if(value >= 1){
                     holder.tvDiffWeight.text = "+${Helper.getNumberWithDecimals(value, 0)}Kg"
                 }else {
@@ -232,4 +233,16 @@ class RoundRunCorralDownloadAdapter (
         return null
     }
 
+
+    fun updateRound(roundRunDetail: RoundRunDetail) {
+        var position : Int = 0
+        filteredRoundCorrals.forEach{corralDetail ->
+            corralDetail.initialWeight = roundRunDetail.round.corrals[position].initialWeight
+            corralDetail.finalWeight = roundRunDetail.round.corrals[position].finalWeight
+            corralDetail.currentWeight = roundRunDetail.round.corrals[position].currentWeight
+            corralDetail.actualTargetWeight = roundRunDetail.round.corrals[position].actualTargetWeight
+            corralDetail.customTargetWeight = roundRunDetail.round.corrals[position].customTargetWeight
+            position++
+        }
+    }
 }

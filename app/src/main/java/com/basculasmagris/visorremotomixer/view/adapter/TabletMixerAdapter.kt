@@ -20,13 +20,14 @@ class TabletMixerAdapter (private  val fragment: Fragment) : RecyclerView.Adapte
 
     private var tabletMixers: MutableList<TabletMixer>  = ArrayList()
     private var filteredTabletMixers: MutableList<TabletMixer>  = ArrayList()
+    private var weight : Long = 0L
 
     class ViewHolder (view: ItemTabletMixerLayoutBinding) : RecyclerView.ViewHolder(view.root) {
         val tvTabletMixerTitle = view.tvTableMixerTitle
         val btnEditTabletMixer = view.btnEditTabletMixer
         val btnDeleteTabletMixer = view.btnDeleteTabletMixer
         val etTabletMixerDescription = view.etTabletMixerDescription
-        val tvMac = view.tvMac
+        val tvWeight                = view.tvTableMixerWeight
 
     }
 
@@ -40,7 +41,7 @@ class TabletMixerAdapter (private  val fragment: Fragment) : RecyclerView.Adapte
         val tabletMixer = filteredTabletMixers[position]
         holder.tvTabletMixerTitle.text = tabletMixer.name
         holder.etTabletMixerDescription.text = tabletMixer.description.ifEmpty { fragment.getString(R.string.lbl_no_description_short) }
-        holder.tvMac.text = tabletMixer.mac
+        holder.tvWeight.text = "${weight}Kg"
 
         holder.itemView.setOnClickListener {
             if (fragment is TabletMixerListFragment) {
@@ -124,6 +125,12 @@ class TabletMixerAdapter (private  val fragment: Fragment) : RecyclerView.Adapte
             }
         }
     }
+
+    fun setWeight(weight : Long){
+        this.weight = weight
+        notifyDataSetChanged()
+    }
+
 
     private fun alertTabletMixerNull(msg: String) {
         val builder = androidx.appcompat.app.AlertDialog.Builder(fragment.requireActivity())

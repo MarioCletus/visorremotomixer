@@ -341,8 +341,9 @@
     <string name="add_tablet_mixer">Añadir Tablet de Mixer</string>
     <string name="ph_tablet_mixer_name">Nombre</string>
     <string name="ph_tablet_mixer_description">Descripcion</string>
-    <string name="screen_tablet_mixer_list">Tablet de mixer 1</string>
-    <string name="menu_tablet_mixer">Tablet de mixer 0</string>
+    <string name="screen_tablet_mixer_list">Tablet de mixer</string>
+    <string name="menu_tablet_mixer">Tablets de Mixer</string>
+    <string name="menu_config">Configuracion</string>
 
 
 </resources>

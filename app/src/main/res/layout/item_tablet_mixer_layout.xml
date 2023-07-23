@@ -29,8 +29,10 @@
             android:id="@+id/tv_table_mixer_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
             android:ellipsize="end"
+            android:gravity="left"
             android:textColor="@color/color_dark_grey"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -39,20 +41,7 @@
             tools:text="TabletMixer 1">
 
         </TextView>
-        <TextView
-            android:id="@+id/tv_mac"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_6sdp"
-            android:textStyle="normal"
-            android:layout_marginRight="@dimen/_10sdp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_table_mixer_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="MAC99229JSJSJSA"
-            android:visibility="gone"/>
+
         <TextView
             android:id="@+id/et_tablet_mixer_description"
             android:layout_width="0dp"
@@ -62,12 +51,29 @@
             android:textSize="14sp"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_mac"
+            app:layout_constraintTop_toBottomOf="@id/tv_table_mixer_title"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="Descripción Tablet Mixer">
-
         </TextView>
 
+        <TextView
+            android:id="@+id/tv_table_mixer_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="20dp"
+            android:ellipsize="end"
+            android:gravity="left"
+            android:textColor="@color/color_dark_grey"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="0Kg">
+
+        </TextView>
 
         <Button
             android:id="@+id/btn_delete_tablet_mixer"

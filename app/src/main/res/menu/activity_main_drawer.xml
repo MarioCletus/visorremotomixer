@@ -27,18 +27,6 @@
 <!--            android:icon="@drawable/ic_corrales"-->
 <!--            android:title="@string/menu_corral" />-->
 <!--    </group>-->
-    <group
-        android:id="@+id/group_diets_products"
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_product"
-            android:icon="@drawable/ic_productos_new"
-            android:title="@string/menu_product" />
-        <item
-            android:id="@+id/nav_diet"
-            android:icon="@drawable/ic_diet_new"
-            android:title="@string/menu_diet" />
-    </group>
 
     <group
         android:id="@+id/group_configuration"
@@ -47,10 +35,10 @@
             android:id="@+id/nav_tablet_mixer"
             android:icon="@drawable/ic_mixer"
             android:title="@string/menu_tablet_mixer" />
-        <item
-            android:id="@+id/nav_mixer"
-            android:icon="@drawable/ic_mixer"
-            android:title="@string/menu_mixer" />
+<!--        <item-->
+<!--            android:id="@+id/nav_mixer"-->
+<!--            android:icon="@drawable/ic_mixer"-->
+<!--            android:title="@string/menu_mixer" />-->
         <item
             android:id="@+id/nav_config"
             android:icon="@drawable/icon_ajustes_topbar"
@@ -65,6 +53,20 @@
 <!--            android:title="@string/menu_round"-->
 <!--            android:visible="false"/>-->
     </group>
+
+    <group
+        android:id="@+id/group_diets_products"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_product"
+            android:icon="@drawable/ic_productos_new"
+            android:title="@string/menu_product" />
+        <item
+            android:id="@+id/nav_diet"
+            android:icon="@drawable/ic_diet_new"
+            android:title="@string/menu_diet" />
+    </group>
+
     <group
         android:id="@+id/group_user_interface"
         android:checkableBehavior="none">

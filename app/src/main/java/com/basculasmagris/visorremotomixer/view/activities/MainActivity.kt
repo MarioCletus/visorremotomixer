@@ -110,16 +110,18 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_tablet_mixer,
                 R.id.nav_mixer_remoto,
                 R.id.nav_home,
+                R.id.nav_tablet_mixer,
+                R.id.nav_config,
                 R.id.nav_product,
-                R.id.nav_establishment,
-                R.id.nav_corral,
-                R.id.nav_mixer,
+//                R.id.nav_establishment,
+//                R.id.nav_corral,
+//                R.id.nav_mixer,
                 R.id.nav_diet,
-                R.id.nav_round,
-                R.id.nav_report,
+//                R.id.nav_round,
+//                R.id.nav_report,
+                R.id.nav_sync,
                 R.id.nav_user
             ), drawerLayout
         )
@@ -328,6 +330,7 @@ class MainActivity : AppCompatActivity() {
                     return@collect
                 }
                 val localKnowDevice = mTabletMixerViewModel.getTabletMixerById(id)
+
                 lifecycleScope.launch {
                     withContext(Dispatchers.Main) {
                         localKnowDevice.observe(this@MainActivity){tabletMixer->
@@ -344,7 +347,6 @@ class MainActivity : AppCompatActivity() {
                                                 }
                                                 is TabletMixerListFragment->{
                                                     fragment.setTabletMixer(selectedTabletMixerInActivity!!)
-                                                    fragment.connect(selectedTabletMixerInActivity!!)
                                                 }
                                             }
 
@@ -355,6 +357,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
+
             }
         }
     }
@@ -364,7 +367,6 @@ class MainActivity : AppCompatActivity() {
             binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon = ContextCompat.getDrawable(this,R.drawable.ic_bluetooth_disconnected_24px)
             binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon?.setTint(getColor(R.color.white))
         }
-
     }
 
     fun deviceConnected() {

@@ -43,6 +43,7 @@ import kotlin.math.roundToLong
 
 class RemoteMixerFragment : BottomSheetDialogFragment() {
 
+    private var countNoLoad: Int = 0
     lateinit var mBinding: FragmentRemoteMixerBinding
     private val TAG: String = "DEBMixerVR"
     var menu: Menu? = null
@@ -491,6 +492,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         Log.i("WEIGHT","CMD_WEIGHT ${String(message)}   mixerWeight $mixerWeight")
                         when(String(message,3,1)){
                             "L"->{
+                                countNoLoad = 0
                                 mixerWeight = (productDetail?.targetWeight?.minus(weight.toDouble()) ?: 0.0)
                                 roundRunProductAdapter?.updateWeight(mixerWeight)
                                 productDetail?.currentWeight = mixerWeight
@@ -504,6 +506,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                                 mBinding.tvCurrentProduct.text = productDetail?.name
                             }
                             "D"->{
+                                countNoLoad = 0
                                 mixerWeight = (corralDetail?.actualTargetWeight?.minus(weight.toDouble()) ?: 0.0)
                                 roundRunCorralAdapter?.updateCorralWeight(mixerWeight)
                                 productDetail?.currentWeight = mixerWeight
@@ -517,6 +520,30 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                                 mBinding.tvCurrentProduct.text = corralDetail?.name
                             }
                             " "->{
+                                countNoLoad++
+                                if(countNoLoad>50){
+                                    countNoLoad = 0
+                                    mBinding.tvTitleProduct.text = getString(R.string.mixer)
+
+                                    val mutableList = mutableListOf<ProductDetail>()
+                                    val dietDetail = DietDetail (
+                                        name = "",
+                                        description = "",
+                                        remoteId = 0L,
+                                        updatedDate = "",
+                                        "",
+                                        usePercentage = false,
+                                        products = mutableList,
+                                        id = 0L
+                                    )
+
+                                    val emptyAdapter =  RoundRunProductAdapter(
+                                        this@RemoteMixerFragment,
+                                        dietDetail,
+                                        defaultStep)
+
+                                    mBinding.rvMixerProductsToLoad.adapter = emptyAdapter
+                                }
                                 mBinding.tvCurrentProductWeightPending.text = "${String(message,4,1)}${weight}Kg"
                                 mBinding.pbCurrentProduct.progress = progress
                                 bInLoad = false
@@ -548,13 +575,16 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                             val roundRunDetail : RoundRunDetail = gson.fromJson(str,  RoundRunDetail::class.java)
                             if(currentRoundRunDetail != null && currentRoundRunDetail!!.id == roundRunDetail.id){
                                 Log.i(TAG,"notifyDataSetChanged roundRunDetail $roundRunDetail")
-                                roundRunProductAdapter?.updateRound(roundRunDetail)
+                                if(bInLoad)
+                                    roundRunProductAdapter?.updateRound(roundRunDetail)
+                                if(bInDownload)
+                                    roundRunCorralAdapter?.updateRound(roundRunDetail)
                             }else{
                                 Log.i(TAG,"new roundRunDetail $roundRunDetail")
                                 currentRoundRunDetail = roundRunDetail
                                 currentRoundRunDetail.let {
                                     val product = roundRunDetail.round.diet.products.firstOrNull{ productDetail->
-                                        productDetail.id == currentProductDetail?.id
+                                        productDetail.remoteId == currentProductDetail?.remoteId
                                     }
                                     if (product != null) {
                                         currentProductDetail?.initialWeight = product.initialWeight
@@ -564,6 +594,18 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                                             currentRoundRunDetail?.round?.diet?.products?.get(position!!)?.initialWeight = product.initialWeight
                                         }
                                     }
+                                    val corral = roundRunDetail.round.corrals.firstOrNull{ corral->
+                                        corral.remoteId == currentCorralDetail?.remoteId
+                                    }
+                                    if (corral != null) {
+                                        currentCorralDetail?.initialWeight = corral.initialWeight
+                                        roundRunCorralAdapter?.updateInicial(corral.initialWeight)
+                                        val productIndex = roundRunProductAdapter?.selectedPosition
+                                        productIndex.let {position->
+                                            currentRoundRunDetail?.round?.corrals?.get(position!!)?.initialWeight = corral.initialWeight
+                                        }
+                                    }
+
                                     loadRoundDetail()
                                     it?.mixer.let {mixerDetail->
                                         val mixer = Mixer(
@@ -626,6 +668,32 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                 }
 
+                Constants.CMD_NXTCORRAL->{
+                    try{
+                        Log.i(TAG,"CMD_NXTCORRAL $messageStr")
+                        val corralPosition = messageStr.substring(3,7).toInt()
+                        val corralIndex = messageStr.substring(7,15).toLong()
+                        val totalDownload = messageStr.substring(15,23).toLong()
+                        Log.i(TAG,"${corralDetail?.name} total loaded $totalDownload Next corralt corralPosition $corralPosition productIndex $corralIndex")
+                        if(corralDetail?.remoteId == corralIndex){
+                            return
+                        }
+                        bSyncroCorral = false
+                        bSyncroSequence = false
+                        bSyncroRound = false
+//                        mBinding.tvCurrentProductWeightPending.text = "Total: ${totalLoaded}Kg"
+                        mBinding.tvCurrentProduct.text = "${corralDetail?.name}"
+                        roundRunCorralAdapter?.selectCorral(corralPosition)
+                        requestRoundRunDetail()
+                    }catch(e :  NumberFormatException){
+                        Log.i(TAG,"CMD_NXTCORRAL NumberFormatException $e ")
+                    }catch ( e : Exception){
+                        Log.i(TAG,"CMD_NXTCORRAL Exception $e ")
+                    }
+                    Log.i(TAG,"CMD_NXTCORRAL")
+
+                }
+
                 Constants.CMD_END->{
                     Log.i(TAG,"CMD_END $messageStr")
                     val msg = "CMD${Constants.CMD_ACK}${Constants.CMD_END}"
@@ -640,8 +708,14 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     totalWeightLoaded = totalWeightLoaded.roundToLong().toDouble()
                     bSyncroSequence = false
                     bSyncroProduct = false
+                    bSyncroCorral = false
                     currentRoundRunDetail = null
                     roundRunProductAdapter?.notifyDataSetChanged()
+
+                    if(bInDownload){
+                        cleanAll()
+                        goToTabletMixerListFragment()
+                    }
                 }
 
                 Constants.CMD_ACK->{
@@ -895,14 +969,25 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         var title: String? = null
         var message: String? = null
         val strkg : String =  strKg
-        if(getCurrentProduct()!=null){
-            title = getCurrentProduct()!!.name
-            message = if(nextItem.isNotEmpty()){
-                "Se pasa a $nextItem"
-            }else{
-                "Se va a pasar al proximo producto! "
+
+        if(bInLoad)
+            if(getCurrentProduct()!=null){
+                title = getCurrentProduct()!!.name
+                message = if(nextItem.isNotEmpty()){
+                    "Se pasa a $nextItem"
+                }else{
+                    "Se va a pasar al proximo producto! "
+                }
             }
-        }
+        if(bInDownload)
+            if(getCurrentCorral()!=null){
+                title = getCurrentCorral()!!.name
+                message = if(nextItem.isNotEmpty()){
+                    "Se pasa a $nextItem"
+                }else{
+                    "Se va a pasar al proximo corral! "
+                }
+            }
 
         val builder = AlertDialog.Builder(requireActivity())
             .create()
@@ -912,14 +997,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         val  tvTitle = view.findViewById<TextView>(R.id.tv_dialog_title)
         val  tvMessage = view.findViewById<TextView>(R.id.tv_dialog_message)
         val  tvCount = view.findViewById<TextView>(R.id.tv_dialog_count)
-        if(getCurrentProduct()!=null){
-            title = getCurrentProduct()!!.name
-            message = if(nextItem.isNotEmpty()){
-                "Se pasa a $nextItem"
-            }else{
-                "Se va a pasar al proximo producto! "
-            }
-        }
+
 
         if(title==null || message == null){
             return null
@@ -928,8 +1006,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         tvMessage.text = message
         tvTitle.text = title
         btnAcept.setOnClickListener {
-            if(getCurrentProduct()!=null){
+            if(bInLoad && getCurrentProduct()!=null){
                 sendNextProduct()
+            }
+            if(bInDownload && getCurrentCorral()!=null){
+                sendNextCorral()
             }
             builder.dismiss()
         }
@@ -953,7 +1034,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                     override fun onFinish() {
                         if (dialog.isShowing) {
-                            sendNextProduct()
+                            if(bInLoad)
+                                sendNextProduct()
+                            if(bInDownload)
+                                sendNextCorral()
                             dialog.dismiss()
                             dialogCountDown = null
                         }
@@ -977,6 +1061,14 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         return previousProductDetail
     }
 
+    fun sendNextCorral(){
+        val msg = "CMD${Constants.CMD_NXTCORRAL}"
+        activity?.mService?.LocalBinder()?.write(msg.toByteArray())
+    }
+
+    private fun getCurrentCorral(): CorralDetail? {
+        return previousCorralDetail
+    }
 
     private fun requestRoundRunDetail() {
         val msg = "CMD${Constants.CMD_ROUNDDETAIL}"
@@ -1000,8 +1092,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         activity?.mService?.LocalBinder()?.write(msg.toByteArray())
     }
 
-    fun goToAddUpdateTabletMixer(){
-        findNavController().navigate(TabletMixerListFragmentDirections.actionTabletMixerListFragmentToAddUpdateTabletMixerActivity())
+    fun goToTabletMixerListFragment(){
+        findNavController().navigate(RemoteMixerFragmentDirections.actionRemoteMixerFragmentToTableMixerListFragment())
     }
 
     fun setTabletMixer(tabletMixerIn: TabletMixer) {
