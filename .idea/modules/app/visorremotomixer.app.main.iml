@@ -105,11 +105,6 @@
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/modules-2/files-2.1/androidx.annotation/annotation/1.3.0/21f49f5f9b85fc49de712539f79123119740595/annotation-1.3.0.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/afb724ae75aaeca508f319e9136250be/transformed/jetified-kotlin-stdlib-jdk7-1.6.21.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/ee97a00095c513b92fb27e7b0f6034c4/transformed/jetified-kotlin-android-extensions-runtime-1.6.21.jar</arg>
-                <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/6f625cb97b983f814d692bf5c38eefd5/transformed/jetified-jackson-databind-2.13.0.jar</arg>
-                <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/87c042fbb5069eed90863a9710f6babc/transformed/jetified-jackson-annotations-2.13.0.jar</arg>
-                <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/315c7fe0be8610298cb1c360b84d24b3/transformed/jetified-jackson-core-2.13.0.jar</arg>
-                <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/2dd8fc742ad3c90649f20561b3fb1738/transformed/jetified-jackson-module-kotlin-2.13.0.jar</arg>
-                <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/35a1cae6143654ca7c06f7b5ccf8174f/transformed/jetified-kotlin-reflect-1.5.30.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/76613d9c9505690357658b3e32c7d7a4/transformed/jetified-kotlin-stdlib-1.6.21.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/54516543dfc729ea4f4e5a48d120fe96/transformed/jetified-kotlin-stdlib-common-1.6.21.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/42eeba1fd5107cb198ddc6eb50d9050f/transformed/jetified-annotations-13.0.jar</arg>
@@ -306,11 +301,6 @@
     <orderEntry type="library" name="Gradle: com.squareup.retrofit2:adapter-rxjava3:2.9.0" level="project" />
     <orderEntry type="library" name="Gradle: io.reactivex.rxjava3:rxjava:3.0.0" level="project" />
     <orderEntry type="library" name="Gradle: org.reactivestreams:reactive-streams:1.0.3" level="project" />
-    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.13.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.13.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.13.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-reflect:1.5.30" level="project" />
     <orderEntry type="library" name="Gradle: androidx.room:room-common:2.4.2" level="project" />
     <orderEntry type="library" name="Gradle: com.github.bumptech.glide:disklrucache:4.13.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.bumptech.glide:annotations:4.13.0" level="project" />
