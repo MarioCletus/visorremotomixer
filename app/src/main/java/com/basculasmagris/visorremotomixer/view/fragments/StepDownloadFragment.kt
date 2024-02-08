@@ -132,11 +132,11 @@ class StepDownloadFragment(mixerDetail: MixerDetail) : Fragment() {
             customDialog("Tara","Seguro quiere hacer tara?")
         }
         mBinding.btnJump.setOnClickListener{
-            if((mBinding.rvRoundCorralsToLoad.adapter as RoundRunCorralDownloadAdapter).isLastCorral()){
-                targetReachedDialog = activity?.dialogAlertTargetWeight("resumen")
-            }else{
-                nextCorral()
-            }
+//            if((mBinding.rvRoundCorralsToLoad.adapter as RoundRunCorralDownloadAdapter).isLastCorral()){
+//                targetReachedDialog = activity?.dialogAlertTargetWeight("resumen")
+//            }else{
+//                nextCorral()
+//            }
 
         }
 
@@ -154,7 +154,7 @@ class StepDownloadFragment(mixerDetail: MixerDetail) : Fragment() {
         val roundRunCorralAdapter =  RoundRunCorralDownloadAdapter(
             this@StepDownloadFragment)
         activity?.currentRoundRunDetail?.round?.corrals?.let { corrals ->
-            roundRunCorralAdapter.corralList(corrals)
+//            roundRunCorralAdapter.corralList(corrals)
         }
         mBinding.rvRoundCorralsToLoad.addItemDecoration(MarginItemDecoration(resources.getDimensionPixelSize(R.dimen.margin_recycler)))
         mBinding.rvRoundCorralsToLoad.adapter = roundRunCorralAdapter
@@ -186,11 +186,11 @@ class StepDownloadFragment(mixerDetail: MixerDetail) : Fragment() {
             sign = "+"
         }
 
-        if((mBinding.rvRoundCorralsToLoad.adapter as RoundRunCorralDownloadAdapter).isLastCorral()){
-            lastCorral()
-        }else{
-            noLastCorral()
-        }
+//        if((mBinding.rvRoundCorralsToLoad.adapter as RoundRunCorralDownloadAdapter).isLastCorral()){
+//            lastCorral()
+//        }else{
+//            noLastCorral()
+//        }
 
         mBinding.tvCurrentCorralWeightPending.text = "${sign}${Helper.getNumberWithDecimals (value, 0)}Kg  ${corral.name}"
         var percentage = 0.0
@@ -213,17 +213,17 @@ class StepDownloadFragment(mixerDetail: MixerDetail) : Fragment() {
                     Log.i(TAG,"DialgoAlertTargetWeight")
                     countGreaterThanTarget = 0
                     noPrevAlert = false
-                    val adapterCorral = (mBinding.rvRoundCorralsToLoad.adapter as RoundRunCorralDownloadAdapter)
-                    val nextCorralName = adapterCorral.getCorral(adapterCorral.selectedPosition + 1)?.name
-                    targetReachedDialog = if(nextCorralName.isNullOrEmpty()){
-                        if(adapterCorral.isLastCorral()){
-                            activity?.dialogAlertTargetWeight("resumen")
-                        }else{
-                            activity?.dialogAlertTargetWeight()
-                        }
-                    } else{
-                        activity?.dialogAlertTargetWeight(nextCorralName)
-                    }
+//                    val adapterCorral = (mBinding.rvRoundCorralsToLoad.adapter as RoundRunCorralDownloadAdapter)
+//                    val nextCorralName = adapterCorral.getCorral(adapterCorral.selectedPosition + 1)?.name
+//                    targetReachedDialog = if(nextCorralName.isNullOrEmpty()){
+//                        if(adapterCorral.isLastCorral()){
+//                            activity?.dialogAlertTargetWeight("resumen")
+//                        }else{
+//                            activity?.dialogAlertTargetWeight()
+//                        }
+//                    } else{
+//                        activity?.dialogAlertTargetWeight(nextCorralName)
+//                    }
                 }
             }
         }
@@ -293,7 +293,7 @@ class StepDownloadFragment(mixerDetail: MixerDetail) : Fragment() {
                     Log.i(TAG,"currentCorralDetail ${currentCorralDetail!!.name}")
                     previousCorralDetail = currentCorralDetail
                     currentCorralDetail?.initialWeight = mixerWeight
-                    (mBinding.rvRoundCorralsToLoad.adapter as RoundRunCorralDownloadAdapter).updateInicial(mixerWeight)
+//                    (mBinding.rvRoundCorralsToLoad.adapter as RoundRunCorralDownloadAdapter).updateInicial(mixerWeight)
                 }
             }else{
                 //Si no se puede extraer un valor numerico del mensaje retorno
@@ -326,7 +326,7 @@ class StepDownloadFragment(mixerDetail: MixerDetail) : Fragment() {
                     // Si aún no se descargó nada actualizamos los kg que hay que descargar en
                     // los corrales segun los kg de mezcla cargados. No se tiene en cuenta si el mixer estaba cargado o si se hace Tara
                     // entre productos.
-                    (mBinding.rvRoundCorralsToLoad.adapter as RoundRunCorralDownloadAdapter).updateCorralTargetWeight()
+//                    (mBinding.rvRoundCorralsToLoad.adapter as RoundRunCorralDownloadAdapter).updateCorralTargetWeight()
                 }
 
             }
@@ -349,7 +349,7 @@ class StepDownloadFragment(mixerDetail: MixerDetail) : Fragment() {
             mBinding.tvMixerTarget.text = "${signMixerTarget}${Helper.getNumberWithDecimals (mixerTarget, 0)}Kg"
             val percentage = (activity!!.getCurrentDownload())*100/activity!!.getTargetDownload()
             mBinding.pbCurrentMixer.progress = 100-percentage.toInt()
-            (mBinding.rvRoundCorralsToLoad.adapter as RoundRunCorralDownloadAdapter).updateCorralWeight(mixerWeight)
+//            (mBinding.rvRoundCorralsToLoad.adapter as RoundRunCorralDownloadAdapter).updateCorralWeight(mixerWeight)
 
             //Se marca la fecha de actualizacion
             lastUpdate = LocalDateTime.now()
@@ -397,11 +397,11 @@ class StepDownloadFragment(mixerDetail: MixerDetail) : Fragment() {
         countGreaterThanTarget = 0
         mBinding.tvCurrentCorralWeightPending.setTextColor(ContextCompat.getColor(activity!!,R.color.white)
         )
-        if(adapteCorral.isLastCorral()){
-            adapteCorral.lastCorralClose()
-        }else {
-            adapteCorral.selectNextCorral()
-        }
+//        if(adapteCorral.isLastCorral()){
+//            adapteCorral.lastCorralClose()
+//        }else {
+//            adapteCorral.selectNextCorral()
+//        }
     }
 
 
@@ -431,7 +431,7 @@ class StepDownloadFragment(mixerDetail: MixerDetail) : Fragment() {
     }
 
     fun tare() {
-        (mBinding.rvRoundCorralsToLoad.adapter as RoundRunCorralDownloadAdapter).tare(mixerWeight)
+//        (mBinding.rvRoundCorralsToLoad.adapter as RoundRunCorralDownloadAdapter).tare(mixerWeight)
     }
 
 }

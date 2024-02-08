@@ -1,20 +1,16 @@
 package com.basculasmagris.visorremotomixer.view.adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.ItemProductLayoutBinding
 import com.basculasmagris.visorremotomixer.model.entities.Product
-import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.Helper
-import com.basculasmagris.visorremotomixer.view.activities.AddUpdateProductActivity
 import com.basculasmagris.visorremotomixer.view.fragments.ProductListFragment
 import com.bumptech.glide.Glide
 

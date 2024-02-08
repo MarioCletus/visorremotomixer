@@ -1,12 +1,10 @@
 package com.basculasmagris.visorremotomixer.view.adapter
 
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MediatorLiveData
@@ -17,8 +15,6 @@ import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
 import com.basculasmagris.visorremotomixer.databinding.ItemEstablishmentLayoutBinding
 import com.basculasmagris.visorremotomixer.model.entities.Corral
 import com.basculasmagris.visorremotomixer.model.entities.Establishment
-import com.basculasmagris.visorremotomixer.utils.Constants
-import com.basculasmagris.visorremotomixer.view.activities.AddUpdateEstablishmentActivity
 import com.basculasmagris.visorremotomixer.view.activities.CorralData
 import com.basculasmagris.visorremotomixer.view.activities.MergedLocalData
 import com.basculasmagris.visorremotomixer.view.fragments.EstablishmentListFragment

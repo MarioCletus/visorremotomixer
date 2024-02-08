@@ -76,11 +76,11 @@ class StepLoadFragment(mixerDetail: MixerDetail) : BottomSheetDialogFragment() {
         }
 
         mBinding.btnJump.setOnClickListener{
-            if((mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter).isLastProduct()){
-                targetReachedDialog = activity?.dialogAlertTargetWeight("descarga")
-            }else{
-                nextProduct()
-            }
+//            if((mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter).isLastProduct()){
+//                targetReachedDialog = activity?.dialogAlertTargetWeight("descarga")
+//            }else{
+//                nextProduct()
+//            }
         }
 
         mBinding.btnRest.setOnClickListener{
@@ -92,29 +92,29 @@ class StepLoadFragment(mixerDetail: MixerDetail) : BottomSheetDialogFragment() {
             }
         }
 
-        activity?.currentRoundRunDetail?.round?.diet?.let { dietDetail ->
-            mBinding.rvRoundProductsToLoad.layoutManager = GridLayoutManager(requireActivity(), 1)
-            val roundRunProductAdapter =  RoundRunProductAdapter(
-                this@StepLoadFragment,
-                dietDetail,
-                defaultStep)
-            activity?.currentRoundRunDetail?.round?.diet?.products?.let { products ->
-                roundRunProductAdapter.productList(products)
-            }
-            mBinding.rvRoundProductsToLoad.addItemDecoration(MarginItemDecoration(resources.getDimensionPixelSize(R.dimen.margin_recycler)))
-            mBinding.rvRoundProductsToLoad.adapter = roundRunProductAdapter
-
-            activity?.startAutomaticSave()
-            activity?.currentRoundRunDetail?.round?.diet?.products?.let { products ->
-                products.forEach{productDetail ->
-                    if(productDetail.finalWeight == 0.0){
-                        selectProduct(productDetail)
-                    }else{
-                        nextProduct()
-                    }
-                }
-            }
-        }
+//        activity?.currentRoundRunDetail?.round?.diet?.let { dietDetail ->
+//            mBinding.rvRoundProductsToLoad.layoutManager = GridLayoutManager(requireActivity(), 1)
+//            val roundRunProductAdapter =  RoundRunProductAdapter(
+//                this@StepLoadFragment,
+//                dietDetail,
+//                defaultStep)
+//            activity?.currentRoundRunDetail?.round?.diet?.products?.let { products ->
+////                roundRunProductAdapter.productList(products)
+//            }
+//            mBinding.rvRoundProductsToLoad.addItemDecoration(MarginItemDecoration(resources.getDimensionPixelSize(R.dimen.margin_recycler)))
+//            mBinding.rvRoundProductsToLoad.adapter = roundRunProductAdapter
+//
+//            activity?.startAutomaticSave()
+//            activity?.currentRoundRunDetail?.round?.diet?.products?.let { products ->
+//                products.forEach{productDetail ->
+//                    if(productDetail.finalWeight == 0.0){
+//                        selectProduct(productDetail)
+//                    }else{
+//                        nextProduct()
+//                    }
+//                }
+//            }
+//        }
         activity?.refreshLogo()
 
         //Conectar bluetooth
@@ -146,11 +146,11 @@ class StepLoadFragment(mixerDetail: MixerDetail) : BottomSheetDialogFragment() {
             sign = "+"
             value *= -1
         }
-        if((mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter).isLastProduct()){
-            lastProduct()
-        }else{
-            noLastProduct()
-        }
+//        if((mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter).isLastProduct()){
+//            lastProduct()
+//        }else{
+//            noLastProduct()
+//        }
         mBinding
         mBinding.tvCurrentProductWeightPending.text = "${sign}${Helper.getNumberWithDecimals (value, 0)}Kg  ${product.name}"
         val percentage = (product.currentWeight-product.initialWeight)*100/targetProductWeight
@@ -161,17 +161,17 @@ class StepLoadFragment(mixerDetail: MixerDetail) : BottomSheetDialogFragment() {
                 if(countGreaterThanTarget>10){
                     countGreaterThanTarget = 0
                     noPrevAlert = false
-                    val adapterProduct = (mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter)
-                    val nextProductName = adapterProduct.getProduct(adapterProduct.selectedPosition + 1)?.name
-                    targetReachedDialog = if(nextProductName.isNullOrEmpty()){
-                        if(adapterProduct.isLastProduct()){
-                            activity?.dialogAlertTargetWeight("descarga")
-                        }else{
-                            activity?.dialogAlertTargetWeight()
-                        }
-                    } else{
-                        activity?.dialogAlertTargetWeight(nextProductName)
-                    }
+//                    val adapterProduct = (mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter)
+//                    val nextProductName = adapterProduct.getProduct(adapterProduct.selectedPosition + 1)?.name
+//                    targetReachedDialog = if(nextProductName.isNullOrEmpty()){
+//                        if(adapterProduct.isLastProduct()){
+//                            activity?.dialogAlertTargetWeight("descarga")
+//                        }else{
+//                            activity?.dialogAlertTargetWeight()
+//                        }
+//                    } else{
+//                        activity?.dialogAlertTargetWeight(nextProductName)
+//                    }
                 }
             }
         }
@@ -290,7 +290,7 @@ class StepLoadFragment(mixerDetail: MixerDetail) : BottomSheetDialogFragment() {
                             "\n!=\ncurrentProductDetail $currentProductDetail |\ninitialWeight $mixerWeight")
                     previousProductDetail = currentProductDetail
                     currentProductDetail?.initialWeight = mixerWeight
-                    (mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter).updateInicial(mixerWeight)
+//                    (mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter).updateInicial(mixerWeight)
                 }
             }
 
@@ -326,7 +326,7 @@ class StepLoadFragment(mixerDetail: MixerDetail) : BottomSheetDialogFragment() {
             mBinding.tvMixerTarget.text = "${signMixerTarget}${Helper.getNumberWithDecimals (mixerTarget, 0)}Kg"
             val percentage = (activity!!.getCurrentWeight())*100/activity!!.getTargetWeight()
             mBinding.pbCurrentMixer.progress = percentage.toInt()
-            (mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter).updateWeight(mixerWeight)
+//            (mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter).updateWeight(mixerWeight)
         }
 
         override fun onMessageSent(device: BluetoothDevice?,message: String?) {
@@ -372,11 +372,11 @@ class StepLoadFragment(mixerDetail: MixerDetail) : BottomSheetDialogFragment() {
         countGreaterThanTarget = 0
         val adapteProduct =(mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter)
         mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(activity!!, R.color.white))
-        if(adapteProduct.isLastProduct()){
-            adapteProduct.lastProductClose()
-        }else{
-            adapteProduct.nextProduct()
-        }
+//        if(adapteProduct.isLastProduct()){
+//            adapteProduct.lastProductClose()
+//        }else{
+//            adapteProduct.nextProduct()
+//        }
     }
 
     fun tare() {
@@ -394,7 +394,7 @@ class StepLoadFragment(mixerDetail: MixerDetail) : BottomSheetDialogFragment() {
                     return@forEach
                 }
             }
-            (mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter).tare(mixerWeight)
+//            (mBinding.rvRoundProductsToLoad.adapter as RoundRunProductAdapter).tare(mixerWeight)
             delay(100)
             return@launch
         }
