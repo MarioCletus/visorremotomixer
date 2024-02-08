@@ -29,7 +29,7 @@ import com.basculasmagris.visorremotomixer.databinding.FragmentHomeBinding
 import com.basculasmagris.visorremotomixer.model.entities.*
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
-import com.basculasmagris.visorremotomixer.utils.ConvertStringToZip
+import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.utils.Helper.Companion.getCurrentUser
 import com.basculasmagris.visorremotomixer.utils.Helper.Companion.setProgressDialog
@@ -661,12 +661,14 @@ class HomeFragment : BottomSheetDialogFragment() {
         val permission4 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
         val permission5 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_SCAN)
         val permission6 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_CONNECT)
+        val permission7 = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_PRIVILEGED)
         if (permission1 != PackageManager.PERMISSION_GRANTED
             || permission2 != PackageManager.PERMISSION_GRANTED
             || permission3 != PackageManager.PERMISSION_GRANTED
             || permission4 != PackageManager.PERMISSION_GRANTED
             || permission5 != PackageManager.PERMISSION_GRANTED
             || permission6 != PackageManager.PERMISSION_GRANTED
+            || permission7 != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(requireActivity(),
                 arrayOf(
@@ -675,7 +677,8 @@ class HomeFragment : BottomSheetDialogFragment() {
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.BLUETOOTH_SCAN,
-                    Manifest.permission.BLUETOOTH_CONNECT
+                    Manifest.permission.BLUETOOTH_CONNECT,
+                    Manifest.permission.BLUETOOTH_PRIVILEGED
                 ),
                 642)
         } else {
@@ -1078,7 +1081,7 @@ class HomeFragment : BottomSheetDialogFragment() {
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
             Log.i("command", "HomeFragment onCommandReceived ${message?.let { String(it) }}" )
-            val convertStringToZip = ConvertStringToZip()
+            val convertZip = ConvertZip()
             if(message == null || message.size<9){
                 Log.i(TAG,"command not enough large (${message?.size})")
                 return
@@ -1103,7 +1106,7 @@ class HomeFragment : BottomSheetDialogFragment() {
                         Log.i(TAG,"Exception $e")
                         return
                     }
-                    val str : String = convertStringToZip.decompress(byteArrayUtil,arraySize)
+                    val str : String = convertZip.decompressText(byteArrayUtil)
                     if(str.isNotEmpty()){
                         val gson = Gson()
                         val roundRunDetail : RoundRunDetail = gson.fromJson(str,  RoundRunDetail::class.java)
@@ -1182,30 +1185,6 @@ class HomeFragment : BottomSheetDialogFragment() {
             }
         }
 
-//        override fun onBondedDevices(device: List<BluetoothDevice>?) {
-//            Log.i(TAG, "ACT onBondedDevices")
-//            Log.i(TAG,"selectedMixerInFragment $selectedMixerInFragment")
-//            knowDevices?.forEach {
-//                Log.i(TAG, "knowDevices: ${it.name} | ${it.address}")
-//            }
-//            knowDevices = device
-//            val selectedMixer = getSelectedMixer()
-//            if (selectedMixer != null){
-//                myMenu?.findItem(R.id.action_change_mixer)?.title = "   " +selectedMixer.name
-//            }
-//
-//            mLocalMixers?.forEach {
-//                val alreadyExist = mLocalMixersCustomList.firstOrNull {  customItem ->
-//                    customItem.id == it.id
-//                }
-//
-//                val isLinked = knowDevices?.any { knowDevice -> knowDevice.address == it.mac } == true
-//                if (alreadyExist == null && isLinked){
-//                    val customList = CustomListItem(it.id, it.remoteId, it.name)
-//                    mLocalMixersCustomList.add(customList)
-//                }
-//            }
-//        }
     }
 
     fun connected(){

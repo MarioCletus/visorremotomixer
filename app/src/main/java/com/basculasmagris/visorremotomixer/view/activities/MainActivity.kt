@@ -2,6 +2,7 @@ package com.basculasmagris.visorremotomixer.view.activities
 
 import android.app.Activity
 import android.app.Dialog
+import android.bluetooth.BluetoothDevice
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -71,7 +72,7 @@ class MainActivity : AppCompatActivity() {
     )
     // Bluetooth
     var mService: BluetoothSDKService? = null
-
+    private var bluetoothDevice: BluetoothDevice? = null
     private var selectedMixerInActivity: Mixer? = null
     private var selectedTabletMixerInActivity: TabletMixer? = null
 
@@ -115,12 +116,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_tablet_mixer,
                 R.id.nav_config,
                 R.id.nav_product,
-//                R.id.nav_establishment,
-//                R.id.nav_corral,
-//                R.id.nav_mixer,
                 R.id.nav_diet,
-//                R.id.nav_round,
-//                R.id.nav_report,
                 R.id.nav_sync,
                 R.id.nav_user
             ), drawerLayout
@@ -201,6 +197,7 @@ class MainActivity : AppCompatActivity() {
             // Other result codes
             else -> {}
         }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     //Bluetooth
@@ -225,14 +222,10 @@ class MainActivity : AppCompatActivity() {
             val binder = service as BluetoothSDKService.LocalBinder
             mService = binder.getService()
             Log.i(TAG, "[MAIN] ****** CONECTADO")
-
-            //val fragmentInstance = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
-            //Log.i(TAG, "[MAIN] ****** CONECTADO ${navController.currentBackStackEntry.toString()}")
-            //if(fragmentInstance is HomeFragment){
-            //  Log.i(TAG, "[MAIN] ****** CONECTADO getBondedDevices")
-
-            //}
             mService?.LocalBinder()?.getBondedDevices()
+            mService?.let {
+                Helper.getServiceInstance().setBluetoothService(it)
+            }
         }
         override fun onServiceDisconnected(arg0: ComponentName) {
             Log.i(TAG, "[MAIN] ****** DESCONECTADO")
@@ -349,7 +342,6 @@ class MainActivity : AppCompatActivity() {
                                                     fragment.setTabletMixer(selectedTabletMixerInActivity!!)
                                                 }
                                             }
-
                                         }
                                     }
                                 }
@@ -357,21 +349,52 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-
             }
         }
     }
 
-    fun deviceDisconnected() {
+
+    fun changeStatusConnected(){
+        hideCustomProgressDialog()
+        Log.v("CONNECTION","Home connected")
+        showDeviceConnected()
+        Helper.saveBluetoothState(true)
+    }
+
+    fun changeStatusDisconnected(){
+        Log.i("CONNECTION","Home disconnected")
+        Helper.saveBluetoothState(false)
+        showDeviceDisconnected()
+        connectDevice(bluetoothDevice)
+    }
+    fun connectDevice(bluetoothDevice: BluetoothDevice?){
+        this.bluetoothDevice = bluetoothDevice
+        if(mService?.isConnected() == true){
+            changeStatusConnected()
+            return
+        }
+
+        bluetoothDevice?.let {deviceBluetooth->
+            if(mService?.LocalBinder()?.isConnected() == false){
+                Log.i(TAG,"connectDevice connectKnowDeviceWithTransfer $deviceBluetooth")
+                mService?.LocalBinder()?.connectKnowDeviceWithTransfer(deviceBluetooth)
+            }
+        }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            connectDevice(this.bluetoothDevice)
+        }, 2000)
+    }
+
+    private fun showDeviceDisconnected() {
         if(binding.appBarMain.toolbarMain.menu.size>0){
             binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon = ContextCompat.getDrawable(this,R.drawable.ic_bluetooth_disconnected_24px)
-            binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon?.setTint(getColor(R.color.white))
+            binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon?.setTint(getColor(R.color.color_full_red))
         }
     }
 
-    fun deviceConnected() {
-        hideCustomProgressDialog()
-        if(binding.appBarMain.toolbarMain.menu.size > 0 ){
+    private fun showDeviceConnected() {
+        if(binding.appBarMain.toolbarMain.menu.size>0){
             binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon = ContextCompat.getDrawable(this,R.drawable.ic_bluetooth_connected_24px)
             binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon?.setTint(getColor(R.color.white))
         }

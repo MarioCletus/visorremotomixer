@@ -167,3 +167,68 @@ data class DownloadReport (
     val corralRealWeight: Double,
     val corralDiffWeight: Double,
 ) : Parcelable
+
+
+
+/***************************************************************
+ * Para transmitir a remoto
+ ***************************************************************/
+
+@Parcelize
+data class MinRoundRunDetail (
+    val userDisplayName: String,
+    val round: MinRoundDetail,
+    var mixer: MinMixerDetail?,
+    var id: Long
+)  : Parcelable
+@Parcelize
+data class MinMixerDetail (
+    val name: String,
+    val description: String,
+    var id: Long
+) : Parcelable
+
+@Parcelize
+data class MinRoundDetail (
+    val name: String,
+    val description: String,
+    var diet: MinDietDetail,
+    var corrals: ArrayList<MinCorralDetail>,
+    var id: Long
+) : Parcelable
+
+@Parcelize
+data class MinCorralDetail (
+    val establishment: MinEstablishmentDetail,
+    val name: String,
+    val description: String,
+    val order: Int,
+    var weight: Long,
+    var customTargetWeight: Long,
+    var actulTargetWeight: Long,
+    var id: Long
+) : Parcelable
+
+@Parcelize
+data class MinEstablishmentDetail (
+    val name: String,
+    val description: String,
+    var id: Long
+) : Parcelable
+
+@Parcelize
+data class MinDietDetail (
+    val name: String,
+    val description: String,
+    var products: ArrayList<MinProductDetail>,
+    val id: Long
+) : Parcelable
+@Parcelize
+data class MinProductDetail (
+    val name: String,
+    val description: String,
+    val order: Int,
+    var weight: Long,
+    var targetWeight: Long,
+    val id: Long
+) : Parcelable

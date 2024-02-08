@@ -87,31 +87,6 @@
             android:src="@drawable/ic_more"
             android:visibility="gone"/>
 
-        <Button
-            android:id="@+id/btn_delete_user"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Eliminar"
-            android:textSize="11sp"
-            android:background="@drawable/btn_user_delete_edit"
-            android:textColor="@color/color_acent_green"
-            app:layout_constraintTop_toBottomOf="@id/tv_user_description"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/fl_user_frameLayout"
-            app:layout_constraintEnd_toStartOf="@id/btn_edit_user"/>
-
-        <Button
-            android:id="@+id/btn_edit_user"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Editar"
-            android:textSize="11sp"
-            android:background="@drawable/btn_user_delete_edit"
-            android:textColor="@color/color_acent_green"
-            app:layout_constraintTop_toBottomOf="@id/tv_user_description"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

@@ -32,9 +32,7 @@ class UserAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<UserA
     class ViewHolder (view: ItemUserLayoutBinding) : RecyclerView.ViewHolder(view.root) {
         val tvUserTitle = view.tvUserTitle
         val tvUserDescription = view.tvUserDescription
-        val ibMore = view.ibMore
-        val btnDeleteUser = view.btnDeleteUser
-        val btnEditUser = view.btnEditUser
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -78,11 +76,7 @@ class UserAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<UserA
 //            fragment.requireActivity().startActivity(intent)
 //        }
 
-        holder.btnDeleteUser.setOnClickListener {
-            if (fragment is UserListFragment) {
-                fragment.deleteUser(user)
-            }
-        }
+
     }
 
     override fun getItemCount(): Int {

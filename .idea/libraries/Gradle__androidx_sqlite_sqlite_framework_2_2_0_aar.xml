@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.sqlite:sqlite-framework:2.2.0@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/05c246d4441d8b4ba1e5827c6bc228c5/transformed/sqlite-framework-2.2.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/05c246d4441d8b4ba1e5827c6bc228c5/transformed/sqlite-framework-2.2.0/res" />
-      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/05c246d4441d8b4ba1e5827c6bc228c5/transformed/sqlite-framework-2.2.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/942041327aebc8a31113c76ce5b00a34/transformed/sqlite-framework-2.2.0/res" />
+      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/942041327aebc8a31113c76ce5b00a34/transformed/sqlite-framework-2.2.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/942041327aebc8a31113c76ce5b00a34/transformed/sqlite-framework-2.2.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

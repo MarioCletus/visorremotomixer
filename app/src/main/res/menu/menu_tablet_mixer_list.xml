@@ -4,7 +4,8 @@
 
     <item
         android:id="@+id/bluetooth_mixer_status"
-        android:icon="@drawable/ic_bluetooth_40dp"
+        android:icon="@drawable/ic_bluetooth_disconnected_24px"
+        android:iconTint="@color/color_full_red"
         android:title="bluetooth"
         android:orderInCategory="90"
         app:showAsAction="always"

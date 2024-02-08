@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.lifecycle:lifecycle-runtime-ktx:2.5.0@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/13bab60e82a705e8c8c16fff7db0dbd1/transformed/jetified-lifecycle-runtime-ktx-2.5.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/13bab60e82a705e8c8c16fff7db0dbd1/transformed/jetified-lifecycle-runtime-ktx-2.5.0/res" />
-      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/13bab60e82a705e8c8c16fff7db0dbd1/transformed/jetified-lifecycle-runtime-ktx-2.5.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/b58181441fd059c87a1987505175419e/transformed/jetified-lifecycle-runtime-ktx-2.5.0/res" />
+      <root url="jar://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/b58181441fd059c87a1987505175419e/transformed/jetified-lifecycle-runtime-ktx-2.5.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/b58181441fd059c87a1987505175419e/transformed/jetified-lifecycle-runtime-ktx-2.5.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

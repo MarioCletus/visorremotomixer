@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
@@ -9,9 +8,12 @@
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/drawable/item_round_run_product_select_bkg.xml" value="0.129" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/activity_add_update_establishment.xml" value="0.1765625" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/activity_add_update_remote_viewer.xml" value="0.16822916666666668" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/activity_add_update_tablet_mixer.xml" value="0.264" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/activity_main.xml" value="0.23046875" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/activity_mixer_config.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/activity_remote_viewer_config.xml" value="0.25052083333333336" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/activity_round_run.xml" value="0.26705370101596515" />
+        <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/activity_tablet_mixer_config.xml" value="0.264" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/app_bar_main.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/content_main.xml" value="0.13359375" />
         <entry key="..\:/AndroidStudioProjects/visor-remoto-mixer/app/src/main/res/layout/dialog_custom_list.xml" value="0.153125" />
@@ -320,7 +322,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

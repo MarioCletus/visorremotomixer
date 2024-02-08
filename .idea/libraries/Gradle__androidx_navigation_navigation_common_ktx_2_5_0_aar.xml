@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.navigation:navigation-common-ktx:2.5.0@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/e484c8810be033c0550f1b2c49dae3bd/transformed/navigation-common-ktx-2.5.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/e484c8810be033c0550f1b2c49dae3bd/transformed/navigation-common-ktx-2.5.0/res" />
-      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/e484c8810be033c0550f1b2c49dae3bd/transformed/navigation-common-ktx-2.5.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/8c55e496fd153a6c9f4694a4b4de1092/transformed/navigation-common-ktx-2.5.0/res" />
+      <root url="jar://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/8c55e496fd153a6c9f4694a4b4de1092/transformed/navigation-common-ktx-2.5.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/8c55e496fd153a6c9f4694a4b4de1092/transformed/navigation-common-ktx-2.5.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

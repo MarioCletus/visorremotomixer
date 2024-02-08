@@ -20,6 +20,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.model.entities.*
+import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
 import com.basculasmagris.visorremotomixer.utils.Constants.LOGIN_OFFLINE_INVALID_CREDENTIALS
 import com.basculasmagris.visorremotomixer.utils.Constants.LOGIN_OFFLINE_NO_DATA
 import com.basculasmagris.visorremotomixer.utils.Constants.LOGIN_OFFLINE_OK
@@ -54,6 +55,22 @@ class Helper {
         private const val MINUTES_PER_HOUR = 60
         private const val SECONDS_PER_MINUTE = 60
         private const val SECONDS_PER_HOUR = SECONDS_PER_MINUTE * MINUTES_PER_HOUR
+
+        var isBluetoothEnabled: Boolean = false
+        private var mService: BluetoothSDKService? = null
+        private var serviceInstance: Helper? = null
+
+
+            private set  // Para evitar que sea modificado desde fuera de la clase
+        fun saveBluetoothState(isBluetoothEnabled: Boolean) {
+            this.isBluetoothEnabled = isBluetoothEnabled
+        }
+        fun getServiceInstance(): Helper {
+            if (serviceInstance == null) {
+                serviceInstance = Helper()
+            }
+            return serviceInstance!!
+        }
 
         fun logOut(context: Context){
             var sharedpreferences: SharedPreferences? = null
@@ -149,9 +166,9 @@ class Helper {
             return LocalDateTime.parse(date, DateTimeFormatter.ofPattern(originFormat)).format(DateTimeFormatter.ofPattern(targetFormat))
         }
         fun diffDate(startDate: String, endDate: String, originFormat: String) : String {
-             var startDateDt = LocalDateTime.parse(startDate, DateTimeFormatter.ofPattern(originFormat))
-             var endDateDt = LocalDateTime.parse(endDate, DateTimeFormatter.ofPattern(originFormat))
-             val duration = Duration.between(startDateDt, endDateDt)
+            var startDateDt = LocalDateTime.parse(startDate, DateTimeFormatter.ofPattern(originFormat))
+            var endDateDt = LocalDateTime.parse(endDate, DateTimeFormatter.ofPattern(originFormat))
+            val duration = Duration.between(startDateDt, endDateDt)
             val seconds = duration.seconds
             val hours: Long = seconds / SECONDS_PER_HOUR
             val minutes: Long = seconds % SECONDS_PER_HOUR / SECONDS_PER_MINUTE
@@ -281,6 +298,23 @@ class Helper {
             val accessToken = sharedpreferences.getString(PREF_LOGIN_KEY_ACCESS_TOKEN, "").toString()
             val password = sharedpreferences.getString(PREF_LOGIN_KEY_ENCRYPTED_PASSWORD, "").toString()
 
+            if(username == null || username.isEmpty()){
+                return UserRemote(
+                    0,
+                    "palero",
+                    "Sin usuario",
+                    "",
+                    "",
+                    "",
+                    "",
+                    1,
+                    RoleRemote(1,""),
+                    "",
+                    "palero",
+                    "",
+                    0
+                )
+            }
             return UserRemote(
                 id,
                 username,
@@ -324,6 +358,14 @@ class Helper {
             Log.i(TAG_DEBUG, "******************************")
         }
     }
+
+    fun setBluetoothService(service: BluetoothSDKService) {
+        mService = service
+    }
+
+    fun getBluetoothService(): BluetoothSDKService? {
+        return mService
+    }
 }
 
 class MarginItemDecoration(private val spaceSize: Int) : RecyclerView.ItemDecoration() {
@@ -339,19 +381,6 @@ class MarginItemDecoration(private val spaceSize: Int) : RecyclerView.ItemDecora
             left = spaceSize
             right = spaceSize
             bottom = spaceSize
-        }
-    }
-}
-
-class MarginItemDecorationHorizontal(private val spaceSize: Int) : RecyclerView.ItemDecoration() {
-    override fun getItemOffsets(
-        outRect: Rect, view: View,
-        parent: RecyclerView,
-        state: RecyclerView.State
-    ) {
-        with(outRect) {
-            left = spaceSize
-            right = spaceSize
         }
     }
 }

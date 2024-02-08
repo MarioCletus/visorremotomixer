@@ -159,6 +159,7 @@ class RoundRunProductAdapter (
     fun selectProduct(position : Int){
         if(position < filteredProducts.size){
             selectedPosition = position
+            notifyDataSetChanged()
         }
     }
 

@@ -157,4 +157,6 @@ object Constants {
     val CMD_CORRAL = "COR"
     val CMD_NXTCORRAL = "NXC"
     val CMD_WEIGHT = "WEI"
+    val CMD_WEIGHT_LOAD = "WEL"
+    val CMD_WEIGHT_DWNL = "WED"
 }

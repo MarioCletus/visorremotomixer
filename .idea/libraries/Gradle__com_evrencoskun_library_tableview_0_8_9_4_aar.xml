@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.evrencoskun.library:tableview:0.8.9.4@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/60913e1a040f19a3661b2e4d0bf19338/transformed/jetified-tableview-0.8.9.4/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/60913e1a040f19a3661b2e4d0bf19338/transformed/jetified-tableview-0.8.9.4/res" />
-      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/60913e1a040f19a3661b2e4d0bf19338/transformed/jetified-tableview-0.8.9.4/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/c6d2620eabc9329169f6099b664864bb/transformed/jetified-tableview-0.8.9.4/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/c6d2620eabc9329169f6099b664864bb/transformed/jetified-tableview-0.8.9.4/res" />
+      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/c6d2620eabc9329169f6099b664864bb/transformed/jetified-tableview-0.8.9.4/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/modules-2/files-2.1/com.evrencoskun.library/tableview/0.8.9.4/5ef68092efe0c65ab9c14815721cb08fbb0ea870/tableview-0.8.9.4-javadoc.jar!/" />

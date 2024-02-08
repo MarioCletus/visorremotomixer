@@ -8,7 +8,13 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -16,33 +22,43 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.FragmentRemoteMixerBinding
-import com.basculasmagris.visorremotomixer.model.entities.*
+import com.basculasmagris.visorremotomixer.model.entities.CorralDetail
+import com.basculasmagris.visorremotomixer.model.entities.DietDetail
+import com.basculasmagris.visorremotomixer.model.entities.Mixer
+import com.basculasmagris.visorremotomixer.model.entities.MixerDetail
+import com.basculasmagris.visorremotomixer.model.entities.ProductDetail
+import com.basculasmagris.visorremotomixer.model.entities.RoundRunDetail
+import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
-import com.basculasmagris.visorremotomixer.utils.ConvertStringToZip
-import com.basculasmagris.visorremotomixer.utils.Helper.Companion.getCurrentUser
-import com.basculasmagris.visorremotomixer.utils.MarginItemDecorationHorizontal
+import com.basculasmagris.visorremotomixer.utils.ConvertZip
+import com.basculasmagris.visorremotomixer.utils.MarginItemDecoration
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunCorralDownloadAdapter
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunProductAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
-import java.util.*
+import java.util.Locale
+import java.util.Timer
+import java.util.TimerTask
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToLong
 
 class RemoteMixerFragment : BottomSheetDialogFragment() {
 
+    private var countMsg: Int = 0
     private var countNoLoad: Int = 0
     lateinit var mBinding: FragmentRemoteMixerBinding
     private val TAG: String = "DEBMixerVR"
@@ -69,22 +85,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private var corralDetail : CorralDetail? = null
     var roundRunCorralAdapter : RoundRunCorralDownloadAdapter? = null
 
-    private var bSyncroSequence: Boolean = false
-    private var bSyncroUser: Boolean = false
-    private var bSyncroMixer: Boolean = false
-    private var bSyncroRound: Boolean = false
-    private var bSyncroProduct: Boolean = false
-    private var bSyncroCorral: Boolean = false
     private var bInLoad: Boolean = false
     private var bInDownload : Boolean = false
 
     private var tick: Long = 0L
-    private var tickCountMessages : Long = 0L
-    private var totalWeightLoaded: Double = 0.0
 
-    //    private var showSnackbar = true
     private var isConnected = false
-//    private var snackbar: Snackbar? = null
     private var selectedMixerInFragment: Mixer? = null
     private var selectedTabletMixerInFragment: TabletMixer? = null
     private var tabletMixerBluetoothDevice : BluetoothDevice? = null
@@ -92,9 +98,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
     private var targetReachedDialog: AlertDialog? = null
     private var dialogCountDown: AlertDialog? = null
-//    private var tabletMixer : TabletMixer? = null
-
-    private var countConection : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(TAG,"onCreate")
@@ -121,14 +124,16 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         mBinding.btnJump.setOnClickListener{
             Log.i(TAG, "btnJump")
-            val position = roundRunProductAdapter?.selectedPosition?.plus(1)
-            if(position != null && roundRunProductAdapter != null && position < roundRunProductAdapter!!.itemCount){
-                val nextItem = currentRoundRunDetail?.round?.diet?.products?.get(position)
-                nextItem.let {product->
-                    targetReachedDialog = dialogAlertTargetWeight(product!!.name)
+            roundRunProductAdapter?.let { productAdapter->
+                val position = productAdapter.selectedPosition.plus(1)
+                if(position < productAdapter.itemCount){
+                    val nextItem = currentRoundRunDetail?.round?.diet?.products?.get(position)
+                    nextItem?.let { productDetail->
+                        targetReachedDialog = dialogAlertTargetWeight(productDetail.name)
+                    }
+                }else{
+                    targetReachedDialog = dialogAlertTargetWeight("descarga")
                 }
-            }else{
-                targetReachedDialog = dialogAlertTargetWeight("descarga")
             }
         }
 
@@ -145,7 +150,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
 
         loadRoundDetail()
-        mBinding.rvMixerProductsToLoad.addItemDecoration(MarginItemDecorationHorizontal(resources.getDimensionPixelSize(R.dimen.margin_recycler_horizontal)))
+        mBinding.rvMixerProductsToLoad.addItemDecoration(MarginItemDecoration(resources.getDimensionPixelSize(R.dimen.margin_recycler_horizontal)))
 
         //Conectar bluetooth
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
@@ -154,9 +159,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     }
 
     private fun loadRoundDetail() {
-
         currentRoundRunDetail?.round?.diet?.let { dietDetail ->
-            mBinding.rvMixerProductsToLoad.layoutManager = LinearLayoutManager(requireActivity(),0,false)
+            mBinding.rvMixerProductsToLoad.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL,false)
             if(bInLoad){
                 Log.i(TAG,"loadAdapter RoundRunProductAdapter")
                 roundRunProductAdapter =  RoundRunProductAdapter(
@@ -168,15 +172,17 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
                 mBinding.rvMixerProductsToLoad.adapter = roundRunProductAdapter
 
-
                 var countProductPosition = 0
+                var prevProduct : ProductDetail? = null
                 currentRoundRunDetail?.round?.diet?.products?.let { products ->
-                    products.forEach{productInProducts ->
-                        if(productInProducts.finalWeight == 0.0){
-                            currentProductDetail = productInProducts
+                    products.forEach{ productInRound ->
+                        if(productInRound.finalWeight == 0.0){
+                            currentProductDetail = productInRound
                             roundRunProductAdapter?.selectProduct(countProductPosition)
+                            previousProductDetail = prevProduct
                             return@forEach
                         }
+                        prevProduct = productInRound
                         countProductPosition++
                     }
                 }
@@ -190,13 +196,16 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 mBinding.rvMixerProductsToLoad.adapter = roundRunCorralAdapter
 
                 var countCorralPosition = 0
+                var prevCorral: CorralDetail? = null
                 currentRoundRunDetail?.round?.corrals?.let { corrals ->
-                    corrals.forEach{corralInRound ->
+                    corrals.forEach{ corralInRound ->
                         if(corralInRound.finalWeight == 0.0){
                             currentCorralDetail = corralInRound
                             roundRunCorralAdapter?.selectCorral(countCorralPosition)
+                            previousCorralDetail = prevCorral
                             return@forEach
                         }
+                        prevCorral = corralInRound
                         countCorralPosition++
                     }
                 }
@@ -216,7 +225,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         mBinding = FragmentRemoteMixerBinding.inflate(inflater, container, false)
 
 
-//        // Navigation Menu
+        // Navigation Menu
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -229,11 +238,21 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
                     R.id.bluetooth_tablet_mixer -> {
-                        Log.i(TAG,"touch bluetooth icon")
+                        Log.v(TAG,"Force connection")
+                        val deviceBluetooth = knowDevices?.firstOrNull { bd->
+                            bd.address == selectedTabletMixerInFragment?.mac
+                        }
+                        deviceBluetooth?.let {
+                            Log.v(TAG,"Force connection ${it.name}")
+                            (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
+                            (requireActivity() as MainActivity).mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                            (requireActivity() as MainActivity).showCustomProgressDialog()
+                        }
                         return true
                     }
-                    R.id.menu_selected_remote_mixer -> {
+                    R.id.menu_selected_remote_tablet -> {
                         Log.i(TAG,"touch tablet icon")
+                        goToTabletMixerListFragment()
                         return true
                     }
                     else -> false
@@ -281,7 +300,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         Log.i(TAG,"onResume fragment: $this")
         if(activity is MainActivity){
             Log.i(TAG,"activity is MainActivity $activity")
-            activity!!.getSavedTabletMixer()
+            (requireActivity() as MainActivity).getSavedTabletMixer()
         }
 
         if(estableTimer != null ){
@@ -294,120 +313,54 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 Log.i(TAG,"init timerTask ${countInResume++}: $timerTask estableTimer $estableTimer")
             }
             override fun run() {
-//                Log.i("timer", "REMOTE MIXER mixerWeight:$mixerWeight | lastUpdate: $lastUpdate |  Time:${tick}   timerTask : ${timerTask}          estableTimer:${estableTimer}")
                 tick ++
-                if(tick == 5L){
-                    MainScope().launch {
-                        if(!isConnected){
-                            if(activity?.mService != null && tabletMixerBluetoothDevice != null){
-                                Log.i(TAG,"connectKnowDeviceWithTransfer L815 ${countConection++}")
-                                activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(tabletMixerBluetoothDevice!!)
-                            }
+
+                if(bInLoad )
+                    productDetail?.let {productDetail ->
+                        activity?.let {mainActivity ->
+                            if(productDetail.currentWeight-productDetail.initialWeight > productDetail.targetWeight*0.9 && bInDownload){
+                                if(mBinding.tvCurrentProductWeightPending.currentTextColor== ContextCompat.getColor(mainActivity, R.color.white)){
+                                    if(productDetail.currentWeight-productDetail.initialWeight > productDetail.targetWeight){
+                                        mBinding.tvCurrentProductWeightPending.setTextColor(
+                                            ContextCompat.getColor(mainActivity, R.color.color_yellow))
+                                        }else{
+                                            mBinding.tvCurrentProductWeightPending.setTextColor(
+                                                ContextCompat.getColor(mainActivity, R.color.color_orange))
+                                        }
+                                    }else{
+                                        mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(mainActivity, R.color.white))
+                                    }
+                                }else{
+                                    mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(mainActivity, R.color.white))
+                                }
+                                if(productDetail.currentWeight-productDetail.initialWeight > productDetail.targetWeight && noPrevAlert){
+                                    countGreaterThanTarget++
+                                }
 
                         }
                     }
-                }
-                if(!bSyncroSequence){
-                    if(!bSyncroUser){
-                        val userRemote = getCurrentUser(requireActivity())
-                        val userIdStr = String.format("%06d",userRemote.id)
-                        val userName = userRemote.displayName
-                        val userNameLenght = String.format("%02d",userName.length)
-                        val msg = "CMD${Constants.CMD_USER}$userIdStr$userNameLenght$userName"
-                        activity?.mService?.LocalBinder()?.write(msg.toByteArray())
-                    }else if(!bSyncroMixer){
-                        requestMixer()
-                    }else if(!bSyncroRound && (bInLoad || bInDownload) ){
-                        Log.i(TAG,"bSyncroRound = false")
-                        requestRoundRunDetail()
-                    }else if(!bSyncroProduct && bInLoad){
-                        requestProduct()
-                    }else if(!bSyncroCorral && bInDownload){
-                        requestCorral()
-                    }else if((bSyncroProduct || bSyncroCorral) && bSyncroRound && bSyncroMixer && bSyncroUser){
-                        bSyncroSequence = true
-                    }
-                }
 
-                if(bInLoad && productDetail!=null && activity!=null){
-                    if(productDetail!!.currentWeight-productDetail!!.initialWeight > productDetail!!.targetWeight*0.9 && bInDownload){
-                        if(mBinding.tvCurrentProductWeightPending.currentTextColor== ContextCompat.getColor(activity!!, R.color.white)){
-                            if(productDetail!!.currentWeight-productDetail!!.initialWeight > productDetail!!.targetWeight){
-                                mBinding.tvCurrentProductWeightPending.setTextColor(
-                                    ContextCompat.getColor(activity!!,
-                                    R.color.color_yellow
-                                ))
+                if(bInDownload)
+                    corralDetail?.let { corralDetail ->
+                        activity?.let {mainActivity ->
+                            if(corralDetail.initialWeight - corralDetail.currentWeight > corralDetail.actualTargetWeight*0.9){
+                                if(mBinding.tvCurrentProductWeightPending.currentTextColor== ContextCompat.getColor(activity!!, R.color.white)){
+                                    if(corralDetail.initialWeight - corralDetail.currentWeight > corralDetail.actualTargetWeight){
+                                        mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(mainActivity, R.color.color_yellow))
+                                    }else{
+                                        mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(mainActivity, R.color.color_orange))
+                                    }
+                                }else{
+                                    mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(mainActivity, R.color.white))
+                                }
                             }else{
-                                mBinding.tvCurrentProductWeightPending.setTextColor(
-                                    ContextCompat.getColor(activity!!,
-                                    R.color.color_orange))
+                                mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(mainActivity, R.color.white))
                             }
-
-                        }else{
-                            mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(activity!!, R.color.white))
-                        }
-                    }else{
-                        mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(activity!!, R.color.white))
-                    }
-
-                    if(productDetail!!.currentWeight-productDetail!!.initialWeight > productDetail!!.targetWeight && noPrevAlert){
-                        countGreaterThanTarget++
-                    }
-                }
-
-                if(bInDownload && corralDetail!=null && activity!=null){
-                    if(corralDetail!!.initialWeight - corralDetail!!.currentWeight > corralDetail!!.actualTargetWeight*0.9){
-                        if(mBinding.tvCurrentProductWeightPending.currentTextColor== ContextCompat.getColor(activity!!, R.color.white)){
-                            if(corralDetail!!.initialWeight - corralDetail!!.currentWeight > corralDetail!!.actualTargetWeight){
-                                mBinding.tvCurrentProductWeightPending.setTextColor(
-                                    ContextCompat.getColor(activity!!,
-                                        R.color.color_yellow
-                                    ))
-                            }else{
-                                mBinding.tvCurrentProductWeightPending.setTextColor(
-                                    ContextCompat.getColor(activity!!,
-                                        R.color.color_orange))
-                            }
-
-                        }else{
-                            mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(activity!!, R.color.white))
-                        }
-                    }else{
-                        mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(activity!!, R.color.white))
-                    }
-
-                    if(corralDetail!!.currentWeight-corralDetail!!.initialWeight > corralDetail!!.actualTargetWeight && noPrevAlert){
-                        countGreaterThanTarget++
-                    }
-                }
-
-                //Check connection
-
-                if (tick - tickCountMessages > 5){
-                    if(tick%10 == 0L){
-                        Log.i("CONEXION", "Conexión: NO ${lastUpdate} ${activity?.isCustomProgresDialogShowing()}")
-                        changeStatusConnection(false)
-                        MainScope().launch {
-                            isConnected = true
-                            deviceDisconnected()
-                        }
-                        if(tabletMixerBluetoothDevice != null && activity?.isCustomProgresDialogShowing() == false){
-                            tabletMixerBluetoothDevice?.let {
-                                Log.i("CONEXION","Reconectando $tabletMixerBluetoothDevice")
-                                Log.i(TAG,"connectKnowDeviceWithTransfer L386 ${countConection++}")
-                                activity?.mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                            if(corralDetail.currentWeight-corralDetail.initialWeight > corralDetail.actualTargetWeight && noPrevAlert){
+                                countGreaterThanTarget++
                             }
                         }
-                            }
-                } else if(tick>5){
-                    Log.i("CONSTATUS", "Conexión: SI | Tiempo: ${lastUpdate}  ${tick-tickCountMessages}  $tick")
-                    if(isAdded){
-                        Log.i("CONSTATUS", "Change status connection rt")
-                        changeStatusConnection(true)
-                    }else{
-                        Log.i("CONEXION", "Conexión: NO | Tiempo: ${lastUpdate}")
                     }
-                }
 
             }
         }
@@ -433,14 +386,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         override fun onDeviceConnected(device: BluetoothDevice?) {
             isConnected = false
-            deviceConnected()
+            (requireActivity() as MainActivity).changeStatusConnected()
             Log.i(TAG, "onDeviceConnected ${device?.name} ${device?.address}")
         }
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
-            deviceConnected()
-            tickCountMessages = tick
-            val convertStringToZip = ConvertStringToZip()
+            (requireActivity() as MainActivity).changeStatusConnected()
             if(message == null || message.size<9){
                 Log.i(TAG,"command not enough large (${message?.size})")
                 return
@@ -449,189 +400,72 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             val command = messageStr.substring(0,3)
             Log.i("SHOWCOMAND","command $command")
             when (command){
-                Constants.CMD_INI->{
-                    bSyncroSequence = false
-                    bSyncroProduct = false
-                    bSyncroCorral = false
-                    bSyncroRound = false
-                    roundRunProductAdapter?.endLoad = false
-                    val msg = "CMD${Constants.CMD_ACK}${Constants.CMD_INI}"
-                    activity?.mService?.LocalBinder()?.write(msg.toByteArray())
-                }
-
-                Constants.CMD_START_LOAD->{
-                    Log.i(TAG,"Start load")
-                    bSyncroSequence = false
-                    bSyncroProduct = false
-                    bSyncroCorral = false
-                    bSyncroRound = false
-                    roundRunProductAdapter?.endLoad = false
-                    mBinding.tvTitleProduct.text = getString(R.string.cargar)
-                    val msg = "CMD${Constants.CMD_ACK}${Constants.CMD_START_LOAD}"
-                    activity?.mService?.LocalBinder()?.write(msg.toByteArray())
-                }
-
-                Constants.CMD_START_DOWNLOAD->{
-                    Log.i(TAG,"Start download")
-                    bSyncroSequence = false
-                    bSyncroProduct = false
-                    bSyncroCorral = false
-                    bSyncroRound = false
-                    roundRunCorralAdapter?.endLoad = false
-                    mBinding.tvTitleProduct.text = getString(R.string.descargar)
-                    val msg = "CMD${Constants.CMD_ACK}${Constants.CMD_START_DOWNLOAD}"
-                    activity?.mService?.LocalBinder()?.write(msg.toByteArray())
-                }
-
-                Constants.CMD_WEIGHT->{
-                    lastUpdate = LocalDateTime.now()
-                    try{
-                        val weight = String(message,5,8).toLong()
-
-                        val progress = String(message,13,3).toInt()
-                        Log.i("WEIGHT","CMD_WEIGHT ${String(message)}   mixerWeight $mixerWeight")
-                        when(String(message,3,1)){
-                            "L"->{
-                                countNoLoad = 0
-                                mixerWeight = (productDetail?.targetWeight?.minus(weight.toDouble()) ?: 0.0)
-                                roundRunProductAdapter?.updateWeight(mixerWeight)
-                                productDetail?.currentWeight = mixerWeight
-                                mBinding.tvCurrentProductWeightPending.text = "${String(message,4,1)}${weight}Kg"
-                                mBinding.pbCurrentProduct.progress = progress
-                                if(bInLoad == false){
-                                    mBinding.tvTitleProduct.text = getString(R.string.cargar)
-                                }
-                                bInLoad = true
-                                bInDownload = false
-                                mBinding.tvCurrentProduct.text = productDetail?.name
-                            }
-                            "D"->{
-                                countNoLoad = 0
-                                mixerWeight = (corralDetail?.actualTargetWeight?.minus(weight.toDouble()) ?: 0.0)
-                                roundRunCorralAdapter?.updateCorralWeight(mixerWeight)
-                                productDetail?.currentWeight = mixerWeight
-                                mBinding.tvCurrentProductWeightPending.text = "${String(message,4,1)}${weight}Kg"
-                                mBinding.pbCurrentProduct.progress = progress
-                                if(bInDownload == false){
-                                    mBinding.tvTitleProduct.text = getString(R.string.descargar)
-                                }
-                                bInDownload = true
-                                bInLoad = false
-                                mBinding.tvCurrentProduct.text = corralDetail?.name
-                            }
-                            " "->{
-                                countNoLoad++
-                                if(countNoLoad>50){
-                                    countNoLoad = 0
-                                    mBinding.tvTitleProduct.text = getString(R.string.mixer)
-
-                                    val mutableList = mutableListOf<ProductDetail>()
-                                    val dietDetail = DietDetail (
-                                        name = "",
-                                        description = "",
-                                        remoteId = 0L,
-                                        updatedDate = "",
-                                        "",
-                                        usePercentage = false,
-                                        products = mutableList,
-                                        id = 0L
-                                    )
-
-                                    val emptyAdapter =  RoundRunProductAdapter(
-                                        this@RemoteMixerFragment,
-                                        dietDetail,
-                                        defaultStep)
-
-                                    mBinding.rvMixerProductsToLoad.adapter = emptyAdapter
-                                }
-                                mBinding.tvCurrentProductWeightPending.text = "${String(message,4,1)}${weight}Kg"
-                                mBinding.pbCurrentProduct.progress = progress
-                                bInLoad = false
-                                bInDownload = false
-                                mBinding.tvCurrentProduct.text = getString(R.string.mixer)
-                            }
-                            else->{
-                                bInLoad = false
-                                bInDownload = false
-                                mBinding.tvCurrentProduct.text = getString(R.string.mixer)
-                            }
-                        }
-                    }catch (e : Exception){
-                        Log.i(TAG,"CMD_WEIGHT Exception $e")
-                    }
-
-                }
 
                 Constants.CMD_ROUNDDETAIL->{
-                    Log.i(TAG,"CMD_ROUNDDETAIL")
-                    val byteArrayUtil = message.copyOfRange(9,message.size-1)
-                    val arraySize: Int
-                    try{
-                        arraySize = String(message,3,6).toInt()
-                        val str : String = convertStringToZip.decompress(byteArrayUtil,arraySize)
-                        Log.i("Json","arraySize $arraySize Json $str")
-                        if(str.isNotEmpty()){
-                            val gson = Gson()
-                            val roundRunDetail : RoundRunDetail = gson.fromJson(str,  RoundRunDetail::class.java)
-                            if(currentRoundRunDetail != null && currentRoundRunDetail!!.id == roundRunDetail.id){
-                                Log.i(TAG,"notifyDataSetChanged roundRunDetail $roundRunDetail")
-                                if(bInLoad)
-                                    roundRunProductAdapter?.updateRound(roundRunDetail)
-                                if(bInDownload)
-                                    roundRunCorralAdapter?.updateRound(roundRunDetail)
-                            }else{
-                                Log.i(TAG,"new roundRunDetail $roundRunDetail")
-                                currentRoundRunDetail = roundRunDetail
-                                currentRoundRunDetail.let {
-                                    val product = roundRunDetail.round.diet.products.firstOrNull{ productDetail->
-                                        productDetail.remoteId == currentProductDetail?.remoteId
-                                    }
-                                    if (product != null) {
-                                        currentProductDetail?.initialWeight = product.initialWeight
-                                        roundRunProductAdapter?.updateInicial(product.initialWeight)
-                                        val productIndex = roundRunProductAdapter?.selectedPosition
-                                        productIndex.let {position->
-                                            currentRoundRunDetail?.round?.diet?.products?.get(position!!)?.initialWeight = product.initialWeight
-                                        }
-                                    }
-                                    val corral = roundRunDetail.round.corrals.firstOrNull{ corral->
-                                        corral.remoteId == currentCorralDetail?.remoteId
-                                    }
-                                    if (corral != null) {
-                                        currentCorralDetail?.initialWeight = corral.initialWeight
-                                        roundRunCorralAdapter?.updateInicial(corral.initialWeight)
-                                        val productIndex = roundRunProductAdapter?.selectedPosition
-                                        productIndex.let {position->
-                                            currentRoundRunDetail?.round?.corrals?.get(position!!)?.initialWeight = corral.initialWeight
-                                        }
-                                    }
 
-                                    loadRoundDetail()
-                                    it?.mixer.let {mixerDetail->
-                                        val mixer = Mixer(
-                                            mixerDetail!!.name,
-                                            mixerDetail.description,
-                                            mixerDetail.mac,
-                                            mixerDetail.btBox,
-                                            mixerDetail.tara,
-                                            mixerDetail.calibration,
-                                            mixerDetail.rfid,
-                                            mixerDetail.remoteId,
-                                            mixerDetail.updatedDate,
-                                            mixerDetail.archiveDate,
-                                            true,
-                                            mixerDetail.id
-                                        )
-                                        setMixer(mixer)
-                                        bSyncroMixer = true
-                                    }
-                                }
+                    val convertZip = ConvertZip()
+                    Log.i(TAG,"message.lenght ${message.size}")
+                    val byteArrayUtil = message.copyOfRange(9,message.size-1)
+                    Log.i(TAG,"CMD_ROUNDDETAIL ${messageStr.length} byteArrayUtil ${byteArrayUtil.size} ")
+                    try{
+
+                        val jsonString : String = convertZip.decompressText(byteArrayUtil)
+
+                        var count = 0
+                        var index = 0
+                        val mult = 256
+                        Log.i("Json","jsonString lenght ${jsonString.length}")
+                        while( (count*mult) + mult < jsonString.length){
+                            count ++
+                            Log.i("Json","jsonString $count ${jsonString.substring(index,count*mult)}")
+                            index = count * mult
+                        }
+                        Log.i("Json","jsonString * $count ${jsonString.substring(index,jsonString.length-1)}")
+
+
+                        if(jsonString.isNotEmpty()){       //TODO hay que verificar bien esto. Me parece que lo mas adecuado es que actalice el adapter cada 1seg y listo!
+//                            val gson = Gson()
+
+                            val objectMapper = ObjectMapper().registerKotlinModule()
+                            val roundRunDetail = objectMapper.readValue<RoundRunDetail>(jsonString)
+
+
+//                            val roundRunDetail : RoundRunDetail = gson.fromJson(jsonString,  RoundRunDetail::class.java)
+                            currentRoundRunDetail = roundRunDetail
+                            if(roundRunDetail.state == Constants.STATE_LOAD){
+                                bInLoad = true
+                                bInDownload = false
+                                roundRunProductAdapter?.updateRound(roundRunDetail)
+                            } else if(roundRunDetail.state == Constants.STATE_DOWNLOAD){
+                                bInLoad = false
+                                bInDownload = true
+                                roundRunCorralAdapter?.updateRound(roundRunDetail)
+                            }else{
+                                bInLoad = false
+                                bInDownload = false
                             }
-                            val title = "Mixer: ${mixerDetail?.name} - ${currentRoundRunDetail!!.round.name} : ${currentRoundRunDetail!!.round.diet.name}"
-                            activity?.changeActionBarTitle(title)
-                            bSyncroRound = true
-                            if(!bSyncroRound){
-                                requestProduct()
+                            loadRoundDetail()
+                            roundRunDetail.mixer?.let {mixerDetail->
+                                val mixer = Mixer(
+                                    mixerDetail.name,
+                                    mixerDetail.description,
+                                    mixerDetail.mac,
+                                    mixerDetail.btBox,
+                                    mixerDetail.tara,
+                                    mixerDetail.calibration,
+                                    mixerDetail.rfid,
+                                    mixerDetail.remoteId,
+                                    mixerDetail.updatedDate,
+                                    mixerDetail.archiveDate,
+                                    true,
+                                    mixerDetail.id
+                                )
+                                setMixer(mixer)
+
+                            }
+                            currentRoundRunDetail?.let {roundRunDetail->
+                                val title = "Mixer: ${mixerDetail?.name} - ${roundRunDetail.round.name} : ${roundRunDetail.round.diet.name}"
+                                activity?.changeActionBarTitle(title)
                             }
                         }
                     }catch (e: NumberFormatException){
@@ -642,107 +476,116 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                 }
 
-                Constants.CMD_NXTPRODUCT->{
+
+                Constants.CMD_WEIGHT->{
                     try{
-                        Log.i(TAG,"CMD_NXTPRODUCT $messageStr")
-                        val productPosition = messageStr.substring(3,7).toInt()
-                        val productIndex = messageStr.substring(7,15).toLong()
-                        val totalLoaded = messageStr.substring(15,23).toLong()
-                        Log.i(TAG,"${productDetail?.name} total loaded $totalLoaded Next product productPosition $productPosition productIndex $productIndex")
-                        if(productDetail?.remoteId == productIndex){
-                            return
+                        val weight = String(message,5,8).toLong()
+                        val progress = String(message,13,3).toInt()
+
+                        mBinding.tvCurrentProductWeightPending.text = "${String(message,4,1)}${weight}Kg"
+                        mBinding.pbCurrentProduct.progress = progress
+                        if(countMsg++ > 10){
+                            requestMixer()
+                            countMsg = 0
+                            val mutableList = mutableListOf<ProductDetail>()
+                            val dietDetail = DietDetail (
+                                name = "",
+                                description = "",
+                                remoteId = 0L,
+                                updatedDate = "",
+                                archiveDate ="",
+                                usePercentage = false,
+                                products = mutableList,
+                                id = 0L
+                            )
+
+                            val emptyAdapter =  RoundRunProductAdapter(
+                                this@RemoteMixerFragment,
+                                dietDetail,
+                                defaultStep)
+
+                            mBinding.rvMixerProductsToLoad.adapter = emptyAdapter
+                            bInLoad = false
+                            bInDownload = false
+                            mBinding.tvTitleProduct.text = getString(R.string.mixer)
+                            mBinding.tvCurrentProduct.text = mixerDetail?.name ?: ""
+                            mBinding.btnJump.isVisible = false
+                            mBinding.btnPause.isVisible = false
                         }
-                        bSyncroProduct = false
-                        bSyncroSequence = false
-                        bSyncroRound = false
-//                        mBinding.tvCurrentProductWeightPending.text = "Total: ${totalLoaded}Kg"
-                        mBinding.tvCurrentProduct.text = "${productDetail?.name}"
-                        roundRunProductAdapter?.selectProduct(productPosition)
-                        requestRoundRunDetail()
-                    }catch(e :  NumberFormatException){
-                        Log.i(TAG,"CMD_NXTPRODUCT NumberFormatException $e ")
-                    }catch ( e : Exception){
-                        Log.i(TAG,"CMD_NXTPRODUCT Exception $e ")
+                    }catch (e : Exception){
+                        Log.i(TAG,"CMD_WEIGHT Exception $e")
                     }
-                    Log.i(TAG,"CMD_NXTPRODUCT")
 
                 }
 
-                Constants.CMD_NXTCORRAL->{
+                Constants.CMD_WEIGHT_LOAD->{
                     try{
-                        Log.i(TAG,"CMD_NXTCORRAL $messageStr")
-                        val corralPosition = messageStr.substring(3,7).toInt()
-                        val corralIndex = messageStr.substring(7,15).toLong()
-                        val totalDownload = messageStr.substring(15,23).toLong()
-                        Log.i(TAG,"${corralDetail?.name} total loaded $totalDownload Next corralt corralPosition $corralPosition productIndex $corralIndex")
-                        if(corralDetail?.remoteId == corralIndex){
-                            return
+                        val weight = String(message,5,8).toLong()
+                        val progress = String(message,13,3).toInt()
+                        Log.i("WEIGHT","CMD_WEIGHT ${String(message)}   mixerWeight $mixerWeight")
+                        countNoLoad = 0
+                        mixerWeight = (productDetail?.targetWeight?.minus(weight.toDouble()) ?: 0.0)
+                        roundRunProductAdapter?.updateWeight(mixerWeight)
+                        productDetail?.currentWeight = mixerWeight
+                        mBinding.tvCurrentProductWeightPending.text = "${String(message,4,1)}${weight}Kg"
+                        mBinding.pbCurrentProduct.progress = progress
+                        if(bInLoad == false){
+                            mBinding.tvTitleProduct.text = getString(R.string.cargar)
                         }
-                        bSyncroCorral = false
-                        bSyncroSequence = false
-                        bSyncroRound = false
-//                        mBinding.tvCurrentProductWeightPending.text = "Total: ${totalLoaded}Kg"
-                        mBinding.tvCurrentProduct.text = "${corralDetail?.name}"
-                        roundRunCorralAdapter?.selectCorral(corralPosition)
-                        requestRoundRunDetail()
-                    }catch(e :  NumberFormatException){
-                        Log.i(TAG,"CMD_NXTCORRAL NumberFormatException $e ")
-                    }catch ( e : Exception){
-                        Log.i(TAG,"CMD_NXTCORRAL Exception $e ")
+                        bInLoad = true
+                        bInDownload = false
+                        mBinding.tvCurrentProduct.text = productDetail?.name
+                        if(countMsg++ > 25){
+                           countMsg = 0
+                           requestRoundRunDetail()
+                            mBinding.btnJump.isVisible = true
+                            mBinding.btnPause.isVisible = true
+                        }
+                    }catch (e : Exception){
+                        Log.i(TAG,"CMD_WEIGHT Exception $e")
                     }
-                    Log.i(TAG,"CMD_NXTCORRAL")
 
                 }
 
-                Constants.CMD_END->{
-                    Log.i(TAG,"CMD_END $messageStr")
-                    val msg = "CMD${Constants.CMD_ACK}${Constants.CMD_END}"
-                    activity?.mService?.LocalBinder()?.write(msg.toByteArray())
-                    roundRunProductAdapter?.endLoad = true
-                    totalWeightLoaded = 0.0
-                    currentRoundRunDetail?.round?.diet?.products?.forEach { product ->
-                        totalWeightLoaded += (product.finalWeight - product.initialWeight)
-                        Log.i(TAG,"product $product totalWeightLoaded $totalWeightLoaded final ${product.finalWeight} inicial ${product.initialWeight}")
-                    }
+                Constants.CMD_WEIGHT_DWNL->{
+                    lastUpdate = LocalDateTime.now()
+                    try{
+                        val weight = String(message,5,8).toLong()
 
-                    totalWeightLoaded = totalWeightLoaded.roundToLong().toDouble()
-                    bSyncroSequence = false
-                    bSyncroProduct = false
-                    bSyncroCorral = false
-                    currentRoundRunDetail = null
-                    roundRunProductAdapter?.notifyDataSetChanged()
-
-                    if(bInDownload){
-                        cleanAll()
-                        goToTabletMixerListFragment()
-                    }
-                }
-
-                Constants.CMD_ACK->{
-                    Log.i(TAG,"CMD_ACK")
-                    when(String(message,3,3)){
-                        Constants.CMD_USER-> {
-                            Log.i(TAG,"CMD_USER ACK")
-                            bSyncroUser = true
-                            if(!bSyncroMixer){
-                                requestMixer()
-                            }
+                        val progress = String(message,13,3).toInt()
+                        Log.i("WEIGHT","CMD_WEIGHT ${String(message)}   mixerWeight $mixerWeight")
+                        countNoLoad = 0
+                        mixerWeight = (corralDetail?.actualTargetWeight?.minus(weight.toDouble()) ?: 0.0)
+                        roundRunCorralAdapter?.updateCorralWeight(mixerWeight)
+                        productDetail?.currentWeight = mixerWeight
+                        mBinding.tvCurrentProductWeightPending.text = "${String(message,4,1)}${weight}Kg"
+                        mBinding.pbCurrentProduct.progress = progress
+                        if(bInDownload == false){
+                            mBinding.tvTitleProduct.text = getString(R.string.descargar)
                         }
+                        bInDownload = true
+                        bInLoad = false
+                        mBinding.tvCurrentProduct.text = corralDetail?.name
+                        if(countMsg++ > 5){
+                            countMsg = 0
+                            requestRoundRunDetail()
+                            mBinding.btnJump.isVisible = true
+                            mBinding.btnPause.isVisible = true
+                        }
+                    }catch (e : Exception){
+                        Log.i(TAG,"CMD_WEIGHT Exception $e")
                     }
+
                 }
 
                 Constants.CMD_MIXER ->{
                     Log.i(TAG,"CMD_MIXER")
                     try{
-                        val json = convertStringToZip.decompress(message.copyOfRange(7,message.size-1),String(message,3,4).toInt())
+                        val convertZip = ConvertZip()
+                        val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
                         val gson = Gson()
                         mixerDetail = gson.fromJson(json,  MixerDetail::class.java)
                         Log.i(TAG,"mixer receibe $mixerDetail")
-                        bSyncroMixer = true
-                        if(!bSyncroRound){
-                            Log.i(TAG,"CMD_MIXER y !bSybcroRound")
-                            requestRoundRunDetail()
-                        }
                         val title = "Mixer: ${mixerDetail?.name}"
                         activity?.changeActionBarTitle(title)
 
@@ -754,58 +597,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         return
                     }
                 }
-
-                Constants.CMD_PRODUCT ->{
-                    Log.i(TAG,"CMD_PRODUCT")
-                    try{
-                        val json = convertStringToZip.decompress(message.copyOfRange(7,message.size-1),String(message,3,4).toInt())
-                        val gson = Gson()
-                        productDetail = gson.fromJson(json,  ProductDetail::class.java)
-                        if(productDetail != null && productDetail!! != currentProductDetail){
-                            previousProductDetail = currentProductDetail
-                            currentProductDetail = productDetail
-                            if(previousProductDetail == null ){
-                                previousProductDetail =currentProductDetail
-                            }
-                        }
-
-                        Log.i(TAG,"Product receibed $productDetail")
-                        bSyncroProduct = true
-                    }catch (e: NumberFormatException){
-                        Log.i(TAG,"bSyncroProduct NumberFormatException $e")
-                        return
-                    }catch (e:Exception){
-                        Log.i(TAG,"bSyncroProduct Exception $e")
-                        return
-                    }
-                }
-
-
-                Constants.CMD_CORRAL ->{
-                    Log.i(TAG,"CMD_CORRAL")
-                    try{
-                        val json = convertStringToZip.decompress(message.copyOfRange(7,message.size-1),String(message,3,4).toInt())
-                        val gson = Gson()
-                       corralDetail = gson.fromJson(json,  CorralDetail::class.java)
-                        if(corralDetail != null && corralDetail!! != currentCorralDetail){
-                            previousCorralDetail = currentCorralDetail
-                            currentCorralDetail = corralDetail
-                            if(previousCorralDetail == null ){
-                                previousCorralDetail =currentCorralDetail
-                            }
-                        }
-
-                        Log.i(TAG,"Corral receibed $corralDetail")
-                        bSyncroCorral = true
-                    }catch (e: NumberFormatException){
-                        Log.i(TAG,"bSyncroCorral NumberFormatException $e")
-                        return
-                    }catch (e:Exception){
-                        Log.i(TAG,"bSyncroCorral Exception $e")
-                        return
-                    }
-                }
-
                 else->{
                     Log.i(TAG,"else $command")
                 }
@@ -815,10 +606,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             Log.i("message","message $message")
-            if(message != null && message.equals("*")){
-                deviceConnected()
-                tickCountMessages = tick
-            }
+            (requireActivity() as MainActivity).changeStatusConnected()
         }
 
         override fun onMessageSent(device: BluetoothDevice?,message: String?) {
@@ -831,11 +619,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         override fun onError(message: String?) {
             Log.i(TAG, "[MixRem] ACT onError")
-            deviceDisconnected()
-        }
+            (requireActivity() as MainActivity).changeStatusDisconnected()        }
 
         override fun onDeviceDisconnected() {
-            deviceDisconnected()
+            (requireActivity() as MainActivity).changeStatusDisconnected()
             Log.i(TAG, "[MixRem]ACT onDeviceDisconnected")
         }
 
@@ -844,12 +631,14 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             knowDevices = device
             knowDevices?.forEach{
                 Log.i(TAG,"selectedTabletMixerInFragment $selectedTabletMixerInFragment \nbluetoothKnowed $it")
-                if(selectedTabletMixerInFragment !=null && selectedTabletMixerInFragment!!.mac == it.address){
-                    Log.i(TAG,"Se seleccionó ${it.name} : ${it.address}")
-                    if(tabletMixerBluetoothDevice != it){
-                        connectTable(selectedTabletMixerInFragment!!)
+                selectedTabletMixerInFragment?.let { tabletMixer ->
+                    if(tabletMixer.mac == it.address){
+                        Log.i(TAG,"Se seleccionó ${it.name} : ${it.address}")
+                        if(tabletMixerBluetoothDevice != it){
+                            connectTable(tabletMixer)
+                        }
+                        tabletMixerBluetoothDevice = it
                     }
-                    tabletMixerBluetoothDevice = it
                 }
             }
 
@@ -870,32 +659,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         estableTimer?.cancel()
         estableTimer = null
         timerTask = null
-        Log.i(TAG,"disconnectKnowDeviceWithTransfer L800")
-        activity!!.mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
     }
 
 
     fun tare() {
     }
-
-    fun deviceDisconnected() {
-        if(isConnected){
-            activity?.deviceDisconnected()
-            Log.i(TAG,"deviceDisconnected")
-            isConnected = false
-        }
-    }
-
-    fun deviceConnected() {
-        if(!isConnected){
-            activity?.deviceConnected()
-            Log.i(TAG,"deviceConnected")
-            isConnected = true
-        }
-        activity?.hideCustomProgressDialog()
-    }
-
 
     private fun customDialog(title: String, message: String, fontSize : Float = 0F, gravity: Int = 0) : AlertDialog? {
         val dialogBuilder = AlertDialog.Builder(requireActivity() as MainActivity)
@@ -924,21 +693,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         return alert
     }
 
-    private var antStatus : Boolean = false
-    fun changeStatusConnection(bConnected: Boolean){
-        activity?.runOnUiThread {
-            if(antStatus != bConnected){
-                Log.i(TAG, "changeStatusConnection $bConnected")
-                antStatus = bConnected
-            }
-            if (bConnected) {
-                deviceConnected()
-            } else {
-                deviceDisconnected()
-            }
-        }
-    }
-
     fun setMixer(mixerIn: Mixer?) {
         mixerIn.let {mixer ->
             selectedMixerInFragment = mixer
@@ -963,31 +717,35 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     }
 
     private fun dialogAlertTargetWeight(nextItem : String ="", strKg :String="") : AlertDialog? {
-        if(dialogCountDown != null && dialogCountDown!!.isShowing ){
-            return dialogCountDown
+        Log.i(TAG,"dialogAlertTargetWeight")
+        dialogCountDown?.let {
+            if(it.isShowing){
+                Log.i(TAG,"already showing")
+                return dialogCountDown
+            }
         }
         var title: String? = null
         var message: String? = null
         val strkg : String =  strKg
 
         if(bInLoad)
-            if(getCurrentProduct()!=null){
-                title = getCurrentProduct()!!.name
+            currentProductDetail?.let {currentProduct->
+                title = currentProduct.name
                 message = if(nextItem.isNotEmpty()){
                     "Se pasa a $nextItem"
                 }else{
                     "Se va a pasar al proximo producto! "
                 }
-            }
+            }?: Log.i(TAG,"current product null")
         if(bInDownload)
-            if(getCurrentCorral()!=null){
-                title = getCurrentCorral()!!.name
+            currentCorralDetail?.let{ currentCorral->
+                title = currentCorral.name
                 message = if(nextItem.isNotEmpty()){
                     "Se pasa a $nextItem"
                 }else{
                     "Se va a pasar al proximo corral! "
                 }
-            }
+            }?: Log.i(TAG,"current corral null")
 
         val builder = AlertDialog.Builder(requireActivity())
             .create()
@@ -999,17 +757,18 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         val  tvCount = view.findViewById<TextView>(R.id.tv_dialog_count)
 
 
-        if(title==null || message == null){
+        if(title == null || message == null){
+            Log.i(TAG,"title = $title message = $message")
             return null
         }
         builder.setView(view)
         tvMessage.text = message
         tvTitle.text = title
         btnAcept.setOnClickListener {
-            if(bInLoad && getCurrentProduct()!=null){
+            if(bInLoad && getCurrentProduct() != null){
                 sendNextProduct()
             }
-            if(bInDownload && getCurrentCorral()!=null){
+            if(bInDownload && getCurrentCorral() != null){
                 sendNextCorral()
             }
             builder.dismiss()
@@ -1058,7 +817,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     }
 
     private fun getCurrentProduct(): ProductDetail? {
-        return previousProductDetail
+        return currentProductDetail
     }
 
     fun sendNextCorral(){
@@ -1075,7 +834,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         Log.i(TAG,"Send requestRoundRunDetail $msg")
         activity?.mService?.LocalBinder()?.write(msg.toByteArray())
     }
-
 
     private fun requestMixer() {
         val msg = "CMD${Constants.CMD_MIXER}"
@@ -1098,7 +856,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
     fun setTabletMixer(tabletMixerIn: TabletMixer) {
             tabletMixerIn.let { tabletMixer ->
-                menu?.findItem(R.id.menu_selected_remote_mixer)?.title = "  " + tabletMixer.name
+                menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + tabletMixer.name
             selectedTabletMixerInFragment = tabletMixer
             Log.i(
                 TAG,
@@ -1116,10 +874,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         if (deviceBluetooth != null){
             Log.i(TAG,"Try to connect with ${deviceBluetooth}")
-            tickCountMessages = tick
             (requireActivity() as MainActivity).showCustomProgressDialog()
-            Log.i(TAG,"connectKnowDeviceWithTransfer L1022 ${countConection++}")
-            (requireActivity() as MainActivity).mService?.LocalBinder()?.connectKnowDeviceWithTransfer(deviceBluetooth)
+            (requireActivity() as MainActivity).connectDevice(deviceBluetooth)
         } else {
             Toast.makeText(requireActivity(), "No se pudo conectar", Toast.LENGTH_SHORT).show()
         }

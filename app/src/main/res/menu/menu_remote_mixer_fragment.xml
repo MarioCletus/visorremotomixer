@@ -5,11 +5,12 @@
 
     <item android:id="@+id/bluetooth_tablet_mixer"
         android:title=""
-        android:icon="@drawable/ic_bluetooth_24dp"
+        android:icon="@drawable/ic_bluetooth_disconnected_24px"
+        android:iconTint="@color/color_full_red"
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/menu_selected_remote_mixer"
+        android:id="@+id/menu_selected_remote_tablet"
         android:icon="@drawable/ic_tablet_48px"
         android:title="    Tablet de Mixer"
         app:showAsAction="ifRoom|withText"

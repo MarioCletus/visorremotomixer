@@ -72,16 +72,16 @@ class SplashActivity : AppCompatActivity() {
 
             override fun onAnimationEnd(p0: Animation?) {
                 Handler(Looper.getMainLooper()).postDelayed({
-                    val isLogged = sharedpreferences.getBoolean(Constants.PREF_IS_LOGGED, false)
-                    Session.accessToken =
-                        sharedpreferences.getString(Constants.PREF_LOGIN_KEY_ACCESS_TOKEN, "").toString()
-                    if (isLogged){
+//                    val isLogged = sharedpreferences.getBoolean(Constants.PREF_IS_LOGGED, false)
+//                    Session.accessToken =
+//                        sharedpreferences.getString(Constants.PREF_LOGIN_KEY_ACCESS_TOKEN, "").toString()
+//                    if (isLogged){
                         startActivity(Intent(this@SplashActivity, MainActivity::class.java))
                         finish()
-                    } else {
-                        startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
-                        finish()
-                    }
+//                    } else {
+//                        startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+//                        finish()
+//                    }
 
                 }, 1000)
             }

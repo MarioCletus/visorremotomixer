@@ -58,9 +58,9 @@ class TabletMixerAdapter (private  val fragment: Fragment) : RecyclerView.Adapte
         }
 
         holder.btnEditTabletMixer.setOnClickListener{
-            val intent = Intent(fragment.requireActivity(), AddUpdateTabletMixerActivity::class.java)
-            intent.putExtra(Constants.EXTRA_TABLET_MIXER_DETAILS, tabletMixer)
-            fragment.requireActivity().startActivity(intent)
+//            val intent = Intent(fragment.requireActivity(), AddUpdateTabletMixerActivity::class.java)
+//            intent.putExtra(Constants.EXTRA_TABLET_MIXER_DETAILS, tabletMixer)
+//            fragment.requireActivity().startActivity(intent)
             if ( fragment is TabletMixerListFragment){
                 fragment.configTabletMixer(tabletMixer,false)
             }

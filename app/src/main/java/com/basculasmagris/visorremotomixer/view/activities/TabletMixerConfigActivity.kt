@@ -139,8 +139,6 @@ class TabletMixerConfigActivity : AppCompatActivity(){
             mBinding.etTabletMixerName.isEnabled  = false
             mBinding.etTabletMixerName.isEnabled  = false
             mBinding.etTabletMixerDescription.isEnabled  = false
-            mBinding.etCapacity.isEnabled  = false
-            mBinding.layCapacity.isEnabled  = false
             mBinding.layBTAsoc.isEnabled  = false
         }
 
