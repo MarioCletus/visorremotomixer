@@ -27,7 +27,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.FragmentRemoteMixerBinding
 import com.basculasmagris.visorremotomixer.model.entities.MinCorralDetail
@@ -70,13 +69,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private var noPrevAlert : Boolean = true
     private var countGreaterThanTarget: Int = 0
     private var currentProductDetail: MinProductDetail? = null
-    private var previousProductDetail: MinProductDetail? =null
     private var mixerDetail: MixerDetail? = null
     var minRoundRunDetail : MinRoundRunDetail? = null
     var roundRunProductAdapter : RoundRunProductAdapter? = null
-
     private var currentCorralDetail : MinCorralDetail? = null
-    private var previousCorralDetail : MinCorralDetail? = null
     var roundRunCorralAdapter : RoundRunCorralDownloadAdapter? = null
 
     private var bInLoad: Boolean = false
@@ -84,7 +80,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
     private var tick: Long = 0L
 
-    private var isConnected = false
     private var selectedMixerInFragment: Mixer? = null
     private var selectedTabletMixerInFragment: TabletMixer? = null
     private var tabletMixerBluetoothDevice : BluetoothDevice? = null
@@ -93,7 +88,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private var targetReachedDialog: AlertDialog? = null
     private var dialogCountDown: AlertDialog? = null
 
-    private val REFRESH_TIME = 50
+    private val REFRESH_TIME = 10
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -188,39 +183,22 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     roundRunProductAdapter?.productList(products)
                 }
 
-//                val layoutManager = mBinding.rvMixerProductsToLoad.layoutManager
-//                // Guardar la posición del item seleccionado actual
-//                val posicionItemSeleccionado = layoutManager.findFirstVisibleItemPosition()
-//                mBinding.rvMixerProductsToLoad.adapter = roundRunProductAdapter
-//                val posicionItemSeleccionadoNuevo = nuevosDatos.indexOf(itemSeleccionado)
-//                if (posicionItemSeleccionadoNuevo != RecyclerView.NO_POSITION) {
-//                    layoutManager.scrollToPositionWithOffset(posicionItemSeleccionadoNuevo, 0)
-//                } else {
-//                    // Si el item seleccionado no está en los nuevos datos, hacer scroll a la posición guardada anteriormente
-//                    layoutManager.scrollToPositionWithOffset(posicionItemSeleccionado, 0)
-//                }
-
                 mBinding.rvMixerProductsToLoad.adapter = roundRunProductAdapter
 
                 dietDetail.products.let { products ->
-                    var countProductPosition = 0
-                    var prevProduct : MinProductDetail? = null
-                    var currentProduct: MinProductDetail? = products[0]
-                    products.forEach{ productInRound ->
+                    var currentProduct = products[0]
+                    products.sortedByDescending { it.order }.forEach{ productInRound ->
                         if(productInRound.finalWeight == 0L && productInRound.initialWeight != 0L){
-                            Log.i(TAG,"currentProductDetail ${productInRound.name}")
                             currentProduct = productInRound
-                            roundRunProductAdapter?.selectProduct(countProductPosition)
-                            previousProductDetail = prevProduct
+                            roundRunProductAdapter?.selectProduct(productInRound.order-1)
                             return@forEach
                         }
-                        prevProduct = productInRound
-                        countProductPosition++
                     }
                     currentProductDetail = currentProduct
-                    previousProductDetail = if(currentProduct != products[0])  prevProduct else null
-                    if(currentProduct != products[0] && countProductPosition < (mBinding.rvMixerProductsToLoad.adapter?.itemCount ?: 0)){
-                        mBinding.rvMixerProductsToLoad.scrollToPosition(countProductPosition)
+                    Log.i(TAG,"currentProductDetail ${currentProductDetail?.name?:""} position ${currentProduct.order}")
+//                    if(currentProduct != products[0] && currentProduct.order < (mBinding.rvMixerProductsToLoad.adapter?.itemCount ?: 0)){
+                    if(currentProduct != products[0]){
+                        mBinding.rvMixerProductsToLoad.scrollToPosition(currentProduct.order-1)
                     }
                 }
             }else if(bInDownload){
@@ -232,22 +210,18 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 mBinding.rvMixerProductsToLoad.adapter = roundRunCorralAdapter
 
                 minRoundRunDetail?.round?.corrals?.let { corrals ->
-                    var countCorralPosition = 0
-                    var prevCorral: MinCorralDetail? = null
-                    var currentCorral : MinCorralDetail = corrals[0]
-                    corrals.forEach{ corralInRound ->
+                    var currentCorral = corrals[0]
+                    corrals.sortedByDescending { it.order }.forEach{ corralInRound ->
                         if(corralInRound.initialWeight != 0L && corralInRound.finalWeight == 0L){
                             currentCorral = corralInRound
-                            roundRunCorralAdapter?.selectCorral(countCorralPosition)
-                            previousCorralDetail = prevCorral
+                            roundRunCorralAdapter?.selectCorral(corralInRound.order-1)
                             return@forEach
                         }
                         currentCorralDetail = currentCorral
-                        prevCorral = if(currentCorral != corrals[0]) corralInRound else null
-                        countCorralPosition++
-                        if(currentCorral != corrals[0]  && countCorralPosition < (mBinding.rvMixerProductsToLoad.adapter?.itemCount ?: 0)){
-                            mBinding.rvMixerProductsToLoad.scrollToPosition(countCorralPosition)
-                        }
+                    }
+//                    if(currentCorral != corrals[0]  && currentCorral.order < (mBinding.rvMixerProductsToLoad.adapter?.itemCount ?: 0)){
+                    if(currentCorral != corrals[0]){
+                        mBinding.rvMixerProductsToLoad.scrollToPosition(currentCorral.order-1)
                     }
                 }
             }else{}
@@ -426,8 +400,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
 
         override fun onDeviceConnected(device: BluetoothDevice?) {
-            isConnected = false
-            (requireActivity() as MainActivity).changeStatusConnected()
+//            (requireActivity() as MainActivity).changeStatusConnected()
             Log.i(TAG, "onDeviceConnected ${device?.name} ${device?.address}")
         }
 
@@ -789,10 +762,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         tvMessage.text = message
         tvTitle.text = title
         btnAcept.setOnClickListener {
-            if(bInLoad && getCurrentProduct() != null){
+            if(bInLoad){
                 sendNextProduct()
             }
-            if(bInDownload && getCurrentCorral() != null){
+            if(bInDownload){
                 sendNextCorral()
             }
             builder.dismiss()
@@ -840,17 +813,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         activity?.mService?.LocalBinder()?.write(msg.toByteArray())
     }
 
-    private fun getCurrentProduct(): MinProductDetail? {
-        return currentProductDetail
-    }
-
     fun sendNextCorral(){
         val msg = "CMD${Constants.CMD_NXTCORRAL}"
         activity?.mService?.LocalBinder()?.write(msg.toByteArray())
-    }
-
-    private fun getCurrentCorral(): MinCorralDetail? {
-        return previousCorralDetail
     }
 
     private fun requestRoundRunDetail() {

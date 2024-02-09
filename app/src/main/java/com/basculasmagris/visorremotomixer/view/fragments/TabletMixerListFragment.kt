@@ -367,7 +367,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
         override fun onDeviceConnected(device: BluetoothDevice?) {
             // Do stuff when is connected
             Log.i(TAG, "[TabletMixerListFragment] onDeviceConnected")
-            (requireActivity() as MainActivity).changeStatusConnected()
+//            (requireActivity() as MainActivity).changeStatusConnected()
         }
 
 
