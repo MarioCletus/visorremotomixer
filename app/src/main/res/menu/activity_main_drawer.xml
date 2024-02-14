@@ -22,11 +22,11 @@
         <item
             android:id="@+id/nav_tablet_mixer"
             android:icon="@drawable/ic_mixer"
-            android:title="@string/menu_tablet_mixer" />
-        <item
-            android:id="@+id/nav_config"
-            android:icon="@drawable/icon_ajustes_topbar"
-            android:title="@string/ajustes" />
+            android:title="@string/mixers" />
+<!--        <item-->
+<!--            android:id="@+id/nav_config"-->
+<!--            android:icon="@drawable/icon_ajustes_topbar"-->
+<!--            android:title="@string/ajustes" />-->
     </group>
 
 <!--    <group-->

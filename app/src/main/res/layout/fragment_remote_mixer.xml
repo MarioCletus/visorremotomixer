@@ -96,13 +96,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <Button
+<!--        <Button-->
+<!--            android:id="@+id/btn_pause"-->
+<!--            android:layout_width="150dp"-->
+<!--            android:layout_height="45dp"-->
+<!--            android:background="@drawable/btn_round_rounded_green"-->
+<!--            android:gravity="center"-->
+<!--            android:text="Pausa"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="18sp"-->
+<!--            app:backgroundTint="@null"-->
+<!--            app:layout_constraintStart_toEndOf="@id/btn_tara"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/btn_jump"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+        <ToggleButton
             android:id="@+id/btn_pause"
             android:layout_width="150dp"
             android:layout_height="45dp"
             android:background="@drawable/btn_round_rounded_green"
             android:gravity="center"
-            android:text="Pausa"
+            android:text="Pausar"
+            android:textOff="Pausar"
+            android:textOn="Continuar"
             android:textColor="@color/white"
             android:textSize="18sp"
             app:backgroundTint="@null"

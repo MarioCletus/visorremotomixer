@@ -344,6 +344,8 @@
     <string name="screen_tablet_mixer_list">Tablet de mixer</string>
     <string name="menu_tablet_mixer">Tablets de Mixer</string>
     <string name="menu_config">Configuracion</string>
+    <string name="mixers">Mixers</string>
+    <string name="proximo_producto">Próximo producto</string>
 
 
 </resources>

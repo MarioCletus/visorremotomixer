@@ -152,6 +152,8 @@ object Constants {
     val CMD_USER = "USR"
     val CMD_TARA = "TAR"
     val CMD_PAUSE = "PAU"
+    val CMD_PAUSE_ON = "PAN"
+    val CMD_PAUSE_OFF = "PAF"
     val CMD_MIXER = "MIX"
     val CMD_PRODUCT = "PRO"
     val CMD_CORRAL = "COR"
@@ -159,4 +161,6 @@ object Constants {
     val CMD_WEIGHT = "WEI"
     val CMD_WEIGHT_LOAD = "WEL"
     val CMD_WEIGHT_DWNL = "WED"
+    val CMD_WEIGHT_LOAD_FREE = "WFL"
+    val CMD_WEIGHT_DWNL_FREE = "WFD"
 }

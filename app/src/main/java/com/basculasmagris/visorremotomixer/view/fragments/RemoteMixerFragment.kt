@@ -50,18 +50,15 @@ import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
 import java.util.concurrent.TimeUnit
-import kotlin.math.roundToLong
 
 class RemoteMixerFragment : BottomSheetDialogFragment() {
 
     private var countMsg: Int = 0
-//    private var countNoLoad: Int = 0
     lateinit var mBinding: FragmentRemoteMixerBinding
     private val TAG: String = "DEBMixerVR"
     var menu: Menu? = null
     private var dialogResto: AlertDialog? = null
-//    private var mixerWeight = 0.0
-    private var totalMixerWeight: Double = 0.0
+    private var rest: Int = 0
     private var timerTask: TimerTask? = null
     private var estableTimer: Timer? = null
     private var defaultStep = 5.0
@@ -75,6 +72,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private var currentCorralDetail : MinCorralDetail? = null
     var roundRunCorralAdapter : RoundRunCorralDownloadAdapter? = null
 
+    private var bInFree: Boolean = true
     private var bInLoad: Boolean = false
     private var bInDownload : Boolean = false
 
@@ -89,7 +87,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private var dialogCountDown: AlertDialog? = null
 
     private val REFRESH_TIME = 10
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(TAG,"onCreate")
@@ -109,9 +106,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         Log.i(TAG,"tabletMixer ${selectedTabletMixerInFragment}")
 
         mBinding.btnTara.setOnClickListener{
+            tareDialog("Tara","Seguro quiere hacer tara?")
             Log.i(TAG, "btnTara")
-            val msg = "CMD${Constants.CMD_TARA}"
-            activity?.mService?.LocalBinder()?.write(msg.toByteArray())
         }
 
         mBinding.btnJump.setOnClickListener{
@@ -123,7 +119,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     if(position < productAdapter.itemCount){
                         val nextItem = minRoundRunDetail?.round?.diet?.products?.get(position)
                         nextItem?.let { productDetail->
-                            targetReachedDialog = dialogAlertTargetWeight(productDetail.name)
+                            targetReachedDialog = dialogAlertTargetWeight(if(bInFree) getString(R.string.proximo_producto) else productDetail.name)
                         }
                     }else{
                         targetReachedDialog = dialogAlertTargetWeight("descarga")
@@ -142,20 +138,26 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     }else{
                         targetReachedDialog = dialogAlertTargetWeight("fin")
                     }
-
-
                 }
-
             }
-
         }
 
-        mBinding.btnPause.setOnClickListener{
+        mBinding.btnPause.setOnCheckedChangeListener { v, isChecked ->
+            Log.i(TAG,"setOnCheckedChangeListener $isChecked")
+            if(isChecked){
+                v.setBackgroundResource(R.drawable.btn_round_to_run_red)
+                val msg = "CMD${Constants.CMD_PAUSE_ON}"
+                activity?.mService?.LocalBinder()?.write(msg.toByteArray())
+            }else{
+                val msg = "CMD${Constants.CMD_PAUSE_OFF}"
+                activity?.mService?.LocalBinder()?.write(msg.toByteArray())
+                v.setBackgroundResource(R.drawable.btn_round_rounded_green)
+            }
         }
 
         mBinding.btnRest.setOnClickListener{
-            dialogResto = if(dialogResto==null){
-                customDialog("Resto","${totalMixerWeight.roundToLong()}Kg",40f, Gravity.CENTER)
+            dialogResto = if(dialogResto == null){
+                customDialog("Resto","${rest}Kg",40f, Gravity.CENTER)
             }else{
                 dialogResto?.dismiss()
                 null
@@ -413,6 +415,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             val messageStr = String(message,0, message.size)
             val command = messageStr.substring(0,3)
             Log.i("SHOWCOMAND","command $command")
+            Log.i("message", String(message))
             when (command){
 
                 Constants.CMD_ROUNDDETAIL->{
@@ -425,22 +428,22 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         val jsonString : String = convertZip.decompressText(byteArrayUtil)
                         Log.i("Json","jsonString * ${jsonString}")
 
-                        if(jsonString.isNotEmpty()){       //TODO hay que verificar bien esto. Me parece que lo mas adecuado es que actalice el adapter cada 1seg y listo!
+                        if(jsonString.isNotEmpty()){
                             val gson = Gson()
                             val roundRunDetail : MinRoundRunDetail = gson.fromJson(jsonString,  MinRoundRunDetail::class.java)
                             minRoundRunDetail = roundRunDetail
-                            if(roundRunDetail.state == Constants.STATE_LOAD){
-                                bInLoad = true
-                                bInDownload = false
-                                roundRunProductAdapter?.updateRound(roundRunDetail)
-                            } else if(roundRunDetail.state == Constants.STATE_DOWNLOAD){
-                                bInLoad = false
-                                bInDownload = true
-                                roundRunCorralAdapter?.updateRound(roundRunDetail)
-                            }else{
-                                bInLoad = false
-                                bInDownload = false
-                            }
+//                            if(roundRunDetail.state == Constants.STATE_LOAD){
+//                                bInLoad = true
+//                                bInDownload = false
+//                                roundRunProductAdapter?.updateRound(roundRunDetail)
+//                            } else if(roundRunDetail.state == Constants.STATE_DOWNLOAD){
+//                                bInLoad = false
+//                                bInDownload = true
+//                                roundRunCorralAdapter?.updateRound(roundRunDetail)
+//                            }else{
+//                                bInLoad = false
+//                                bInDownload = false
+//                            }
                             loadRoundDetail()
                             roundRunDetail.mixer?.let {mixerDetail->
                                 val mixer = Mixer(
@@ -483,12 +486,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         if(countMsg++ > REFRESH_TIME){
                             noInLoadOrDownload()
                         }
-                        val weight = String(message,5,8).toLong()
-                        val progress = String(message,13,3).toInt()
-                        mBinding.tvCurrentProductWeightPending.text = "${String(message,4,1)}${weight}Kg"
-                        mBinding.pbCurrentProduct.progress = progress
+                        refreshWeight(message)
                         bInLoad = false
                         bInDownload = false
+                        bInFree = false
                     }catch (e : Exception){
                         Log.i(TAG,"CMD_WEIGHT Exception $e")
                     }
@@ -503,14 +504,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         if(countMsg++ > REFRESH_TIME){
                             inLoad()
                         }
-                        val weight = String(message,5,8).toLong()
-                        val progress = String(message,13,3).toInt()
-                        mBinding.tvCurrentProductWeightPending.text = "${String(message,4,1)}${weight}Kg"
-                        mBinding.pbCurrentProduct.progress = progress
+                        refreshWeight(message)
                         bInLoad = true
                         bInDownload = false
+                        bInFree = false
                     }catch (e : Exception){
-                        Log.i(TAG,"CMD_WEIGHT Exception $e")
+                        Log.i(TAG,"CMD_WEIGHT_LOAD Exception $e")
                     }
 
                 }
@@ -524,14 +523,49 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         if(countMsg++ > REFRESH_TIME){
                             inDownload()
                         }
-                        val weight = String(message,5,8).toLong()
-                        val progress = String(message,13,3).toInt()
-                        mBinding.tvCurrentProductWeightPending.text = "${String(message,4,1)}${weight}Kg"
-                        mBinding.pbCurrentProduct.progress = progress
+                        refreshWeight(message)
                         bInDownload = true
                         bInLoad = false
+                        bInFree = false
                     }catch (e : Exception){
-                        Log.i(TAG,"CMD_WEIGHT Exception $e")
+                        Log.i(TAG,"CMD_WEIGHT_DWNL Exception $e")
+                    }
+
+                }
+
+                Constants.CMD_WEIGHT_LOAD_FREE->{
+                    try{
+                        if(bInLoad == false){
+                            inLoad()
+                        }
+                        if(countMsg++ > REFRESH_TIME){
+                            inLoad()
+                        }
+                        refreshWeight(message)
+                        bInLoad = true
+                        bInDownload = false
+                        bInFree = true
+                    }catch (e : Exception){
+                        Log.i(TAG,"CMD_WEIGHT_LOAD Exception $e")
+                    }
+
+                }
+
+                Constants.CMD_WEIGHT_DWNL_FREE->{
+                    try{
+                        if(bInDownload == false){
+                            inDownload()
+                        }
+                        mBinding.tvCurrentProduct.text = currentCorralDetail?.name
+                        if(countMsg++ > REFRESH_TIME){
+                            inDownload()
+                        }
+                        refreshWeight(message)
+                        bInDownload = true
+                        bInLoad = false
+                        bInFree = true
+                    }catch (e : Exception){
+                        Log.i(TAG,"CMD_WEIGHT_DWNL Exception $e")
                     }
 
                 }
@@ -602,6 +636,19 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
     }
 
+    private fun refreshWeight(message:ByteArray) {
+        val weight = String(message,4,8).toLong()
+        val sign = String(message,3,1)
+        val progress = String(message,12,3).toInt()
+        val signRest = String(message,15,1)
+        rest = String(message,16,8).toIntOrNull()?:0
+        mBinding.btnPause.isChecked = (String(message, 24, 1).toIntOrNull() ?: 0) == 1
+        mBinding.tvCurrentProductWeightPending.text = "${sign}${weight}Kg"
+        mBinding.pbCurrentProduct.progress = progress
+        dialogResto?.setMessage("$signRest${rest}Kg")
+
+    }
+
     private fun inDownload() {
         countMsg = 0
         requestRoundRunDetail()
@@ -670,11 +717,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         // set message of alert dialog
         dialogBuilder.setMessage(message)
             .setCancelable(false)
-            .setPositiveButton("Aceptar") { _, _ ->
-                    tare()
-            }
-            .setNegativeButton("Cancelar") { dialog, _ ->
+            .setPositiveButton("Aceptar") { dialog, _ ->
                 dialog.dismiss()
+                dialogResto = null
             }
         val alert = dialogBuilder.create()
         alert.setTitle(title)
@@ -691,6 +736,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     }
 
     fun setMixer(mixerIn: Mixer?) {
+        if(selectedMixerInFragment?.equals(mixerIn) == true && mixerDetail != null){
+            return
+        }
         mixerIn.let {mixer ->
             selectedMixerInFragment = mixer
             mixer?.let { mixer1->
@@ -726,23 +774,52 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         val strkg : String =  strKg
 
         if(bInLoad)
-            currentProductDetail?.let {currentProduct->
-                title = currentProduct.name
-                message = if(nextItem.isNotEmpty()){
-                    "Se pasa a $nextItem"
-                }else{
-                    "Se va a pasar al proximo producto! "
+            if(bInFree){
+                if(currentProductDetail != null) {
+                    title = currentProductDetail?.name
+                    message = if(nextItem.isNotEmpty()){
+                        "Se pasa a $nextItem"
+                    }else{
+                        "Se va a pasar al proximo producto! "
+                    }
+                }else {
+                    title = "Elegir producto"
+                    message = nextItem
                 }
-            }?: Log.i(TAG,"current product null")
+            }else{
+                currentProductDetail?.let {currentProduct->
+                    title = currentProduct.name
+                    message = if(nextItem.isNotEmpty()){
+                        "Se pasa a $nextItem"
+                    }else{
+                        "Se va a pasar al proximo producto! "
+                    }
+                }?: Log.i(TAG,"current product null")
+
+            }
         if(bInDownload)
-            currentCorralDetail?.let{ currentCorral->
-                title = currentCorral.name
-                message = if(nextItem.isNotEmpty()){
-                    "Se pasa a $nextItem"
-                }else{
-                    "Se va a pasar al proximo corral! "
+            if(bInFree){
+                if(currentProductDetail != null) {
+                    title = currentProductDetail?.name
+                    message = if(nextItem.isNotEmpty()){
+                        nextItem
+                    }else{
+                        "Se va a pasar al proximo producto! "
+                    }
+                }else {
+                    title = "Elegir producto"
+                    message = nextItem
                 }
-            }?: Log.i(TAG,"current corral null")
+            }else{
+                currentCorralDetail?.let{ currentCorral->
+                    title = currentCorral.name
+                    message = if(nextItem.isNotEmpty()){
+                        "Se pasa a $nextItem"
+                    }else{
+                        "Se va a pasar al proximo corral! "
+                    }
+                }?: Log.i(TAG,"current corral null")
+            }
 
         val builder = AlertDialog.Builder(requireActivity())
             .create()
@@ -870,5 +947,32 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
     }
 
+    fun tareDialog(title: String, message: String,fontSize : Float = 0F,gravity: Int = 0) : AlertDialog? {
+        val fragmentInstance = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_round_run)
+        val dialogBuilder = AlertDialog.Builder(context)
+
+        // set message of alert dialog
+        dialogBuilder.setMessage(message)
+            .setCancelable(false)
+            .setPositiveButton("Aceptar") { _, _ ->
+                val msg = "CMD${Constants.CMD_TARA}"
+                activity?.mService?.LocalBinder()?.write(msg.toByteArray())
+            }
+            .setNegativeButton("Cancelar") { dialog, _ ->
+                dialog.dismiss()
+            }
+        val alert = dialogBuilder.create()
+        alert.setTitle(title)
+        alert.show()
+        if(fontSize>0){
+            val textView : TextView = alert.findViewById(android.R.id.message)
+            textView.textSize = fontSize
+        }
+        if(gravity != Gravity.NO_GRAVITY){
+            val textView : TextView = alert.findViewById(android.R.id.message)
+            textView.gravity = gravity
+        }
+        return alert
+    }
 
 }
