@@ -26,6 +26,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -36,20 +38,31 @@ import androidx.navigation.ui.setupWithNavController
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
 import com.basculasmagris.visorremotomixer.databinding.ActivityMainBinding
+import com.basculasmagris.visorremotomixer.model.entities.MinCorral
+import com.basculasmagris.visorremotomixer.model.entities.MinEstablishment
+import com.basculasmagris.visorremotomixer.model.entities.MinProduct
+import com.basculasmagris.visorremotomixer.model.entities.MinRound
+import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunDetail
+import com.basculasmagris.visorremotomixer.model.entities.MinUser
 import com.basculasmagris.visorremotomixer.model.entities.Mixer
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.model.entities.RoundRunDetail
 import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
+import com.basculasmagris.visorremotomixer.utils.Constants
+import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
 import com.basculasmagris.visorremotomixer.view.fragments.MixerListFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
+import com.basculasmagris.visorremotomixer.view.fragments.ResumeFragment
 import com.basculasmagris.visorremotomixer.view.fragments.TabletMixerListFragment
 import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModelFactory
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModelFactory
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -75,6 +88,13 @@ class MainActivity : AppCompatActivity() {
     private var bluetoothDevice: BluetoothDevice? = null
     private var selectedMixerInActivity: Mixer? = null
     private var selectedTabletMixerInActivity: TabletMixer? = null
+
+    var minRoundRunDetail : MinRoundRunDetail? = null
+    var listOfMinProducts: ArrayList<MinProduct> =  ArrayList()
+    var listOfMinCorrals: ArrayList<MinCorral> = ArrayList()
+    var listOfMinRounds: ArrayList<MinRound> = ArrayList()
+    var listOfMinUsers: ArrayList<MinUser> = ArrayList()
+    var listOfMinEstablishments: ArrayList<MinEstablishment> = ArrayList()
 
     // -------------------
     // Mixer
@@ -115,8 +135,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home,
                 R.id.nav_tablet_mixer,
                 R.id.nav_config,
-                R.id.nav_product,
-                R.id.nav_diet,
+//                R.id.nav_product,
+//                R.id.nav_diet,
                 R.id.nav_sync,
                 R.id.nav_user
             ), drawerLayout
@@ -449,6 +469,339 @@ class MainActivity : AppCompatActivity() {
     fun isCustomProgresDialogShowing(): Boolean {
         return mProgressDialog?.isShowing == true
     }
+
+
+
+    fun requestRoundRunDetail() {
+        val msg = "CMD${Constants.CMD_ROUNDDETAIL}"
+        Log.i(TAG,"Send requestRoundRunDetail $msg")
+        mService?.LocalBinder()?.write(msg.toByteArray())
+    }
+
+    fun requestMixer() {
+        val msg = "CMD${Constants.CMD_MIXER}"
+        mService?.LocalBinder()?.write(msg.toByteArray())
+    }
+
+    fun requestCorrals() {
+        val msg = "CMD${Constants.CMD_CORRAL}"
+        Log.i(TAG,"Send requestCorral $msg")
+        mService?.LocalBinder()?.write(msg.toByteArray())
+    }
+    fun requestEstablishment() {
+        val msg = "CMD${Constants.CMD_ESTAB_LIST}"
+        Log.i(TAG,"Send requestEstablishment $msg")
+        mService?.LocalBinder()?.write(msg.toByteArray())
+    }
+
+    fun requestProducts() {
+        val msg = "CMD${Constants.CMD_PRODUCT}"
+        Log.i(TAG,"Send requestProducts $msg")
+        mService?.LocalBinder()?.write(msg.toByteArray())
+    }
+
+    fun refreshUsers(message: ByteArray):Boolean {
+        try{
+            val convertZip = ConvertZip()
+            val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
+            val gson = Gson()
+            val listType = object : TypeToken<ArrayList<MinUser>>() {}.type
+            listOfMinUsers = gson.fromJson<ArrayList<MinUser>>(json, listType)?:ArrayList()
+            return true
+        }catch (e: NumberFormatException){
+            Log.i(TAG,"bSyncroUsers NumberFormatException $e")
+            return false
+        }catch (e:Exception){
+            Log.i(TAG,"bSyncroUsers Exception $e")
+            return false
+        }
+    }
+
+    fun refreshRounds(message: ByteArray): Boolean {
+        try{
+            val convertZip = ConvertZip()
+            val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
+            val gson = Gson()
+            val listType = object : TypeToken<ArrayList<MinRound>>() {}.type
+            listOfMinRounds = gson.fromJson<ArrayList<MinRound>>(json, listType)?:ArrayList()
+            return true
+        }catch (e: NumberFormatException){
+            Log.i(TAG,"bSyncroRounds NumberFormatException $e")
+            return false
+        }catch (e:Exception){
+            Log.i(TAG,"bSyncroRounds Exception $e")
+            return false
+        }
+
+    }
+
+    fun refreshProducts(message: ByteArray):Boolean {
+        try{
+            val convertZip = ConvertZip()
+            val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
+            val gson = Gson()
+            val listType = object : TypeToken<ArrayList<MinProduct>>() {}.type
+            listOfMinProducts = gson.fromJson<ArrayList<MinProduct>>(json, listType)?:ArrayList()
+            return true
+        }catch (e: NumberFormatException){
+            Log.i(TAG,"bSyncroProduct NumberFormatException $e")
+            return false
+        }catch (e:Exception){
+            Log.i(TAG,"bSyncroProduct Exception $e")
+            return false
+        }
+    }
+
+    fun refreshCorrals(message: ByteArray): Boolean {
+        try{
+            val convertZip = ConvertZip()
+            val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
+            val gson = Gson()
+            val listType = object : TypeToken<ArrayList<MinCorral>>() {}.type
+            listOfMinCorrals = gson.fromJson<ArrayList<MinCorral>>(json, listType)?:ArrayList()
+            return true
+        }catch (e: NumberFormatException){
+            Log.i(TAG,"bSyncroCorral NumberFormatException $e")
+            return false
+        }catch (e:Exception){
+            Log.i(TAG,"bSyncroCorral Exception $e")
+            return false
+        }
+    }
+
+    fun refreshEstablishments(message: ByteArray): Boolean {
+        try{
+            val convertZip = ConvertZip()
+            val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
+            val gson = Gson()
+            val listType = object : TypeToken<ArrayList<MinEstablishment>>() {}.type
+            listOfMinEstablishments = gson.fromJson<ArrayList<MinEstablishment>>(json, listType)?:ArrayList()
+            return true
+        }catch (e: NumberFormatException){
+            Log.i(TAG,"bSyncroEstablishment NumberFormatException $e")
+            return false
+        }catch (e:Exception){
+            Log.i(TAG,"bSyncroEstablishment Exception $e")
+            return false
+        }
+    }
+
+    fun selectProductDialog(productsToSelect : ArrayList<MinProduct>) {
+        if(productsToSelect.isEmpty()){
+            return
+        }
+        val productosStr = arrayOfNulls<String>(productsToSelect.size)
+        var i = 0
+        for (producto in productsToSelect) {
+            productosStr[i] = producto.name + if(producto.description.isEmpty())"" else " - ${producto.description}"
+            i++
+        }
+        val builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle("Producto")
+        builder.setItems(productosStr) { dialog, which ->
+            val productSelected = productsToSelect[which]
+            val minProduct = MinProduct(
+                name = productSelected.name,
+                description = productSelected.description,
+                remoteId = productSelected.remoteId,
+                id = productSelected.id
+            )
+            Log.i(TAG,"producto seleccionado ${minProduct}")
+            sendSelectProductToMixer(minProduct)
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("Cancelar"){dialog,_->
+            dialog.dismiss()
+        }
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+
+    fun selectEstablishmentDialog(establishmentsToSelect: ArrayList<MinEstablishment>) {
+        val establishments = java.util.ArrayList<MinEstablishment>()
+        establishmentsToSelect.forEach{ establishment : MinEstablishment ->
+            establishments.add(establishment)
+        }
+        val establishmentStr = arrayOfNulls<String>(establishments.size)
+        for ((i, establishment) in establishments.withIndex()) {
+            establishmentStr[i] = establishment.name
+            establishments[i] = establishment
+        }
+        val builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle("Establecimientos")
+        builder.setItems(establishmentStr) { dialog, which ->
+            val establishmentSelected = establishmentsToSelect[which]
+            establishmentSelected.let {
+                sendSelectEstablishmentToMixer(it)
+            }
+            dialog.dismiss()
+            //**********************************************************************
+        }
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+
+
+    fun selectCorralDialog(corralsToSelect : ArrayList<MinCorral>) {
+        if(corralsToSelect.isEmpty()){
+            return
+        }
+        val corralStr = arrayOfNulls<String>(corralsToSelect.size)
+        for ((i, corral) in corralsToSelect.withIndex()) {
+            corralStr[i] = corral.name +if(corral.description.isEmpty()) "" else " - ${corral.description}"
+        }
+        val builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle("Corrales")
+        builder.setItems(corralStr) { dialog, which ->
+            val corralSelected = corralsToSelect[which]
+            corralSelected.let {
+                sendSelectCorralToMixer(it)
+            }
+            dialog.dismiss()
+            //**********************************************************************
+        }
+        builder.setPositiveButton(getString(R.string.finalizar)){dialog,_->
+            sendEndToMixer()
+            dialog.dismiss()
+        }
+        builder.setNegativeButton(getString(R.string.cancelar)){dialog,_->
+            dialog.dismiss()
+        }
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+    fun sendEndToMixer() {
+        val byteArray = "CMD${Constants.CMD_END}${String.format("%06d",0)}".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
+    private fun sendSelectCorralToMixer(minCorral: MinCorral) {
+        val byteArray = "CMD${Constants.CMD_SELECT_CORRAL}${String.format("%06d",minCorral.id)}".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
+    private fun sendSelectProductToMixer(minProduct: MinProduct) {
+        Log.i(TAG,"sendSelectProductToMixer $minProduct")
+        val byteArray = "CMD${Constants.CMD_SELECT_PRODUCT}${String.format("%06d",minProduct.id)}".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
+    private fun sendSelectEstablishmentToMixer(minEstablishment: MinEstablishment) {
+        val byteArray = "CMD${Constants.CMD_SELECT_ESTAB}${String.format("%06d",minEstablishment.id)}".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
+    fun requestListOfProducts() {
+        val byteArray = "CMD${Constants.CMD_REQ_PRODUCT}$000000".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
+    fun requestListOfCorrals() {
+        val byteArray = "CMD${Constants.CMD_REQ_CORRAL}$000000".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
+    fun dlgProduct(message: ByteArray) {
+        try {
+            val convertZip = ConvertZip()
+            val json = convertZip.decompressText(message.copyOfRange(7, message.size - 1))
+            val gson = Gson()
+            val listType = object : TypeToken<ArrayList<MinProduct>>() {}.type
+            val listOfMinProductsToSelect =
+                gson.fromJson<ArrayList<MinProduct>>(json, listType) ?: ArrayList()
+            Log.i(TAG, "dlgProduct $listOfMinProductsToSelect")
+            selectProductDialog(listOfMinProductsToSelect)
+            return
+        } catch (e: NumberFormatException) {
+            Log.i(TAG, "dlgProduct NumberFormatException $e")
+            return
+        } catch (e: Exception) {
+            Log.i(TAG, "dlgProduct Exception $e")
+            return
+        }
+    }
+
+    fun dlgEstablishment(message: ByteArray) {
+        try{
+            val convertZip = ConvertZip()
+            val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
+            val gson = Gson()
+            val listType = object : TypeToken<ArrayList<MinEstablishment>>() {}.type
+            val listOfMinEstablishmentToSelect = gson.fromJson<ArrayList<MinEstablishment>>(json, listType)?:ArrayList()
+            Log.i(TAG,"dlgEstablishment $listOfMinEstablishmentToSelect")
+            selectEstablishmentDialog(listOfMinEstablishmentToSelect)
+            return
+        }catch (e: NumberFormatException){
+            Log.i(TAG,"dlgEstablishment NumberFormatException $e")
+            return
+        }catch (e:Exception){
+            Log.i(TAG,"dlgEstablishment Exception $e")
+            return
+        }
+
+    }
+
+    fun dlgCorral(message: ByteArray) {
+        try {
+            val convertZip = ConvertZip()
+            val json = convertZip.decompressText(message.copyOfRange(7, message.size - 1))
+            val gson = Gson()
+            val listType = object : TypeToken<ArrayList<MinCorral>>() {}.type
+            val listOfMinCorralsToSelect =
+                gson.fromJson<ArrayList<MinCorral>>(json, listType) ?: ArrayList()
+            Log.i(TAG, "dlgCorral $listOfMinCorralsToSelect")
+            selectCorralDialog(listOfMinCorralsToSelect)
+            return
+        } catch (e: NumberFormatException) {
+            Log.i(TAG, "dlgCorral NumberFormatException $e")
+            return
+        } catch (e: Exception) {
+            Log.i(TAG, "dlgCorral Exception $e")
+            return
+        }
+    }
+
+    fun getLoadDifference(): Double {
+        var totalDiff = 0.0
+        minRoundRunDetail?.round?.diet?.products?.forEach {
+            totalDiff += (it.finalWeight-it.initialWeight)- it.targetWeight
+        }
+        return totalDiff
+    }
+
+    fun getFinalLoad(): Double {
+        var totalLoad = 0.0
+        minRoundRunDetail?.round?.diet?.products?.forEach {
+            totalLoad += (it.finalWeight-it.initialWeight)
+        }
+        return totalLoad
+    }
+
+    fun getDownloadDifference(): Double {
+        var totalDiff = 0.0
+        minRoundRunDetail?.round?.corrals?.forEach {
+            totalDiff += (it.initialWeight-it.finalWeight)-it.actualTargetWeight
+        }
+        return totalDiff
+    }
+
+    fun getFinalDownload(): Double {
+        var totalDownload = 0.0
+        minRoundRunDetail?.round?.corrals?.forEach {
+            totalDownload += (it.initialWeight-it.finalWeight)
+        }
+        return totalDownload
+    }
+
+    fun getTargetWeight(): Double {
+        var totalTarget = 0.0
+        minRoundRunDetail?.round?.corrals?.forEach {
+            totalTarget += (it.actualTargetWeight)
+        }
+        return totalTarget
+    }
+
+
 
 }
 

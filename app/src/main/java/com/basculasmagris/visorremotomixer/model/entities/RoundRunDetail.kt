@@ -2,6 +2,8 @@ package com.basculasmagris.visorremotomixer.model.entities
 
 import android.bluetooth.BluetoothDevice
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -172,6 +174,15 @@ data class DownloadReport (
 /***************************************************************
  * Para transmitir a remoto
  ***************************************************************/
+@Parcelize
+data class MinUserDetail (
+    val username: String,
+    val name: String,
+    val lastname: String,
+    val password: String,
+    var remoteId: Long,
+    var id: Long
+) : Parcelable
 
 @Parcelize
 data class MinRoundRunDetail (
@@ -203,6 +214,7 @@ data class MinRoundDetail (
 data class MinCorralDetail (
     val name: String,
     val description: String,
+    val establishmentId: Long,
     val order: Int,
     var initialWeight: Long,
     var finalWeight: Long,
@@ -235,3 +247,49 @@ data class MinProductDetail (
     var targetWeight: Long,
     val id: Long
 ) : Parcelable
+
+
+@Parcelize
+data class MinUser (
+    val username: String,
+    val name: String,
+    val lastname: String,
+    val password: String,
+    val remoteId: Long,
+    val id: Long
+) : Parcelable
+
+@Parcelize
+data class MinRound (
+    val name: String,
+    val description: String,
+    var remoteId: Long,
+    val id: Long
+) : Parcelable
+
+@Parcelize
+data class MinEstablishment (
+    val name: String,
+    val description: String,
+    val remoteId: Long,
+    val id: Long
+) : Parcelable
+
+@Parcelize
+data class MinCorral (
+    val name: String,
+    val description: String,
+    val establishmentId: Long,
+    var remoteId: Long,
+    val id: Long
+) : Parcelable
+
+
+@Parcelize
+data class MinProduct (
+    val name: String,
+    val description: String,
+    val remoteId: Long,
+    val id: Long
+) : Parcelable
+

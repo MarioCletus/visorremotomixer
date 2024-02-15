@@ -859,22 +859,6 @@ class HomeFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun alertMixer(msg: String) {
-        val builder = androidx.appcompat.app.AlertDialog.Builder(requireActivity())
-        builder.setTitle("Alerta")
-        builder.setMessage(msg)
-        builder.setPositiveButton("Vincular") { dialog, _ ->
-            val options = NavOptions.Builder()
-                .setPopUpTo(R.id.nav_home, true)
-                .build()
-            findNavController().navigate(R.id.nav_mixer, null, options)
-            dialog.dismiss()
-        }
-        builder.setNegativeButton("Cerrar") { dialog, _ ->
-            dialog.dismiss()
-        }
-        builder.show()
-    }
 
     fun goToRoundDetails(round: Round){
         findNavController().navigate(HomeFragmentDirections.actionNavHomeToRoundDetailFragment(
@@ -882,95 +866,6 @@ class HomeFragment : BottomSheetDialogFragment() {
         ))
     }
 
-    fun goToRemoteMixerFragment(){
-        findNavController().navigate(HomeFragmentDirections.actionNavHomeToAddUpdateRoundActivity())
-    }
-
-    fun goToAddUpdateRound(){
-//        val intent = Intent(activity, AddUpdateRoundActivity::class.java)
-//        startActivity(intent)
-        findNavController().navigate(HomeFragmentDirections.actionNavHomeToAddUpdateRoundActivity())
-    }
-
-    fun goToRoundRun(roundRunDetail: RoundRunDetail,toStep : Int){
-        val selectedMixer = getSelectedMixer()
-
-        val selecetedBluetoothDevice = getSelectedMixerBluetoothDevice()
-        roundRunDetail.mixerBluetoothDevice =  selecetedBluetoothDevice
-
-        selectedMixer?.let {
-            Log.i("run", "selectedMixer: ${selectedMixer.name}")
-            val mixer = MixerDetail(
-                it.name,
-                it.description,
-                it.mac,
-                it.btBox,
-                it.tara,
-                it.calibration,
-                it.rfid,
-                it.remoteId,
-                it.updatedDate,
-                it.archiveDate,
-                it.id
-            )
-
-            roundRunDetail.mixer = mixer
-
-            if (roundRunDetail.endDate.isNotEmpty()) {
-                Log.i("run", "[Nueva] Ronda con id: ${roundRunDetail.id} | ${roundRunDetail.round.name}")
-                roundRunDetail.round.diet.products.forEach {  prodcutDetail ->
-                    prodcutDetail.initialWeight = 0.0
-                    prodcutDetail.currentWeight = 0.0
-                    prodcutDetail.finalWeight = 0.0
-                }
-                roundRunDetail.round.corrals.forEach { corralDetail ->
-                    corralDetail.initialWeight = 0.0
-                    corralDetail.currentWeight = 0.0
-                    corralDetail.finalWeight = 0.0
-                    corralDetail.actualTargetWeight = corralDetail.customTargetWeight
-                }
-                roundRunDetail.round.customRoundRunPercentage = roundRunDetail.round.customPercentage
-                roundRunDetail.round.customRoundRunWeight = roundRunDetail.round.weight
-                roundRunDetail.customTara = 0.0
-                roundRunDetail.addedBlend = 0.0
-
-                val newRoundRunDetail = RoundRunDetail(
-                    roundRunDetail.userId,
-                    roundRunDetail.userDisplayName,
-                    roundRunDetail.round,
-                    mixer = mixer,
-                    selecetedBluetoothDevice,
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.APP_DB_FORMAT_DATE)),
-                    "",
-                    "",
-                    0L,
-                    roundRunDetail.round.customPercentage,
-                    roundRunDetail.customTara,
-                    roundRunDetail.addedBlend,
-                    roundRunDetail.state,
-                    0L,
-                )
-                Log.i(TAG, "Ronda: $roundRunDetail")
-
-                Helper.logRoundRunComplete(newRoundRunDetail)
-                cleanObservers()
-                findNavController().navigate(HomeFragmentDirections.actionNavHomeToRoundRunActivity(newRoundRunDetail))
-
-            } else {
-                Log.i(TAG, "[Continuar] Ronda con id: ${roundRunDetail.id} | ${roundRunDetail.round.name}")
-                if (roundRunDetail.startDate.isEmpty()){
-                    roundRunDetail.startDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.APP_DB_FORMAT_DATE))
-                    roundRunDetail.customTara = 0.0//TODO selectedMixer.tara Para mi estas dos lineas estan mal
-                    roundRunDetail.addedBlend = 0.0//TODO selectedMixer.tara
-                }
-                cleanObservers()
-                findNavController().navigate(HomeFragmentDirections.actionNavHomeToRoundRunActivity(roundRunDetail,toStep))
-            }
-        }?: run {
-            alertMixer("No se puede iniciar la ronda porque no hay ningún mixer vinculado en el dispositvo.")
-        }
-
-    }
 
     private fun customItemsLDialog(title: String, itemsList: List<CustomListItem>, selection: String){
         mCustomListDialog = Dialog(requireActivity())
@@ -1087,10 +982,7 @@ class HomeFragment : BottomSheetDialogFragment() {
                 return
             }
             when (String(message.copyOfRange(0,3))){
-                Constants.CMD_INI->{
-                    Log.i(TAG,"CMD_INI")
-                    goToRemoteMixerFragment()
-                }
+
 
                 Constants.CMD_ROUNDDETAIL->{
                     Log.i(TAG,"CMD_ROUNDDETAIL")

@@ -337,7 +337,7 @@
     <string name="carga_total">Total cargado</string>
     <string name="ajustes">Ajustes</string>
     <string name="cargar">Cargar</string>
-    <string name="descargar">Descargar en</string>
+    <string name="descargar_en">Descargar en</string>
     <string name="add_tablet_mixer">Añadir Tablet de Mixer</string>
     <string name="ph_tablet_mixer_name">Nombre</string>
     <string name="ph_tablet_mixer_description">Descripcion</string>
@@ -346,6 +346,10 @@
     <string name="menu_config">Configuracion</string>
     <string name="mixers">Mixers</string>
     <string name="proximo_producto">Próximo producto</string>
+    <string name="product">Producto</string>
+    <string name="corral">Corral</string>
+    <string name="rest">Resto</string>
+    <string name="finalizar">Finalizar</string>
 
 
 </resources>

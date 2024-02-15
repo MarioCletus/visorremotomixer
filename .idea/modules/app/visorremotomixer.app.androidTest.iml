@@ -15,6 +15,7 @@
             <stringArg name="classpath">
               <args>
                 <arg>$MODULE_DIR$/../../../app/build/intermediates/compile_and_runtime_not_namespaced_r_class_jar/debugAndroidTest/R.jar</arg>
+                <arg>$MODULE_DIR$/../../../app/build/intermediates/compile_app_classes_jar/debug/classes.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/4faeca535ec317cca95337b74d7a9275/transformed/jetified-junit-1.1.3-api.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/41372a7d1a20287d565a22495dd14fb5/transformed/espresso-core-3.4.0-api.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/854a55c2c18ee4efa96d35652f61c054/transformed/jetified-viewbinding-7.4.2-api.jar</arg>

@@ -40,13 +40,6 @@ class CustomListItemAdapter (
         holder.tvDescription.text = item.description.ifEmpty { activity.getString(R.string.no_description) }
 
         holder.itemView.setOnClickListener{
-            if (activity is AddUpdateCorralActivity){
-                activity.selectedListItem(item, selection)
-            }
-
-            if (activity is AddUpdateDietActivity){
-                activity.selectedListItem(item, selection)
-            }
 
             if (activity is AddUpdateRoundActivity){
                 activity.selectedListItem(item, selection)

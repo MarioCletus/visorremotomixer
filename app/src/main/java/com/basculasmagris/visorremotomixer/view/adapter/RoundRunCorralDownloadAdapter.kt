@@ -1,4 +1,5 @@
 package com.basculasmagris.visorremotomixer.view.adapter
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
@@ -10,6 +11,7 @@ import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.ItemLineRoundRunCorralDownloadBinding
 import com.basculasmagris.visorremotomixer.model.entities.MinCorralDetail
 import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunDetail
+import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
 
 
 class RoundRunCorralDownloadAdapter (
@@ -39,19 +41,24 @@ class RoundRunCorralDownloadAdapter (
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val corral = filteredRoundCorrals[position]
         fragment.context?.let {context->
-            if(selectedPosition == position) {
-                holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_select_bkg)
-            }
-            else if( position < selectedPosition){
+            if((fragment as RemoteMixerFragment).isInFree()){
                 holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_ready_bkg)
-                val diff = (corral.initialWeight - corral.finalWeight) - corral.actualTargetWeight
-                if(diff >= 1){
-                    holder.tvDiffWeight.text = "+${diff}Kg"
-                }else {
-                    holder.tvDiffWeight.text = "${diff}Kg"
-                }
+                holder.tvDiffWeight.text = "0Kg"
             }else{
-                holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_bkg)
+                if(selectedPosition == position) {
+                    holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_select_bkg)
+                }
+                else if( position < selectedPosition){
+                    holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_ready_bkg)
+                    val diff = (corral.initialWeight - corral.finalWeight) - corral.actualTargetWeight
+                    if(diff >= 1){
+                        holder.tvDiffWeight.text = "+${diff}Kg"
+                    }else {
+                        holder.tvDiffWeight.text = "${diff}Kg"
+                    }
+                }else{
+                    holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_bkg)
+                }
             }
             holder.tvCorralName.text = corral.name
             holder.tvCurrentWeight.text = "${corral.actualTargetWeight}Kg"

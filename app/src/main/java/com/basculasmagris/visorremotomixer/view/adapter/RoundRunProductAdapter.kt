@@ -12,6 +12,7 @@ import com.basculasmagris.visorremotomixer.databinding.ItemLineRoundRunProductSt
 import com.basculasmagris.visorremotomixer.model.entities.MinDietDetail
 import com.basculasmagris.visorremotomixer.model.entities.MinProductDetail
 import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunDetail
+import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
 
 
 class RoundRunProductAdapter (
@@ -43,19 +44,24 @@ class RoundRunProductAdapter (
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val product = filteredProducts[position]
         fragment.context?.let {
-            if(selectedPosition == position && !endLoad) {
-                holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_select_bkg)
-            }
-            else if( position < selectedPosition || endLoad){
+            if((fragment as RemoteMixerFragment).isInFree()){
                 holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_ready_bkg)
-                val value = (product.finalWeight - product.initialWeight)-product.targetWeight
-                if(value >= 1){
-                    holder.tvDiffWeight.text = "+${value}Kg"
-                }else {
-                    holder.tvDiffWeight.text = "${value}Kg"
-                }
+                holder.tvDiffWeight.text = "$0Kg"
             }else{
-                holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_bkg)
+                if(selectedPosition == position && !endLoad) {
+                    holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_select_bkg)
+                }
+                else if( position < selectedPosition || endLoad){
+                    holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_ready_bkg)
+                    val value = (product.finalWeight - product.initialWeight)-product.targetWeight
+                    if(value >= 1){
+                        holder.tvDiffWeight.text = "+${value}Kg"
+                    }else {
+                        holder.tvDiffWeight.text = "${value}Kg"
+                    }
+                }else{
+                    holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_bkg)
+                }
             }
             holder.tvProductName.text = product.name
             holder.tvCurrentWeight.text = "${product.targetWeight}Kg"

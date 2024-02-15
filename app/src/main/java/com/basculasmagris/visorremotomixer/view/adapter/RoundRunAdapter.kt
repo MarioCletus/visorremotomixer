@@ -3,7 +3,9 @@ package com.basculasmagris.visorremotomixer.view.adapter
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
@@ -14,7 +16,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
@@ -25,14 +26,13 @@ import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.utils.Helper.Companion.getCurrentUser
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
 import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
-import com.basculasmagris.visorremotomixer.view.fragments.HomeFragmentDirections
 import com.basculasmagris.visorremotomixer.viewmodel.RoundViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.RoundViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 import kotlin.math.roundToInt
 
 class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<RoundRunAdapter.ViewHolder>(),
@@ -167,7 +167,7 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
                 holder.roundCard.setCardBackgroundColor(Color.LTGRAY)
                 holder.tvRoundStartDate.setTextColor(Color.BLACK)
                 holder.tvRoundName.setTextColor(Color.BLACK)
-                holder.tvRoundRunDescription.setTextColor(R.color.color_deep_green)
+//                holder.tvRoundRunDescription.setTextColor(R.color.color_deep_green)
 //                holder.btnStopRound.visibility = VISIBLE
                 holder.btnStopRound.text = fragment.resources.getString(R.string.resumen)
                 holder.btnStopRound.background = fragment.context?.let { getDrawable(it,R.drawable.btn_round_rounded_blue) }
@@ -246,7 +246,7 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
                         }
                     }
                 }else if(holder.btnStopRound.text.equals(fragment.resources.getString(R.string.resumen))){
-                    fragment.findNavController().navigate(HomeFragmentDirections.actionNavHomeToRoundRunActivity(roundToRun,4))
+//                    fragment.findNavController().navigate(HomeFragmentDirections.actionNavHomeToRoundRunActivity(roundToRun,4))
                 }
 
             }

@@ -15,7 +15,6 @@
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
-    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".application.SpiMixerApplication"
@@ -66,43 +65,21 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustNothing" />
 
-        <activity
-            android:name=".view.activities.RoundRunActivity"
-            android:exported="true"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Spimixer.NoActionBar"
-            android:windowSoftInputMode="adjustNothing" />
+
         <activity
             android:name=".view.activities.AddUpdateRoundActivity"
             android:exported="true"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Spimixer.NoActionBar"
             android:windowSoftInputMode="adjustNothing" />
-        <activity
-            android:name=".view.activities.AddUpdateDietActivity"
-            android:exported="true"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Spimixer.NoActionBar"
-            android:windowSoftInputMode="adjustNothing" />
+
         <activity
             android:name=".view.activities.AddUpdateMixerActivity"
             android:exported="true"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Spimixer.NoActionBar"
             android:windowSoftInputMode="adjustNothing" />
-        <activity
-            android:name=".view.activities.AddUpdateCorralActivity"
-            android:exported="true"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Spimixer.NoActionBar"
-            android:windowSoftInputMode="adjustNothing" />
-        <activity
-            android:name=".view.activities.AddUpdateEstablishmentActivity"
-            android:exported="true"
-            android:label="Agregar Establecimiento"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Spimixer.NoActionBar"
-            android:windowSoftInputMode="adjustNothing" />
+
         <activity
             android:name=".view.activities.SplashActivity"
             android:exported="true"
@@ -115,18 +92,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".view.activities.AddUpdateProductActivity"
-            android:configChanges="orientation"
-            android:exported="true"
-            android:label="Agregar Producto"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Spimixer.NoActionBar"
-            android:windowSoftInputMode="adjustNothing">
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
+
         <activity
             android:name=".view.activities.MainActivity"
             android:exported="true"

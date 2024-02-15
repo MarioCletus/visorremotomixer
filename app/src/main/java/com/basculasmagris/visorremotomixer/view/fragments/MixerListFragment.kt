@@ -183,9 +183,7 @@ class MixerListFragment : Fragment() {
 
     }
 
-    fun goToAddUpdateMixer(){
-        findNavController().navigate(MixerListFragmentDirections.actionMixerListFragmentToAddUpdateMixerActivity())
-    }
+
 
     fun deleteMixer(mixer: Mixer){
         val builder = AlertDialog.Builder(requireActivity())

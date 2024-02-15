@@ -157,30 +157,6 @@ class RoundListFragment : Fragment() {
         ))
     }
 
-    fun goToAddUpdateRound(){
-        findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToAddUpdateRoundActivity())
-    }
-
-    fun deleteRound(round: Round){
-        val builder = AlertDialog.Builder(requireActivity())
-        builder.setTitle(resources.getString(R.string.title_delete_round))
-        builder.setMessage(resources.getString(R.string.msg_delete_round_dialog, round.name))
-        builder.setIcon(android.R.drawable.ic_dialog_alert)
-        builder.setPositiveButton(resources.getString(R.string.lbl_yes)){ dialogInterface, _ ->
-            mRoundViewModel.delete(round)
-            dialogInterface.dismiss()
-        }
-
-        builder.setNegativeButton(resources.getString(R.string.lbl_no)){ dialogInterface, _ ->
-            dialogInterface.dismiss()
-        }
-
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         cleanObservers()
