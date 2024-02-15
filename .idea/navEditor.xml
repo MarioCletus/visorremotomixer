@@ -13,8 +13,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
+                            <option name="x" value="29" />
+                            <option name="y" value="-296" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -25,8 +25,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
+                            <option name="x" value="-249" />
+                            <option name="y" value="-99" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -37,8 +37,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
+                            <option name="x" value="-246" />
+                            <option name="y" value="421" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -73,8 +73,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
+                            <option name="x" value="438" />
+                            <option name="y" value="13" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -85,8 +85,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
+                            <option name="x" value="446" />
+                            <option name="y" value="-275" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -97,8 +97,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
+                            <option name="x" value="-259" />
+                            <option name="y" value="-655" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -109,8 +109,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
+                            <option name="x" value="-28" />
+                            <option name="y" value="-862" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -125,11 +125,6 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_nav_home_to_roundRunActivity">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
                           </map>
                         </option>
                       </LayoutPositions>
@@ -140,8 +135,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
+                            <option name="x" value="222" />
+                            <option name="y" value="-302" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -199,8 +194,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
+                            <option name="x" value="-404" />
+                            <option name="y" value="-1097" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -241,7 +236,7 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="resume:">
+                  <entry key="resume_fragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
@@ -252,12 +247,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_tablet_mixerListFragment_to_addUpdateTabletMixerActivity">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                            <entry key="action_tablet_mixer_list_fragment_to_remote_mixer_fragment">
+                            <entry key="action_resume_fragment_to_remote_mixer_fragment">
                               <value>
                                 <LayoutPositions />
                               </value>

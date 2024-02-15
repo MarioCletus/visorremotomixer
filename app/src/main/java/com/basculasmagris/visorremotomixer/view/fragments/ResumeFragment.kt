@@ -6,18 +6,18 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.FragmentResumeBinding
 import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.Mixer
-import com.basculasmagris.visorremotomixer.model.entities.MixerDetail
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
@@ -39,6 +39,7 @@ class ResumeFragment : Fragment() {
     private var bSyncroRoundDetail = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         arguments?.let {
         }
     }
@@ -107,8 +108,10 @@ class ResumeFragment : Fragment() {
     }
 
     fun exitFragment(){
+        Log.i(TAG,"exitFragment")
         (requireActivity() as MainActivity).sendEndToMixer()
         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
+        findNavController().navigate(ResumeFragmentDirections.actionResumeFragmentToRemoteMixerFragment())
     }
 
 
@@ -209,27 +212,22 @@ class ResumeFragment : Fragment() {
 
                 Constants.CMD_WEIGHT->{
                     exitFragment()
-                    findNavController().navigate(ResumeFragmentDirections.actionResumeFragmentToRemoteMixerFragment())
                 }
 
                 Constants.CMD_WEIGHT_LOAD->{
                     exitFragment()
-                    findNavController().navigate(ResumeFragmentDirections.actionResumeFragmentToRemoteMixerFragment())
                 }
 
                 Constants.CMD_WEIGHT_DWNL->{
                     exitFragment()
-                    findNavController().navigate(ResumeFragmentDirections.actionResumeFragmentToRemoteMixerFragment())
                 }
 
                 Constants.CMD_WEIGHT_LOAD_FREE->{
                     exitFragment()
-                    findNavController().navigate(ResumeFragmentDirections.actionResumeFragmentToRemoteMixerFragment())
                 }
 
                 Constants.CMD_WEIGHT_DWNL_FREE->{
                     exitFragment()
-                    findNavController().navigate(ResumeFragmentDirections.actionResumeFragmentToRemoteMixerFragment())
                 }
 
                 Constants.CMD_WEIGHT_RESUME->{
@@ -274,4 +272,14 @@ class ResumeFragment : Fragment() {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                exitFragment()
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)}
+        }
+    }
 }
