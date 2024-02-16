@@ -111,7 +111,12 @@ class ResumeFragment : Fragment() {
         Log.i(TAG,"exitFragment")
         (requireActivity() as MainActivity).sendEndToMixer()
         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
-        findNavController().navigate(ResumeFragmentDirections.actionResumeFragmentToRemoteMixerFragment())
+        try{
+            findNavController().navigate(ResumeFragmentDirections.actionResumeFragmentToRemoteMixerFragment())
+        }catch (e : Exception){
+            Log.i(TAG,"Nav Exception $e")
+        }
+
     }
 
 
@@ -168,7 +173,7 @@ class ResumeFragment : Fragment() {
                     val convertZip = ConvertZip()
                     Log.i(TAG,"message.lenght ${message.size}")
                     val byteArrayUtil = message.copyOfRange(9,message.size-1)
-                    Log.i(TAG,"CMD_ROUNDDETAIL ${messageStr.length} byteArrayUtil ${byteArrayUtil.size} ")
+                    Log.i("showCommand","CMD_ROUNDDETAIL ${messageStr.length} byteArrayUtil ${byteArrayUtil.size} ")
                     try{
                         val jsonString : String = convertZip.decompressText(byteArrayUtil)
                         Log.i("Json","jsonString * ${jsonString}")
@@ -203,30 +208,35 @@ class ResumeFragment : Fragment() {
 
                         }
                     }catch (e: NumberFormatException){
-                        Log.i(TAG,"CMD_ROUNDDETAIL NumberFormatException $e")
+                        Log.i("showCommand","CMD_ROUNDDETAIL NumberFormatException $e")
                     }catch (e:Exception){
-                        Log.i(TAG,"CMD_ROUNDDETAIL Exception $e")
+                        Log.i("showCommand","CMD_ROUNDDETAIL Exception $e")
                     }
 
                 }
 
                 Constants.CMD_WEIGHT->{
+                    Log.v("commandsWeight","CMD_WEIGHT")
                     exitFragment()
                 }
 
                 Constants.CMD_WEIGHT_LOAD->{
+                    Log.v("commandsWeight","CMD_WEIGHT_LOAD")
                     exitFragment()
                 }
 
                 Constants.CMD_WEIGHT_DWNL->{
+                    Log.v("commandsWeight","CMD_WEIGHT_DWNL")
                     exitFragment()
                 }
 
                 Constants.CMD_WEIGHT_LOAD_FREE->{
+                    Log.v("commandsWeight","CMD_WEIGHT_LOAD_FREE")
                     exitFragment()
                 }
 
                 Constants.CMD_WEIGHT_DWNL_FREE->{
+                    Log.v("commandsWeight","CMD_WEIGHT_DWNL_FREE")
                     exitFragment()
                 }
 

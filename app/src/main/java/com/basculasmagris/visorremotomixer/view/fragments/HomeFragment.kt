@@ -985,7 +985,7 @@ class HomeFragment : BottomSheetDialogFragment() {
 
 
                 Constants.CMD_ROUNDDETAIL->{
-                    Log.i(TAG,"CMD_ROUNDDETAIL")
+                    Log.i("showCommand","CMD_ROUNDDETAIL")
                     val byteArrayUtil = message.copyOfRange(9,message.size-9)
                     val arraySize: Int
                     try{

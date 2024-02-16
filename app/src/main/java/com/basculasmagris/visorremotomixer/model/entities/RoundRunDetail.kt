@@ -217,6 +217,7 @@ data class MinCorralDetail (
     val establishmentId: Long,
     val order: Int,
     var initialWeight: Long,
+    var currentWeight: Long,
     var finalWeight: Long,
     var customTargetWeight: Long,
     var actualTargetWeight: Long,
@@ -243,6 +244,7 @@ data class MinProductDetail (
     val description: String,
     val order: Int,
     var initialWeight: Long,
+    var currentWeight: Long,
     var finalWeight: Long,
     var targetWeight: Long,
     val id: Long

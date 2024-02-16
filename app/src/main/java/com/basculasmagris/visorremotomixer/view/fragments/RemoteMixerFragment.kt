@@ -90,6 +90,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
     private val REFRESH_TIME = 10
     private var countMsg: Int = REFRESH_TIME
+    private var count_resume = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(TAG,"onCreate")
@@ -241,8 +242,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                                 roundRunCorralAdapter?.selectCorral(corralInRound.order-1)
                                 return@forEach
                             }
-                            currentCorralDetail = currentCorral
                         }
+                        currentCorralDetail = currentCorral
                         if(currentCorral != corrals[0] && currentCorral.order > 2){
                             mBinding.rvMixerProductsToLoad.scrollToPosition(currentCorral.order-2)
                         }
@@ -372,9 +373,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 if(bInLoad && !bInFree)
                     currentProductDetail?.let {productDetail ->
                         activity?.let {mainActivity ->
-                            if(productDetail.finalWeight - productDetail.initialWeight > productDetail.targetWeight*0.9){
+                            if(productDetail.currentWeight - productDetail.initialWeight > productDetail.targetWeight*0.9){
                                 if(mBinding.tvCurrentProductWeightPending.currentTextColor== ContextCompat.getColor(mainActivity, R.color.white)){
-                                    if(productDetail.finalWeight - productDetail.initialWeight > productDetail.targetWeight){
+                                    if(productDetail.currentWeight - productDetail.initialWeight > productDetail.targetWeight){
                                         mBinding.tvCurrentProductWeightPending.setTextColor(
                                             ContextCompat.getColor(mainActivity, R.color.color_yellow))
                                         }else{
@@ -387,7 +388,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                                 }else{
                                     mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(mainActivity, R.color.white))
                                 }
-                                if(productDetail.finalWeight - productDetail.initialWeight > productDetail.targetWeight && noPrevAlert){
+                                if(productDetail.currentWeight - productDetail.initialWeight > productDetail.targetWeight && noPrevAlert){
                                     countGreaterThanTarget++
                                 }
                         }
@@ -396,10 +397,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 if(bInDownload && !bInFree)
                     currentCorralDetail?.let { corralDetail ->
                         activity?.let {mainActivity ->
-                            Log.i(TAG,"corralDetail ${corralDetail.name}   ${corralDetail.initialWeight}    ${corralDetail.finalWeight}  ")
-                            if(corralDetail.finalWeight != 0L && corralDetail.initialWeight - corralDetail.finalWeight  > corralDetail.actualTargetWeight*0.9){
+                            Log.i(TAG,"corralDetail ${corralDetail.name}   ${corralDetail.initialWeight}    ${corralDetail.currentWeight}  ")
+                            if(corralDetail.currentWeight != 0L && corralDetail.initialWeight - corralDetail.currentWeight  > corralDetail.actualTargetWeight*0.9){
                                 if(mBinding.tvCurrentProductWeightPending.currentTextColor == ContextCompat.getColor(activity!!, R.color.white)){
-                                    if(corralDetail.initialWeight - corralDetail.finalWeight > corralDetail.actualTargetWeight){
+                                    if(corralDetail.initialWeight - corralDetail.currentWeight > corralDetail.actualTargetWeight){
                                         mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(mainActivity, R.color.color_yellow))
                                     }else{
                                         mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(mainActivity, R.color.color_orange))
@@ -410,7 +411,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                             }else{
                                 mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(mainActivity, R.color.white))
                             }
-                            if(corralDetail.initialWeight - corralDetail.finalWeight > corralDetail.actualTargetWeight && noPrevAlert){
+                            if(corralDetail.initialWeight - corralDetail.currentWeight > corralDetail.actualTargetWeight && noPrevAlert){
                                 countGreaterThanTarget++
                             }
                         }
@@ -473,7 +474,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     val convertZip = ConvertZip()
                     Log.i(TAG,"message.lenght ${message.size}")
                     val byteArrayUtil = message.copyOfRange(9,message.size-1)
-                    Log.i(TAG,"CMD_ROUNDDETAIL ${messageStr.length} byteArrayUtil ${byteArrayUtil.size} ")
+                    Log.i("showCommand","CMD_ROUNDDETAIL ${messageStr.length} byteArrayUtil ${byteArrayUtil.size} ")
                     try{
                         val jsonString : String = convertZip.decompressText(byteArrayUtil)
                         Log.i("Json","jsonString * ${jsonString}")
@@ -521,57 +522,58 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                             }
                         }
                     }catch (e: NumberFormatException){
-                        Log.i(TAG,"CMD_ROUNDDETAIL NumberFormatException $e")
+                        Log.i("showCommand","CMD_ROUNDDETAIL NumberFormatException $e")
                     }catch (e:Exception){
-                        Log.i(TAG,"CMD_ROUNDDETAIL Exception $e")
+                        Log.i("showCommand","CMD_ROUNDDETAIL Exception $e")
                     }
                 }
 
                 Constants.CMD_USER_LIST->{
-                    Log.i(TAG,"CMD_USER_LIST")
+                    Log.i("showCommand","CMD_USER_LIST")
                     bSyncroUsers = (requireActivity() as MainActivity).refreshUsers(message)
 
                 }
 
                 Constants.CMD_ROUNDS->{
-                    Log.i(TAG,"CMD_ROUNDS")
+                    Log.i("showCommand","CMD_ROUNDS")
                     bSyncroRounds = (requireActivity() as MainActivity).refreshRounds(message)
                 }
 
 //                Constants.CMD_PRODUCT->{
-//                    Log.i(TAG,"CMD_PRODUCT")
+//                    Log.i("showCommand","CMD_PRODUCT")
 //                    bSyncroProducts = (requireActivity() as MainActivity).refreshProducts(message)
 //                }
 //
 //                Constants.CMD_CORRAL->{
-//                    Log.i(TAG,"CMD_CORRAL")
+//                    Log.i("showCommand","CMD_CORRAL")
 //                    bSyncroCorrals = (requireActivity() as MainActivity).refreshCorrals(message)
 //                }
 //
 //                Constants.CMD_ESTAB_LIST->{
-//                    Log.i(TAG,"CMD_ESTAB_LIST")
+//                    Log.i("showCommand","CMD_ESTAB_LIST")
 //                    bSyncroEstablishment = (requireActivity() as MainActivity).refreshEstablishments(message)
 //                }
 
                 Constants.CMD_DLG_PRODUCT->{
-                    Log.i(TAG,"CMD_DLG_PRODUCT")
+                    Log.i("showCommand","CMD_DLG_PRODUCT")
                     (requireActivity() as MainActivity).dlgProduct(message)
                 }
 
 
                 Constants.CMD_DLG_EST->{
-                    Log.i(TAG,"CMD_DLG_EST")
+                    Log.i("showCommand","CMD_DLG_EST")
                     (requireActivity() as MainActivity).dlgEstablishment(message)
                 }
 
 
                 Constants.CMD_DLG_CORRAL->{
-                    Log.i(TAG,"CMD_DLG_CORRAL")
+                    Log.i("showCommand","CMD_DLG_CORRAL")
                     (requireActivity() as MainActivity).dlgCorral(message)
                 }
 
 
                 Constants.CMD_WEIGHT->{
+                    count_resume = 0
                     try{
                         if(bInLoad || bInDownload){
                             countMsg = REFRESH_TIME
@@ -585,12 +587,13 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         bInDownload = false
                         bInFree = false
                     }catch (e : Exception){
-                        Log.i(TAG,"CMD_WEIGHT Exception $e")
+                        Log.i("showCommand","CMD_WEIGHT Exception $e")
                     }
 
                 }
 
                 Constants.CMD_WEIGHT_LOAD->{
+                    count_resume = 0
                     try{
                         if(bInLoad == false){
                             mBinding.btnJump.text = getString(R.string.salto)
@@ -606,12 +609,13 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         bInDownload = false
                         bInFree = false
                     }catch (e : Exception){
-                        Log.i(TAG,"CMD_WEIGHT_LOAD Exception $e")
+                        Log.i("showCommand","CMD_WEIGHT_LOAD Exception $e")
                     }
 
                 }
 
                 Constants.CMD_WEIGHT_DWNL->{
+                    count_resume = 0
                     try{
                         if(!bInDownload){
                             mBinding.btnJump.text = getString(R.string.salto)
@@ -627,12 +631,13 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         bInLoad = false
                         bInFree = false
                     }catch (e : Exception){
-                        Log.i(TAG,"CMD_WEIGHT_DWNL Exception $e")
+                        Log.i("showCommand","CMD_WEIGHT_DWNL Exception $e")
                     }
 
                 }
 
                 Constants.CMD_WEIGHT_LOAD_FREE->{
+                    count_resume = 0
                     try{
                         if(!bInLoad){
                             mBinding.btnJump.text = getString(R.string.salto)
@@ -648,12 +653,13 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         bInDownload = false
                         bInFree = true
                     }catch (e : Exception){
-                        Log.i(TAG,"CMD_WEIGHT_LOAD Exception $e")
+                        Log.i("showCommand","CMD_WEIGHT_LOAD Exception $e")
                     }
 
                 }
 
                 Constants.CMD_WEIGHT_DWNL_FREE->{
+                    count_resume = 0
                     try{
                         if(!bInDownload){
                             mBinding.btnJump.text = getString(R.string.salto_fin)
@@ -669,12 +675,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         bInLoad = false
                         bInFree = true
                     }catch (e : Exception){
-                        Log.i(TAG,"CMD_WEIGHT_DWNL Exception $e")
+                        Log.i("showCommand","CMD_WEIGHT_DWNL Exception $e")
                     }
                 }
 
                 Constants.CMD_MIXER ->{
-                    Log.i(TAG,"CMD_MIXER")
+                    Log.i("showCommand","CMD_MIXER")
                     try{
                         val convertZip = ConvertZip()
                         val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
@@ -694,12 +700,14 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_RESUME->{
-                    try{
-                        findNavController().navigate(RemoteMixerFragmentDirections.actionRemoteMixerFragmentToResumeFragment())
-                    }catch (e : Exception){
-                        Log.i(TAG,"CMD_WEIGHT_RESUME Exception $e")
+                    if(count_resume++ > 5){
+                        Log.v("commandsWeight","CMD_WEIGHT_RESUME")
+                        try{
+                            findNavController().navigate(RemoteMixerFragmentDirections.actionRemoteMixerFragmentToResumeFragment())
+                        }catch (e : Exception){
+                            Log.i("showCommand","CMD_WEIGHT_RESUME Exception $e")
+                        }
                     }
-
                 }
                 else->{
                     Log.i(TAG,"else $command")
