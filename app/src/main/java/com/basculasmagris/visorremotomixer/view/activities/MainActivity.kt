@@ -1,5 +1,6 @@
 package com.basculasmagris.visorremotomixer.view.activities
 
+import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.bluetooth.BluetoothDevice
@@ -7,6 +8,8 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
@@ -20,6 +23,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.size
 import androidx.datastore.preferences.core.edit
@@ -796,6 +800,41 @@ class MainActivity : AppCompatActivity() {
         return totalTarget
     }
 
+    fun getName(btDevice: BluetoothDevice?): String {
+        var name = ""
+        btDevice?.let{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                if (ActivityCompat.checkSelfPermission(
+                        this@MainActivity,
+                        Manifest.permission.BLUETOOTH_CONNECT
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    name = it.name
+                }
+            }else{
+                name = it.name
+            }
+        }
+        return name
+    }
+
+    fun getAddress(btDevice: BluetoothDevice?): String {
+        var address = ""
+        btDevice?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                if (ActivityCompat.checkSelfPermission(
+                        this@MainActivity,
+                        Manifest.permission.BLUETOOTH_CONNECT
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    address = it.address
+                }
+            }else{
+                address = it.address
+            }
+        }
+        return address
+    }
 
 
 }

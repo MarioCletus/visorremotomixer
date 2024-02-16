@@ -34,7 +34,6 @@ import com.basculasmagris.visorremotomixer.databinding.FragmentTabletMixerListBi
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
-import com.basculasmagris.visorremotomixer.utils.Helper.Companion.setProgressDialog
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
 import com.basculasmagris.visorremotomixer.view.activities.MergedLocalData
 import com.basculasmagris.visorremotomixer.view.activities.TabletMixerConfigActivity
@@ -47,8 +46,6 @@ import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerRemoteViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import java.util.Timer
 import java.util.TimerTask
 import kotlin.math.roundToInt
@@ -173,7 +170,9 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
                                 bd.address == tabletMixer.mac
                             }
                             deviceBluetooth?.let {
-                                Log.v(TAG,"Force connection ${it.name}")
+                                val name = (requireActivity() as MainActivity).getName(it)
+                                val macAddress = (requireActivity() as MainActivity).getAddress(it)
+                                Log.v(TAG,"Force connection $name $macAddress")
                                 (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
                                 (requireActivity() as MainActivity).mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
                                 (requireActivity() as MainActivity).showCustomProgressDialog()
@@ -245,7 +244,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
     fun deleteTabletMixer(tabletMixer: TabletMixer){
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(resources.getString(R.string.title_delete_mixer))
-        builder.setMessage(resources.getString(R.string.msg_delete_tablet_mixer_dialog, tabletMixer.name))
+        builder.setMessage(resources.getString(R.string.msg_delete_mixer_dialog, tabletMixer.name))
         builder.setIcon(android.R.drawable.ic_dialog_alert)
         builder.setPositiveButton(resources.getString(R.string.lbl_yes)){ dialogInterface, _ ->
             mTabletMixerViewModel.delete(tabletMixer)
@@ -262,37 +261,37 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
 
     }
 
-    fun linkDevice(tabletMixer: TabletMixer){
-        likingTabletMixer = tabletMixer
-        dialog = setProgressDialog(requireActivity(), "Buscando un tabletMixer...")
-        dialog?.show()
-        (requireActivity() as MainActivity).mService?.LocalBinder()?.startDiscovery(requireActivity())
-    }
-
-    fun bluetoothConnectionError(){
-        Log.i("BLUEFAT", "TabletMixerlist")
-        Snackbar.make(mBinding.tabletMixerListView, "No se pudo conectar con el dispositivo",
-            BaseTransientBottomBar.LENGTH_SHORT
-        ).show()
-
-        mCustomListDialog.dismiss()
-    }
-
-    fun bluetoothConnectionSuccess(){
-
-        selectedBluetoothDevice?.let { selectedDevice ->
-            likingTabletMixer?.let {
-                bluetoothDevices.add(selectedDevice)
-                mTabletMixerViewModel.setUpdatedMacAddress(it.id, selectedDevice.address)
-                (mBinding.rvTabletMixersList.adapter as TabletMixerAdapter).statusConnexion(it, true)
-            }
-        }
-
-        Snackbar.make(mBinding.tabletMixerListView, "Dispositivo vinculado",
-            BaseTransientBottomBar.LENGTH_SHORT
-        ).show()
-        mCustomListDialog.dismiss()
-    }
+//    fun linkDevice(tabletMixer: TabletMixer){
+//        likingTabletMixer = tabletMixer
+//        dialog = setProgressDialog(requireActivity(), "Buscando un tabletMixer...")
+//        dialog?.show()
+//        (requireActivity() as MainActivity).mService?.LocalBinder()?.startDiscovery(requireActivity())
+//    }
+//
+//    fun bluetoothConnectionError(){
+//        Log.i("BLUEFAT", "TabletMixerlist")
+//        Snackbar.make(mBinding.tabletMixerListView, "No se pudo conectar con el dispositivo",
+//            BaseTransientBottomBar.LENGTH_SHORT
+//        ).show()
+//
+//        mCustomListDialog.dismiss()
+//    }
+//
+//    fun bluetoothConnectionSuccess(){
+//
+//        selectedBluetoothDevice?.let { selectedDevice ->
+//            likingTabletMixer?.let {
+//                bluetoothDevices.add(selectedDevice)
+//                mTabletMixerViewModel.setUpdatedMacAddress(it.id, selectedDevice.address)
+//                (mBinding.rvTabletMixersList.adapter as TabletMixerAdapter).statusConnexion(it, true)
+//            }
+//        }
+//
+//        Snackbar.make(mBinding.tabletMixerListView, "Dispositivo vinculado",
+//            BaseTransientBottomBar.LENGTH_SHORT
+//        ).show()
+//        mCustomListDialog.dismiss()
+//    }
 
     fun connect(tabletMixer: TabletMixer){
         likingTabletMixer = tabletMixer
@@ -353,7 +352,8 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
             device?.let { currentDevice ->
                 allBluetoothDevice.add(device)
 
-                val name = if (currentDevice.name == null) "No identificado" else currentDevice.name
+                var name = (requireActivity() as MainActivity).getName(device)
+                if(name.equals("")) name = getString(R.string.no_identificado)
                 val mac = if (currentDevice.address == null) "00:00:00:00" else currentDevice.address
 
                 val item = CustomListItem(0L, 0, name, mac, R.drawable.icon_balance)
@@ -451,7 +451,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
                     if(tabletMixer.mac == it.address){
                         if(it.address != tabletMixerBluetoothDevice?.address){
                             tabletMixerBluetoothDevice = it
-                            Log.i(TAG,"Se seleccionó ${it.name} : ${it.address}")
+                            Log.i(TAG,"Se seleccionó ${(requireActivity() as MainActivity).getName(it)} : ${(requireActivity() as MainActivity).getAddress(it)}")
                             connect(tabletMixer)
                         }
                         return@forEach

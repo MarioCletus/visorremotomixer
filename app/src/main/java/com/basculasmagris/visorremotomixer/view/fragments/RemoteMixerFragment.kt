@@ -24,8 +24,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -515,7 +513,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                                 }else{
                                     (requireActivity() as MainActivity).minRoundRunDetail?.round?.corrals?.let{
                                         if(it.isNotEmpty() && it[it.size-1].initialWeight != 0L){
-                                            mBinding.btnJump.text = getString(R.string.finalizar)
+                                            mBinding.btnJump.text = getString(R.string.fin)
                                         }
                                     }
                                 }
@@ -595,6 +593,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 Constants.CMD_WEIGHT_LOAD->{
                     try{
                         if(bInLoad == false){
+                            mBinding.btnJump.text = getString(R.string.salto)
                             countMsg = REFRESH_TIME
                         }
                         if(countMsg++ > REFRESH_TIME){
@@ -615,6 +614,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 Constants.CMD_WEIGHT_DWNL->{
                     try{
                         if(!bInDownload){
+                            mBinding.btnJump.text = getString(R.string.salto)
                             countMsg = REFRESH_TIME
                         }
                         mBinding.tvTitleProduct.text = getString(R.string.descargar_en)
@@ -635,6 +635,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 Constants.CMD_WEIGHT_LOAD_FREE->{
                     try{
                         if(!bInLoad){
+                            mBinding.btnJump.text = getString(R.string.salto)
                             countMsg = REFRESH_TIME
                         }
                         if(countMsg++ > REFRESH_TIME){
@@ -655,6 +656,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 Constants.CMD_WEIGHT_DWNL_FREE->{
                     try{
                         if(!bInDownload){
+                            mBinding.btnJump.text = getString(R.string.salto_fin)
                             countMsg = REFRESH_TIME
                         }
                         mBinding.tvTitleProduct.text = getString(R.string.descargar_en)

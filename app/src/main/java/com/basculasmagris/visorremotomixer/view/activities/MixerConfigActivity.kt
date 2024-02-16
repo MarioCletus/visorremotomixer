@@ -1,5 +1,6 @@
 package com.basculasmagris.visorremotomixer.view.activities
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
@@ -9,6 +10,8 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
@@ -23,6 +26,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowInsetsCompat
@@ -156,7 +160,7 @@ class MixerConfigActivity : AppCompatActivity(),ConfirmDialogFragment.OnConfirmL
                         return true
                     }
                     R.id.icon_bluetooth -> {
-                        Log.i(TAG,"icon_bluetooth pressed $isConnected   | ${selectedBluetoothDevice?.name}" )
+                        Log.i(TAG,"icon_bluetooth pressed $isConnected   | ${getName(selectedBluetoothDevice)}" )
                         if(!isConnected && selectedBluetoothDevice != null){
                             Log.i(TAG,"try to connect " )
                             snackbar?.dismiss()
@@ -345,7 +349,7 @@ class MixerConfigActivity : AppCompatActivity(),ConfirmDialogFragment.OnConfirmL
         Timer().schedule(5000){
             dialog?.cancel()
             mDevicesFound.forEach { deviceFounded ->
-                Log.i("FOUND", deviceFounded.name + "  " + deviceFounded.address)
+                Log.i("FOUND", getName(deviceFounded) + "  " + getAddress(deviceFounded))
             }
             mService?.LocalBinder()?.stopDiscovery()
         }
@@ -387,7 +391,7 @@ class MixerConfigActivity : AppCompatActivity(),ConfirmDialogFragment.OnConfirmL
             mBound = true
             Log.i(TAG, "*********** onServiceConnected [MixerConfigActivity] CONECTADO " )
             if(selectedBluetoothDevice!=null){
-                Log.i(TAG, "*********** onServiceConnected [MixerConfigActivity] CONECTADO ${selectedBluetoothDevice?.name} ${selectedBluetoothDevice?.address} | $mService" )
+                Log.i(TAG, "*********** onServiceConnected [MixerConfigActivity] CONECTADO ${getName(selectedBluetoothDevice)} ${selectedBluetoothDevice?.address} | $mService" )
                 mService?.LocalBinder()?.connectKnowDeviceWithTransfer(selectedBluetoothDevice!!)
             }
         }
@@ -410,7 +414,19 @@ class MixerConfigActivity : AppCompatActivity(),ConfirmDialogFragment.OnConfirmL
             device?.let { currentDevice ->
                 allBluetoothDevice.add(device)
 
-                val name = if (currentDevice.name == null) "No identificado" else currentDevice.name
+                val name = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                    if (ActivityCompat.checkSelfPermission(
+                            this@MixerConfigActivity,
+                            Manifest.permission.BLUETOOTH_CONNECT
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        if (currentDevice.name == null) "No identificado" else currentDevice.name
+                    }else{
+                        "No identificado"
+                    }
+                }else{
+                    if (currentDevice.name == null) "No identificado" else currentDevice.name
+                }
                 val mac = if (currentDevice.address == null) "00:00:00:00" else currentDevice.address
 
                 val item = CustomListItem(0L, 0, name, mac, R.drawable.icon_balance)
@@ -503,11 +519,11 @@ class MixerConfigActivity : AppCompatActivity(),ConfirmDialogFragment.OnConfirmL
     override fun onBondedDevices(device: List<BluetoothDevice>?) {
             Log.i(TAG, "[HomeFragment] ACT onBondedDevices")
             knowDevices?.forEach {
-                Log.i(TAG, "knowDevices bfr: ${it.name} | ${it.address}")
+                Log.i(TAG, "knowDevices bfr: ${getName(it)} | ${getAddress(it)}")
             }
             knowDevices = device
             knowDevices?.forEach {
-                Log.i(TAG, "knowDevices aft: ${it.name} | ${it.address}")
+                Log.i(TAG, "knowDevices aft: ${getName(it)} | ${getAddress(it)}")
             }
 
             if(firstIn && knowDevices != null){
@@ -561,7 +577,7 @@ class MixerConfigActivity : AppCompatActivity(),ConfirmDialogFragment.OnConfirmL
         val dispositivos = arrayOfNulls<String>(bluetoothDevicesKnow.size)
         var i = 0
         for (device in bluetoothDevicesKnow) {
-            dispositivos[i] = device.name
+            dispositivos[i] = getName(device)
             devices[i] = device
             i++
         }
@@ -585,12 +601,12 @@ class MixerConfigActivity : AppCompatActivity(),ConfirmDialogFragment.OnConfirmL
         selectedBluetoothDevice = device
         if(mMixerDetails != null){
             mMixerDetails?.mac = selectedBluetoothDevice?.address.toString()
-            mMixerDetails?.btBox = device?.name.toString()
+            mMixerDetails?.btBox = getName(device)
             mMixerViewModel.update(mMixerDetails!!)
         }
         macaddress = mMixerDetails?.mac.toString()
-        mBinding.tvCajaBluetoothAsoc.setText(device?.name.toString() + "   " + selectedBluetoothDevice?.address.toString() )
-        Log.i(TAG,"Se seleccionó: " + selectedBluetoothDevice!!.name + "   " + selectedBluetoothDevice!!.address)
+        mBinding.tvCajaBluetoothAsoc.setText(getName(device) + "   " + getAddress(selectedBluetoothDevice) )
+        Log.i(TAG,"Se seleccionó: " + getName(selectedBluetoothDevice) + "   " + selectedBluetoothDevice!!.address)
 
 
         if(!isConnected && selectedBluetoothDevice != null){
@@ -709,7 +725,7 @@ class MixerConfigActivity : AppCompatActivity(),ConfirmDialogFragment.OnConfirmL
                 mBinding.tvPesoConocido.setText(value?.toInt().toString())
                 val icon = getDrawable(R.drawable.icon_warning)
                 icon.let {_icon->
-                    icon?.setTint(R.color.color_acent_green)
+                    icon?.setTint(ContextCompat.getColor(this,R.color.color_acent_green))
                     ConfirmDialogFragment(
                         getString(R.string.calibracion),
                         """
@@ -947,8 +963,16 @@ class MixerConfigActivity : AppCompatActivity(),ConfirmDialogFragment.OnConfirmL
     }
 
     fun isKeyBoardShowing(): Boolean {
-        val view: View = mBinding.root
-        return view.rootWindowInsets.isVisible(WindowInsetsCompat.Type.ime())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val view: View = mBinding.root
+            return view.rootWindowInsets.isVisible(WindowInsetsCompat.Type.ime())
+        }else{
+            val view: View = mBinding.root
+            val decorView = view.rootView
+            val rootViewHeight = decorView.height
+            val insets = decorView.rootWindowInsets
+            return rootViewHeight > insets.stableInsetBottom + insets.stableInsetTop
+        }
     }
 
 
@@ -981,12 +1005,12 @@ class MixerConfigActivity : AppCompatActivity(),ConfirmDialogFragment.OnConfirmL
         selectedBluetoothDevice = allBluetoothDevice.firstOrNull { device ->
             device.address == item.description
         }
-        mBinding.tvCajaBluetoothAsoc.setText(selectedBluetoothDevice?.name)
+        mBinding.tvCajaBluetoothAsoc.setText(getName(selectedBluetoothDevice))
 
         selectedBluetoothDevice?.let { bluetoothDevice ->
             when (selection){
                 Constants.DEVICE_REF -> {
-                    Log.i(TAG,"Dispositivo seleccionado ${bluetoothDevice.name}")
+                    Log.i(TAG,"Dispositivo seleccionado ${getName(bluetoothDevice)}")
                     selectDevice(bluetoothDevice)
                 }
                 else -> {}
@@ -1020,6 +1044,43 @@ class MixerConfigActivity : AppCompatActivity(),ConfirmDialogFragment.OnConfirmL
         runOnUiThread {
             deviceConnected()
         }
+    }
+
+
+    fun getName(btDevice: BluetoothDevice?): String {
+        var name = ""
+        btDevice?.let{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                if (ActivityCompat.checkSelfPermission(
+                        this@MixerConfigActivity,
+                        Manifest.permission.BLUETOOTH_CONNECT
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    name = it.name
+                }
+            }else{
+                name = it.name
+            }
+        }
+        return name
+    }
+
+    fun getAddress(btDevice: BluetoothDevice?): String {
+        var address = ""
+        btDevice?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                if (ActivityCompat.checkSelfPermission(
+                        this@MixerConfigActivity,
+                        Manifest.permission.BLUETOOTH_CONNECT
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    address = it.address
+                }
+            }else{
+                address = it.address
+            }
+        }
+        return address
     }
 
 }

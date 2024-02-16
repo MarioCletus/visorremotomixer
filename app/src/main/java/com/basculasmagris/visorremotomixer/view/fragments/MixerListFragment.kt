@@ -1,23 +1,25 @@
 package com.basculasmagris.visorremotomixer.view.fragments
 
+import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.*
-import android.widget.SearchView
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basculasmagris.visorremotomixer.R
@@ -27,7 +29,11 @@ import com.basculasmagris.visorremotomixer.databinding.FragmentMixerListBinding
 import com.basculasmagris.visorremotomixer.model.entities.Mixer
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
-import com.basculasmagris.visorremotomixer.view.activities.*
+import com.basculasmagris.visorremotomixer.view.activities.MainActivity
+import com.basculasmagris.visorremotomixer.view.activities.MergedLocalData
+import com.basculasmagris.visorremotomixer.view.activities.MixerConfigActivity
+import com.basculasmagris.visorremotomixer.view.activities.MixerData
+import com.basculasmagris.visorremotomixer.view.activities.datastore
 import com.basculasmagris.visorremotomixer.view.adapter.CustomDynamicListItemAdapterFragment
 import com.basculasmagris.visorremotomixer.view.adapter.CustomListItem
 import com.basculasmagris.visorremotomixer.view.adapter.MixerAdapter
@@ -261,7 +267,19 @@ class MixerListFragment : Fragment() {
             device?.let { currentDevice ->
                 allBluetoothDevice.add(device)
 
-                val name = if (currentDevice.name == null) "No identificado" else currentDevice.name
+                val name = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                    if (ActivityCompat.checkSelfPermission(
+                            (requireActivity() as MainActivity),
+                            Manifest.permission.BLUETOOTH_CONNECT
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        if (currentDevice.name == null) "No identificado" else currentDevice.name
+                    }else{
+                        "No identificado"
+                    }
+                }else{
+                    if (currentDevice.name == null) "No identificado" else currentDevice.name
+                }
                 val mac = if (currentDevice.address == null) "00:00:00:00" else currentDevice.address
 
                 val item = CustomListItem(0L, 0, name, mac, R.drawable.icon_balance)

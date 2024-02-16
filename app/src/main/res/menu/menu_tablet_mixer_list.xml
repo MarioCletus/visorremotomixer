@@ -30,7 +30,7 @@
     <item
         android:id="@+id/action_add_tablet_mixer"
         android:icon="@drawable/ic_add"
-        android:title="@string/add_tablet_mixer"
+        android:title="@string/add_mixer"
         app:showAsAction="always"
         android:orderInCategory="103"
         />

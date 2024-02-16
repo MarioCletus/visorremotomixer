@@ -12,7 +12,7 @@
     <item
         android:id="@+id/menu_selected_remote_tablet"
         android:icon="@drawable/ic_tablet_48px"
-        android:title="    Tablet de Mixer"
+        android:title="    Mixer"
         app:showAsAction="ifRoom|withText"
         />
 

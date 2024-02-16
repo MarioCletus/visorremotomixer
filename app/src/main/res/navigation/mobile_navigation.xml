@@ -28,7 +28,7 @@
     <fragment
         android:id="@+id/resume_fragment"
         android:name="com.basculasmagris.visorremotomixer.view.fragments.ResumeFragment"
-        android:label="@string/screen_tablet_mixer_list"
+        android:label="@string/mixer"
         tools:layout="@layout/fragment_resume" >
         <action
             android:id="@+id/action_resume_fragment_to_remote_mixer_fragment"
@@ -40,7 +40,7 @@
     <fragment
         android:id="@+id/nav_tablet_mixer"
         android:name="com.basculasmagris.visorremotomixer.view.fragments.TabletMixerListFragment"
-        android:label="@string/screen_tablet_mixer_list"
+        android:label="@string/mixer"
         tools:layout="@layout/fragment_tablet_mixer_list" >
         <action
             android:id="@+id/action_tablet_mixerListFragment_to_addUpdateTabletMixerActivity"

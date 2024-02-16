@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@color/white"
         android:gravity="center"
-        app:title="@string/add_tablet_mixer"
+        app:title="@string/add_mixer"
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout

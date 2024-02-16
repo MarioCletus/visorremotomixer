@@ -338,11 +338,8 @@
     <string name="ajustes">Ajustes</string>
     <string name="cargar">Cargar</string>
     <string name="descargar_en">Descargar en</string>
-    <string name="add_tablet_mixer">Añadir Tablet de Mixer</string>
     <string name="ph_tablet_mixer_name">Nombre</string>
     <string name="ph_tablet_mixer_description">Descripcion</string>
-    <string name="screen_tablet_mixer_list">Tablet de mixer</string>
-    <string name="menu_tablet_mixer">Tablets de Mixer</string>
     <string name="menu_config">Configuracion</string>
     <string name="mixers">Mixers</string>
     <string name="proximo_producto">Próximo producto</string>
@@ -350,6 +347,9 @@
     <string name="corral">Corral</string>
     <string name="rest">Resto</string>
     <string name="finalizar">Finalizar</string>
+    <string name="no_identificado">No identificado</string>
+    <string name="salto_fin">Salto/Fin</string>
+    <string name="fin">Fin</string>
 
 
 </resources>
