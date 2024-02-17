@@ -33,6 +33,7 @@ import com.basculasmagris.visorremotomixer.databinding.FragmentRemoteMixerBindin
 import com.basculasmagris.visorremotomixer.model.entities.MinCorralDetail
 import com.basculasmagris.visorremotomixer.model.entities.MinDietDetail
 import com.basculasmagris.visorremotomixer.model.entities.MinProductDetail
+import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunData
 import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.Mixer
 import com.basculasmagris.visorremotomixer.model.entities.MixerDetail
@@ -78,7 +79,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
     private var bSyncroUsers = false
     private var bSyncroRounds = false
-    private var tick: Long = 0L
 
     private var selectedMixerInFragment: Mixer? = null
     private var selectedTabletMixerInFragment: TabletMixer? = null
@@ -88,8 +88,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private var targetReachedDialog: AlertDialog? = null
     private var dialogCountDown: AlertDialog? = null
 
-    private val REFRESH_TIME = 10
-    private var countMsg: Int = REFRESH_TIME
+    private val REFRESH_VIEW_TIME = 20
+    private var countMsg: Int = REFRESH_VIEW_TIME
+    private val REFRESH_DATA_TIME = 4
+    private var countDataMsg: Int = REFRESH_DATA_TIME
     private var count_resume = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -252,11 +254,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     }
                 }
             }else{}
-
         }
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -265,7 +264,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         permission()
         mBinding = FragmentRemoteMixerBinding.inflate(inflater, container, false)
-
 
         // Navigation Menu
         val menuHost: MenuHost = requireActivity()
@@ -344,9 +342,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         } else {
             Log.d("BLUE", "Permissions Granted")
         }
-
     }
-
 
     var countInResume = 0
     override fun onResume() {
@@ -368,8 +364,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 Log.i(TAG,"init timerTask ${countInResume++}: $timerTask estableTimer $estableTimer")
             }
             override fun run() {
-                tick ++
-
                 if(bInLoad && !bInFree)
                     currentProductDetail?.let {productDetail ->
                         activity?.let {mainActivity ->
@@ -397,9 +391,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 if(bInDownload && !bInFree)
                     currentCorralDetail?.let { corralDetail ->
                         activity?.let {mainActivity ->
-                            Log.i(TAG,"corralDetail ${corralDetail.name}   ${corralDetail.initialWeight}    ${corralDetail.currentWeight}  ")
-                            if(corralDetail.currentWeight != 0L && corralDetail.initialWeight - corralDetail.currentWeight  > corralDetail.actualTargetWeight*0.9){
-                                if(mBinding.tvCurrentProductWeightPending.currentTextColor == ContextCompat.getColor(activity!!, R.color.white)){
+                            Log.i(TAG,"corralDetail ${corralDetail.name}   ${corralDetail.initialWeight}    ${corralDetail.currentWeight}  ${corralDetail.actualTargetWeight}")
+                            if(corralDetail.initialWeight - corralDetail.currentWeight  > corralDetail.actualTargetWeight*0.9){
+                                if(mBinding.tvCurrentProductWeightPending.currentTextColor == ContextCompat.getColor(mainActivity, R.color.white)){
                                     if(corralDetail.initialWeight - corralDetail.currentWeight > corralDetail.actualTargetWeight){
                                         mBinding.tvCurrentProductWeightPending.setTextColor(ContextCompat.getColor(mainActivity, R.color.color_yellow))
                                     }else{
@@ -528,6 +522,64 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     }
                 }
 
+                Constants.CMD_ROUNDDATA->{
+                    val convertZip = ConvertZip()
+                    Log.i(TAG,"message.lenght ${message.size}")
+                    val byteArrayUtil = message.copyOfRange(9,message.size-1)
+                    Log.i("showCommand","CMD_ROUNDDATA ${messageStr.length} byteArrayUtil ${byteArrayUtil.size} ")
+                    try{
+                        val jsonString : String = convertZip.decompressText(byteArrayUtil)
+                        Log.i("Json","jsonString * ${jsonString}")
+                        if(jsonString.isNotEmpty()){
+                            val gson = Gson()
+                            val roundRunData : MinRoundRunData = gson.fromJson(jsonString,  MinRoundRunData::class.java)
+                            (requireActivity() as MainActivity).minRoundRunDetail?.let{roundRundDetail->
+                                if(bInLoad){
+                                    roundRundDetail.round.diet.products.forEach {product->
+                                        val newProductData = roundRunData.productsData.firstOrNull {
+                                            it.id == product.id && it.order == product.order
+                                        }
+                                        newProductData?.let {data->
+                                            product.initialWeight = data.initialWeight
+                                            product.currentWeight = data.currentWeight
+                                            product.finalWeight = data.finalWeight
+                                            product.targetWeight = data.targetWeight
+                                        }
+                                        if(newProductData==null) {
+                                            refreshRound()
+                                            return
+                                        }
+                                    }
+                                    roundRunProductAdapter?.notifyDataSetChanged()
+                                }
+                                if(bInDownload){
+                                    roundRundDetail.round.corrals.forEach {corral->
+                                        val newCorralData = roundRunData.corralsData.firstOrNull {
+                                            it.id == corral.id && it.order == corral.order
+                                        }
+                                        newCorralData?.let {data->
+                                            corral.initialWeight = data.initialWeight
+                                            corral.currentWeight = data.currentWeight
+                                            corral.finalWeight = data.finalWeight
+                                            corral.customTargetWeight = data.customTargetWeight
+                                            corral.actualTargetWeight = data.actualTargetWeight
+                                        }
+                                        if(newCorralData == null) {
+                                            refreshRound()
+                                            return
+                                        }
+                                    }
+                                    roundRunCorralAdapter?.notifyDataSetChanged()
+                                }
+                            }
+                        }
+                    }catch (e: NumberFormatException){
+                        Log.i("showCommand","CMD_ROUNDDATA NumberFormatException $e")
+                    }catch (e:Exception){
+                        Log.i("showCommand","CMD_ROUNDDATA Exception $e")
+                    }
+                }
+
                 Constants.CMD_USER_LIST->{
                     Log.i("showCommand","CMD_USER_LIST")
                     bSyncroUsers = (requireActivity() as MainActivity).refreshUsers(message)
@@ -573,13 +625,13 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
 
                 Constants.CMD_WEIGHT->{
+                    Log.v("cmd_weight","CMD_WEIGHT")
                     count_resume = 0
                     try{
                         if(bInLoad || bInDownload){
-                            countMsg = REFRESH_TIME
+                            noInLoadOrDownload()
                         }
-
-                        if(countMsg++ > REFRESH_TIME){
+                        if(countMsg++ > REFRESH_VIEW_TIME){
                             noInLoadOrDownload()
                         }
                         refreshWeight(message)
@@ -597,10 +649,13 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     try{
                         if(bInLoad == false){
                             mBinding.btnJump.text = getString(R.string.salto)
-                            countMsg = REFRESH_TIME
-                        }
-                        if(countMsg++ > REFRESH_TIME){
                             refreshRound()
+                        }
+                        if(countMsg++ > REFRESH_VIEW_TIME){
+                            refreshRound()
+                        }
+                        if(countDataMsg++ > REFRESH_DATA_TIME){
+                            refreshDataRound()
                         }
                         mBinding.tvTitleProduct.text = getString(R.string.cargar)
                         mBinding.tvCurrentProduct.text = currentProductDetail?.name
@@ -619,11 +674,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     try{
                         if(!bInDownload){
                             mBinding.btnJump.text = getString(R.string.salto)
-                            countMsg = REFRESH_TIME
+                            countMsg = REFRESH_VIEW_TIME
                         }
                         mBinding.tvTitleProduct.text = getString(R.string.descargar_en)
                         mBinding.tvCurrentProduct.text = currentCorralDetail?.name
-                        if(countMsg++ > REFRESH_TIME){
+                        if(countMsg++ > REFRESH_VIEW_TIME){
                             refreshRound()
                         }
                         refreshWeight(message)
@@ -641,9 +696,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     try{
                         if(!bInLoad){
                             mBinding.btnJump.text = getString(R.string.salto)
-                            countMsg = REFRESH_TIME
+                            countMsg = REFRESH_VIEW_TIME
                         }
-                        if(countMsg++ > REFRESH_TIME){
+                        if(countMsg++ > REFRESH_VIEW_TIME){
                             refreshRound()
                         }
                         mBinding.tvTitleProduct.text = getString(R.string.cargar)
@@ -663,11 +718,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     try{
                         if(!bInDownload){
                             mBinding.btnJump.text = getString(R.string.salto_fin)
-                            countMsg = REFRESH_TIME
+                            countMsg = REFRESH_VIEW_TIME
                         }
                         mBinding.tvTitleProduct.text = getString(R.string.descargar_en)
                         mBinding.tvCurrentProduct.text = getString(R.string.corral)
-                        if(countMsg++ > REFRESH_TIME){
+                        if(countMsg++ > REFRESH_VIEW_TIME){
                             refreshRound()
                         }
                         refreshWeight(message)
@@ -791,6 +846,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         (requireActivity() as MainActivity).requestRoundRunDetail()
         mBinding.btnJump.isVisible = true
         mBinding.btnPause.isVisible = true
+    }
+
+    private fun refreshDataRound() {
+        countDataMsg = 0
+        (requireActivity() as MainActivity).requestDataRoundRunDetail()
     }
 
     private fun noInLoadOrDownload() {

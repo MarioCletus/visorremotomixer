@@ -147,6 +147,7 @@ object Constants {
     val CMD_START_DOWNLOAD  = "STD"
     val CMD_ROUNDS = "RRR"
     val CMD_ROUNDDETAIL = "RRD"
+    val CMD_ROUNDDATA = "RDD"
     val CMD_NXTPRODUCT = "NXP"
     val CMD_END = "END"
     val CMD_ACK = "ACK"

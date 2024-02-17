@@ -295,3 +295,34 @@ data class MinProduct (
     val id: Long
 ) : Parcelable
 
+/********************************************
+ * MinData
+ ********************************************/
+
+@Parcelize
+data class MinRoundRunData (
+    var corralsData: ArrayList<MinCorralData>,
+    var productsData: ArrayList<MinProductData>,
+    var id: Long
+)  : Parcelable
+
+@Parcelize
+data class MinCorralData (
+    val order: Int,
+    var initialWeight: Long,
+    var currentWeight: Long,
+    var finalWeight: Long,
+    var customTargetWeight: Long,
+    var actualTargetWeight: Long,
+    var id: Long
+) : Parcelable
+
+@Parcelize
+data class MinProductData (
+    val order: Int,
+    var initialWeight: Long,
+    var currentWeight: Long,
+    var finalWeight: Long,
+    var targetWeight: Long,
+    val id: Long
+) : Parcelable

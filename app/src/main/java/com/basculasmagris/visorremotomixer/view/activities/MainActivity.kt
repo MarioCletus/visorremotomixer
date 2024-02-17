@@ -473,10 +473,15 @@ class MainActivity : AppCompatActivity() {
 
     fun requestRoundRunDetail() {
         val msg = "CMD${Constants.CMD_ROUNDDETAIL}"
-        Log.i(TAG,"Send requestRoundRunDetail $msg")
+        Log.i("send_cmd","Send requestRoundRunDetail $msg")
         mService?.LocalBinder()?.write(msg.toByteArray())
     }
 
+    fun requestDataRoundRunDetail() {
+        val msg = "CMD${Constants.CMD_ROUNDDATA}"
+        Log.i("send_cmd","Send requestRoundRunData $msg")
+        mService?.LocalBinder()?.write(msg.toByteArray())
+    }
     fun requestMixer() {
         val msg = "CMD${Constants.CMD_MIXER}"
         mService?.LocalBinder()?.write(msg.toByteArray())
@@ -489,13 +494,13 @@ class MainActivity : AppCompatActivity() {
     }
     fun requestEstablishment() {
         val msg = "CMD${Constants.CMD_ESTAB_LIST}"
-        Log.i(TAG,"Send requestEstablishment $msg")
+        Log.i("send_cmd","Send requestEstablishment $msg")
         mService?.LocalBinder()?.write(msg.toByteArray())
     }
 
     fun requestProducts() {
         val msg = "CMD${Constants.CMD_PRODUCT}"
-        Log.i(TAG,"Send requestProducts $msg")
+        Log.i("send_cmd","Send requestProducts $msg")
         mService?.LocalBinder()?.write(msg.toByteArray())
     }
 
