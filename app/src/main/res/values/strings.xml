@@ -350,6 +350,10 @@
     <string name="no_identificado">No identificado</string>
     <string name="salto_fin">Salto/Fin</string>
     <string name="fin">Fin</string>
+    <string name="iniciar">INICIAR</string>
+    <string name="continuar">CONTINUAR</string>
+    <string name="free_round">Ronda libre</string>
+    <string name="round">Ronda</string>
 
 
 </resources>

@@ -364,45 +364,6 @@
 
     </ScrollView>
 
-    <LinearLayout
-        android:id="@+id/ll_sync_no_internet"
-        android:layout_marginTop="@dimen/_50sdp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:text="No hay conexión de internet"
-            >
-
-        </TextView>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textStyle="italic"
-            android:text="Revise su conexión y vuelva a intentar nuevamente"
-            >
-
-        </TextView>
-
-        <Button
-            android:id="@+id/btn_retry"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Reintentar"
-            android:textAlignment="center"
-            >
-
-        </Button>
-    </LinearLayout>
-
 
 
 

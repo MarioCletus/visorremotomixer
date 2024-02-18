@@ -326,3 +326,14 @@ data class MinProductData (
     var targetWeight: Long,
     val id: Long
 ) : Parcelable
+
+/****************************
+ *
+ */
+@Parcelize
+data class MedRoundRunDetail (
+    val round: MinRound,
+    var startDate: String,
+    val endDate: String,
+    var state: Int
+)  : Parcelable

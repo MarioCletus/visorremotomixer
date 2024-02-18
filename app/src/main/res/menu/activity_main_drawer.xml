@@ -11,7 +11,7 @@
             android:icon="@drawable/ic_tablet_48px"
             android:title="Mixer Remoto" />
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_round"
             android:icon="@drawable/ic_route_new"
             android:title="@string/menu_round"/>
     </group>

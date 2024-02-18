@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.ItemCustomListBinding
 import com.basculasmagris.visorremotomixer.view.activities.*
-import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
 import com.basculasmagris.visorremotomixer.view.fragments.MixerListFragment
 
 class CustomListItemAdapter (
@@ -100,10 +99,6 @@ class CustomListItemAdapterFragment (
         holder.tvDescription.text = item.description.ifEmpty { fragment.requireActivity().getString(R.string.no_description) }
 
         holder.itemView.setOnClickListener{
-            if (fragment is HomeFragment){
-                fragment.selectedListItem(item, selection)
-            }
-
             if (fragment is MixerListFragment){
                 fragment.selectedListItem(item, selection)
             }
@@ -146,10 +141,6 @@ class CustomDynamicListItemAdapterFragment (
         holder.tvDescription.text = item.description.ifEmpty { fragment.requireActivity().getString(R.string.no_description) }
 
         holder.itemView.setOnClickListener{
-            if (fragment is HomeFragment){
-                fragment.selectedListItem(item, selection)
-            }
-
             if (fragment is MixerListFragment){
                 fragment.selectedListItem(item, selection)
             }

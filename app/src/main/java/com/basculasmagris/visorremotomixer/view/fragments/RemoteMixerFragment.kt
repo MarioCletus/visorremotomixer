@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
@@ -74,6 +75,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     var roundRunCorralAdapter : RoundRunCorralDownloadAdapter? = null
 
     private var bInFree: Boolean = true
+    private var bInCfg: Boolean = false
+    private var bInRes: Boolean = false
     private var bInLoad: Boolean = false
     private var bInDownload : Boolean = false
 
@@ -116,13 +119,25 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             Log.i(TAG, "btnTara")
         }
 
+
         mBinding.btnJump.setOnClickListener{
             Log.i(TAG, "btnJump")
+
+            if(!bInCfg && !bInLoad && !bInDownload && !bInRes){
+                findNavController().navigate(RemoteMixerFragmentDirections.actionRemoteMixerFragmentToRoundListFragment())
+            }
+
+            if(bInCfg){
+                (requireActivity() as MainActivity).sendIniToMixer()
+                return@setOnClickListener
+            }
             if(bInFree){
                 if(bInLoad){
                     (requireActivity() as MainActivity).requestListOfProducts()
+                    return@setOnClickListener
                 }else{
                     (requireActivity() as MainActivity).requestListOfCorrals()
+                    return@setOnClickListener
                 }
             }else{
                 if(bInLoad){
@@ -137,6 +152,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                             targetReachedDialog = dialogAlertTargetWeight("descarga")
                         }
                     }
+                    return@setOnClickListener
                 }
 
                 if(bInDownload){
@@ -151,6 +167,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                             targetReachedDialog = dialogAlertTargetWeight("fin")
                         }
                     }
+                    return@setOnClickListener
                 }
 
             }
@@ -163,8 +180,16 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             return@setOnLongClickListener false
         }
 
+        mBinding.btnInitFreeRound.setOnClickListener{
+            (requireActivity() as MainActivity).sendGoToFreeRound()
+        }
+
+
         mBinding.btnPause.setOnCheckedChangeListener { v, isChecked ->
             Log.i(TAG,"setOnCheckedChangeListener $isChecked")
+            if(!bInCfg && !bInLoad && !bInDownload && !bInRes){
+                return@setOnCheckedChangeListener
+            }
             if(isChecked){
                 v.setBackgroundResource(R.drawable.btn_round_to_run_red)
                 val msg = "CMD${Constants.CMD_PAUSE_ON}"
@@ -591,21 +616,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     bSyncroRounds = (requireActivity() as MainActivity).refreshRounds(message)
                 }
 
-//                Constants.CMD_PRODUCT->{
-//                    Log.i("showCommand","CMD_PRODUCT")
-//                    bSyncroProducts = (requireActivity() as MainActivity).refreshProducts(message)
-//                }
-//
-//                Constants.CMD_CORRAL->{
-//                    Log.i("showCommand","CMD_CORRAL")
-//                    bSyncroCorrals = (requireActivity() as MainActivity).refreshCorrals(message)
-//                }
-//
-//                Constants.CMD_ESTAB_LIST->{
-//                    Log.i("showCommand","CMD_ESTAB_LIST")
-//                    bSyncroEstablishment = (requireActivity() as MainActivity).refreshEstablishments(message)
-//                }
-
                 Constants.CMD_DLG_PRODUCT->{
                     Log.i("showCommand","CMD_DLG_PRODUCT")
                     (requireActivity() as MainActivity).dlgProduct(message)
@@ -628,7 +638,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     Log.v("cmd_weight","CMD_WEIGHT")
                     count_resume = 0
                     try{
-                        if(bInLoad || bInDownload){
+                        if(bInLoad || bInDownload || bInRes || bInCfg){
                             noInLoadOrDownload()
                         }
                         if(countMsg++ > REFRESH_VIEW_TIME){
@@ -638,10 +648,67 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         bInLoad = false
                         bInDownload = false
                         bInFree = false
+                        bInCfg =  false
+                        bInRes = false
                     }catch (e : Exception){
                         Log.i("showCommand","CMD_WEIGHT Exception $e")
                     }
 
+                }
+
+
+                Constants.CMD_WEIGHT_CONFIG->{
+                    count_resume = 0
+                    try{
+                        if(bInCfg == false){
+                            mBinding.btnJump.text = getString(R.string.iniciar)
+                            mBinding.btnInitFreeRound.isVisible = false
+                            refreshRound()
+                        }
+                        if(countMsg++ > REFRESH_VIEW_TIME){
+                            refreshRound()
+                        }
+                        mBinding.tvTitleProduct.text = getString(R.string.iniciar)
+                        mBinding.tvCurrentProduct.text = (requireActivity() as MainActivity).minRoundRunDetail?.round?.name
+                        countMsg = 0
+                        val mutableList = ArrayList<MinProductDetail>()
+                        val dietDetail = MinDietDetail (
+                            name = "",
+                            description = "",
+                            products = mutableList,
+                            id = 0L
+                        )
+
+                        val emptyAdapter =  RoundRunProductAdapter(
+                            this@RemoteMixerFragment,
+                            dietDetail,
+                            defaultStep)
+
+                        mBinding.rvMixerProductsToLoad.adapter = emptyAdapter
+                        mBinding.btnJump.isVisible = true
+                        mBinding.btnPause.isVisible = false
+                        refreshWeight(message)
+                        bInLoad = false
+                        bInDownload = false
+                        bInFree = false
+                        bInCfg = true
+                        bInRes = false
+                    }catch (e : Exception){
+                        Log.i("showCommand","CMD_WEIGHT_LOAD Exception $e")
+                    }
+
+                }
+
+                Constants.CMD_WEIGHT_RESUME->{
+                    mBinding.btnInitFreeRound.isVisible = false
+                    if(count_resume++ > 5){
+                        Log.v("commandsWeight","CMD_WEIGHT_RESUME")
+                        try{
+                            findNavController().navigate(RemoteMixerFragmentDirections.actionRemoteMixerFragmentToResumeFragment())
+                        }catch (e : Exception){
+                            Log.i("showCommand","CMD_WEIGHT_RESUME Exception $e")
+                        }
+                    }
                 }
 
                 Constants.CMD_WEIGHT_LOAD->{
@@ -649,6 +716,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     try{
                         if(bInLoad == false){
                             mBinding.btnJump.text = getString(R.string.salto)
+                            mBinding.btnInitFreeRound.isVisible = false
                             refreshRound()
                         }
                         if(countMsg++ > REFRESH_VIEW_TIME){
@@ -663,6 +731,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         bInLoad = true
                         bInDownload = false
                         bInFree = false
+                        bInCfg = false
+                        bInRes = false
                     }catch (e : Exception){
                         Log.i("showCommand","CMD_WEIGHT_LOAD Exception $e")
                     }
@@ -675,6 +745,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         if(!bInDownload){
                             mBinding.btnJump.text = getString(R.string.salto)
                             countMsg = REFRESH_VIEW_TIME
+                            mBinding.btnInitFreeRound.isVisible = false
                         }
                         mBinding.tvTitleProduct.text = getString(R.string.descargar_en)
                         mBinding.tvCurrentProduct.text = currentCorralDetail?.name
@@ -695,6 +766,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(!bInLoad){
+                            mBinding.btnInitFreeRound.isVisible = false
                             mBinding.btnJump.text = getString(R.string.salto)
                             countMsg = REFRESH_VIEW_TIME
                         }
@@ -717,6 +789,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(!bInDownload){
+                            mBinding.btnInitFreeRound.isVisible = false
                             mBinding.btnJump.text = getString(R.string.salto_fin)
                             countMsg = REFRESH_VIEW_TIME
                         }
@@ -751,17 +824,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     }catch (e:Exception){
                         Log.i(TAG,"bSyncroMixer Exception $e")
                         return
-                    }
-                }
-
-                Constants.CMD_WEIGHT_RESUME->{
-                    if(count_resume++ > 5){
-                        Log.v("commandsWeight","CMD_WEIGHT_RESUME")
-                        try{
-                            findNavController().navigate(RemoteMixerFragmentDirections.actionRemoteMixerFragmentToResumeFragment())
-                        }catch (e : Exception){
-                            Log.i("showCommand","CMD_WEIGHT_RESUME Exception $e")
-                        }
                     }
                 }
                 else->{
@@ -872,8 +934,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         mBinding.rvMixerProductsToLoad.adapter = emptyAdapter
         mBinding.tvTitleProduct.text = getString(R.string.mixer)
         mBinding.tvCurrentProduct.text = mixerDetail?.name ?: ""
-        mBinding.btnJump.isVisible = false
-        mBinding.btnPause.isVisible = false
+        mBinding.btnJump.text = getString(R.string.round)
+        mBinding.btnPause.visibility = View.INVISIBLE
+        mBinding.btnInitFreeRound.visibility = View.VISIBLE
 
     }
 

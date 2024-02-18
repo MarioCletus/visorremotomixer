@@ -175,5 +175,9 @@ object Constants {
     val CMD_WEIGHT_DWNL = "WED"
     val CMD_WEIGHT_LOAD_FREE = "WFL"
     val CMD_WEIGHT_DWNL_FREE = "WFD"
-    val CMD_WEIGHT_RESUME = "WFR"
+    val CMD_WEIGHT_CONFIG = "WCF"
+    val CMD_WEIGHT_RESUME = "WRE"
+    val CMD_GO_TO_ROUND = "GRD"
+    val CMD_GO_TO_FREE_ROUND = "GFR"
+    val CMD_GO_TO_RESUME = "GRE"
 }

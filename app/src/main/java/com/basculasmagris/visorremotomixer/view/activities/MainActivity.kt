@@ -40,10 +40,10 @@ import androidx.navigation.ui.setupWithNavController
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
 import com.basculasmagris.visorremotomixer.databinding.ActivityMainBinding
+import com.basculasmagris.visorremotomixer.model.entities.MedRoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.MinCorral
 import com.basculasmagris.visorremotomixer.model.entities.MinEstablishment
 import com.basculasmagris.visorremotomixer.model.entities.MinProduct
-import com.basculasmagris.visorremotomixer.model.entities.MinRound
 import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.MinUser
 import com.basculasmagris.visorremotomixer.model.entities.Mixer
@@ -53,7 +53,6 @@ import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.utils.Helper
-import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
 import com.basculasmagris.visorremotomixer.view.fragments.MixerListFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
 import com.basculasmagris.visorremotomixer.view.fragments.TabletMixerListFragment
@@ -87,13 +86,12 @@ class MainActivity : AppCompatActivity() {
     // Bluetooth
     var mService: BluetoothSDKService? = null
     private var bluetoothDevice: BluetoothDevice? = null
-    private var selectedMixerInActivity: Mixer? = null
     private var selectedTabletMixerInActivity: TabletMixer? = null
 
     var minRoundRunDetail : MinRoundRunDetail? = null
     var listOfMinProducts: ArrayList<MinProduct> =  ArrayList()
     var listOfMinCorrals: ArrayList<MinCorral> = ArrayList()
-    var listOfMinRounds: ArrayList<MinRound> = ArrayList()
+    var listOfMedRoundsRun: ArrayList<MedRoundRunDetail> = ArrayList()
     var listOfMinUsers: ArrayList<MinUser> = ArrayList()
     var listOfMinEstablishments: ArrayList<MinEstablishment> = ArrayList()
 
@@ -133,9 +131,8 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_mixer_remoto,
-                R.id.nav_home,
+                R.id.nav_round,
                 R.id.nav_tablet_mixer,
-                R.id.nav_config,
                 R.id.nav_sync,
                 R.id.nav_user
             ), drawerLayout
@@ -419,45 +416,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getSavedMixer(){
-        lifecycleScope.launch(Dispatchers.IO){
-            Log.i(TAG,"getSavedMixer")
-            val flowLong = getSavedMixerId()
-            flowLong.collect {id->
-                if(id==null){
-                    return@collect
-                }
-                val localKnowDevice = mMixerViewModel.getMixerById(id)
-                lifecycleScope.launch {
-                    withContext(Dispatchers.Main) {
-                        localKnowDevice.observe(this@MainActivity){mixer->
-                            if (mixer != null){
-                                selectedMixerInActivity = mixer
-                                val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
-                                navHost?.let { navFragment ->
-                                    navFragment.childFragmentManager.primaryNavigationFragment?.let {fragment->
-                                        Log.i(TAG,"observe selectedMixerInFragment $selectedMixerInActivity")
-                                        if(fragment is HomeFragment){
-                                            fragment.setMixer(selectedMixerInActivity)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 
     private fun getSavedMixerTabletId() = datastore.data.map { preferences->
         preferences[longPreferencesKey("IDTABLET")]
     }
 
-    private fun getSavedMixerId() = datastore.data.map { preferences->
-        preferences[longPreferencesKey("IDMIXER")]
-    }
 
     fun changeActionBarTitle(title: String) {
         supportActionBar?.let {
@@ -526,8 +489,9 @@ class MainActivity : AppCompatActivity() {
             val convertZip = ConvertZip()
             val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
             val gson = Gson()
-            val listType = object : TypeToken<ArrayList<MinRound>>() {}.type
-            listOfMinRounds = gson.fromJson<ArrayList<MinRound>>(json, listType)?:ArrayList()
+            val listType = object : TypeToken<ArrayList<MedRoundRunDetail>>() {}.type
+            listOfMedRoundsRun = gson.fromJson<ArrayList<MedRoundRunDetail>>(json, listType)?:ArrayList()
+            Log.i(TAG,"listOfMinRounds $listOfMedRoundsRun")
             return true
         }catch (e: NumberFormatException){
             Log.i(TAG,"bSyncroRounds NumberFormatException $e")
@@ -674,6 +638,12 @@ class MainActivity : AppCompatActivity() {
         val alertDialog = builder.create()
         alertDialog.show()
     }
+
+    fun sendIniToMixer() {
+        val byteArray = "CMD${Constants.CMD_INI}${String.format("%06d",0)}".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
     fun sendEndToMixer() {
         val byteArray = "CMD${Constants.CMD_END}${String.format("%06d",0)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
@@ -696,15 +666,40 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun requestListOfProducts() {
-        val byteArray = "CMD${Constants.CMD_REQ_PRODUCT}$000000".toByteArray()
+        val byteArray = "CMD${Constants.CMD_REQ_PRODUCT}000000".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
+
+    fun sendGoToRound(id:Long) {
+        val byteArray = "CMD${Constants.CMD_GO_TO_ROUND}${String.format("%06d",id)}".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
+    fun sendGoToFreeRound() {
+        val byteArray = "CMD${Constants.CMD_GO_TO_FREE_ROUND}000000".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
+    fun sendGoToResume(id:Long) {
+        val byteArray = "CMD${Constants.CMD_GO_TO_RESUME}${String.format("%06d",id)}".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }    
+    
     fun requestListOfCorrals() {
-        val byteArray = "CMD${Constants.CMD_REQ_CORRAL}$000000".toByteArray()
+        val byteArray = "CMD${Constants.CMD_REQ_CORRAL}000000".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
+    fun requestListOfUsers() {
+        val byteArray = "CMD${Constants.CMD_USER_LIST}000000".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
+    fun requestListOfRounds() {
+        val byteArray = "CMD${Constants.CMD_ROUNDS}000000".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
     fun dlgProduct(message: ByteArray) {
         try {
             val convertZip = ConvertZip()

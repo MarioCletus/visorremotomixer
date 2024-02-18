@@ -11,46 +11,28 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.basculasmagris.visorremotomixer.R
-import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
 import com.basculasmagris.visorremotomixer.databinding.ItemRoundToRunLayoutBinding
-import com.basculasmagris.visorremotomixer.model.entities.RoundRunDetail
+import com.basculasmagris.visorremotomixer.model.entities.MedRoundRunDetail
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.Helper
-import com.basculasmagris.visorremotomixer.utils.Helper.Companion.getCurrentUser
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
-import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
-import com.basculasmagris.visorremotomixer.viewmodel.RoundViewModel
-import com.basculasmagris.visorremotomixer.viewmodel.RoundViewModelFactory
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.basculasmagris.visorremotomixer.view.fragments.RoundListFragment
 import java.text.SimpleDateFormat
 import java.util.Date
-import kotlin.math.roundToInt
+import java.util.Locale
 
 class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<RoundRunAdapter.ViewHolder>(),
     Filterable {
 
     private val CANT_HORAS_MUESTRA_RONDA_FINALIZADA : Int = 4
-    private var roundsRun: List<RoundRunDetail> = ArrayList()
-    private var filteredRoundsRun: List<RoundRunDetail> = ArrayList()
-
-    private val mRoundViewModel: RoundViewModel by fragment.viewModels {
-        RoundViewModelFactory((fragment.requireActivity().application as SpiMixerApplication).roundRepository)
-    }
+    private var roundsRun: List<MedRoundRunDetail> = ArrayList()
+    private var filteredRoundsRun: List<MedRoundRunDetail> = ArrayList()
 
     class ViewHolder (view: ItemRoundToRunLayoutBinding) : RecyclerView.ViewHolder(view.root) {
         val tvRoundName = view.tvRoundName
         val tvRoundRunDescription = view.tvRoundRunDescription
-        val ibMoreRoundRun = view.ibMoreRoundRun
-        val cvRoundIcon = view.cvRoundIcon
         val tvRoundRunPercentage = view.tvRoundRunPercentage
         val tvRoundStartDate = view.tvRoundStartDate
         val btnStartRound = view.btnStartRound
@@ -66,38 +48,11 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
         return ViewHolder(binding)
     }
 
-    private fun getProgress(roundRunDetail: RoundRunDetail) : Int{
-        var progressValue = 0
-        var totalProgressLoadWeight = 0.0
-        var totalWeightLoad = 0.0
-        var totalProgressDownLoadWeight = 0.0
-        var totalWeightDownload = 0.0
-        val roundTargetWeight = roundRunDetail.round.customRoundRunWeight
-
-        roundRunDetail.round.corrals.forEach { corralDetail ->
-            totalProgressDownLoadWeight += corralDetail.initialWeight - corralDetail.currentWeight
-            totalWeightDownload += corralDetail.weight
-        }
-
-        if (totalWeightDownload > 0 && totalProgressDownLoadWeight > 0){
-            progressValue = 50 + (totalProgressDownLoadWeight * 50 / totalWeightDownload).roundToInt()
-        } else {
-            roundRunDetail.round.diet.products.forEach { productDetail ->
-                val maxWeightForProducts = productDetail.percentage*roundTargetWeight/100
-                totalWeightLoad += maxWeightForProducts
-                if (roundTargetWeight > 0){
-                    totalProgressLoadWeight += (if (productDetail.currentWeight-productDetail.initialWeight > maxWeightForProducts) maxWeightForProducts else productDetail.currentWeight-productDetail.initialWeight)
-                }
-            }
-
-            if (totalWeightLoad > 0){
-                progressValue = (totalProgressLoadWeight*50/totalWeightLoad).roundToInt()
-            }
-        }
-        return progressValue
+    private fun getProgress(roundRunDetail: MedRoundRunDetail) : Int{
+        return 0
     }
 
-    private fun getCurrentStatus(roundToRun: RoundRunDetail) : String {
+    private fun getCurrentStatus(roundToRun: MedRoundRunDetail) : String {
 
         val status = ""
 
@@ -138,17 +93,16 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
             // Nunca iniciada
             holder.llProgressBar.visibility = GONE
             holder.btnStopRound.visibility = INVISIBLE
-            holder.btnStartRound.text = "INICIAR"
+            holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.iniciar)
             holder.tvRoundRunDescription.text = getCurrentStatus(roundToRun)
 
         } else if (roundToRun.endDate.isEmpty()) {
             // En curso
-            holder.btnStartRound.text = "CONTINUAR"
+            holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.continuar)
             holder.tvRoundStartDate.text = "Iniciada el ${Helper.formattedDate(roundToRun.startDate, Constants.APP_DB_FORMAT_DATE, Constants.APP_SHOW_LARGE_FORMAT_DATE)}"
             holder.tvRoundRunDescription.text = getCurrentStatus(roundToRun)
             holder.pbRoundRun.progress = getProgress(roundToRun)
             holder.tvRoundRunPercentage.text = "${holder.pbRoundRun.progress}%"
-//            holder.btnStopRound.visibility = VISIBLE
             holder.btnStopRound.text = fragment.resources.getString(R.string.detener)
             holder.btnStopRound.background = fragment.context?.let { getDrawable(it,R.drawable.btn_round_to_run_red) }
             holder.llProgressBar.visibility = VISIBLE
@@ -156,118 +110,49 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
             // Con ejecuciones previas
             holder.llProgressBar.visibility = GONE
             holder.btnStopRound.visibility = INVISIBLE
-            holder.btnStartRound.text = "INICIAR"
+            holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.iniciar)
             holder.tvRoundRunDescription.text = getCurrentStatus(roundToRun)
             holder.tvRoundStartDate.text = "Iniciada el ${Helper.formattedDate(roundToRun.startDate, Constants.APP_DB_FORMAT_DATE, Constants.APP_SHOW_LARGE_FORMAT_DATE)}"
             val strDate = roundToRun.endDate
             val currentDate = Date()
-            val endDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strDate)
+            val endDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(strDate)
             val diff = currentDate.time - (endDate?.time ?: currentDate.time)
             if(diff<(60*60*1000 * CANT_HORAS_MUESTRA_RONDA_FINALIZADA)){
                 holder.roundCard.setCardBackgroundColor(Color.LTGRAY)
                 holder.tvRoundStartDate.setTextColor(Color.BLACK)
                 holder.tvRoundName.setTextColor(Color.BLACK)
-//                holder.tvRoundRunDescription.setTextColor(R.color.color_deep_green)
-//                holder.btnStopRound.visibility = VISIBLE
+
                 holder.btnStopRound.text = fragment.resources.getString(R.string.resumen)
                 holder.btnStopRound.background = fragment.context?.let { getDrawable(it,R.drawable.btn_round_rounded_blue) }
             }
         }
 
-        holder.itemView.setOnClickListener {
-            if (fragment is HomeFragment){
-                val localRow = mRoundViewModel.getRoundById(roundToRun.round.id)
-                fragment.lifecycleScope.launch {
-                    withContext(Dispatchers.Main) {
-                        localRow.observeOnce(fragment){round->
-                            fragment.goToRoundDetails(round)
-                        }
-                    }
-                }
-            }
-
-        }
-
-//        holder.ibMoreRoundRun.setOnClickListener{
-//            val popup =  PopupMenu(fragment.context, holder.ibMoreRoundRun)
-//            popup.menuInflater.inflate(R.menu.menu_adapter_round, popup.menu)
-//
-//            // Si el roundo está sincronizado no se permite el borrado.
-//            if (roundToRun.remoteId != 0L) {
-//                popup.menu.getItem(1).isVisible = false
-//            }
-//
-//            popup.setOnMenuItemClickListener {menuItem ->
-//                if (menuItem.itemId  == R.id.action_edit_round){
-//                    val ldRound = mRoundViewModel.getRoundById(roundToRun.round.id)
-//                    ldRound.observeOnce(fragment.requireActivity()){round->
-//                        val intent = Intent(fragment.requireActivity(), AddUpdateRoundActivity::class.java)
-//                        intent.putExtra(Constants.EXTRA_ROUND_DETAILS, round)
-//                        fragment.requireActivity().startActivity(intent)
-//                    }
-//                } else if (menuItem.itemId == R.id.action_delete_round){
-//                    if (fragment is HomeFragment) {
-//                        val localRow = mRoundViewModel.getRoundById(roundToRun.round.id)
-//                        fragment.lifecycleScope.launch {
-//                            withContext(Dispatchers.Main) {
-//                                localRow.observeOnce(fragment){round->
-//                                    fragment.deleteRound(round)
-//                                }
-//                            }
-//                        }
-//
-//                    }
-//                }
-//                true
-//            }
-//
-//            popup.show()
-//        }
-
         holder.btnStartRound.setOnClickListener{
-            if (fragment is HomeFragment){
-                Log.i("ROUNDRUNADAPTER","btnStart")
-                val rounRunId = String.format("%06d",roundToRun.id)
-                val msg = "CMD${Constants.CMD_INI}${rounRunId}"
-                (fragment.requireActivity() as MainActivity).mService?.LocalBinder()?.write(msg.toByteArray())
-            }
+            if(fragment is RoundListFragment)
+                fragment.sendGoToRound(roundToRun.round.id)
         }
 
         holder.btnStopRound.setOnClickListener{
-            if (fragment is HomeFragment){
-                if(holder.btnStopRound.text.equals(fragment.resources.getString(R.string.detener))){
-                    if (roundToRun.endDate.isEmpty() && roundToRun.startDate.isNotEmpty()){
-                        roundToRun.let { roundRunDetail ->
-                            if (roundRunDetail.id != 0L){
-                                fragment.activity?.lifecycleScope?.launch(Dispatchers.IO){
-                                    mRoundViewModel.finishRoundRunSyncWState(roundRunDetail.id,Constants.STATE_INTERRUPT)
-                                }
-                            }
+            if(holder.btnStopRound.text.equals(fragment.resources.getString(R.string.detener))){
+                if (roundToRun.endDate.isEmpty() && roundToRun.startDate.isNotEmpty()){
+                    roundToRun.let { roundRunDetail ->
+                        if (roundRunDetail.round.id != 0L){
+                            (fragment.requireActivity() as MainActivity).sendEndToMixer()
                         }
                     }
-                }else if(holder.btnStopRound.text.equals(fragment.resources.getString(R.string.resumen))){
-//                    fragment.findNavController().navigate(HomeFragmentDirections.actionNavHomeToRoundRunActivity(roundToRun,4))
                 }
-
+            }else if(holder.btnStopRound.text.equals(fragment.resources.getString(R.string.resumen))){
+                (fragment.requireActivity() as MainActivity).sendGoToResume(roundToRun.round.id)
             }
         }
 
-        if (fragment is HomeFragment) {
-            val currentUser = getCurrentUser(fragment.requireActivity())
-            if(currentUser.role.code == 1)
-//                holder.ibMoreRoundRun.visibility = VISIBLE
-            holder.cvRoundIcon.visibility = GONE
-        } else {
-            holder.ibMoreRoundRun.visibility = GONE
-            holder.cvRoundIcon.visibility = GONE
-        }
     }
 
     override fun getItemCount(): Int {
         return filteredRoundsRun.size
     }
 
-    fun roundList(list: List<RoundRunDetail>){
+    fun roundList(list: List<MedRoundRunDetail>){
         roundsRun = list
         filteredRoundsRun = list
         notifyDataSetChanged()
@@ -278,7 +163,7 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val charString = constraint?.toString() ?: ""
                 filteredRoundsRun = if (charString.isEmpty()) roundsRun else {
-                    val filteredList = ArrayList<RoundRunDetail>()
+                    val filteredList = ArrayList<MedRoundRunDetail>()
                     roundsRun
                         .filter {
                             (it.round.name.lowercase().contains(charString.lowercase())) or
@@ -300,19 +185,12 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
                 }
                 else{
                     Log.i("DEBUG","results.value ${results.values}")
-                    results.values as List<RoundRunDetail>
+                    results.values as List<MedRoundRunDetail>
                 }
                 notifyDataSetChanged()
             }
         }
     }
 
-    private fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
-        observe(lifecycleOwner, object : Observer<T> {
-            override fun onChanged(t: T?) {
-                observer.onChanged(t)
-                removeObserver(this)
-            }
-        })
-    }
+
 }

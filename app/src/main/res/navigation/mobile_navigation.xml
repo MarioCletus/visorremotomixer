@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_remote_mixer_fragment_to_resume_fragment"
             app:destination="@id/resume_fragment" />
+        <action
+            android:id="@+id/action_remote_mixer_fragment_to_round_list_fragment"
+            app:destination="@id/nav_round" />
     </fragment>
 
     <fragment
@@ -48,29 +51,6 @@
         <action
             android:id="@+id/action_tablet_mixer_list_fragment_to_remote_mixer_fragment"
             app:destination="@id/nav_mixer_remoto" />
-    </fragment>
-
-    <!-- HOME -->
-    <fragment
-        android:id="@+id/nav_home"
-        android:name="com.basculasmagris.visorremotomixer.view.fragments.HomeFragment"
-        android:label="@string/menu_round"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/actionNavHomeToRoundDetailFragment"
-            app:destination="@id/roundDetailFragment" />
-        <action
-            android:id="@+id/actionNavHomeToRemoteMixerFragment"
-            app:destination="@id/nav_mixer_remoto" />
-    </fragment>
-
-
-    <!-- CONFIG -->
-    <fragment
-        android:id="@+id/nav_config"
-        android:name="com.basculasmagris.visorremotomixer.view.fragments.HomeFragment"
-        android:label="@string/menu_config"
-        tools:layout="@layout/fragment_home" >
     </fragment>
 
 
@@ -121,25 +101,14 @@
         android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateMixerActivity"
         android:label="@string/screen_mixer_new"
         tools:layout="@layout/activity_add_update_mixer" />
-
-    <fragment
-        android:id="@+id/roundDetailFragment"
-        android:name="com.basculasmagris.visorremotomixer.view.fragments.RoundDetailFragment"
-        android:label="@string/round_detail_title"
-        tools:layout="@layout/fragment_round_detail"
-        >
-        <argument
-            android:name="roundDetail"
-            app:argType="com.basculasmagris.visorremotomixer.model.entities.Round"
-            />
-    </fragment>
     <fragment
         android:id="@+id/nav_round"
         android:name="com.basculasmagris.visorremotomixer.view.fragments.RoundListFragment"
         android:label="@string/round_list" >
         <action
-            android:id="@+id/action_roundListFragment_to_roundDetailFragment"
-            app:destination="@id/roundDetailFragment" />
+            android:id="@+id/action_round_list_fragment_to_remote_mixer_fragment"
+            app:destination="@id/nav_mixer_remoto" />
+
     </fragment>
     <fragment
         android:id="@+id/nav_sync"
