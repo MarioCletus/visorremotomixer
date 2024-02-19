@@ -9,7 +9,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
@@ -100,6 +99,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(TAG,"onCreate")
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         arguments?.let {
         }
     }
@@ -329,8 +329,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         return true
                     }
                     R.id.menu_selected_remote_tablet -> {
-                        Log.i(TAG,"touch tablet icon")
-                        goToTabletMixerListFragment()
+                        if(!bInCfg && !bInLoad && !bInDownload && !bInRes){
+                            Log.i(TAG,"touch tablet icon")
+                            goToTabletMixerListFragment()
+                        }
                         return true
                     }
                     else -> false
@@ -639,6 +641,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(bInLoad || bInDownload || bInRes || bInCfg){
+                            mostrarIconoMenu()
                             noInLoadOrDownload()
                         }
                         if(countMsg++ > REFRESH_VIEW_TIME){
@@ -661,6 +664,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(bInCfg == false){
+                            mostrarFlechaAtras()
                             mBinding.btnJump.text = getString(R.string.iniciar)
                             mBinding.btnInitFreeRound.isVisible = false
                             refreshRound()
@@ -715,6 +719,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(bInLoad == false){
+                            mostrarFlechaAtras()
                             mBinding.btnJump.text = getString(R.string.salto)
                             mBinding.btnInitFreeRound.isVisible = false
                             refreshRound()
@@ -743,6 +748,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(!bInDownload){
+                            mostrarFlechaAtras()
                             mBinding.btnJump.text = getString(R.string.salto)
                             countMsg = REFRESH_VIEW_TIME
                             mBinding.btnInitFreeRound.isVisible = false
@@ -766,6 +772,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(!bInLoad){
+                            mostrarFlechaAtras()
                             mBinding.btnInitFreeRound.isVisible = false
                             mBinding.btnJump.text = getString(R.string.salto)
                             countMsg = REFRESH_VIEW_TIME
@@ -789,6 +796,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(!bInDownload){
+                            mostrarFlechaAtras()
                             mBinding.btnInitFreeRound.isVisible = false
                             mBinding.btnJump.text = getString(R.string.salto_fin)
                             countMsg = REFRESH_VIEW_TIME
@@ -1194,5 +1202,31 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         return bInFree
     }
 
+
+    private fun mostrarFlechaAtras() {
+        Log.i(TAG,"mostrarFlechaAtras")
+        val actionBar = (requireActivity() as MainActivity).supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+        actionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24px)
+        setHasOptionsMenu(true)
+    }
+
+    private fun mostrarIconoMenu() {
+        Log.i(TAG,"mostrarIconoMenu")
+        val actionBar = (requireActivity() as MainActivity).supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+        actionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_24px)
+        setHasOptionsMenu(false)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Log.i(TAG,"Boton presionado")
+        // Manejar el evento del botón de retroceso
+        if (item.itemId == android.R.id.home && (bInCfg || bInLoad || bInDownload || bInRes)) {
+            (requireActivity() as MainActivity).sendEndToMixer()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
 }
