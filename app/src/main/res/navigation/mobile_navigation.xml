@@ -66,36 +66,6 @@
         android:label="@string/screen_tablet_mixer_new"
         tools:layout="@layout/activity_add_update_tablet_mixer" />
 
-
-    <activity
-        android:id="@+id/mixerConfigActivity"
-        android:name="com.basculasmagris.visorremotomixer.view.activities.MixerConfigActivity"
-        android:label="@string/screen_mixer_config"
-        tools:layout="@layout/activity_mixer_config">
-        <argument
-            android:name="mixerConfig"
-            app:argType="com.basculasmagris.visorremotomixer.model.entities.Mixer"
-            />
-        <argument
-            android:name="mixerBluetooth"
-            app:argType="android.bluetooth.BluetoothDevice"
-            android:defaultValue="@null"
-            app:nullable="true"
-            />
-    </activity>
-
-
-    <fragment
-        android:id="@+id/mixerDetailFragment"
-        android:name="com.basculasmagris.visorremotomixer.view.fragments.MixerDetailFragment"
-        android:label="@string/screen_mixer_detail"
-        tools:layout="@layout/fragment_mixer_detail"
-        >
-        <argument
-            android:name="mixerDetail"
-            app:argType="com.basculasmagris.visorremotomixer.model.entities.Mixer"
-            />
-    </fragment>
     <activity
         android:id="@+id/addUpdateMixerActivity"
         android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateMixerActivity"

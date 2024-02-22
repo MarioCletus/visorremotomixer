@@ -53,7 +53,6 @@ import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.utils.Helper
-import com.basculasmagris.visorremotomixer.view.fragments.MixerListFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
 import com.basculasmagris.visorremotomixer.view.fragments.TabletMixerListFragment
 import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModel
@@ -76,7 +75,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private var mProgressDialog: Dialog? = null
-    var mLocalDetailRound: MutableList<RoundRunDetail> = ArrayList()
     private var roles: ArrayList<Pair<Int, String>> = arrayListOf(
         Pair(1, "Administrador"),
         Pair(2, "Operario"),
@@ -94,6 +92,7 @@ class MainActivity : AppCompatActivity() {
     var listOfMedRoundsRun: ArrayList<MedRoundRunDetail> = ArrayList()
     var listOfMinUsers: ArrayList<MinUser> = ArrayList()
     var listOfMinEstablishments: ArrayList<MinEstablishment> = ArrayList()
+    private var bReconnect: Boolean = true
 
     // -------------------
     // Mixer
@@ -278,32 +277,6 @@ class MainActivity : AppCompatActivity() {
         mProgressDialog?.dismiss()
     }
 
-    fun bluetoothConnectionError(){
-        val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
-        navHost?.let { navFragment ->
-            navFragment.childFragmentManager.primaryNavigationFragment?.let {fragment->
-                if (fragment is MixerListFragment){
-                    fragment.bluetoothConnectionError()
-                }
-            }
-        }
-    }
-
-    fun bluetoothConnectionSuccess(){
-        val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
-        navHost?.let { navFragment ->
-            navFragment.childFragmentManager.primaryNavigationFragment?.let {fragment->
-                if (fragment is MixerListFragment){
-                    runOnUiThread {
-                        fragment.bluetoothConnectionSuccess()
-                    }
-
-
-                }
-            }
-        }
-    }
-
     fun saveMixer(mixer: Mixer){
         lifecycleScope.launch(Dispatchers.IO){
             saveMixer(mixer.id)
@@ -329,46 +302,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    fun getSavedTabletMixer(){
-        lifecycleScope.launch(Dispatchers.IO){
-            Log.i(TAG,"getSavedTabletMixer")
+    fun getSavedTabletMixer() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            Log.i(TAG, "getSavedTabletMixer")
             val flowLong = getSavedMixerTabletId()
-            flowLong.collect {id->
-                if(id==null){
-                    return@collect
-                }
-                val localKnowDevice = mTabletMixerViewModel.getTabletMixerById(id)
-
-                lifecycleScope.launch {
-                    withContext(Dispatchers.Main) {
-                        localKnowDevice.observe(this@MainActivity){tabletMixer->
-                            if (tabletMixer != null){
-                                selectedTabletMixerInActivity = tabletMixer
-                                val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
-                                navHost?.let { navFragment ->
-                                    navFragment.childFragmentManager.primaryNavigationFragment?.let {fragment->
-                                        Log.i(TAG,"observe selectedTableMixerInFragment $selectedTabletMixerInActivity")
-                                        if(selectedTabletMixerInActivity != null){
-                                            when (fragment){
-                                                is RemoteMixerFragment->{
-                                                    fragment.setTabletMixer(selectedTabletMixerInActivity!!)
-                                                }
-                                                is TabletMixerListFragment->{
-                                                    fragment.setTabletMixer(selectedTabletMixerInActivity!!)
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+            flowLong.collect { id ->
+                id ?: return@collect
+                observeTabletMixerById(id)
             }
         }
     }
 
+    private fun observeTabletMixerById(id: Long) {
+        lifecycleScope.launch {
+            val localKnowDevice = mTabletMixerViewModel.getTabletMixerById(id)
+            localKnowDevice.observe(this@MainActivity) { tabletMixer ->
+                tabletMixer ?: return@observe
+                handleTabletMixerUpdate(tabletMixer)
+                localKnowDevice.removeObservers(this@MainActivity)
+            }
+        }
+    }
+
+    private fun handleTabletMixerUpdate(tabletMixer: TabletMixer) {
+        selectedTabletMixerInActivity = tabletMixer
+        val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
+        navHost?.childFragmentManager?.primaryNavigationFragment?.let { fragment ->
+            when (fragment) {
+                is RemoteMixerFragment -> {
+                    Log.i(TAG, "setTabletMixer in RemoteMixerFragment $selectedTabletMixerInActivity")
+                    fragment.setTabletMixer(tabletMixer)}
+                is TabletMixerListFragment -> {
+                    Log.i(TAG, "setTabletMixer in TabletMixerListFragment $selectedTabletMixerInActivity")
+                    fragment.setTabletMixer(tabletMixer)
+                }
+            }
+        }
+    }
 
     fun changeStatusConnected(){
         hideCustomProgressDialog()
@@ -377,12 +347,18 @@ class MainActivity : AppCompatActivity() {
         Helper.saveBluetoothState(true)
     }
 
+    private var isActionRunning = false
     fun changeStatusDisconnected(){
         Log.i("CONNECTION","Home disconnected")
         Helper.saveBluetoothState(false)
         showDeviceDisconnected()
-        connectDevice(bluetoothDevice)
-    }
+        if(!isActionRunning && bReconnect){
+            isActionRunning = true
+            Handler(Looper.getMainLooper()).postDelayed({
+                connectDevice(bluetoothDevice)
+                isActionRunning = false
+            }, 250)
+        }    }
     fun connectDevice(bluetoothDevice: BluetoothDevice?){
         this.bluetoothDevice = bluetoothDevice
         if(mService?.isConnected() == true){
@@ -835,6 +811,60 @@ class MainActivity : AppCompatActivity() {
         }
         return address
     }
+
+    fun getBluetoothName(btDevice: BluetoothDevice?): String {
+        var name = ""
+        btDevice?.let{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                if (ActivityCompat.checkSelfPermission(
+                        this@MainActivity,
+                        Manifest.permission.BLUETOOTH_CONNECT
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    name = it.name
+                }
+            }else{
+                name = it.name
+            }
+        }
+        return name
+    }
+
+    fun getBluetoothAddress(btDevice: BluetoothDevice?): String {
+        var address = ""
+        btDevice?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                if (ActivityCompat.checkSelfPermission(
+                        this@MainActivity,
+                        Manifest.permission.BLUETOOTH_CONNECT
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    address = it.address
+                }
+            }else{
+                address = it.address
+            }
+        }
+        return address
+    }
+
+
+    fun selectTabletMixer(tabletMixer: TabletMixer) {
+        selectedTabletMixerInActivity = tabletMixer
+    }
+
+    fun selectBluetooth(deviceBluetooth: BluetoothDevice?) {
+        this.bluetoothDevice = deviceBluetooth
+    }
+
+    fun reconnectDisable() {
+        bReconnect = false
+    }
+
+    fun reconnectEnable() {
+        bReconnect = true
+    }
+
 
 
 }

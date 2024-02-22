@@ -1,18 +1,21 @@
 package com.basculasmagris.visorremotomixer.services
 
+import android.Manifest
 import android.app.Activity
 import android.app.Service
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.content.*
+import android.content.pm.PackageManager
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.basculasmagris.visorremotomixer.view.activities.TabletMixerConfigActivity
 import com.basculasmagris.visorremotomixer.utils.BluetoothUtils
-import com.basculasmagris.visorremotomixer.view.activities.MainActivity
-import com.basculasmagris.visorremotomixer.view.activities.MixerConfigActivity
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -23,20 +26,17 @@ class BluetoothSDKService : Service() {
 
     // Service Binder
     private val binder = LocalBinder()
+    private val TAG = "DEBServ"
 
     // Bluetooth stuff
     private lateinit var bluetoothAdapter: BluetoothAdapter
-    private lateinit var pairedDevices: MutableSet<BluetoothDevice>
-    private var connectedDevice: BluetoothDevice? = null
     private val MY_UUID = "00001101-0000-1000-8000-00805F9B34FB"
-    private val RESULT_INTENT = 15
-
     // Bluetooth connections
     private var connectThread: ConnectThread? = null
     private var connectThreadWithTransfer: ConnectThreadWithTransfer? = null
 
     private var connectedThread: ConnectedThread? = null
-    private var mAcceptThread: AcceptThread? = null
+
 
     // Invoked only first time
     override fun onCreate() {
@@ -72,7 +72,7 @@ class BluetoothSDKService : Service() {
             val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
             filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
             registerReceiver(discoveryBroadcastReceiver, filter)
-            bluetoothAdapter.startDiscovery()
+            startDiscovery(bluetoothAdapter)
             pushBroadcastMessage(BluetoothUtils.ACTION_DISCOVERY_STARTED, null, null)
         }
 
@@ -80,11 +80,23 @@ class BluetoothSDKService : Service() {
         fun getBondedDevices() : ArrayList<BluetoothDevice>{
             val devices = ArrayList<BluetoothDevice>()
             try{
-                val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter.bondedDevices
+                var pairedDevices: Set<BluetoothDevice>? = null
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                    if (ActivityCompat.checkSelfPermission(
+                            applicationContext,
+                            Manifest.permission.BLUETOOTH_CONNECT
+                        ) == PackageManager.PERMISSION_GRANTED) {
+                        pairedDevices = bluetoothAdapter.bondedDevices
+                    }else{
+                        Log.e(TAG,"getBondedDevices: Permission Denied")
+                    }
+                }else{
+                    pairedDevices = bluetoothAdapter.bondedDevices
+                }
                 //filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED)
                 pairedDevices?.forEach { device ->
-                    val deviceName = device.name
-                    val deviceHardwareAddress = device.address // MAC address
+                    val deviceName = getBluetoothName(device)
+                    val deviceHardwareAddress = getBluetoothAddress(device) // MAC address
                     devices.add(device)
                     Log.i("BLUE", "[getBondedDevices] deviceName: $deviceName | $deviceHardwareAddress")
                 }
@@ -102,7 +114,8 @@ class BluetoothSDKService : Service() {
         }
 
         fun connectKnowDeviceWithTransfer(bluetoothDevice: BluetoothDevice) {
-            Log.i("BLUE", "***Se CONECTA el servicio TR ${bluetoothDevice.name}")
+            disconnectKnowDeviceWithTransfer()
+            Log.i("BLUE", "***Se CONECTA el servicio TR ${getBluetoothName(bluetoothDevice)}")
             connectThreadWithTransfer = ConnectThreadWithTransfer(bluetoothDevice)
             connectThreadWithTransfer?.start()
         }
@@ -137,7 +150,7 @@ class BluetoothSDKService : Service() {
          * stop discovery
          */
         public fun stopDiscovery() {
-            bluetoothAdapter.cancelDiscovery()
+            cancelDiscovery(bluetoothAdapter)
             pushBroadcastMessage(BluetoothUtils.ACTION_DISCOVERY_STOPPED, null, null)
         }
 
@@ -181,22 +194,17 @@ class BluetoothSDKService : Service() {
                     val device: BluetoothDevice? =
                         intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                     device?.let {
-                        Log.i("BLUE", "ACTION_FOUND: ${device.name}")
-                        pushBroadcastMessage(BluetoothUtils.ACTION_DEVICE_FOUND, arrayListOf(device) , null)
+                        Log.i("BLUE", "ACTION_FOUND: ${getBluetoothName(it)}")
+                        pushBroadcastMessage(BluetoothUtils.ACTION_DEVICE_FOUND, arrayListOf(it) , null)
                     }
                 }
             }
         }
     }
 
-    private inner class AcceptThread : Thread() {
 
-    }
+    private inner class ConnectThread(private val activity: Activity, device: BluetoothDevice) : Thread() {
 
-
-    private inner class ConnectThread(activity: Activity, device: BluetoothDevice) : Thread() {
-
-        private val activity = activity
         private val mmSocket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
             device.createRfcommSocketToServiceRecord(UUID.fromString(MY_UUID))
         }
@@ -204,27 +212,23 @@ class BluetoothSDKService : Service() {
         override fun run() {
             Log.i("BLUE", "**** uniqueID: $MY_UUID")
             // Cancel discovery because it otherwise slows down the connection.
-            bluetoothAdapter.cancelDiscovery()
+            cancelDiscovery(bluetoothAdapter)
 
             mmSocket?.let { socket ->
                 // Connect to the remote device through the socket. This call blocks
                 // until it succeeds or throws an exception.
                 try
                 {
-                    socket.connect()
+                    socketConcetWithPermission(socket)
                     connectedThread = ConnectedThread(socket)
                     Log.i("BLUEFAT", "conexión exitosa")
-                    if(activity is MainActivity){
-                        activity.bluetoothConnectionSuccess()
-                    }else if(activity is MixerConfigActivity){
+                    if(activity is TabletMixerConfigActivity){
                         activity.bluetoothConnectionSuccess()
                     }
 
                 } catch (e: IOException) {
                     Log.i("BLUEFAT", e.message.toString())
-                    if(activity is MainActivity){
-                        activity.bluetoothConnectionError()
-                    }else if(activity is MixerConfigActivity){
+                    if(activity is TabletMixerConfigActivity){
                         activity.bluetoothConnectionError()
                     }
 
@@ -254,13 +258,13 @@ class BluetoothSDKService : Service() {
 
             try {
                 // Cancel discovery because it otherwise slows down the connection.
-                bluetoothAdapter.cancelDiscovery()
+                cancelDiscovery(bluetoothAdapter)
 
                 mmSocket?.let { socket ->
                     Log.i("BLUE", "**** uniqueID: ${MY_UUID} | socket: ${socket.toString()}")
                     // Connect to the remote device through the socket. This call blocks
                     // until it succeeds or throws an exception.
-                    socket.connect()
+                    socketConcetWithPermission(socket)
 
                     // The connection attempt succeeded. Perform work associated with
                     // the connection in a separate thread.
@@ -439,6 +443,92 @@ class BluetoothSDKService : Service() {
             }
         }
         return uniqueID
+    }
+
+
+    fun getBluetoothName(btDevice: BluetoothDevice?): String {
+        var name = ""
+        btDevice?.let{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                if (ActivityCompat.checkSelfPermission(
+                        applicationContext,
+                        Manifest.permission.BLUETOOTH_CONNECT
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    name = it.name
+                }
+            }else{
+                name = it.name
+            }
+        }
+        return name
+    }
+
+    fun getBluetoothAddress(btDevice: BluetoothDevice?): String {
+        var address = ""
+        btDevice?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                if (ActivityCompat.checkSelfPermission(
+                        applicationContext,
+                        Manifest.permission.BLUETOOTH_CONNECT
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    address = it.address
+                }
+            }else{
+                address = it.address
+            }
+        }
+        return address
+    }
+
+    fun startDiscovery(btAdapter: BluetoothAdapter){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+            if (ActivityCompat.checkSelfPermission(
+                    applicationContext,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) == PackageManager.PERMISSION_GRANTED) {
+                btAdapter.startDiscovery()
+            }else{
+                Log.e(TAG,"startDiscovery: Permission Denied")
+            }
+        }else{
+            btAdapter.startDiscovery()
+        }
+    }
+
+
+    private fun cancelDiscovery(btAdapter: BluetoothAdapter) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+            if (ActivityCompat.checkSelfPermission(
+                    applicationContext,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) == PackageManager.PERMISSION_GRANTED) {
+                btAdapter.cancelDiscovery()
+            }else{
+                Log.e(TAG,"cancelDiscovery: Permission Denied")
+            }
+        }else{
+            btAdapter.cancelDiscovery()
+        }
+    }
+
+
+
+    private fun socketConcetWithPermission(socket: BluetoothSocket) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+            if (ActivityCompat.checkSelfPermission(
+                    applicationContext,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) == PackageManager.PERMISSION_GRANTED) {
+                socket.connect()
+            }else{
+                Log.e(TAG,"socket.connect: Permission Denied")
+            }
+        }else{
+            socket.connect()
+        }
+
     }
 
 }

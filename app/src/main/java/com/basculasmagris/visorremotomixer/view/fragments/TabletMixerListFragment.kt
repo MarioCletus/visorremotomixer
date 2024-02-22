@@ -1,11 +1,13 @@
 package com.basculasmagris.visorremotomixer.view.fragments
 
 import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,7 +17,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
@@ -42,24 +44,19 @@ import com.basculasmagris.visorremotomixer.view.adapter.CustomDynamicListItemAda
 import com.basculasmagris.visorremotomixer.view.adapter.CustomListItem
 import com.basculasmagris.visorremotomixer.view.adapter.TabletMixerAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
-import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerRemoteViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import java.util.Timer
-import java.util.TimerTask
-import kotlin.math.roundToInt
 
 class TabletMixerListFragment : BottomSheetDialogFragment() {
 
-    private var bConexionClosed: Boolean = false
     private val TAG : String = "DEBTML"
     var menu: Menu? = null
     private lateinit var mBinding: FragmentTabletMixerListBinding
     private var bluetoothDevices: MutableList<BluetoothDevice> = ArrayList()
     private var allBluetoothDevice: MutableList<BluetoothDevice> = ArrayList()
     private var selectedBluetoothDevice : BluetoothDevice? = null
-    private var selectedTabletMixerInFragment: TabletMixer? = null
+    var selectedTabletMixerInFragment: TabletMixer? = null
     private var tabletMixerBluetoothDevice : BluetoothDevice? = null
     private lateinit var mCustomListDialog : Dialog
     private val allBluetoothDeviceCustomList: java.util.ArrayList<CustomListItem> =
@@ -69,14 +66,9 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
     private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
         TabletMixerViewModelFactory((requireActivity().application as SpiMixerApplication).tabletMixerRepository)
     }
-    private var mTabletMixerViewModelRemote: TabletMixerRemoteViewModel? = null
     private var mLocalTabletMixers: List<TabletMixer>? = null
     private var likingTabletMixer: TabletMixer? = null
-    private var accumulatedWight = 0.0
-    private var readCount = 0
-    private var timerTask: TimerTask? = null
-    private var estableTimer: Timer? = null
-    private var tick: Long = 0L
+
 
     //    private var mProgressDialog: Dialog? = null
 //    private var isFound = false
@@ -153,8 +145,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
                     R.id.action_add_tablet_mixer -> {
-                        val intent = Intent(requireActivity(), TabletMixerConfigActivity::class.java)
-                        startActivity(intent)
+                        goToConfigMixer(null,false)
                         return true
                     }
                     R.id.menu_selected_tabler_mixer ->{
@@ -186,7 +177,6 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
         // Bluethoot
-        Log.i(TAG, "Se inicia la búsqueda de dispositivos asociados")
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireActivity(), mBluetoothListener)
     }
 
@@ -208,7 +198,6 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
                         val isLinked = bluetoothDevices.firstOrNull { bluetoothDevice ->
                             bluetoothDevice.address == remoteViewer.mac
                         }
-                        Log.i(TAG, "[TabletMixerListFragment] TabletMixer ${remoteViewer.name}: ${isLinked!=null}")
                         (mBinding.rvTabletMixersList.adapter as TabletMixerAdapter).statusConnexion(remoteViewer, isLinked!=null)
                     }
                 } else {
@@ -225,21 +214,13 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
 
     fun goToRemoteMixerFragment(tabletMixer: TabletMixer){
         (activity as MainActivity).saveTabletMixer(tabletMixer)
-        closeConnection()
+        cleanObservers()
         findNavController().navigate(TabletMixerListFragmentDirections.actionTabletMixerListFragmentToRemoteMixerFragment())
     }
 
 
 
 
-    private fun closeConnection() {
-        Log.i(TAG,"closeconnection $bConexionClosed")
-        estableTimer?.purge()
-        estableTimer?.cancel()
-        estableTimer = null
-        timerTask = null
-        BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireActivity(), mBluetoothListener)
-    }
 
     fun deleteTabletMixer(tabletMixer: TabletMixer){
         val builder = AlertDialog.Builder(requireActivity())
@@ -261,38 +242,6 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
 
     }
 
-//    fun linkDevice(tabletMixer: TabletMixer){
-//        likingTabletMixer = tabletMixer
-//        dialog = setProgressDialog(requireActivity(), "Buscando un tabletMixer...")
-//        dialog?.show()
-//        (requireActivity() as MainActivity).mService?.LocalBinder()?.startDiscovery(requireActivity())
-//    }
-//
-//    fun bluetoothConnectionError(){
-//        Log.i("BLUEFAT", "TabletMixerlist")
-//        Snackbar.make(mBinding.tabletMixerListView, "No se pudo conectar con el dispositivo",
-//            BaseTransientBottomBar.LENGTH_SHORT
-//        ).show()
-//
-//        mCustomListDialog.dismiss()
-//    }
-//
-//    fun bluetoothConnectionSuccess(){
-//
-//        selectedBluetoothDevice?.let { selectedDevice ->
-//            likingTabletMixer?.let {
-//                bluetoothDevices.add(selectedDevice)
-//                mTabletMixerViewModel.setUpdatedMacAddress(it.id, selectedDevice.address)
-//                (mBinding.rvTabletMixersList.adapter as TabletMixerAdapter).statusConnexion(it, true)
-//            }
-//        }
-//
-//        Snackbar.make(mBinding.tabletMixerListView, "Dispositivo vinculado",
-//            BaseTransientBottomBar.LENGTH_SHORT
-//        ).show()
-//        mCustomListDialog.dismiss()
-//    }
-
     fun connect(tabletMixer: TabletMixer){
         likingTabletMixer = tabletMixer
         Log.i(TAG, "Cantidad: ${bluetoothDevices.size}")
@@ -310,113 +259,77 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
         }
     }
 
+
+    fun selectTabletMixer(tabletMixer: TabletMixer) {
+        val deviceBluetooth = bluetoothDevices.firstOrNull { bd->
+            bd.address == tabletMixer.mac
+        }
+        (requireActivity() as MainActivity).selectTabletMixer(tabletMixer)
+        (requireActivity() as MainActivity).selectBluetooth(deviceBluetooth)
+        (requireActivity() as MainActivity).saveTabletMixer(tabletMixer)
+        selectedTabletMixerInFragment = tabletMixer
+        selectedBluetoothDevice = deviceBluetooth
+        selectedBluetoothDevice?.let {
+            (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
+        }
+    }
+
+    var countMessage = 0
     private val mBluetoothListener: IBluetoothSDKListener = object : IBluetoothSDKListener {
         override fun onDiscoveryStarted() {
-            Log.i(TAG, "[TabletMixerListFragment] onDiscoveryStarted")
+            Log.i("BLUE", "[MixerListFragment] onDiscoveryStarted")
             customItemsDialog("Dispositivos disponibles", ArrayList(), Constants.DEVICE_REF)
         }
 
         override fun onDiscoveryStopped() {
-            Log.i(TAG, "[TabletMixerListFragment] onDiscoveryStopped")
+            Log.i("BLUE", "[MixerListFragment] onDiscoveryStopped")
             dialog?.cancel()
-
-            /*
-            allBluetoothDeviceCustomList.clear()
-            allBluetoothDevice.forEachIndexed { index, bluetoothDevice ->
-                val name = if (bluetoothDevice.name == null) "No identificado" else bluetoothDevice.name
-                val mac = if (bluetoothDevice.address == null) "00:00:00:00" else bluetoothDevice.address
-
-                val item = CustomListItem(index.toLong(), 0, name, mac, R.drawable.icon_balance)
-                allBluetoothDeviceCustomList.add(item)
-            }*/
-
-            //customItemsDialog("Dispositivos disponibles", allBluetoothDeviceCustomList, Constants.DEVICE_REF)
-
-            /*
-            if (!isFound) {
-                Toast.makeText(requireActivity(), "No se encontraron tabletMixers cercanos", Toast.LENGTH_SHORT).show()
-            }
-            */
-
-
         }
 
-
-
-
         override fun onDeviceDiscovered(device: BluetoothDevice?) {
-            val alreadyLinked = mLocalTabletMixers?.firstOrNull {
-                it.mac == device?.address
-            }
 
             device?.let { currentDevice ->
                 allBluetoothDevice.add(device)
-
-                var name = (requireActivity() as MainActivity).getName(device)
-                if(name.equals("")) name = getString(R.string.no_identificado)
-                val mac = if (currentDevice.address == null) "00:00:00:00" else currentDevice.address
+                val name = if ((requireActivity() as MainActivity).getBluetoothName(device).isEmpty()) "No identificado" else (requireActivity() as MainActivity).getBluetoothName(device)
+                val mac = if ((requireActivity() as MainActivity).getBluetoothAddress(device).isEmpty()) "00:00:00:00" else (requireActivity() as MainActivity).getBluetoothAddress(device)
 
                 val item = CustomListItem(0L, 0, name, mac, R.drawable.icon_balance)
                 //allBluetoothDeviceCustomList.add(item)
                 (dialogCustomListBinding?.rvList?.adapter as CustomDynamicListItemAdapterFragment).updateList(item)
 
             }
-
         }
 
         override fun onDeviceConnected(device: BluetoothDevice?) {
             // Do stuff when is connected
-            Log.i(TAG, "[TabletMixerListFragment] onDeviceConnected")
-//            (requireActivity() as MainActivity).changeStatusConnected()
+            Log.i("BLUE", "[MixerListFragment] onDeviceConnected")
         }
-
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
             Log.i("command", "TabletMixerListFragment onCommandReceived ${message?.let { String(it) }}")
             (requireActivity() as MainActivity).changeStatusConnected()
+
+
 
             if(message == null || message.size<9){
                 Log.i(TAG,"command not enough large (${message?.size})")
                 return
             }
             val messageStr = String(message,0, message.size)
+            if(countMessage++>20){
+                Log.d("message","message $messageStr")
+                countMessage = 0
+            }
             val command = messageStr.substring(0,3)
             Log.i("SHOWCOMAND","tabletMixerList command $command")
             when (command) {
-                Constants.CMD_WEIGHT -> {
-                    try {
-                        val weight = String(message, 5, 8).toLong()
-                        (mBinding.rvTabletMixersList.adapter as TabletMixerAdapter).setWeight(weight)
-                        Log.i("peso","Peso: $weight")
-                    } catch (e: Exception) {
-                        Log.i(TAG, "CMD_WEIGHT Exception $e")
-                    }
-                }
+
             }
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             (requireActivity() as MainActivity).changeStatusConnected()
             Log.i("message", "TabletMixerListFragment onMessageReceived $message")
-            message?.let{msg->
-                if (msg.length > 8){
-                    readCount += 1
-                    val currentTabletMixerWeight = msg.substring(1, 7).toDoubleOrNull()
-                    currentTabletMixerWeight?.let {
-                        accumulatedWight += it
-                    }
-
-                    if (readCount >= 10){
-                        (requireActivity() as MainActivity).hideCustomProgressDialog()
-                        val average = (accumulatedWight/readCount).roundToInt()
-
-                        likingTabletMixer?.let {
-
-                            Toast.makeText(requireActivity(), "Se calibró el remoteViewer con un valor de ${average.toDouble()}Kg", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-            }
         }
 
         override fun onMessageSent(device: BluetoothDevice?,message: String?) {
@@ -438,25 +351,24 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
         }
 
         override fun onBondedDevices(device: List<BluetoothDevice>?) {
-            Log.i(TAG, "[TabletMixerListFragment] onBondedDevices: ${device?.size} | Local TabletMixers: ${mLocalTabletMixers?.size}")
+            Log.i("BLUE", "[MixerListFragment] onBondedDevices: ${device?.size} | Local Mixers: ${mLocalTabletMixers?.size}")
             device?.let { bdList ->
                 bluetoothDevices = bdList.toMutableList()
             }
 
-            knowDevices = device
-
-            knowDevices?.forEach{
-                Log.i(TAG,"selectedTabletMixerInFragment $selectedTabletMixerInFragment \nbluetoothKnowed $it")
-                selectedTabletMixerInFragment?.let{ tabletMixer->
-                    if(tabletMixer.mac == it.address){
-                        if(it.address != tabletMixerBluetoothDevice?.address){
-                            tabletMixerBluetoothDevice = it
-                            Log.i(TAG,"Se seleccionó ${(requireActivity() as MainActivity).getName(it)} : ${(requireActivity() as MainActivity).getAddress(it)}")
-                            connect(tabletMixer)
-                        }
-                        return@forEach
-                    }
+            mLocalTabletMixers?.forEach { mixer ->
+                val isLinked = device?.firstOrNull { bluetoothDevice ->
+                    bluetoothDevice.address == mixer.mac
                 }
+                Log.i("BLUE", "[MixerListFragment] Mixer ${mixer.name}: ${isLinked!=null}")
+                (mBinding.rvTabletMixersList.adapter as TabletMixerAdapter).statusConnexion(mixer, isLinked!=null)
+            }
+
+            selectedTabletMixerInFragment?.let {
+                val deviceBluetooth = bluetoothDevices.firstOrNull { bd ->
+                    bd.address == it.mac
+                }
+                (requireActivity() as MainActivity).connectDevice(deviceBluetooth)
             }
         }
 
@@ -500,55 +412,68 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
 
     override fun onResume() {
         super.onResume()
+        Log.i(TAG,"onResume")
+        getLocalData()
+        (requireActivity() as MainActivity).getSavedTabletMixer()
+    }
 
-
-        if(estableTimer != null ){
-            Log.i(TAG,"estableTimer != null $estableTimer")
-            return
-        }
-        estableTimer = Timer(false)
-        timerTask = object : TimerTask() {
-
-            override fun run() {
-                tick ++
-                if(tick == 2L){
-                    (requireActivity() as MainActivity).getSavedTabletMixer()
-                    estableTimer?.cancel()
-                    timerTask?.cancel()
-                    estableTimer = null
-                    timerTask = null
-                }
-            }
-        }
-        estableTimer?.scheduleAtFixedRate(timerTask, 0, 1000)
+    override fun onStop() {
+        Log.i(TAG,"onStop")
+        BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
+        super.onStop()
     }
 
     private fun cleanObservers(){
-        mTabletMixerViewModelRemote?.remoteViewersResponse?.value = null
-        mTabletMixerViewModelRemote?.remoteViewersLoadingError?.value = null
-        mTabletMixerViewModelRemote?.loadTabletMixer?.value = null
-        mTabletMixerViewModelRemote?.addTabletMixersResponse?.value = null
-        mTabletMixerViewModelRemote?.addTabletMixerErrorResponse?.value = null
-        mTabletMixerViewModelRemote?.addTabletMixersLoad?.value = null
-        mTabletMixerViewModelRemote?.updateTabletMixersResponse?.value = null
-        mTabletMixerViewModelRemote?.updateTabletMixersErrorResponse?.value = null
-        mTabletMixerViewModelRemote?.updateTabletMixersLoad?.value = null
-        mTabletMixerViewModelRemote = null
         mLocalTabletMixers = null
-        closeConnection()
+        BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireActivity(), mBluetoothListener)
+
     }
 
-    fun configTabletMixer(tabletMixer: TabletMixer, mode :Boolean = false):Boolean {
-        Log.i(TAG, "Cantidad: ${bluetoothDevices.size} tabletMixer.mac: ${tabletMixer.mac}")
-        val deviceBluetooth = bluetoothDevices.firstOrNull { bd->
-            bd.address == tabletMixer.mac
+
+    fun goToConfigMixer(tabletMixer:TabletMixer?, isDetail :Boolean = false){
+        Log.d(TAG, "Go to config Activity. BTDevice: $tabletMixer")
+        if(tabletMixer == null || tabletMixer.id != selectedTabletMixerInFragment?.id){
+            (requireActivity() as MainActivity).reconnectDisable()
+            (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
         }
         val intent = Intent(requireActivity(), TabletMixerConfigActivity::class.java)
-        intent.putExtra(Constants.EXTRA_TABLET_MIXER_DETAILS, tabletMixer)
-        intent.putExtra(Constants.EXTRA_TABLET_MIXER_MODE, mode)
-        intent.putExtra("BTDEVICE",deviceBluetooth)
-        startActivity(intent)
-        return true
+        intent.putExtra(Constants.EXTRA_MIXER_MODE, isDetail)
+        if(tabletMixer != null){
+            val deviceBluetooth = bluetoothDevices.firstOrNull { bd->
+                bd.address == tabletMixer.mac
+            }
+            intent.putExtra(Constants.EXTRA_MIXER_DETAILS, tabletMixer)
+            intent.putExtra("BTDEVICE",deviceBluetooth)
+        }
+        someActivityResultLauncher.launch(intent)
+        return
+    }
+
+    private val someActivityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        // Aquí manejas el resultado de la actividad
+        Log.v(TAG,"Return from MixerConfigActivity")
+        (requireActivity() as MainActivity).reconnectEnable()
+        if (result.resultCode == Activity.RESULT_OK) {
+            Log.v(TAG,"result code OK")
+            val intent: Intent? = result.data
+            var mixerReturned: TabletMixer? = null
+            if (intent?.hasExtra(Constants.EXTRA_MIXER_DETAILS) == true){
+                mixerReturned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    intent?.getParcelableExtra(Constants.EXTRA_MIXER_DETAILS,  TabletMixer::class.java)
+                } else {
+                    intent?.getParcelableExtra< TabletMixer>(Constants.EXTRA_MIXER_DETAILS)
+                }
+            }
+            Log.v(TAG,"mixerReturned $mixerReturned")
+            mixerReturned?.let {
+                Log.v(TAG,"MixerReturned ${it.name}  ${it.mac}  selectedTabletMixerInFragment $selectedTabletMixerInFragment")
+                if(it.mac != selectedTabletMixerInFragment?.mac && selectedTabletMixerInFragment != null){
+                    Log.v(TAG,"Disconnect MixerReturned")
+                    (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
+                    (requireActivity() as MainActivity).changeStatusDisconnected()
+                }
+            }
+        }
     }
 
     private fun permission() {
@@ -583,10 +508,11 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
 
     fun setTabletMixer(tabletMixerIn: TabletMixer) {
         tabletMixerIn.let { tabletMixer ->
-            Log.i(TAG," ${menu?.findItem(R.id.menu_selected_tabler_mixer) == null} setTabletMixer $tabletMixer")
             menu?.findItem(R.id.menu_selected_tabler_mixer)?.title = "  " + tabletMixer.name
             selectedTabletMixerInFragment = tabletMixer
             (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
+            (mBinding.rvTabletMixersList.adapter as TabletMixerAdapter).selectedTabletMixer = tabletMixer
+            BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
         }
     }
 

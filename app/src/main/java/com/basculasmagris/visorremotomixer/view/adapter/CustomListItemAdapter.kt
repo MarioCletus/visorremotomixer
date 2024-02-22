@@ -5,10 +5,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.basculasmagris.visorremotomixer.view.activities.TabletMixerConfigActivity
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.ItemCustomListBinding
 import com.basculasmagris.visorremotomixer.view.activities.*
-import com.basculasmagris.visorremotomixer.view.fragments.MixerListFragment
+
 
 class CustomListItemAdapter (
     private val activity: Activity,
@@ -52,7 +53,7 @@ class CustomListItemAdapter (
                 activity.selectedListItem(item, selection)
             }
 
-            if (activity is MixerConfigActivity){
+            if (activity is TabletMixerConfigActivity){
                 activity.selectedListItem(item, selection)
             }
 
@@ -99,9 +100,7 @@ class CustomListItemAdapterFragment (
         holder.tvDescription.text = item.description.ifEmpty { fragment.requireActivity().getString(R.string.no_description) }
 
         holder.itemView.setOnClickListener{
-            if (fragment is MixerListFragment){
-                fragment.selectedListItem(item, selection)
-            }
+
         }
     }
 
@@ -141,9 +140,6 @@ class CustomDynamicListItemAdapterFragment (
         holder.tvDescription.text = item.description.ifEmpty { fragment.requireActivity().getString(R.string.no_description) }
 
         holder.itemView.setOnClickListener{
-            if (fragment is MixerListFragment){
-                fragment.selectedListItem(item, selection)
-            }
         }
     }
 

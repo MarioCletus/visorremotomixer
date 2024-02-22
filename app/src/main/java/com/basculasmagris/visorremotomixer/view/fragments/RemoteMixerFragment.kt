@@ -329,10 +329,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         return true
                     }
                     R.id.menu_selected_remote_tablet -> {
-                        if(!bInCfg && !bInLoad && !bInDownload && !bInRes){
-                            Log.i(TAG,"touch tablet icon")
-                            goToTabletMixerListFragment()
-                        }
+//                        if(!bInCfg && !bInLoad && !bInDownload && !bInRes){
+//                            Log.i(TAG,"touch tablet icon")
+//                            goToTabletMixerListFragment()
+//                        }
                         return true
                     }
                     else -> false
@@ -443,6 +443,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         estableTimer?.scheduleAtFixedRate(timerTask, 0, 1000)
     }
 
+    var countMessage = 0
     private val mBluetoothListener: IBluetoothSDKListener = object : IBluetoothSDKListener {
         init {
             Log.i(TAG,"create mBluetoothListener")
@@ -481,14 +482,20 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
             (requireActivity() as MainActivity).changeStatusConnected()
+
             if(message == null || message.size<9){
                 Log.i(TAG,"command not enough large (${message?.size})")
                 return
             }
+
             val messageStr = String(message,0, message.size)
+            if(countMessage++>20){
+                Log.d("message","message $messageStr")
+                countMessage = 0
+            }
             val command = messageStr.substring(0,3)
             Log.i("SHOWCOMAND","command $command")
-            Log.i("message", String(message))
+
             when (command){
 
                 Constants.CMD_ROUNDDETAIL->{

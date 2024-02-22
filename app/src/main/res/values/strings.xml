@@ -242,6 +242,7 @@
     <string name="prompt_password">Contraseña</string>
     <string name="action_sign_in">Ingresar</string>
     <string name="screen_mixer_config">Configuración del mixer</string>
+    <string name="screen_tablet_mixer_config">Configuración del mixer</string>
     <string name="tara">Tara</string>
     <string name="datorecibido">Dato Recibido</string>
     <string name="peso">Peso</string>
@@ -252,8 +253,8 @@
     <string name="divisiones_externas">Divisiones externas</string>
     <string name="peso_conocido">Peso conocido</string>
     <string name="caja_bluetooth_asoc">Caja bluetooth asociada</string>
-    <string name="equipos_vinculados">Balanzas vinculadas</string>
-    <string name="buscar_equipos">Buscar Balanzas</string>
+    <string name="equipos_vinculados">Mixers vinculadas</string>
+    <string name="buscar_equipos">Buscar Mixers</string>
     <string name="ingrese_macaddress">Ingrese Macaddress</string>
     <string name="aceptar">Aceptar</string>
     <string name="cancelar">Cancelar</string>
@@ -354,6 +355,7 @@
     <string name="continuar">CONTINUAR</string>
     <string name="free_round">Ronda libre</string>
     <string name="round">Ronda</string>
+    <string name="buscar_mixers_cercanos">Buscar Mixers Cercanos</string>
 
 
 </resources>
