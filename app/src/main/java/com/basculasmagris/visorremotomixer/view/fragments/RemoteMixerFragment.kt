@@ -84,8 +84,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
     private var selectedMixerInFragment: Mixer? = null
     private var selectedTabletMixerInFragment: TabletMixer? = null
-    private var tabletMixerBluetoothDevice : BluetoothDevice? = null
-    private var knowDevices: List<BluetoothDevice>? = null
 
     private var targetReachedDialog: AlertDialog? = null
     private var dialogCountDown: AlertDialog? = null
@@ -180,9 +178,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             return@setOnLongClickListener false
         }
 
-
-
-
         mBinding.btnPause.setOnCheckedChangeListener { v, isChecked ->
             Log.i(TAG,"setOnCheckedChangeListener $isChecked")
             if(!bInCfg && !bInLoad && !bInDownload && !bInRes){
@@ -211,11 +206,14 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         loadRoundDetail()
         mBinding.rvMixerProductsToLoad.addItemDecoration(MarginItemDecoration(resources.getDimensionPixelSize(R.dimen.margin_recycler_horizontal)))
 
+
+
         //Conectar bluetooth
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
         (requireActivity() as MainActivity).minRoundRunDetail?.state = Constants.STATE_LOAD
         Log.i(TAG,"onViewCreated ready")
     }
+
 
     private fun loadRoundDetail() {
         (requireActivity() as MainActivity).minRoundRunDetail?.round?.diet?.let { dietDetail ->
@@ -302,7 +300,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 return when (menuItem.itemId) {
                     R.id.bluetooth_tablet_mixer -> {
                         Log.v(TAG,"Force connection")
-                        val deviceBluetooth = knowDevices?.firstOrNull { bd->
+                        val deviceBluetooth = (requireActivity() as MainActivity).knowDevices?.firstOrNull { bd->
                             bd.address == selectedTabletMixerInFragment?.mac
                         }
                         deviceBluetooth?.let {
@@ -860,34 +858,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         override fun onBondedDevices(device: List<BluetoothDevice>?) {
             Log.i(TAG, "[MixRem]onBondedDevices ${device?.size} \n$device")
-            knowDevices = device
-            knowDevices?.forEach{
-                Log.i(TAG,"selectedTabletMixerInFragment $selectedTabletMixerInFragment \nbluetoothKnowed $it")
-                selectedTabletMixerInFragment?.let { tabletMixer ->
-                    if(tabletMixer.mac == it.address){
-                        var name = ""
-                        var address = ""
-                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-                            if (ActivityCompat.checkSelfPermission(
-                                    requireActivity() as MainActivity,
-                                    Manifest.permission.BLUETOOTH_CONNECT
-                                ) == PackageManager.PERMISSION_GRANTED
-                            ) {
-                                name = it.name
-                                address = it.address
-                            }
-                        }else{
-                            name = it.name
-                            address = it.address
-                        }
-                        Log.i(TAG,"Se seleccionó $name : $address")
-                        if(tabletMixerBluetoothDevice != it){
-                            connectTable(tabletMixer)
-                        }
-                        tabletMixerBluetoothDevice = it
-                    }
-                }
-            }
+            (requireActivity() as MainActivity).knowDevices = device
         }
     }
 
@@ -1144,21 +1115,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 "setTabletMixer $tabletMixer  \nmService ${(requireActivity() as MainActivity).mService}"
             )
             (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
-        }
-    }
-
-    fun connectTable(tabletMixer: TabletMixer){
-        Log.i(TAG, "Cantidad: ${knowDevices?.size}")
-        val deviceBluetooth = knowDevices?.firstOrNull { bd->
-            bd.address == tabletMixer.mac
-        }
-
-        if (deviceBluetooth != null){
-            Log.i(TAG,"Try to connect with ${deviceBluetooth}")
-            (requireActivity() as MainActivity).showCustomProgressDialog()
-            (requireActivity() as MainActivity).connectDevice(deviceBluetooth)
-        } else {
-            Toast.makeText(requireActivity(), "No se pudo conectar", Toast.LENGTH_SHORT).show()
         }
     }
 

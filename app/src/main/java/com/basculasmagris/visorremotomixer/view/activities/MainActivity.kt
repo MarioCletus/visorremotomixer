@@ -53,6 +53,7 @@ import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.utils.Helper
+import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
 import com.basculasmagris.visorremotomixer.view.fragments.TabletMixerListFragment
 import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModel
@@ -93,6 +94,7 @@ class MainActivity : AppCompatActivity() {
     var listOfMinUsers: ArrayList<MinUser> = ArrayList()
     var listOfMinEstablishments: ArrayList<MinEstablishment> = ArrayList()
     private var bReconnect: Boolean = true
+    var knowDevices: List<BluetoothDevice>? = null
 
     // -------------------
     // Mixer
@@ -185,7 +187,7 @@ class MainActivity : AppCompatActivity() {
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
         mMixerViewModel.allMixerList.observe(this){
-            mService?.LocalBinder()?.getBondedDevices()
+//            mService?.LocalBinder()?.getBondedDevices()
         }
 
         refreshLogo()
@@ -242,7 +244,7 @@ class MainActivity : AppCompatActivity() {
             val binder = service as BluetoothSDKService.LocalBinder
             mService = binder.getService()
             Log.i(TAG, "[MAIN] ****** CONECTADO")
-            mService?.LocalBinder()?.getBondedDevices()
+//            mService?.LocalBinder()?.getBondedDevices()
             mService?.let {
                 Helper.getServiceInstance().setBluetoothService(it)
             }
@@ -334,6 +336,9 @@ class MainActivity : AppCompatActivity() {
         val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
         navHost?.childFragmentManager?.primaryNavigationFragment?.let { fragment ->
             when (fragment) {
+                is HomeFragment -> {
+                    Log.i(TAG, "setTabletMixer in HomeFragment $selectedTabletMixerInActivity")
+                    fragment.setTabletMixer(tabletMixer)}
                 is RemoteMixerFragment -> {
                     Log.i(TAG, "setTabletMixer in RemoteMixerFragment $selectedTabletMixerInActivity")
                     fragment.setTabletMixer(tabletMixer)}
