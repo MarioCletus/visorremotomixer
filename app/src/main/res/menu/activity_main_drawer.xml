@@ -4,12 +4,20 @@
     tools:showIn="navigation_view">
 
     <group
-        android:id="@+id/group_activity"
+        android:id="@+id/group_home"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_mixer_remoto"
-            android:icon="@drawable/ic_tablet_48px"
-            android:title="Mixer Remoto" />
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
+            android:title="Inicio" />
+    </group>
+    <group
+        android:id="@+id/group_activity"
+        android:checkableBehavior="single">
+<!--        <item-->
+<!--            android:id="@+id/nav_mixer_remoto"-->
+<!--            android:icon="@drawable/ic_tablet_48px"-->
+<!--            android:title="Mixer Remoto" />-->
         <item
             android:id="@+id/nav_round"
             android:icon="@drawable/ic_route_new"
@@ -23,32 +31,14 @@
             android:id="@+id/nav_tablet_mixer"
             android:icon="@drawable/ic_mixer"
             android:title="@string/mixers" />
-<!--        <item-->
-<!--            android:id="@+id/nav_config"-->
-<!--            android:icon="@drawable/icon_ajustes_topbar"-->
-<!--            android:title="@string/ajustes" />-->
+
     </group>
 
-<!--    <group-->
-<!--        android:id="@+id/group_diets_products"-->
-<!--        android:checkableBehavior="single">-->
-<!--        <item-->
-<!--            android:id="@+id/nav_product"-->
-<!--            android:icon="@drawable/ic_productos_new"-->
-<!--            android:title="@string/menu_product" />-->
-<!--        <item-->
-<!--            android:id="@+id/nav_diet"-->
-<!--            android:icon="@drawable/ic_diet_new"-->
-<!--            android:title="@string/menu_diet" />-->
-<!--    </group>-->
 
     <group
         android:id="@+id/group_user_interface"
         android:checkableBehavior="none">
-<!--        <item-->
-<!--            android:id="@+id/nav_report"-->
-<!--            android:icon="@drawable/ic_reports_new"-->
-<!--            android:title="@string/menu_report" />-->
+
         <item
             android:id="@+id/nav_sync"
             android:icon="@drawable/ic_sync_new"

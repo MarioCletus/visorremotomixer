@@ -123,9 +123,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         mBinding.btnJump.setOnClickListener{
             Log.i(TAG, "btnJump")
 
-            if(!bInCfg && !bInLoad && !bInDownload && !bInRes){
-                findNavController().navigate(RemoteMixerFragmentDirections.actionRemoteMixerFragmentToRoundListFragment())
-            }
+//            if(!bInCfg && !bInLoad && !bInDownload && !bInRes){
+//                findNavController().navigate(RemoteMixerFragmentDirections.actionRemoteMixerFragmentToRoundListFragment())
+//            }
 
             if(bInCfg){
                 (requireActivity() as MainActivity).sendIniToMixer()
@@ -180,9 +180,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             return@setOnLongClickListener false
         }
 
-        mBinding.btnInitFreeRound.setOnClickListener{
-            (requireActivity() as MainActivity).sendGoToFreeRound()
-        }
+
 
 
         mBinding.btnPause.setOnCheckedChangeListener { v, isChecked ->
@@ -648,7 +646,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(bInLoad || bInDownload || bInRes || bInCfg){
-                            mostrarIconoMenu()
                             noInLoadOrDownload()
                         }
                         if(countMsg++ > REFRESH_VIEW_TIME){
@@ -671,9 +668,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(bInCfg == false){
-                            mostrarFlechaAtras()
                             mBinding.btnJump.text = getString(R.string.iniciar)
-                            mBinding.btnInitFreeRound.isVisible = false
                             refreshRound()
                         }
                         if(countMsg++ > REFRESH_VIEW_TIME){
@@ -711,7 +706,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_RESUME->{
-                    mBinding.btnInitFreeRound.isVisible = false
                     if(count_resume++ > 5){
                         Log.v("commandsWeight","CMD_WEIGHT_RESUME")
                         try{
@@ -726,9 +720,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(bInLoad == false){
-                            mostrarFlechaAtras()
                             mBinding.btnJump.text = getString(R.string.salto)
-                            mBinding.btnInitFreeRound.isVisible = false
                             refreshRound()
                         }
                         if(countMsg++ > REFRESH_VIEW_TIME){
@@ -755,10 +747,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(!bInDownload){
-                            mostrarFlechaAtras()
                             mBinding.btnJump.text = getString(R.string.salto)
                             countMsg = REFRESH_VIEW_TIME
-                            mBinding.btnInitFreeRound.isVisible = false
                         }
                         mBinding.tvTitleProduct.text = getString(R.string.descargar_en)
                         mBinding.tvCurrentProduct.text = currentCorralDetail?.name
@@ -779,8 +769,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(!bInLoad){
-                            mostrarFlechaAtras()
-                            mBinding.btnInitFreeRound.isVisible = false
                             mBinding.btnJump.text = getString(R.string.salto)
                             countMsg = REFRESH_VIEW_TIME
                         }
@@ -803,8 +791,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(!bInDownload){
-                            mostrarFlechaAtras()
-                            mBinding.btnInitFreeRound.isVisible = false
                             mBinding.btnJump.text = getString(R.string.salto_fin)
                             countMsg = REFRESH_VIEW_TIME
                         }
@@ -951,8 +937,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         mBinding.tvCurrentProduct.text = mixerDetail?.name ?: ""
         mBinding.btnJump.text = getString(R.string.round)
         mBinding.btnPause.visibility = View.INVISIBLE
-        mBinding.btnInitFreeRound.visibility = View.VISIBLE
-
     }
 
     override fun onDestroyView() {
@@ -1146,10 +1130,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         val msg = "CMD${Constants.CMD_NXTCORRAL}"
         activity?.mService?.LocalBinder()?.write(msg.toByteArray())
     }
-
-    fun goToTabletMixerListFragment(){
-        findNavController().navigate(RemoteMixerFragmentDirections.actionRemoteMixerFragmentToTableMixerListFragment())
-    }
+//
+//    fun goToTabletMixerListFragment(){
+//        findNavController().navigate(RemoteMixerFragmentDirections.actionRemoteMixerFragmentToTableMixerListFragment())
+//    }
 
     fun setTabletMixer(tabletMixerIn: TabletMixer) {
             tabletMixerIn.let { tabletMixer ->
@@ -1207,23 +1191,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
     fun isInFree(): Boolean {
         return bInFree
-    }
-
-
-    private fun mostrarFlechaAtras() {
-        Log.i(TAG,"mostrarFlechaAtras")
-        val actionBar = (requireActivity() as MainActivity).supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24px)
-        setHasOptionsMenu(true)
-    }
-
-    private fun mostrarIconoMenu() {
-        Log.i(TAG,"mostrarIconoMenu")
-        val actionBar = (requireActivity() as MainActivity).supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_24px)
-        setHasOptionsMenu(false)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -4,71 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.fragments.StepResumeFragment">
-
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    android:orientation="vertical"
-    android:visibility="gone">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="@dimen/_8sdp"
-        android:text="Fecha Inicio: "
-        >
-
-    </TextView>
-    <TextView
-        android:id="@+id/tv_round_start_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="@dimen/_8sdp"
-        >
-    </TextView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="@dimen/_8sdp"
-        android:text="Usuario: "
-        >
-
-    </TextView>
-    <TextView
-        android:id="@+id/tv_round_user_run"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="@dimen/_8sdp"
-        >
-    </TextView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="@dimen/_8sdp"
-        android:text="Total dieta: "
-        >
-
-    </TextView>
-    <TextView
-        android:id="@+id/tv_round_diet_total_weight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="100Kg"
-        android:textSize="@dimen/_8sdp"
-        >
-    </TextView>
-
-
-</LinearLayout>
+    tools:context=".view.fragments.ResumeFragment">
 
     <com.kofigyan.stateprogressbar.StateProgressBar
         android:id="@+id/sp_round_run_step"

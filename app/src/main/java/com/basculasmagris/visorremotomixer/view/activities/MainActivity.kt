@@ -129,7 +129,8 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_mixer_remoto,
+                R.id.nav_home,
+//                R.id.nav_mixer_remoto,
                 R.id.nav_round,
                 R.id.nav_tablet_mixer,
                 R.id.nav_sync,
@@ -171,6 +172,10 @@ class MainActivity : AppCompatActivity() {
                         .show()
                     drawerLayout.close()
                 }
+                R.id.nav_home ->{
+                    navController.popBackStack(R.id.nav_home, false)
+                }
+
             }
             outPut
         }

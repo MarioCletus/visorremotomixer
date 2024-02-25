@@ -3,7 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_mixer_remoto">
+    app:startDestination="@+id/nav_home">
+
+
+    <!--Home-->
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.basculasmagris.visorremotomixer.view.fragments.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_remote_mixer" >
+<!--        <action-->
+<!--            android:id="@+id/action_home_to_mixer"-->
+<!--            app:destination="@id/nav_tablet_mixer" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_home_to_round"-->
+<!--            app:destination="@id/nav_round" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_home_to_sync"-->
+<!--            app:destination="@id/nav_sync" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_home_to_free_round"-->
+<!--            app:destination="@id/nav_mixer_remoto" />-->
+    </fragment>
 
     <!-- principal -->
     <fragment

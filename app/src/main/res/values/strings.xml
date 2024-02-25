@@ -356,6 +356,9 @@
     <string name="free_round">Ronda libre</string>
     <string name="round">Ronda</string>
     <string name="buscar_mixers_cercanos">Buscar Mixers Cercanos</string>
+    <string name="sincronizar">Sincronizar</string>
+    <string name="rondas">Rondas</string>
+    <string name="ronda_libre">Ronda\nLibre</string>
 
 
 </resources>

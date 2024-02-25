@@ -2,7 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <item android:id="@+id/bluetooth_tablet_mixer"
         android:title=""
         android:icon="@drawable/ic_bluetooth_disconnected_24px"

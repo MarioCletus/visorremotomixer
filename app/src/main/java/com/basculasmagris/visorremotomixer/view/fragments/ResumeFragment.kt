@@ -64,7 +64,6 @@ class ResumeFragment : Fragment() {
         }
         mBinding.spRoundRunStep.setStateDescriptionData(stepsDescription)
         mBinding.spRoundRunStep.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR)
-        mBinding.tvRoundUserRun.text = currentUser.displayName
         mBinding.rvRoundCorralsToLoad.layoutManager = GridLayoutManager(requireActivity(), 1)
         mBinding.rvRoundProductsToLoad.addItemDecoration(MarginItemDecoration(resources.getDimensionPixelSize(R.dimen.margin_recycler)))
         mBinding.rvRoundCorralsToLoad.addItemDecoration(MarginItemDecoration(resources.getDimensionPixelSize(R.dimen.margin_recycler)))
@@ -94,8 +93,6 @@ class ResumeFragment : Fragment() {
         } else {
             mBinding.tvTotalDownloadDiff.text = "${Helper.getNumberWithDecimals(activity.getFinalDownload(),0)}Kg     ${Helper.getNumberWithDecimals(downloadDiff,0)}Kg"
         }
-
-        mBinding.tvRoundDietTotalWeight.text = "${Helper.getNumberWithDecimals(activity.getTargetWeight(), 0)}Kg"
 
     }
 
