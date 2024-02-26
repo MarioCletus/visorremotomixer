@@ -2,42 +2,42 @@ package com.basculasmagris.visorremotomixer.view.fragments
 
 import android.Manifest
 import android.bluetooth.BluetoothDevice
-import android.content.Context
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
 import com.basculasmagris.visorremotomixer.databinding.FragmentSyncBinding
-import com.basculasmagris.visorremotomixer.model.entities.*
+import com.basculasmagris.visorremotomixer.model.entities.MedRoundRunDetail
+import com.basculasmagris.visorremotomixer.model.entities.MinUser
+import com.basculasmagris.visorremotomixer.model.entities.RoundLocal
+import com.basculasmagris.visorremotomixer.model.entities.User
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
-import com.basculasmagris.visorremotomixer.utils.Helper
-import com.basculasmagris.visorremotomixer.view.activities.*
+import com.basculasmagris.visorremotomixer.view.activities.MainActivity
+import com.basculasmagris.visorremotomixer.view.activities.MergedLocalData
+import com.basculasmagris.visorremotomixer.view.activities.RoundLocalData
+import com.basculasmagris.visorremotomixer.view.activities.UserData
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
-import com.basculasmagris.visorremotomixer.viewmodel.*
+import com.basculasmagris.visorremotomixer.viewmodel.RoundLocalViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.RoundLocalViewModelFactory
+import com.basculasmagris.visorremotomixer.viewmodel.UserViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.UserViewModelFactory
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
-import kotlin.properties.Delegates
 
 class SyncFragment : Fragment() {
 
@@ -45,6 +45,7 @@ class SyncFragment : Fragment() {
     private val TAG = "DEBSync"
     private var bSyncroRounds: Boolean = false
     private var bSyncroUsers: Boolean = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +58,7 @@ class SyncFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         mBinding.btnSync.setOnClickListener{
             GlobalScope.launch (Dispatchers.Main) {
@@ -140,21 +142,6 @@ class SyncFragment : Fragment() {
                     bSyncroRounds = false
                 }
 
-//                Constants.CMD_PRODUCT->{
-//                    Log.i("showCommand","CMD_PRODUCT")
-//                    bSyncroProducts = (requireActivity() as MainActivity).refreshProducts(message)
-//                }
-//
-//                Constants.CMD_CORRAL->{
-//                    Log.i("showCommand","CMD_CORRAL")
-//                    bSyncroCorrals = (requireActivity() as MainActivity).refreshCorrals(message)
-//                }
-//
-//                Constants.CMD_ESTAB_LIST->{
-//                    Log.i("showCommand","CMD_ESTAB_LIST")
-//                    bSyncroEstablishment = (requireActivity() as MainActivity).refreshEstablishments(message)
-//                }
-
                 Constants.CMD_DLG_PRODUCT->{
                     Log.i("showCommand","CMD_DLG_PRODUCT")
                     (requireActivity() as MainActivity).dlgProduct(message)
@@ -210,8 +197,6 @@ class SyncFragment : Fragment() {
         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
         super.onDestroyView()
     }
-
-
 
     private suspend fun syncData(){
         (requireActivity() as MainActivity).requestListOfUsers()

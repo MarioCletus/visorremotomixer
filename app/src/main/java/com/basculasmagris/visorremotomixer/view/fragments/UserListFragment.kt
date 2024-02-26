@@ -147,8 +147,6 @@ class UserListFragment : Fragment() {
         mUserViewModelRemote?.updateUsersResponse?.value = null
         mUserViewModelRemote?.updateUsersErrorResponse?.value = null
         mUserViewModelRemote?.updateUsersLoad?.value = null
-
-
         mUserViewModelRemote = null
         mLocalUsers = null
     }

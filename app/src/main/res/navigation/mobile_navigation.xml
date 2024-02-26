@@ -38,6 +38,11 @@
             android:defaultValue="@null"
             app:nullable="true"
             />
+        <argument
+            android:name="tipoRonda"
+            app:argType="integer"
+            android:defaultValue="0"
+            />
         <action
             android:id="@+id/action_remote_mixer_fragment_to_table_mixer_list_fragment"
             app:destination="@id/nav_tablet_mixer" />

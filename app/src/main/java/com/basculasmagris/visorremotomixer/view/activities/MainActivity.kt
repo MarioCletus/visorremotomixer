@@ -30,6 +30,9 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -47,8 +50,11 @@ import com.basculasmagris.visorremotomixer.model.entities.MinProduct
 import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.MinUser
 import com.basculasmagris.visorremotomixer.model.entities.Mixer
+import com.basculasmagris.visorremotomixer.model.entities.MixerDetail
+import com.basculasmagris.visorremotomixer.model.entities.RoundLocal
 import com.basculasmagris.visorremotomixer.model.entities.RoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
+import com.basculasmagris.visorremotomixer.model.entities.User
 import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
@@ -58,8 +64,12 @@ import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
 import com.basculasmagris.visorremotomixer.view.fragments.TabletMixerListFragment
 import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModelFactory
+import com.basculasmagris.visorremotomixer.viewmodel.RoundLocalViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.RoundLocalViewModelFactory
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModelFactory
+import com.basculasmagris.visorremotomixer.viewmodel.UserViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.UserViewModelFactory
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -105,6 +115,16 @@ class MainActivity : AppCompatActivity() {
 
     private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
         TabletMixerViewModelFactory((application as SpiMixerApplication).tabletMixerRepository)
+    }
+
+    private var mLocalUsers: List<User>? = null
+    private var mLocalRoundsLocal: List<RoundLocal>? = null
+    private val mRoundLocalViewModel: RoundLocalViewModel by viewModels {
+        RoundLocalViewModelFactory((application as SpiMixerApplication).roundLocalRepository)
+    }
+
+    private val mUserViewModel: UserViewModel by viewModels {
+        UserViewModelFactory((application as SpiMixerApplication).userRepository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -191,7 +211,42 @@ class MainActivity : AppCompatActivity() {
         }
 
         refreshLogo()
+        getLocalData()
+    }
 
+    private fun fetchLocalData(): MediatorLiveData<MergedLocalData> {
+        val liveDataMerger = MediatorLiveData<MergedLocalData>()
+        liveDataMerger.addSource(mUserViewModel.allUserList) {
+            if (it != null) {
+                liveDataMerger.value = UserData(it)
+            }
+        }
+        liveDataMerger.addSource(mRoundLocalViewModel.allRoundLocalList) {
+            if (it != null) {
+                liveDataMerger.value = RoundLocalData(it)
+            }
+        }
+
+        return liveDataMerger
+    }
+    private fun getLocalData(){
+        // Sync local data
+        val liveData = fetchLocalData()
+        liveData.observe(this, object : Observer<MergedLocalData> {
+            override fun onChanged(it: MergedLocalData?) {
+                when (it) {
+                    is UserData -> mLocalUsers = it.users
+                    is RoundLocalData -> mLocalRoundsLocal = it.roundsLocal
+                    else -> {}
+                }
+
+                if (mLocalUsers != null && mLocalRoundsLocal != null) {
+                    Log.i(TAG, "Rondas: ${mLocalRoundsLocal?.size}  Usuarios: ${mLocalUsers?.size}")
+                    liveData.removeObserver(this)
+                    liveData.value = null
+                }
+            }
+        })
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -453,6 +508,7 @@ class MainActivity : AppCompatActivity() {
         mService?.LocalBinder()?.write(msg.toByteArray())
     }
 
+
     fun refreshUsers(message: ByteArray):Boolean {
         try{
             val convertZip = ConvertZip()
@@ -460,6 +516,30 @@ class MainActivity : AppCompatActivity() {
             val gson = Gson()
             val listType = object : TypeToken<ArrayList<MinUser>>() {}.type
             listOfMinUsers = gson.fromJson<ArrayList<MinUser>>(json, listType)?:ArrayList()
+            listOfMinUsers.forEach{ minUser ->
+                val isUser = mLocalUsers?.firstOrNull{
+                    it.id == minUser.id
+                }
+                val user = User(
+                    username = minUser.username,
+                    name = minUser.name,
+                    lastname = minUser.lastname,
+                    mail = "",
+                    password = minUser.password,
+                    remoteId = minUser.remoteId,
+                    updatedDate = "",
+                    archiveDate = null,
+                    codeRole = minUser.codeRole,
+                    codeClient = "",
+                    id = minUser.id
+                )
+                if(isUser == null){
+                    mUserViewModel.insert(user)
+                }else{
+                    mUserViewModel.update(user)
+                }
+            }
+
             return true
         }catch (e: NumberFormatException){
             Log.i(TAG,"bSyncroUsers NumberFormatException $e")
@@ -477,7 +557,30 @@ class MainActivity : AppCompatActivity() {
             val gson = Gson()
             val listType = object : TypeToken<ArrayList<MedRoundRunDetail>>() {}.type
             listOfMedRoundsRun = gson.fromJson<ArrayList<MedRoundRunDetail>>(json, listType)?:ArrayList()
-            Log.i(TAG,"listOfMinRounds $listOfMedRoundsRun")
+            Log.i(TAG,"listOfMinRounds $(requireactivity() as MainActivity).listOfMedRoundsRun")
+
+            listOfMedRoundsRun.forEach{ minRound ->
+                val isRound = mLocalRoundsLocal?.firstOrNull{
+                    it.id == minRound.round.id
+                }
+                val roundLocal = RoundLocal(
+                    name = minRound.round.name,
+                    description = minRound.round.description,
+                    remoteId = minRound.round.remoteId,
+                    startDate = minRound.startDate,
+                    endDate = minRound.endDate,
+                    state = minRound.state,
+                    tabletMixerId = minRound.round.id,
+                    tabletMixerMac = selectedTabletMixerInActivity?.mac?:"",
+                    id = isRound?.id?:0L
+                )
+                if(isRound == null){
+                    mRoundLocalViewModel.insert(roundLocal)
+                }else{
+                    mRoundLocalViewModel.update(roundLocal)
+                }
+            }
+
             return true
         }catch (e: NumberFormatException){
             Log.i(TAG,"bSyncroRounds NumberFormatException $e")

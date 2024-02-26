@@ -110,6 +110,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         val args: RemoteMixerFragmentArgs by navArgs()
 
         selectedTabletMixerInFragment = args.tabletMixer
+        val tipoRonda = args.tipoRonda
         Log.i(TAG,"tabletMixer ${selectedTabletMixerInFragment}")
 
         mBinding.btnTara.setOnClickListener{
@@ -117,6 +118,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             Log.i(TAG, "btnTara")
         }
 
+        mBinding.btnInitFreeRound.setOnClickListener{
+            (requireActivity() as MainActivity).sendGoToFreeRound()
+        }
 
         mBinding.btnJump.setOnClickListener{
             Log.i(TAG, "btnJump")
@@ -212,6 +216,13 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
         (requireActivity() as MainActivity).minRoundRunDetail?.state = Constants.STATE_LOAD
         Log.i(TAG,"onViewCreated ready")
+        if(tipoRonda == 1){
+            (requireActivity() as MainActivity).sendGoToFreeRound()
+            mBinding.btnInitFreeRound.visibility = View.VISIBLE
+        }else{
+            mBinding.btnInitFreeRound.visibility = View.INVISIBLE
+        }
+
     }
 
 
@@ -645,6 +656,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     try{
                         if(bInLoad || bInDownload || bInRes || bInCfg){
                             noInLoadOrDownload()
+                            mBinding.btnJump.visibility = View.INVISIBLE
+                            mBinding.btnTara.visibility = View.VISIBLE
+                            mBinding.btnInitFreeRound.visibility = View.INVISIBLE
+                            mBinding.btnRest.visibility = View.VISIBLE
+                            mBinding.btnPause.visibility = View.INVISIBLE
                         }
                         if(countMsg++ > REFRESH_VIEW_TIME){
                             noInLoadOrDownload()
@@ -666,6 +682,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(bInCfg == false){
+                            mBinding.btnJump.visibility = View.VISIBLE
+                            mBinding.btnTara.visibility = View.INVISIBLE
+                            mBinding.btnInitFreeRound.visibility = View.INVISIBLE
+                            mBinding.btnRest.visibility = View.INVISIBLE
+                            mBinding.btnPause.visibility = View.INVISIBLE
                             mBinding.btnJump.text = getString(R.string.iniciar)
                             refreshRound()
                         }
@@ -718,6 +739,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(bInLoad == false){
+                            mBinding.btnJump.visibility = View.VISIBLE
+                            mBinding.btnTara.visibility = View.VISIBLE
+                            mBinding.btnInitFreeRound.visibility = View.INVISIBLE
+                            mBinding.btnRest.visibility = View.VISIBLE
+                            mBinding.btnPause.visibility = View.VISIBLE
                             mBinding.btnJump.text = getString(R.string.salto)
                             refreshRound()
                         }
@@ -745,6 +771,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(!bInDownload){
+                            mBinding.btnJump.visibility = View.VISIBLE
+                            mBinding.btnTara.visibility = View.VISIBLE
+                            mBinding.btnInitFreeRound.visibility = View.INVISIBLE
+                            mBinding.btnRest.visibility = View.VISIBLE
+                            mBinding.btnPause.visibility = View.VISIBLE
                             mBinding.btnJump.text = getString(R.string.salto)
                             countMsg = REFRESH_VIEW_TIME
                         }
@@ -767,6 +798,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(!bInLoad){
+                            mBinding.btnJump.visibility = View.VISIBLE
+                            mBinding.btnTara.visibility = View.VISIBLE
+                            mBinding.btnInitFreeRound.visibility = View.INVISIBLE
+                            mBinding.btnRest.visibility = View.VISIBLE
+                            mBinding.btnPause.visibility = View.VISIBLE
                             mBinding.btnJump.text = getString(R.string.salto)
                             countMsg = REFRESH_VIEW_TIME
                         }
@@ -789,6 +825,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_resume = 0
                     try{
                         if(!bInDownload){
+                            mBinding.btnJump.visibility = View.VISIBLE
+                            mBinding.btnTara.visibility = View.VISIBLE
+                            mBinding.btnInitFreeRound.visibility = View.INVISIBLE
+                            mBinding.btnRest.visibility = View.VISIBLE
+                            mBinding.btnPause.visibility = View.VISIBLE
                             mBinding.btnJump.text = getString(R.string.salto_fin)
                             countMsg = REFRESH_VIEW_TIME
                         }

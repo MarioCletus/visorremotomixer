@@ -7,12 +7,19 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
+import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.FragmentHomeBinding
 import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.Mixer
@@ -20,6 +27,7 @@ import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
+import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.google.gson.Gson
@@ -31,6 +39,7 @@ class HomeFragment : Fragment() {
     private val TAG = "DEBHome"
     private var selectedTabletMixerInFragment: TabletMixer? = null
     private var tabletMixerBluetoothDevice : BluetoothDevice? = null
+    private var menu:Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +52,63 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                // Add menu items here
+                menuInflater.inflate(R.menu.menu_remote_mixer_fragment, menu)
+                this@HomeFragment.menu = menu
+                val activity = requireActivity() as MainActivity
+                activity.supportActionBar?.let {
+                    it.title = "Inicio - ${Helper.getCurrentUser(activity).displayName}"
+                }
+
+            }
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Handle the menu selection
+                return when (menuItem.itemId) {
+                    R.id.bluetooth_tablet_mixer -> {
+                        Log.v(TAG,"Force connection")
+                        val deviceBluetooth = (requireActivity() as MainActivity).knowDevices?.firstOrNull { bd->
+                            bd.address == selectedTabletMixerInFragment?.mac
+                        }
+                        deviceBluetooth?.let {
+                            val name = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                                if (ActivityCompat.checkSelfPermission(
+                                        requireActivity() as MainActivity,
+                                        Manifest.permission.BLUETOOTH_CONNECT
+                                    ) == PackageManager.PERMISSION_GRANTED
+                                ) {
+                                    if (it.name == null) "" else it.name
+                                }else{
+                                    ""
+                                }
+                            }else{
+                                if (it.name == null) "" else it.name
+                            }
+                            Log.v(TAG,"Force connection $name")
+                            (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
+                            (requireActivity() as MainActivity).mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                            (requireActivity() as MainActivity).showCustomProgressDialog()
+                        }
+                        return true
+                    }
+                    R.id.menu_selected_remote_tablet -> {
+//                        if(!bInCfg && !bInLoad && !bInDownload && !bInRes){
+//                            Log.i(TAG,"touch tablet icon")
+//                            goToTabletMixerListFragment()
+//                        }
+                        return true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+
+
         mBinding = FragmentHomeBinding.inflate(inflater, container, false)
 
         mBinding.btnMixer.setOnClickListener{
@@ -58,7 +124,7 @@ class HomeFragment : Fragment() {
         }
 
         mBinding.btnRondaLibre.setOnClickListener{
-            findNavController().navigate(HomeFragmentDirections.actionHomeToFreeRound())
+            findNavController().navigate(HomeFragmentDirections.actionHomeToFreeRound(selectedTabletMixerInFragment,1))
         }
 
 
@@ -309,7 +375,7 @@ class HomeFragment : Fragment() {
 
     fun setTabletMixer(tabletMixerIn: TabletMixer) {
         tabletMixerIn.let { tabletMixer ->
-//            menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + tabletMixer.name
+            menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + tabletMixer.name
             selectedTabletMixerInFragment = tabletMixer
             Log.i(
                 TAG,

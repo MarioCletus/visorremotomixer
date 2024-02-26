@@ -97,6 +97,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
+        <Button
+            android:id="@+id/btn_init_free_round"
+            android:layout_width="150dp"
+            android:layout_height="45dp"
+            android:background="@drawable/btn_round_rounded_green"
+            android:gravity="center"
+            android:text="@string/free_round"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:backgroundTint="@null"
+            android:visibility="invisible"
+            app:layout_constraintStart_toEndOf="@id/btn_tara"
+            app:layout_constraintEnd_toStartOf="@id/btn_jump"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
         <ToggleButton
             android:id="@+id/btn_pause"
             android:layout_width="150dp"

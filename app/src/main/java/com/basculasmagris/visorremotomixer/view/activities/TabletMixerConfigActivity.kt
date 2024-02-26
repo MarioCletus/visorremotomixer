@@ -36,7 +36,6 @@ import androidx.core.view.size
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
@@ -55,7 +54,6 @@ import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.view.adapter.CustomListItem
 import com.basculasmagris.visorremotomixer.view.adapter.CustomListItemAdapter
-import com.basculasmagris.visorremotomixer.view.fragments.RoundListFragmentDirections
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.basculasmagris.visorremotomixer.viewmodel.RoundLocalViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.RoundLocalViewModelFactory
@@ -75,7 +73,6 @@ import java.util.Date
 import java.util.Locale
 import java.util.Timer
 import kotlin.concurrent.schedule
-import kotlin.math.min
 
 
 class TabletMixerConfigActivity : AppCompatActivity(){
@@ -158,11 +155,13 @@ class TabletMixerConfigActivity : AppCompatActivity(){
             bIsFirstIn = intent.getBooleanExtra(Constants.FIRST_IN, false)
             if(bIsFirstIn){
                 mBinding.llSyncProgress.visibility = View.VISIBLE
+                getLocalData()
             }
             Log.i(TAG,"bIsFirstIn $bIsFirstIn")
         }
 
         setupActionBar()
+
         // Navigation Menu
         this.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -183,7 +182,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                             if(bIsFirstIn)
                                 return true
                             saveTabletMixer()
-                            BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(applicationContext, mBluetoothListener)
+                            cleanObservers()
                             finish()
                         }else
                             hideSoftKeyboard()
@@ -262,7 +261,6 @@ class TabletMixerConfigActivity : AppCompatActivity(){
             }
         }
 
-
         mService = Helper.getServiceInstance().getBluetoothService()
         selectedBluetoothDevice?.let{
             Log.i(TAG, "*********** onServiceConnected [TabletMixerConfigActivity] CONECTADO ${it.toString()} ${it.address} | $mService" )
@@ -280,6 +278,12 @@ class TabletMixerConfigActivity : AppCompatActivity(){
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
+    }
+
+    private fun cleanObservers(){
+        mLocalUsers = null
+        mLocalRoundsLocal = null
+        BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(applicationContext, mBluetoothListener)
     }
 
 
@@ -771,7 +775,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
 
                     result(tabletMixer)
                     if(bIsFirstIn){
-                        BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(applicationContext, mBluetoothListener)
+                        cleanObservers()
                         finish()
                     }
                 }
@@ -848,7 +852,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                     result(it)
                 }
             }
-            BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(applicationContext, mBluetoothListener)
+            cleanObservers()
             onBackPressed()
         }
 
@@ -963,7 +967,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
         liveData.observe(this, object : Observer<MergedLocalData> {
             override fun onChanged(it: MergedLocalData?) {
                 when (it) {
-                    is UserData -> mLocalUsers = it.users.filter { user -> user.codeRole != 1 }
+                    is UserData -> mLocalUsers = it.users
                     is RoundLocalData -> mLocalRoundsLocal = it.roundsLocal
                     else -> {}
                 }
