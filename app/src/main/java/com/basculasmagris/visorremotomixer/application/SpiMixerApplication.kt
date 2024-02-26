@@ -8,11 +8,10 @@ class SpiMixerApplication: Application() {
     private  val database by lazy { SpiMixerRoomDatabase.getDatabase((this@SpiMixerApplication))}
     val corralRepository by lazy { CorralRepository(database.corralDao()) }
     val dietRepository by lazy { DietRepository(database.dietDao()) }
-    val establishmentRepository by lazy { EstablishmentRepository(database.establishmentDao()) }
     val mixerRepository by lazy { MixerRepository(database.mixerDao()) }
-    val productRepository by lazy { ProductRepository(database.productDao()) }
     val userRepository by lazy { UserRepository(database.userDao())}
     val roundRepository by lazy { RoundRepository(database.roundDao())}
+    val roundLocalRepository by lazy { RoundLocalRepository(database.roundLocalDao())}
     val tabletMixerRepository by lazy { TabletMixerRepository(database.remoteViewerDao()) }
 
     //val roundRunReportRepository by lazy { RoundRunReportRepository(database.roundRunReportDao())}

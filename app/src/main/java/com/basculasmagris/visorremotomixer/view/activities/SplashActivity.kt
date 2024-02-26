@@ -19,21 +19,13 @@ import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.Session
 
 sealed class MergedLocalData
-data class EstablishmentData(val establishments: MutableList<Establishment>): MergedLocalData()
 data class CorralData(val corrals: MutableList<Corral>): MergedLocalData()
-data class ProductData(val products: MutableList<Product>): MergedLocalData()
-data class MixerData(val mixers: MutableList<Mixer>): MergedLocalData()
 data class TabletMixerData(val tabletMixers: MutableList<TabletMixer>): MergedLocalData()
 data class DietData(val diets: MutableList<Diet>): MergedLocalData()
-data class DietProductDetailData(val dietProductsDetail: MutableList<DietProductDetail>): MergedLocalData()
-data class DietProductData(val dietProducts: MutableList<DietProduct>): MergedLocalData()
 data class RoundData(val rounds: MutableList<Round>): MergedLocalData()
 data class RoundCorralDetailData(val roundCorralDetail: MutableList<RoundCorralDetail>): MergedLocalData()
-data class RoundCorralData(val roundCorrals: MutableList<RoundCorral>): MergedLocalData()
-data class RoundRunData(val roundRun: MutableList<RoundRun>): MergedLocalData()
-data class RoundRunProgressLoadData(val roundRunProgressLoad: MutableList<RoundRunProgressLoad>): MergedLocalData()
-data class RoundRunProgressDownloadData(val roundRunProgressDownload: MutableList<RoundRunProgressDownload>): MergedLocalData()
 data class UserData(val users: MutableList<User>): MergedLocalData()
+data class RoundLocalData(val roundsLocal: MutableList<RoundLocal>): MergedLocalData()
 
 class SplashActivity : AppCompatActivity() {
 
@@ -72,16 +64,16 @@ class SplashActivity : AppCompatActivity() {
 
             override fun onAnimationEnd(p0: Animation?) {
                 Handler(Looper.getMainLooper()).postDelayed({
-//                    val isLogged = sharedpreferences.getBoolean(Constants.PREF_IS_LOGGED, false)
-//                    Session.accessToken =
-//                        sharedpreferences.getString(Constants.PREF_LOGIN_KEY_ACCESS_TOKEN, "").toString()
-//                    if (isLogged){
+                    val isLogged = sharedpreferences.getBoolean(Constants.PREF_IS_LOGGED, false)
+                    Session.accessToken =
+                        sharedpreferences.getString(Constants.PREF_LOGIN_KEY_ACCESS_TOKEN, "").toString()
+                    if (isLogged){
                         startActivity(Intent(this@SplashActivity, MainActivity::class.java))
                         finish()
-//                    } else {
-//                        startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
-//                        finish()
-//                    }
+                    } else {
+                        startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+                        finish()
+                    }
 
                 }, 1000)
             }

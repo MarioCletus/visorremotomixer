@@ -20,8 +20,9 @@ import com.basculasmagris.visorremotomixer.model.entities.*
         RoundRunProgressLoad::class,
         RoundRunProgressDownload::class,
         RoundRun::class,
+        RoundLocal::class,
         TabletMixer::class],
-    version = 12)
+    version = 13)
 
 abstract class SpiMixerRoomDatabase: RoomDatabase() {
 
@@ -32,6 +33,7 @@ abstract class SpiMixerRoomDatabase: RoomDatabase() {
     abstract fun corralDao() : CorralDao
     abstract fun dietDao() : DietDao
     abstract fun roundDao() : RoundDao
+    abstract fun roundLocalDao() : RoundLocalDao
     abstract fun remoteViewerDao() : TabletMixerDao
     //abstract fun roundRunReportDao() : RoundRunReportDao
 

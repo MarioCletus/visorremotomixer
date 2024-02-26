@@ -2,8 +2,6 @@ package com.basculasmagris.visorremotomixer.model.entities
 
 import android.bluetooth.BluetoothDevice
 import android.os.Parcelable
-import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -257,6 +255,7 @@ data class MinUser (
     val name: String,
     val lastname: String,
     val password: String,
+    val codeRole: Int,
     val remoteId: Long,
     val id: Long
 ) : Parcelable

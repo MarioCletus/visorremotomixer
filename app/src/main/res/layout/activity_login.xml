@@ -111,7 +111,7 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:text="Aún no hay usuarios creados"
-            ></TextView>
+            />
         <TextView
             android:layout_margin="@dimen/_12sdp"
             android:textAlignment="center"
@@ -119,8 +119,47 @@
             android:layout_height="wrap_content"
             android:textStyle="italic"
             android:text="Para visualizar la lista de usuarios se debe ingresar con conexión a internet y realizar una sincronización desde el menu de la aplicación"
-            ></TextView>
+            />
     </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_login_first_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            >
+
+            <TextView
+                android:layout_marginTop="@dimen/_20sdp"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Primer ingreso. Debe conectarse con un mixer"
+                />
+            <TextView
+                android:layout_margin="@dimen/_12sdp"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="italic"
+                android:text=""
+                />
+
+            <Button
+                android:id="@+id/btn_search_and_sincro"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/declarar_mixer" />
+        </LinearLayout>
+
 
     </LinearLayout>
 

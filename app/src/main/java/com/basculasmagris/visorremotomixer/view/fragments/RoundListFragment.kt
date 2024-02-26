@@ -19,27 +19,42 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.basculasmagris.visorremotomixer.R
+import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
 import com.basculasmagris.visorremotomixer.databinding.FragmentRoundListBinding
 import com.basculasmagris.visorremotomixer.model.entities.MedRoundRunDetail
+import com.basculasmagris.visorremotomixer.model.entities.MinRound
+import com.basculasmagris.visorremotomixer.model.entities.RoundLocal
+import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
+import com.basculasmagris.visorremotomixer.view.activities.MergedLocalData
+import com.basculasmagris.visorremotomixer.view.activities.RoundLocalData
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
+import com.basculasmagris.visorremotomixer.viewmodel.RoundLocalViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.RoundLocalViewModelFactory
 
 
 class RoundListFragment : Fragment() {
 
     private lateinit var mBinding: FragmentRoundListBinding
-    private var mLocalRounds: List<MedRoundRunDetail>? = null
     private val TAG = "DEBRLF"
 
     private var bGoToRound: Boolean = false
     private var bBlockButton = false
+
+    private val mRoundLocalViewModel: RoundLocalViewModel by viewModels {
+        RoundLocalViewModelFactory((requireActivity().application as SpiMixerApplication).roundLocalRepository)
+    }
+    private var mLocalRoundsLocal: List<RoundLocal>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +68,7 @@ class RoundListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.i(TAG,"onViewCreated")
-        getLocalRound()
+        getLocalData()
 
         // Navigation Menu
         val menuHost: MenuHost = requireActivity()
@@ -106,15 +121,68 @@ class RoundListFragment : Fragment() {
 
     }
 
+
+
+    private fun fetchLocalData(tabletMixer: TabletMixer): MediatorLiveData<MergedLocalData> {
+        val liveDataMerger = MediatorLiveData<MergedLocalData>()
+        liveDataMerger.addSource(mRoundLocalViewModel.allRoundLocalListByMac(tabletMixer.mac)) {
+            if (it != null) {
+                liveDataMerger.value = RoundLocalData(it)
+            }
+        }
+        return liveDataMerger
+    }
+
+    private fun getLocalData(){
+        // Sync local data
+        (requireActivity() as MainActivity).selectedTabletMixerInActivity?.let {
+            val liveData = fetchLocalData(it)
+            liveData.observe(viewLifecycleOwner, object : Observer<MergedLocalData> {
+                override fun onChanged(it: MergedLocalData?) {
+                    when (it) {
+                        is RoundLocalData -> mLocalRoundsLocal = it.roundsLocal
+                        else -> {}
+                    }
+
+                    if (mLocalRoundsLocal != null) {
+                        liveData.removeObserver(this)
+                        (requireActivity() as MainActivity).listOfMedRoundsRun.clear()
+                        mLocalRoundsLocal?.let {roundsLocal->
+                            roundsLocal.forEach {roundLocal->
+                                val minRoundRun   = MinRound (
+                                    name = roundLocal.name,
+                                    description = roundLocal.description,
+                                    remoteId = roundLocal.remoteId,
+                                    id = roundLocal.id
+                                )
+                                val medRoundRunRun = MedRoundRunDetail(
+                                    round = minRoundRun,
+                                    startDate = roundLocal.startDate,
+                                    endDate = roundLocal.endDate,
+                                    state = roundLocal.state
+                                )
+                                (requireActivity() as MainActivity).listOfMedRoundsRun.add(medRoundRunRun)
+                            }
+                        }
+
+                        getLocalRound()
+                    }
+                }
+            })
+            return
+        }
+        getLocalRound()
+    }
+
+
     private fun getLocalRound(){
 
         mBinding.rvRoundsList.layoutManager = GridLayoutManager(requireActivity(), 3)
         val roundAdapter =  RoundRunAdapter(this@RoundListFragment)
         mBinding.rvRoundsList.adapter = roundAdapter
-
-        mLocalRounds = (requireActivity() as MainActivity).listOfMedRoundsRun
+        val mLocalRounds = (requireActivity() as MainActivity).listOfMedRoundsRun
         Log.i(TAG,"mLocalRounds $mLocalRounds")
-        mLocalRounds?.let{
+        mLocalRounds.let{
             if (it.isEmpty()){
                 mBinding.rvRoundsList.visibility = View.GONE
                 mBinding.tvNoData.visibility = View.VISIBLE

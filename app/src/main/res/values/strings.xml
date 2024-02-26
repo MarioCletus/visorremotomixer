@@ -359,6 +359,8 @@
     <string name="sincronizar">Sincronizar</string>
     <string name="rondas">Rondas</string>
     <string name="ronda_libre">Ronda\nLibre</string>
+    <string name="declarar_mixer">Declarar Mixer</string>
+    <string name="usuarios">Usuarios</string>
 
 
 </resources>

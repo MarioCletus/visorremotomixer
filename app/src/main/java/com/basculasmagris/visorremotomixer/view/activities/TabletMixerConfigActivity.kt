@@ -34,32 +34,53 @@ import androidx.core.view.MenuProvider
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.size
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
 import com.basculasmagris.visorremotomixer.databinding.ActivityTabletMixerConfigBinding
 import com.basculasmagris.visorremotomixer.databinding.DialogCustomListBinding
+import com.basculasmagris.visorremotomixer.model.entities.MedRoundRunDetail
+import com.basculasmagris.visorremotomixer.model.entities.MinUser
+import com.basculasmagris.visorremotomixer.model.entities.MixerDetail
+import com.basculasmagris.visorremotomixer.model.entities.RoundLocal
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
+import com.basculasmagris.visorremotomixer.model.entities.User
 import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
+import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.view.adapter.CustomListItem
 import com.basculasmagris.visorremotomixer.view.adapter.CustomListItemAdapter
+import com.basculasmagris.visorremotomixer.view.fragments.RoundListFragmentDirections
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
+import com.basculasmagris.visorremotomixer.viewmodel.RoundLocalViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.RoundLocalViewModelFactory
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModelFactory
+import com.basculasmagris.visorremotomixer.viewmodel.UserViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.UserViewModelFactory
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.Timer
 import kotlin.concurrent.schedule
+import kotlin.math.min
 
 
 class TabletMixerConfigActivity : AppCompatActivity(){
+
     private var macaddress: String = ""
-    private var bIsDetail: Boolean = false
     private var contMensajes: Int = 0
     private var TAG = "DEBConfig"
     private var firstIn: Boolean = false
@@ -69,11 +90,31 @@ class TabletMixerConfigActivity : AppCompatActivity(){
     private var knowDevices: List<BluetoothDevice>? = null
     private var tabletMixerReceibed: TabletMixer? = null
 
+    //*******************************************************************
+    //Sincronizacion
+    var listOfMedRoundsRun: ArrayList<MedRoundRunDetail> = ArrayList()
+    var listOfMinUsers: ArrayList<MinUser> = ArrayList()
+    var listOfMixers: ArrayList<MixerDetail> = ArrayList()
+    private var mLocalUsers: List<User>? = null
+    private var mLocalRoundsLocal: List<RoundLocal>? = null
+
+    private var bSyncroUsers = false
+    private var bSyncroRounds = false
+    private var bSyncroMixers = false
+    private var bIsDetail: Boolean = false
+    private var bIsFirstIn: Boolean = false
+    //*******************************************************************
 
     // Bluetooth
     var mService: BluetoothSDKService? = null
     private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
         TabletMixerViewModelFactory((this.application as SpiMixerApplication).tabletMixerRepository)
+    }
+    private val mRoundLocalViewModel: RoundLocalViewModel by viewModels {
+        RoundLocalViewModelFactory((this.application as SpiMixerApplication).roundLocalRepository)
+    }
+    private val mUserViewModel: UserViewModel by viewModels {
+        UserViewModelFactory((this.application as SpiMixerApplication).userRepository)
     }
     private var mLocalTabletMixers: List<TabletMixer>? = null
     private var mDevicesFound : MutableSet<BluetoothDevice> = mutableSetOf()
@@ -113,6 +154,13 @@ class TabletMixerConfigActivity : AppCompatActivity(){
             bIsDetail = intent.getBooleanExtra(Constants.EXTRA_MIXER_MODE, false)
             Log.i(TAG,"bIsDetail $bIsDetail")
         }
+        if (intent.hasExtra(Constants.FIRST_IN)) {
+            bIsFirstIn = intent.getBooleanExtra(Constants.FIRST_IN, false)
+            if(bIsFirstIn){
+                mBinding.llSyncProgress.visibility = View.VISIBLE
+            }
+            Log.i(TAG,"bIsFirstIn $bIsFirstIn")
+        }
 
         setupActionBar()
         // Navigation Menu
@@ -132,6 +180,8 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                 return when (menuItem.itemId) {
                     R.id.action_save_mixer -> {
                         if(!isKeyBoardShowing()){
+                            if(bIsFirstIn)
+                                return true
                             saveTabletMixer()
                             BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(applicationContext, mBluetoothListener)
                             finish()
@@ -203,6 +253,13 @@ class TabletMixerConfigActivity : AppCompatActivity(){
 
             }
             bluetoothDialog()
+        }
+
+
+        mBinding.btnSincro.setOnClickListener{
+            GlobalScope.launch (Dispatchers.Main) {
+                syncData()
+            }
         }
 
 
@@ -360,15 +417,49 @@ class TabletMixerConfigActivity : AppCompatActivity(){
         }
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
-            if(message == null){
-                Log.i(TAG,"command null ")
+            if(message == null || message.size<9){
+                Log.i(TAG,"command not enough large (${message?.size})")
                 return
             }
+
             val messageStr = String(message,0, message.size)
             if(countMessage++>20){
-                Log.d("message","message $messageStr")
+                Log.d("message","Tablet config message $messageStr")
                 countMessage = 0
             }
+            val command = messageStr.substring(0,3)
+            Log.i("command","Tablet config command $command")
+
+            when (command){
+                Constants.CMD_USER_LIST->{
+                    Log.i("showCommand","CMD_USER_LIST")
+                    bSyncroUsers = refreshUsers(message)
+                    if(bSyncroUsers){
+                        mBinding.pbUsers.progress = 100
+                    }
+                    bSyncroUsers = false
+                }
+
+                Constants.CMD_ROUNDS->{
+                    Log.i("showCommand","CMD_ROUNDS")
+                    bSyncroRounds = refreshRounds(message)
+                    if(bSyncroRounds){
+                        mBinding.pbRounds.progress = 100
+                        saveTabletMixer()
+                    }
+                    bSyncroRounds = false
+                }
+
+                Constants.CMD_MIXERS->{
+                    Log.i("showCommand","CMD_MIXERS")
+                    bSyncroMixers = refreshMixer(message)
+                    if(bSyncroMixers){
+                        mBinding.pbMixers.progress = 100
+                    }
+                    bSyncroMixers = false
+                }
+            }
+
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
@@ -392,6 +483,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
 
         override fun onCommandSent(device: BluetoothDevice?, message: ByteArray?) {
             Log.i("send", "[TabletMixerConfigActivity] onCommandSent")
+
         }
 
         override fun onError(message: String?) {
@@ -676,8 +768,12 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                         mTabletMixerViewModel.updateSync(tabletMixer)
                         Toast.makeText(this@TabletMixerConfigActivity, "TabletMixer actualizado", Toast.LENGTH_SHORT).show()
                     }
-                    Log.i("SYNC", "Se actualiza tabletMixer con fecha ${tabletMixer.updatedDate}")
+
                     result(tabletMixer)
+                    if(bIsFirstIn){
+                        BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(applicationContext, mBluetoothListener)
+                        finish()
+                    }
                 }
 
             }
@@ -846,7 +942,165 @@ class TabletMixerConfigActivity : AppCompatActivity(){
         return address
     }
 
+    private fun fetchLocalData(): MediatorLiveData<MergedLocalData> {
+        val liveDataMerger = MediatorLiveData<MergedLocalData>()
+        liveDataMerger.addSource(mUserViewModel.allUserList) {
+            if (it != null) {
+                liveDataMerger.value = UserData(it)
+            }
+        }
+        liveDataMerger.addSource(mRoundLocalViewModel.allRoundLocalList) {
+            if (it != null) {
+                liveDataMerger.value = RoundLocalData(it)
+            }
+        }
+
+        return liveDataMerger
+    }
+    private fun getLocalData(){
+        // Sync local data
+        val liveData = fetchLocalData()
+        liveData.observe(this, object : Observer<MergedLocalData> {
+            override fun onChanged(it: MergedLocalData?) {
+                when (it) {
+                    is UserData -> mLocalUsers = it.users.filter { user -> user.codeRole != 1 }
+                    is RoundLocalData -> mLocalRoundsLocal = it.roundsLocal
+                    else -> {}
+                }
+
+                if (mLocalUsers != null && mLocalRoundsLocal != null) {
+                    Log.i(TAG, "Rondas: ${mLocalRoundsLocal?.size}  Usuarios: ${mLocalUsers?.size}")
+                    liveData.removeObserver(this)
+                    liveData.value = null
+                }
+            }
+        })
+    }
+
+    fun refreshUsers(message: ByteArray):Boolean {
+        try{
+            val convertZip = ConvertZip()
+            val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
+            val gson = Gson()
+            val listType = object : TypeToken<ArrayList<MinUser>>() {}.type
+            listOfMinUsers = gson.fromJson<ArrayList<MinUser>>(json, listType)?:ArrayList()
+            listOfMinUsers.forEach{ minUser ->
+                val isUser = mLocalUsers?.firstOrNull{
+                    it.id == minUser.id
+                }
+                val user = User(
+                    username = minUser.username,
+                    name = minUser.name,
+                    lastname = minUser.lastname,
+                    mail = "",
+                    password = minUser.password,
+                    remoteId = minUser.remoteId,
+                    updatedDate = "",
+                    archiveDate = null,
+                    codeRole = minUser.codeRole,
+                    codeClient = "",
+                    id = minUser.id
+                )
+                if(isUser == null){
+                    mUserViewModel.insert(user)
+                }else{
+                    mUserViewModel.update(user)
+                }
+            }
+
+            return true
+        }catch (e: NumberFormatException){
+            Log.i(TAG,"bSyncroUsers NumberFormatException $e")
+            return false
+        }catch (e:Exception){
+            Log.i(TAG,"bSyncroUsers Exception $e")
+            return false
+        }
+    }
+
+    fun refreshRounds(message: ByteArray): Boolean {
+        try{
+            val convertZip = ConvertZip()
+            val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
+            val gson = Gson()
+            val listType = object : TypeToken<ArrayList<MedRoundRunDetail>>() {}.type
+            listOfMedRoundsRun = gson.fromJson<ArrayList<MedRoundRunDetail>>(json, listType)?:ArrayList()
+            Log.i(TAG,"listOfMinRounds $listOfMedRoundsRun")
+
+            listOfMedRoundsRun.forEach{ minRound ->
+                val isRound = mLocalRoundsLocal?.firstOrNull{
+                    it.id == minRound.round.id
+                }
+                val roundLocal = RoundLocal(
+                    name = minRound.round.name,
+                    description = minRound.round.description,
+                    remoteId = minRound.round.remoteId,
+                    startDate = minRound.startDate,
+                    endDate = minRound.endDate,
+                    state = minRound.state,
+                    tabletMixerId = minRound.round.id,
+                    tabletMixerMac = tabletMixerReceibed?.mac?:"",
+                    id = isRound?.id?:0L
+                )
+                if(isRound == null){
+                    mRoundLocalViewModel.insert(roundLocal)
+                }else{
+                    mRoundLocalViewModel.update(roundLocal)
+                }
+            }
+
+            return true
+        }catch (e: NumberFormatException){
+            Log.i(TAG,"bSyncroRounds NumberFormatException $e")
+            return false
+        }catch (e:Exception){
+            Log.i(TAG,"bSyncroRounds Exception $e")
+            return false
+        }
+
+    }
 
 
+    fun refreshMixer(message: ByteArray): Boolean {
+        try{
+            val convertZip = ConvertZip()
+            val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
+            val gson = Gson()
+            val listType = object : TypeToken<ArrayList<MixerDetail>>() {}.type
+            listOfMixers = gson.fromJson<ArrayList<MixerDetail>>(json, listType)?:ArrayList()
+            Log.i(TAG,"listOfMinMixers $listOfMixers")
+            return true
+        }catch (e: NumberFormatException){
+            Log.i(TAG,"bSyncroMixers NumberFormatException $e")
+            return false
+        }catch (e:Exception){
+            Log.i(TAG,"bSyncroMixers Exception $e")
+            return false
+        }
+
+    }
+
+    fun requestListOfUsers() {
+        val byteArray = "CMD${Constants.CMD_USER_LIST}000000".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
+    fun requestListOfRounds() {
+        val byteArray = "CMD${Constants.CMD_ROUNDS}000000".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
+    fun requestListOfMixers() {
+        val byteArray = "CMD${Constants.CMD_MIXERS}000000".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
+    private suspend fun syncData(){
+        requestListOfUsers()
+        delay(1000)
+        requestListOfRounds()
+//        delay(1000)
+//        requestListOfMixers()
+    }
 }
 

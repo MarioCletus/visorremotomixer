@@ -25,6 +25,7 @@ object Constants {
     const val EXTRA_USER_DETAILS : String = "UserDetails"
     const val EXTRA_MIXER_MODE: String = "MixerMode"
     const val EXTRA_TABLET_MIXER_MODE: String = "TabletMixerMode"
+    const val FIRST_IN: String = "FirstIn"
 
     const val BASE_URL: String = "http://sd-1810916-h00006.ferozo.net:3004/api/"
     const val API_PRODUCT_ENDPOINT: String = "products/"
@@ -158,6 +159,7 @@ object Constants {
     val CMD_PAUSE_ON = "PAN"
     val CMD_PAUSE_OFF = "PAF"
     val CMD_MIXER = "MIX"
+    val CMD_MIXERS = "MXS"
     val CMD_PRODUCT = "PRO"
     val CMD_CORRAL = "COR"
     val CMD_SELECT_PRODUCT = "PRS"

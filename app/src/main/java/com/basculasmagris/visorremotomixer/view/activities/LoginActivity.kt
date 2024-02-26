@@ -1,16 +1,20 @@
 package com.basculasmagris.visorremotomixer.view.activities
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +22,7 @@ import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
 import com.basculasmagris.visorremotomixer.databinding.ActivityLoginBinding
 import com.basculasmagris.visorremotomixer.databinding.DialogCustomListBinding
+import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.model.entities.User
 import com.basculasmagris.visorremotomixer.model.entities.UserRemote
 import com.basculasmagris.visorremotomixer.model.network.UserApiService
@@ -57,7 +62,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private var alertDialog: android.app.AlertDialog? = null
     private val userApiService = UserApiService()
-    private val TAG = "Login"
+    private val TAG = "DEBLogin"
     private var sharedpreferences: SharedPreferences? = null
     private lateinit var mCustomListDialog : Dialog
     private val mUsersList: ArrayList<CustomListItem> = ArrayList<CustomListItem>()
@@ -75,17 +80,15 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         sharedpreferences = getSharedPreferences(PREF_LOGIN, Context.MODE_PRIVATE);
 
-        //TEST
-//        binding.username.setText("fernando.ariel.tello")
-//        binding.password.setText("spimixer")
+
         binding.tiUsersRef.visibility = GONE
         binding.username.visibility = VISIBLE
         binding.llLoginNoData.visibility = GONE
         binding.llLoginData.visibility = VISIBLE
 
         binding.etUserRef.setOnClickListener {
-            Log.i("LOGIN", "[mUsersList]: ${mUserList.count()}")
-            customItemsLDialog("Establecimientos disponibles", mUserList, Constants.USER_REF)
+            Log.i(TAG, "[mUsersList]: ${mUserList.count()}")
+            customItemsLDialog(getString(R.string.usuarios), mUserList, Constants.USER_REF)
         }
 
         mUserViewModel.allUserList.observe(this) {
@@ -93,34 +96,46 @@ class LoginActivity : AppCompatActivity() {
                 users ->
             mUserList.clear()
             originUserList.clear()
-            Log.i("LOGIN", "[allUserList]: ${users.count()}")
-            users.let{
+            Log.i(TAG, "[allUserList]: ${users.count()}")
+            if(users.count() == 0){
+                binding.switchRole.visibility = INVISIBLE
+                binding.llLoginNoData.visibility = GONE
+                binding.llLoginData.visibility = GONE
+                binding.llLoginFirstIn.visibility = VISIBLE
+            }else{
+                users.let {
+                    users.forEach {
 
-                users.forEach {
-
-                    if (it.archiveDate.isNullOrEmpty()){
-                        val item = CustomListItem(it.id, it.remoteId, it.name, it.username, R.drawable.ic_face)
-                        mUserList.add(item)
-                        originUserList.add(it)
+                        if (it.archiveDate.isNullOrEmpty()) {
+                            val item = CustomListItem(
+                                it.id,
+                                it.remoteId,
+                                it.name,
+                                it.username,
+                                R.drawable.ic_face
+                            )
+                            mUserList.add(item)
+                            originUserList.add(it)
+                        }
                     }
-                }
-                Log.i("LOGIN", "[mUserList]: ${mUserList.count()}")
-                selectedUser = if (mUserList.isNotEmpty()) mUserList[0] else null
-                binding.etUserRef.setText(selectedUser?.name)
+                    Log.i(TAG, "[mUserList]: ${mUserList.count()}")
+                    selectedUser = if (mUserList.isNotEmpty()) mUserList[0] else null
+                    binding.etUserRef.setText(selectedUser?.name)
 
-                if (originUserList.size > 0) {
-                    binding.switchRole.isChecked = true
-                    showUserList()
-                } else {
-                    binding.switchRole.isChecked = false
-                    hideUserList()
+                    if (originUserList.size > 0) {
+                        binding.switchRole.isChecked = true
+                        showUserList()
+                    } else {
+                        binding.switchRole.isChecked = false
+                        hideUserList()
+                    }
                 }
 
             }
         }
 
         binding.switchRole.setOnCheckedChangeListener { compoundButton, isChecked ->
-            Log.i("LOGIN", "isChecked: $isChecked")
+            Log.i(TAG, "isChecked: $isChecked")
             if (isChecked) {
                 showUserList()
             } else {
@@ -174,11 +189,41 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+
+        binding.btnSearchAndSincro.setOnClickListener {
+            val intent = Intent(this, TabletMixerConfigActivity::class.java)
+            intent.putExtra(Constants.EXTRA_MIXER_MODE, false)
+            intent.putExtra(Constants.FIRST_IN, true)
+            someActivityResultLauncher.launch(intent)
+        }
+
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
+    }
+
+    private val someActivityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        // Aquí manejas el resultado de la actividad
+        Log.v(TAG,"Return from MixerConfigActivity")
+        if (result.resultCode == Activity.RESULT_OK) {
+            Log.v(TAG,"result code OK")
+            val intent: Intent? = result.data
+            var mixerReturned: TabletMixer? = null
+            if (intent?.hasExtra(Constants.EXTRA_MIXER_DETAILS) == true){
+                mixerReturned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    intent?.getParcelableExtra(Constants.EXTRA_MIXER_DETAILS,  TabletMixer::class.java)
+                } else {
+                    intent?.getParcelableExtra<TabletMixer>(Constants.EXTRA_MIXER_DETAILS)
+                }
+            }
+            Log.v(TAG,"mixerReturned $mixerReturned")
+            mixerReturned?.let {
+                Log.v(TAG,"MixerReturned ${it.name}  ${it.mac}  selectedTabletMixerInFragment")
+                binding.llLoginFirstIn.visibility = GONE
+            }
+        }
     }
 
     private fun hideUserList(){

@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
     // Bluetooth
     var mService: BluetoothSDKService? = null
     private var bluetoothDevice: BluetoothDevice? = null
-    private var selectedTabletMixerInActivity: TabletMixer? = null
+    var selectedTabletMixerInActivity: TabletMixer? = null
 
     var minRoundRunDetail : MinRoundRunDetail? = null
     var listOfMinProducts: ArrayList<MinProduct> =  ArrayList()
