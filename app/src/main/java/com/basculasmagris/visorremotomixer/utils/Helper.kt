@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.text.format.DateUtils
 import android.util.Log
 import android.view.Gravity
@@ -19,7 +18,11 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.basculasmagris.visorremotomixer.R
-import com.basculasmagris.visorremotomixer.model.entities.*
+import com.basculasmagris.visorremotomixer.model.entities.Mixer
+import com.basculasmagris.visorremotomixer.model.entities.RoleRemote
+import com.basculasmagris.visorremotomixer.model.entities.RoundRunDetail
+import com.basculasmagris.visorremotomixer.model.entities.User
+import com.basculasmagris.visorremotomixer.model.entities.UserRemote
 import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
 import com.basculasmagris.visorremotomixer.utils.Constants.LOGIN_OFFLINE_INVALID_CREDENTIALS
 import com.basculasmagris.visorremotomixer.utils.Constants.LOGIN_OFFLINE_NO_DATA
@@ -35,8 +38,9 @@ import com.basculasmagris.visorremotomixer.utils.Constants.PREF_LOGIN_KEY_NAME
 import com.basculasmagris.visorremotomixer.utils.Constants.PREF_LOGIN_KEY_ROLE
 import com.basculasmagris.visorremotomixer.utils.Constants.PREF_LOGIN_KEY_ROLE_DESC
 import com.basculasmagris.visorremotomixer.utils.Constants.PREF_LOGIN_KEY_USERNAME
-import com.basculasmagris.visorremotomixer.view.adapter.CustomListItem
+import java.math.BigInteger
 import java.math.RoundingMode
+import java.security.MessageDigest
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.time.Duration
@@ -44,10 +48,8 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Locale
 import kotlin.math.roundToLong
-import java.math.BigInteger
-import java.security.MessageDigest
 
 class Helper {
     companion object {
@@ -298,7 +300,7 @@ class Helper {
             val accessToken = sharedpreferences.getString(PREF_LOGIN_KEY_ACCESS_TOKEN, "").toString()
             val password = sharedpreferences.getString(PREF_LOGIN_KEY_ENCRYPTED_PASSWORD, "").toString()
 
-            if(username == null || username.isEmpty()){
+            if((username.isEmpty()) && (name.isEmpty()) && (lastName.isEmpty())){
                 return UserRemote(
                     0,
                     "palero",

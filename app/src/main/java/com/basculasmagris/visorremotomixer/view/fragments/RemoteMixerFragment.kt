@@ -18,7 +18,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
@@ -219,6 +218,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         if(tipoRonda == 1){
             (requireActivity() as MainActivity).sendGoToFreeRound()
             mBinding.btnInitFreeRound.visibility = View.VISIBLE
+            mBinding.btnJump.visibility = View.GONE
+            mBinding.btnTara.visibility = View.GONE
+            mBinding.btnPause.visibility = View.GONE
+            mBinding.btnRest.visibility = View.GONE
         }else{
             mBinding.btnInitFreeRound.visibility = View.INVISIBLE
         }
@@ -652,6 +655,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                 Constants.CMD_WEIGHT->{
                     Log.v("cmd_weight","CMD_WEIGHT")
+
+                    (requireActivity()).onBackPressed()
+                    return
                     count_resume = 0
                     try{
                         if(bInLoad || bInDownload || bInRes || bInCfg){

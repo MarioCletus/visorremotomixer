@@ -40,6 +40,11 @@ class HomeFragment : Fragment() {
     private var selectedTabletMixerInFragment: TabletMixer? = null
     private var tabletMixerBluetoothDevice : BluetoothDevice? = null
     private var menu:Menu? = null
+    private var bInFree: Boolean = true
+    private var bInCfg: Boolean = false
+    private var bInRes: Boolean = false
+    private var bInLoad: Boolean = false
+    private var bInDownload : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +67,9 @@ class HomeFragment : Fragment() {
                 this@HomeFragment.menu = menu
                 val activity = requireActivity() as MainActivity
                 activity.supportActionBar?.let {
-                    it.title = "Inicio - ${Helper.getCurrentUser(activity).displayName}"
+                    val user = Helper.getCurrentUser(activity)
+                    val title = "Inicio - ${user.name} ${user.lastname}"
+                    it.title = title
                 }
 
             }
@@ -120,7 +127,11 @@ class HomeFragment : Fragment() {
         }
 
         mBinding.btnRondas.setOnClickListener{
-            findNavController().navigate(HomeFragmentDirections.actionHomeToRound())
+            if(bInCfg ||bInLoad || bInDownload || bInRes){
+                findNavController().navigate(HomeFragmentDirections.actionHomeToFreeRound(selectedTabletMixerInFragment))
+            }else{
+                findNavController().navigate(HomeFragmentDirections.actionHomeToRound())
+            }
         }
 
         mBinding.btnRondaLibre.setOnClickListener{
@@ -135,7 +146,6 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as MainActivity).getSavedTabletMixer()
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
-
     }
 
     var countMessage = 0
@@ -263,29 +273,63 @@ class HomeFragment : Fragment() {
 
 
                 Constants.CMD_WEIGHT->{
+                    bInCfg = false
+                    bInLoad = false
+                    bInDownload = false
+                    bInRes = false
+                    bInFree = false
                     Log.v("cmd_weight","CMD_WEIGHT")
                 }
 
 
                 Constants.CMD_WEIGHT_CONFIG->{
+                    bInCfg = true
+                    bInLoad = false
+                    bInDownload = false
+                    bInRes = false
+                    bInFree = false
                     Log.v("cmd_weight","CMD_WEIGHT_CONFIG")
                 }
 
                 Constants.CMD_WEIGHT_RESUME->{
+                    bInCfg = false
+                    bInLoad = false
+                    bInDownload = false
+                    bInRes = true
+                    bInFree = false
                     Log.v("cmd_weight","CMD_WEIGHT_RESUME")
                 }
 
                 Constants.CMD_WEIGHT_LOAD->{
-
+                    bInCfg = false
+                    bInLoad = true
+                    bInDownload = false
+                    bInRes = false
+                    bInFree = false
                 }
 
                 Constants.CMD_WEIGHT_DWNL->{
+                    bInCfg = false
+                    bInLoad = false
+                    bInDownload = true
+                    bInRes = false
+                    bInFree = false
                 }
 
                 Constants.CMD_WEIGHT_LOAD_FREE->{
+                    bInCfg = false
+                    bInLoad = true
+                    bInDownload = false
+                    bInRes = false
+                    bInFree = true
                 }
 
                 Constants.CMD_WEIGHT_DWNL_FREE->{
+                    bInCfg = false
+                    bInLoad = false
+                    bInDownload = true
+                    bInRes = false
+                    bInFree = true
                 }
 
                 Constants.CMD_MIXER ->{
@@ -385,4 +429,16 @@ class HomeFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        Log.i(TAG,"onResume")
+        BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
+        BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
+        super.onResume()
+    }
+
+    override fun onStop() {
+        Log.i(TAG,"onStop")
+        BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
+        super.onStop()
+    }
 }

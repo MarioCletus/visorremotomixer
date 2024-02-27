@@ -146,7 +146,7 @@ class LoginActivity : AppCompatActivity() {
         alertDialog = Helper.setProgressDialog(this, "Validando credenciales")
         binding.login.setOnClickListener {
 
-            val isAvailableInternet = checkForInternet(this)
+            val isAvailableInternet = false //checkForInternet(this)
             Log.i("INTERNET", "INTERNET Conexion: $isAvailableInternet")
 
             val username = if (binding.switchRole.isChecked) selectedUser?.description else binding.username.text.toString()
@@ -163,6 +163,7 @@ class LoginActivity : AppCompatActivity() {
                     val userLogged = originUserList.first { user ->
                         user.username == username
                     }
+                    Log.v(TAG,"userLogged $userLogged")
                     editor?.putString(PREF_LOGIN_KEY_NAME, userLogged.name)
                     editor?.putString(PREF_LOGIN_KEY_MAIL, userLogged.mail)
                     editor?.putString(PREF_LOGIN_KEY_LASTNAME, userLogged.lastname)
