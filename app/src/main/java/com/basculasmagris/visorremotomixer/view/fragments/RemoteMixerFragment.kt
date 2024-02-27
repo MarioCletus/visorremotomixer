@@ -454,6 +454,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     }
 
     var countMessage = 0
+    var oneBack = true
     private val mBluetoothListener: IBluetoothSDKListener = object : IBluetoothSDKListener {
         init {
             Log.i(TAG,"create mBluetoothListener")
@@ -656,7 +657,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 Constants.CMD_WEIGHT->{
                     Log.v("cmd_weight","CMD_WEIGHT")
 
-                    (requireActivity()).onBackPressed()
+                    if(oneBack){
+                        (requireActivity()).onBackPressed()
+                        oneBack = false
+                    }
                     return
                     count_resume = 0
                     try{

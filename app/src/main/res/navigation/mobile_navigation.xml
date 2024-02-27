@@ -62,6 +62,9 @@
         <action
             android:id="@+id/action_resume_fragment_to_remote_mixer_fragment"
             app:destination="@id/nav_mixer_remoto" />
+        <action
+            android:id="@+id/action_resume_fragment_to_home_fragment"
+            app:destination="@id/nav_home" />
     </fragment>
 
 

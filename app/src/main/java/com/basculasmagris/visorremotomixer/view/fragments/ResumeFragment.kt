@@ -104,16 +104,21 @@ class ResumeFragment : Fragment() {
         return mBinding.root
     }
 
+    var oneShot = true
     fun exitFragment(){
-        Log.i(TAG,"exitFragment")
-        (requireActivity() as MainActivity).sendEndToMixer()
-        BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
+       if(oneShot){
+           Log.i(TAG,"exitFragment")
+           (requireActivity() as MainActivity).sendEndToMixer()
+           BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
         try{
-            findNavController().navigate(ResumeFragmentDirections.actionResumeFragmentToRemoteMixerFragment())
+            findNavController().popBackStack(R.id.nav_home, false)
+            findNavController().navigate(ResumeFragmentDirections.actionResumeFragmentToHomeFragment())
         }catch (e : Exception){
             Log.i(TAG,"Nav Exception $e")
         }
 
+       }
+        oneShot = false
     }
 
 
