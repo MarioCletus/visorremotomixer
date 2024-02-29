@@ -182,4 +182,8 @@ object Constants {
     val CMD_GO_TO_ROUND = "GRD"
     val CMD_GO_TO_FREE_ROUND = "GFR"
     val CMD_GO_TO_RESUME = "GRE"
+    val CMD_REFRESH = "REF"
+    val CMD_CLOSE_DLG = "CLD"
+    val CMD_NEXT_PRODUCT_DLG = "NPD"
+    val CMD_NEXT_CORRAL_DLG = "NCD"
 }

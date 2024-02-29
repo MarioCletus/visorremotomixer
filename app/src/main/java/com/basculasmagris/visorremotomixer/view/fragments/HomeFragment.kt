@@ -256,19 +256,16 @@ class HomeFragment : Fragment() {
 
                 Constants.CMD_DLG_PRODUCT->{
                     Log.i("showCommand","CMD_DLG_PRODUCT")
-                    (requireActivity() as MainActivity).dlgProduct(message)
                 }
 
 
                 Constants.CMD_DLG_EST->{
                     Log.i("showCommand","CMD_DLG_EST")
-                    (requireActivity() as MainActivity).dlgEstablishment(message)
                 }
 
 
                 Constants.CMD_DLG_CORRAL->{
                     Log.i("showCommand","CMD_DLG_CORRAL")
-                    (requireActivity() as MainActivity).dlgCorral(message)
                 }
 
 

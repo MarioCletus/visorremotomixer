@@ -244,7 +244,7 @@ class ResumeFragment : Fragment() {
 
                 Constants.CMD_WEIGHT_RESUME->{
                     if(!bSyncroRoundDetail && countMsg++ > REFRESH_TIME){
-                        (requireActivity() as MainActivity).requestRoundRunDetail()
+                        (requireActivity() as MainActivity).sendRequestRoundRunDetail()
                         countMsg = 0
                     }
 

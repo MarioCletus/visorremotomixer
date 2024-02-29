@@ -16,9 +16,7 @@ import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
 
 
 class RoundRunProductAdapter (
-    private val fragment: Fragment,
-    private val diet: MinDietDetail,
-    private val step: Double
+    private val fragment: Fragment
     ) : RecyclerView.Adapter<RoundRunProductAdapter.ViewHolder>(),
     Filterable {
 
@@ -46,7 +44,7 @@ class RoundRunProductAdapter (
         fragment.context?.let {
             if((fragment as RemoteMixerFragment).isInFree()){
                 holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_ready_bkg)
-                holder.tvDiffWeight.text = "$0Kg"
+                holder.tvDiffWeight.text = "0Kg"
             }else{
                 if(selectedPosition == position && !endLoad) {
                     holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_select_bkg)

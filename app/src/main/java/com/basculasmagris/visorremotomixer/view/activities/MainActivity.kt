@@ -2,6 +2,7 @@ package com.basculasmagris.visorremotomixer.view.activities
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.Dialog
 import android.bluetooth.BluetoothDevice
 import android.content.ComponentName
@@ -21,7 +22,6 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -30,7 +30,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -49,8 +48,6 @@ import com.basculasmagris.visorremotomixer.model.entities.MinEstablishment
 import com.basculasmagris.visorremotomixer.model.entities.MinProduct
 import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.MinUser
-import com.basculasmagris.visorremotomixer.model.entities.Mixer
-import com.basculasmagris.visorremotomixer.model.entities.MixerDetail
 import com.basculasmagris.visorremotomixer.model.entities.RoundLocal
 import com.basculasmagris.visorremotomixer.model.entities.RoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
@@ -76,7 +73,6 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 val Context.datastore by preferencesDataStore(name = "PREFERENCIAS")
 class MainActivity : AppCompatActivity() {
@@ -98,13 +94,13 @@ class MainActivity : AppCompatActivity() {
     var selectedTabletMixerInActivity: TabletMixer? = null
 
     var minRoundRunDetail : MinRoundRunDetail? = null
-    var listOfMinProducts: ArrayList<MinProduct> =  ArrayList()
-    var listOfMinCorrals: ArrayList<MinCorral> = ArrayList()
     var listOfMedRoundsRun: ArrayList<MedRoundRunDetail> = ArrayList()
     var listOfMinUsers: ArrayList<MinUser> = ArrayList()
-    var listOfMinEstablishments: ArrayList<MinEstablishment> = ArrayList()
     private var bReconnect: Boolean = true
     var knowDevices: List<BluetoothDevice>? = null
+    private var dialogProduct: AlertDialog? = null
+    private var dialogEstablishment: AlertDialog? = null
+    private var dialogCorral: AlertDialog? = null
 
     // -------------------
     // Mixer
@@ -168,7 +164,7 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_logout -> {
                     outPut = false
-                    android.app.AlertDialog.Builder(this)
+                    AlertDialog.Builder(this)
                         .setMessage("¿Desea cerrar la sesión?")
                         .setPositiveButton("Sí")
                         { _, _ ->
@@ -182,7 +178,7 @@ class MainActivity : AppCompatActivity() {
                     drawerLayout.close()
                 }
                 R.id.nav_exit ->{
-                    android.app.AlertDialog.Builder(this)
+                    AlertDialog.Builder(this)
                         .setMessage("¿Desea cerrar la aplicación?")
                         .setPositiveButton("Sí")
                         { _, _ ->
@@ -335,22 +331,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun hideCustomProgressDialog(){
+    private fun hideCustomProgressDialog(){
         mProgressDialog?.dismiss()
     }
-
-    fun saveMixer(mixer: Mixer){
-        lifecycleScope.launch(Dispatchers.IO){
-            saveMixer(mixer.id)
-        }
-    }
-
-    private suspend fun saveMixer(idMixer: Long){
-        datastore.edit { preferences->
-            preferences[longPreferencesKey("IDMIXER")] = idMixer
-        }
-    }
-
 
     fun saveTabletMixer(tabletMixer: TabletMixer){
         lifecycleScope.launch(Dispatchers.IO){
@@ -469,13 +452,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun isCustomProgresDialogShowing(): Boolean {
-        return mProgressDialog?.isShowing == true
-    }
-
-
-
-    fun requestRoundRunDetail() {
+    fun sendRequestRoundRunDetail() {
         val msg = "CMD${Constants.CMD_ROUNDDETAIL}"
         Log.i("send_cmd","Send requestRoundRunDetail $msg")
         mService?.LocalBinder()?.write(msg.toByteArray())
@@ -490,24 +467,6 @@ class MainActivity : AppCompatActivity() {
         val msg = "CMD${Constants.CMD_MIXER}"
         mService?.LocalBinder()?.write(msg.toByteArray())
     }
-
-    fun requestCorrals() {
-        val msg = "CMD${Constants.CMD_CORRAL}"
-        Log.i(TAG,"Send requestCorral $msg")
-        mService?.LocalBinder()?.write(msg.toByteArray())
-    }
-    fun requestEstablishment() {
-        val msg = "CMD${Constants.CMD_ESTAB_LIST}"
-        Log.i("send_cmd","Send requestEstablishment $msg")
-        mService?.LocalBinder()?.write(msg.toByteArray())
-    }
-
-    fun requestProducts() {
-        val msg = "CMD${Constants.CMD_PRODUCT}"
-        Log.i("send_cmd","Send requestProducts $msg")
-        mService?.LocalBinder()?.write(msg.toByteArray())
-    }
-
 
     fun refreshUsers(message: ByteArray):Boolean {
         try{
@@ -592,68 +551,15 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun refreshProducts(message: ByteArray):Boolean {
-        try{
-            val convertZip = ConvertZip()
-            val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
-            val gson = Gson()
-            val listType = object : TypeToken<ArrayList<MinProduct>>() {}.type
-            listOfMinProducts = gson.fromJson<ArrayList<MinProduct>>(json, listType)?:ArrayList()
-            return true
-        }catch (e: NumberFormatException){
-            Log.i(TAG,"bSyncroProduct NumberFormatException $e")
-            return false
-        }catch (e:Exception){
-            Log.i(TAG,"bSyncroProduct Exception $e")
-            return false
-        }
-    }
-
-    fun refreshCorrals(message: ByteArray): Boolean {
-        try{
-            val convertZip = ConvertZip()
-            val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
-            val gson = Gson()
-            val listType = object : TypeToken<ArrayList<MinCorral>>() {}.type
-            listOfMinCorrals = gson.fromJson<ArrayList<MinCorral>>(json, listType)?:ArrayList()
-            return true
-        }catch (e: NumberFormatException){
-            Log.i(TAG,"bSyncroCorral NumberFormatException $e")
-            return false
-        }catch (e:Exception){
-            Log.i(TAG,"bSyncroCorral Exception $e")
-            return false
-        }
-    }
-
-    fun refreshEstablishments(message: ByteArray): Boolean {
-        try{
-            val convertZip = ConvertZip()
-            val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
-            val gson = Gson()
-            val listType = object : TypeToken<ArrayList<MinEstablishment>>() {}.type
-            listOfMinEstablishments = gson.fromJson<ArrayList<MinEstablishment>>(json, listType)?:ArrayList()
-            return true
-        }catch (e: NumberFormatException){
-            Log.i(TAG,"bSyncroEstablishment NumberFormatException $e")
-            return false
-        }catch (e:Exception){
-            Log.i(TAG,"bSyncroEstablishment Exception $e")
-            return false
-        }
-    }
-
-    fun selectProductDialog(productsToSelect : ArrayList<MinProduct>) {
+    private fun selectProductDialog(productsToSelect : ArrayList<MinProduct>): AlertDialog? {
         if(productsToSelect.isEmpty()){
-            return
+            return null
         }
         val productosStr = arrayOfNulls<String>(productsToSelect.size)
-        var i = 0
-        for (producto in productsToSelect) {
+        for ((i, producto) in productsToSelect.withIndex()) {
             productosStr[i] = producto.name + if(producto.description.isEmpty())"" else " - ${producto.description}"
-            i++
         }
-        val builder = android.app.AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this)
         builder.setTitle("Producto")
         builder.setItems(productosStr) { dialog, which ->
             val productSelected = productsToSelect[which]
@@ -663,18 +569,21 @@ class MainActivity : AppCompatActivity() {
                 remoteId = productSelected.remoteId,
                 id = productSelected.id
             )
-            Log.i(TAG,"producto seleccionado ${minProduct}")
+            Log.i(TAG,"producto seleccionado $minProduct")
             sendSelectProductToMixer(minProduct)
             dialog.dismiss()
+            dialogProduct = null
         }
         builder.setNegativeButton("Cancelar"){dialog,_->
             dialog.dismiss()
+            dialogProduct = null
         }
         val alertDialog = builder.create()
         alertDialog.show()
+        return alertDialog
     }
 
-    fun selectEstablishmentDialog(establishmentsToSelect: ArrayList<MinEstablishment>) {
+    private fun selectEstablishmentDialog(establishmentsToSelect: ArrayList<MinEstablishment>): AlertDialog? {
         val establishments = java.util.ArrayList<MinEstablishment>()
         establishmentsToSelect.forEach{ establishment : MinEstablishment ->
             establishments.add(establishment)
@@ -684,48 +593,50 @@ class MainActivity : AppCompatActivity() {
             establishmentStr[i] = establishment.name
             establishments[i] = establishment
         }
-        val builder = android.app.AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this)
         builder.setTitle("Establecimientos")
         builder.setItems(establishmentStr) { dialog, which ->
             val establishmentSelected = establishmentsToSelect[which]
-            establishmentSelected.let {
-                sendSelectEstablishmentToMixer(it)
-            }
+            sendSelectEstablishmentToMixer(establishmentSelected)
             dialog.dismiss()
+            dialogEstablishment = null
             //**********************************************************************
         }
         val alertDialog = builder.create()
         alertDialog.show()
+        return alertDialog
     }
 
 
-    fun selectCorralDialog(corralsToSelect : ArrayList<MinCorral>) {
+    private fun selectCorralDialog(corralsToSelect : ArrayList<MinCorral>): AlertDialog?{
         if(corralsToSelect.isEmpty()){
-            return
+            return null
         }
         val corralStr = arrayOfNulls<String>(corralsToSelect.size)
         for ((i, corral) in corralsToSelect.withIndex()) {
             corralStr[i] = corral.name +if(corral.description.isEmpty()) "" else " - ${corral.description}"
         }
-        val builder = android.app.AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this)
         builder.setTitle("Corrales")
         builder.setItems(corralStr) { dialog, which ->
             val corralSelected = corralsToSelect[which]
-            corralSelected.let {
-                sendSelectCorralToMixer(it)
-            }
+            sendSelectCorralToMixer(corralSelected)
             dialog.dismiss()
+            dialogCorral = null
             //**********************************************************************
         }
         builder.setPositiveButton(getString(R.string.finalizar)){dialog,_->
             sendEndToMixer()
             dialog.dismiss()
+            dialogCorral = null
         }
         builder.setNegativeButton(getString(R.string.cancelar)){dialog,_->
             dialog.dismiss()
+            dialogCorral = null
         }
         val alertDialog = builder.create()
         alertDialog.show()
+        return alertDialog
     }
 
     fun sendIniToMixer() {
@@ -798,7 +709,7 @@ class MainActivity : AppCompatActivity() {
             val listOfMinProductsToSelect =
                 gson.fromJson<ArrayList<MinProduct>>(json, listType) ?: ArrayList()
             Log.i(TAG, "dlgProduct $listOfMinProductsToSelect")
-            selectProductDialog(listOfMinProductsToSelect)
+            dialogProduct = selectProductDialog(listOfMinProductsToSelect)
             return
         } catch (e: NumberFormatException) {
             Log.i(TAG, "dlgProduct NumberFormatException $e")
@@ -817,7 +728,7 @@ class MainActivity : AppCompatActivity() {
             val listType = object : TypeToken<ArrayList<MinEstablishment>>() {}.type
             val listOfMinEstablishmentToSelect = gson.fromJson<ArrayList<MinEstablishment>>(json, listType)?:ArrayList()
             Log.i(TAG,"dlgEstablishment $listOfMinEstablishmentToSelect")
-            selectEstablishmentDialog(listOfMinEstablishmentToSelect)
+            dialogEstablishment = selectEstablishmentDialog(listOfMinEstablishmentToSelect)
             return
         }catch (e: NumberFormatException){
             Log.i(TAG,"dlgEstablishment NumberFormatException $e")
@@ -838,7 +749,7 @@ class MainActivity : AppCompatActivity() {
             val listOfMinCorralsToSelect =
                 gson.fromJson<ArrayList<MinCorral>>(json, listType) ?: ArrayList()
             Log.i(TAG, "dlgCorral $listOfMinCorralsToSelect")
-            selectCorralDialog(listOfMinCorralsToSelect)
+            dialogCorral = selectCorralDialog(listOfMinCorralsToSelect)
             return
         } catch (e: NumberFormatException) {
             Log.i(TAG, "dlgCorral NumberFormatException $e")
@@ -978,7 +889,18 @@ class MainActivity : AppCompatActivity() {
         bReconnect = true
     }
 
+    fun closeDialogs() {
+        dialogProduct?.dismiss()
+        dialogProduct = null
 
+        dialogCorral?.dismiss()
+        dialogCorral = null
+
+        dialogEstablishment?.dismiss()
+        dialogEstablishment = null
+
+
+    }
 
 }
 

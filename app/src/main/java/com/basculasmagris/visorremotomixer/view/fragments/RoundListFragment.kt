@@ -48,7 +48,7 @@ class RoundListFragment : Fragment() {
     private lateinit var mBinding: FragmentRoundListBinding
     private val TAG = "DEBRLF"
 
-    private var bGoToRound: Boolean = false
+    private var bGoToRound: Boolean = true
     private var bBlockButton = false
 
     private val mRoundLocalViewModel: RoundLocalViewModel by viewModels {
@@ -248,8 +248,44 @@ class RoundListFragment : Fragment() {
                     (requireActivity() as MainActivity).refreshRounds(message)
                 }
 
+                Constants.CMD_WEIGHT_LOAD->{
+                    if(bGoToRound){
+                        bGoToRound = false
+                        BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
+                        findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
+                    }
+                }
+                Constants.CMD_WEIGHT_LOAD_FREE->{
+                    if(bGoToRound){
+                        bGoToRound = false
+                        BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
+                        findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
+                    }
+                }
+                Constants.CMD_WEIGHT_DWNL->{
+                    if(bGoToRound){
+                        bGoToRound = false
+                        BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
+                        findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
+                    }
+                }
+                Constants.CMD_WEIGHT_DWNL_FREE->{
+                    if(bGoToRound){
+                        bGoToRound = false
+                        BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
+                        findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
+                    }
+                }
                 Constants.CMD_WEIGHT_CONFIG->{
                     if(bGoToRound){
+                        bGoToRound = false
+                        BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
+                        findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
+                    }
+                }
+                Constants.CMD_WEIGHT_RESUME->{
+                    if(bGoToRound){
+                        bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
                         findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
                     }
@@ -283,7 +319,6 @@ class RoundListFragment : Fragment() {
     }
 
     fun sendGoToRound(id: Long) {
-        bGoToRound = true
         (requireActivity() as MainActivity).sendGoToRound(id)
     }
 }
