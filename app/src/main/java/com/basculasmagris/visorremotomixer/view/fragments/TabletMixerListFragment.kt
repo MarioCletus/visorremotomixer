@@ -9,6 +9,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -57,10 +59,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
     private var allBluetoothDevice: MutableList<BluetoothDevice> = ArrayList()
     private var selectedBluetoothDevice : BluetoothDevice? = null
     var selectedTabletMixerInFragment: TabletMixer? = null
-    private var tabletMixerBluetoothDevice : BluetoothDevice? = null
     private lateinit var mCustomListDialog : Dialog
-    private val allBluetoothDeviceCustomList: java.util.ArrayList<CustomListItem> =
-        java.util.ArrayList<CustomListItem>()
     private var knowDevices: List<BluetoothDevice>? = null
 
     private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
@@ -69,11 +68,19 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
     private var mLocalTabletMixers: List<TabletMixer>? = null
     private var likingTabletMixer: TabletMixer? = null
 
-
-    //    private var mProgressDialog: Dialog? = null
-//    private var isFound = false
     private var dialog: AlertDialog? = null
     var dialogCustomListBinding: DialogCustomListBinding? = null
+
+
+    private val handlerBaliza = Handler(Looper.getMainLooper())
+    private val runnable: Runnable = object : Runnable {
+        override fun run() {
+
+            (requireActivity() as MainActivity).sendBeacon()
+            handlerBaliza.postDelayed(this, 2000)
+        }
+    }
+
 
     private fun fetchLocalData(): MediatorLiveData<MergedLocalData> {
         val liveDataMerger = MediatorLiveData<MergedLocalData>()
@@ -106,7 +113,6 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         permission()
         mBinding = FragmentTabletMixerListBinding.inflate(inflater, container, false)
         return mBinding.root
@@ -208,19 +214,11 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
         }
     }
 
-    fun goToAddUpdateTabletMixer(){
-        findNavController().navigate(TabletMixerListFragmentDirections.actionTabletMixerListFragmentToAddUpdateTabletMixerActivity())
-    }
-
     fun goToRemoteMixerFragment(tabletMixer: TabletMixer){
         (activity as MainActivity).saveTabletMixer(tabletMixer)
         cleanObservers()
         findNavController().navigate(TabletMixerListFragmentDirections.actionTabletMixerListFragmentToRemoteMixerFragment())
     }
-
-
-
-
 
     fun deleteTabletMixer(tabletMixer: TabletMixer){
         val builder = AlertDialog.Builder(requireActivity())
@@ -323,7 +321,10 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
             val command = messageStr.substring(0,3)
             Log.i("SHOWCOMAND","tabletMixerList command $command")
             when (command) {
-
+                Constants.CMD_ACK->{
+                    Log.i(TAG,"CMD_ACK")
+                    handlerBaliza.removeCallbacks(runnable)
+                }
             }
         }
 
@@ -374,24 +375,6 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
 
     }
 
-    fun selectedListItem(item: CustomListItem, selection: String){
-
-        selectedBluetoothDevice = allBluetoothDevice.firstOrNull { device ->
-            device.address == item.description
-        }
-
-        selectedBluetoothDevice?.let { bluetoothDevice ->
-            when (selection){
-                Constants.DEVICE_REF -> {
-                    (requireActivity() as MainActivity).mService?.LocalBinder()?.connectKnowDevice(requireActivity(), bluetoothDevice)
-
-                }
-                else -> {}
-            }
-        }
-
-    }
-
     private fun customItemsDialog(title: String, itemsList: List<CustomListItem>, selection: String){
         mCustomListDialog = Dialog(requireActivity())
         dialogCustomListBinding = DialogCustomListBinding.inflate(layoutInflater)
@@ -413,6 +396,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
     override fun onResume() {
         super.onResume()
         Log.i(TAG,"onResume")
+        handlerBaliza.post(runnable)
         getLocalData()
         (requireActivity() as MainActivity).getSavedTabletMixer()
     }
@@ -421,6 +405,11 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
         Log.i(TAG,"onStop")
         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
         super.onStop()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handlerBaliza.removeCallbacks(runnable)
     }
 
     private fun cleanObservers(){

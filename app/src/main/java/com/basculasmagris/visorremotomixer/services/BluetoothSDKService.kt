@@ -488,6 +488,7 @@ class BluetoothSDKService : Service() {
                     applicationContext,
                     Manifest.permission.BLUETOOTH_CONNECT
                 ) == PackageManager.PERMISSION_GRANTED) {
+                Log.e(TAG,"startDiscovery: Permission Granted")
                 btAdapter.startDiscovery()
             }else{
                 Log.e(TAG,"startDiscovery: Permission Denied")

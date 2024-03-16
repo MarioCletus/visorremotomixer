@@ -186,4 +186,5 @@ object Constants {
     val CMD_CLOSE_DLG = "CLD"
     val CMD_NEXT_PRODUCT_DLG = "NPD"
     val CMD_NEXT_CORRAL_DLG = "NCD"
+    val CMD_BEACON = "BEA"
 }

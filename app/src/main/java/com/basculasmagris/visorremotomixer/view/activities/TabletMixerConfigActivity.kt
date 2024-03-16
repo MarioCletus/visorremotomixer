@@ -114,7 +114,6 @@ class TabletMixerConfigActivity : AppCompatActivity(){
         UserViewModelFactory((this.application as SpiMixerApplication).userRepository)
     }
     private var mLocalTabletMixers: List<TabletMixer>? = null
-    private var mDevicesFound : MutableSet<BluetoothDevice> = mutableSetOf()
     private var selectedTabletMixer: TabletMixer? = null
 
     private var mProgressDialog: Dialog? = null
@@ -126,6 +125,14 @@ class TabletMixerConfigActivity : AppCompatActivity(){
     private var selectedBluetoothDevice : BluetoothDevice? = null
     var dialogCustomListBinding: DialogCustomListBinding? = null
     private lateinit var mCustomListDialog : Dialog
+
+    private val handlerBaliza = Handler(Looper.getMainLooper())
+    private val runnable: Runnable = object : Runnable {
+        override fun run() {
+            sendBeacon()
+            handlerBaliza.postDelayed(this, 500)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -326,6 +333,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
 
     override fun onDestroy() {
         super.onDestroy()
+        handlerBaliza.removeCallbacks(runnable)
         Log.i(TAG,"onDestroy")
         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(applicationContext, mBluetoothListener)
     }
@@ -336,12 +344,10 @@ class TabletMixerConfigActivity : AppCompatActivity(){
         selectedTabletMixer = tabletMixer
         dialog = Helper.setProgressDialog(this, "Buscando tabletMixer...")
         dialog?.show()
+        Log.i(TAG,"buscando..")
         mService?.LocalBinder()?.startDiscovery(this)
-        Timer().schedule(5000){
+        Timer().schedule(10000){
             dialog?.cancel()
-            mDevicesFound.forEach { deviceFounded ->
-                Log.i("FOUND", deviceFounded.toString() + "  " + deviceFounded.address)
-            }
             mService?.LocalBinder()?.stopDiscovery()
         }
     }
@@ -400,10 +406,12 @@ class TabletMixerConfigActivity : AppCompatActivity(){
 
         override fun onDiscoveryStopped() {
             Log.i(TAG, "[TabletMixerConfigActivity] onDiscoveryStopped")
+            mCustomListDialog.dismiss()
         }
 
         override fun onDeviceDiscovered(device: BluetoothDevice?) {
             device?.let { currentDevice ->
+                Log.i(TAG, "onDeviceDiscovered $currentDevice")
                 allBluetoothDevice.add(device)
 
                 val name = if(getBluetoothName(currentDevice).isEmpty()) getString(R.string.no_identificado) else getBluetoothName(currentDevice)
@@ -540,11 +548,8 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                     equiposVinculados()
                 }
                 1 -> {
-                    if(tabletMixerReceibed!=null){
-                        linkDevice(tabletMixerReceibed!!)
-                    }
-                    else{
-                        Log.i(TAG,"mTabletMixerDetail = null")
+                    tabletMixerReceibed?.let {
+                        linkDevice(it)
                     }
                 }
             }
@@ -594,6 +599,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
     }
 
     private fun selectDevice(device : BluetoothDevice?) {
+        handlerBaliza.post(runnable)
         selectedBluetoothDevice = device
         if(tabletMixerReceibed != null){
             tabletMixerReceibed?.mac = selectedBluetoothDevice?.address.toString()
@@ -1103,8 +1109,11 @@ class TabletMixerConfigActivity : AppCompatActivity(){
         requestListOfUsers()
         delay(1000)
         requestListOfRounds()
-//        delay(1000)
-//        requestListOfMixers()
+    }
+
+    fun sendBeacon() {
+        val byteArray = "CMD${Constants.CMD_BEACON}${String.format("%06d",0)}".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
     }
 }
 

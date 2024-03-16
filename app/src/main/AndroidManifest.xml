@@ -29,10 +29,12 @@
             android:name=".view.activities.TabletMixerConfigActivity"
             android:exported="false"
             android:label="@string/title_activity_tablet_mixer_config"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.Spimixer.NoActionBar" />
         <activity
             android:name=".view.activities.AddUpdateTabletMixerActivity"
             android:exported="false"
+            android:screenOrientation="landscape"
             android:label="@string/title_activity_add_update_tablet_mixer"
             android:theme="@style/Theme.Spimixer.NoActionBar" />
         <activity
@@ -46,12 +48,6 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".view.activities.MixerConfigActivity"
-            android:exported="true"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Spimixer.NoActionBar"
-            android:windowSoftInputMode="adjustNothing" />
-        <activity
             android:name=".view.activities.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login"
@@ -62,7 +58,6 @@
             android:name=".services.BluetoothSDKService"
             android:enabled="true"
             android:exported="true"
-            android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustNothing" />
 
 

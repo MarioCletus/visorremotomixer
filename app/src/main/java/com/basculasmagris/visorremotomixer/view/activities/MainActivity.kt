@@ -676,6 +676,13 @@ class MainActivity : AppCompatActivity() {
         mService?.LocalBinder()?.write(byteArray)
     }
 
+
+    fun sendBeacon() {
+        Log.i(TAG,"send CMD_BEACON")
+        val byteArray = "CMD${Constants.CMD_BEACON}${String.format("%06d",0)}".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
     fun sendGoToFreeRound() {
         val byteArray = "CMD${Constants.CMD_GO_TO_FREE_ROUND}000000".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
