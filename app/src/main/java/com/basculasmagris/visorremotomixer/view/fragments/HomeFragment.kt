@@ -71,6 +71,7 @@ class HomeFragment : Fragment() {
                     val title = "Inicio - ${user.name} ${user.lastname}"
                     it.title = title
                 }
+                menu.findItem(R.id.cancel_round).isVisible = false
 
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

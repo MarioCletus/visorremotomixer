@@ -18,6 +18,7 @@
         android:textSize="18sp" />
 
     <LinearLayout
+        android:id="@+id/ll_barra1"
         android:layout_width="0dp"
         android:layout_weight="0.005"
         android:layout_height="match_parent"
@@ -35,6 +36,7 @@
         android:textSize="18sp"
         android:textColor="@color/white"/>
     <LinearLayout
+        android:id="@+id/ll_barra2"
         android:layout_width="0dp"
         android:layout_weight="0.005"
         android:layout_height="match_parent"

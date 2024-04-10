@@ -2,6 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+    <item
+        android:id="@+id/cancel_round"
+        android:icon="@drawable/ic_cancel_round"
+        android:iconTint="@color/white"
+        android:title=""
+        app:showAsAction="ifRoom|withText"
+        />
+
     <item android:id="@+id/bluetooth_tablet_mixer"
         android:title=""
         android:icon="@drawable/ic_bluetooth_disconnected_24px"

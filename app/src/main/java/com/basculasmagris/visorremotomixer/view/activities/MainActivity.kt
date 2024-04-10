@@ -405,7 +405,7 @@ class MainActivity : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 connectDevice(bluetoothDevice)
                 isActionRunning = false
-            }, 250)
+            }, 1500)
         }    }
     fun connectDevice(bluetoothDevice: BluetoothDevice?){
         this.bluetoothDevice = bluetoothDevice
@@ -428,15 +428,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun showDeviceDisconnected() {
         if(binding.appBarMain.toolbarMain.menu.size>0){
-            binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon = ContextCompat.getDrawable(this,R.drawable.ic_bluetooth_disconnected_24px)
-            binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon?.setTint(getColor(R.color.color_full_red))
+            val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_tablet_mixer)
+            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_bluetooth_disconnected_24px)
+            menuItem?.icon?.setTint(getColor(R.color.color_full_red))
         }
     }
 
     private fun showDeviceConnected() {
         if(binding.appBarMain.toolbarMain.menu.size>0){
-            binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon = ContextCompat.getDrawable(this,R.drawable.ic_bluetooth_connected_24px)
-            binding.appBarMain.toolbarMain.menu?.getItem(0)?.icon?.setTint(getColor(R.color.white))
+            val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_tablet_mixer)
+            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_bluetooth_connected_24px)
+            menuItem?.icon?.setTint(getColor(R.color.white))
         }
     }
 
@@ -649,6 +651,11 @@ class MainActivity : AppCompatActivity() {
         mService?.LocalBinder()?.write(byteArray)
     }
 
+    fun sendCancelToMixer() {
+        val byteArray = "CMD${Constants.CMD_CANCEL}${String.format("%06d",0)}".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
     private fun sendSelectCorralToMixer(minCorral: MinCorral) {
         val byteArray = "CMD${Constants.CMD_SELECT_CORRAL}${String.format("%06d",minCorral.id)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
@@ -691,7 +698,12 @@ class MainActivity : AppCompatActivity() {
     fun sendGoToResume(id:Long) {
         val byteArray = "CMD${Constants.CMD_GO_TO_RESUME}${String.format("%06d",id)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
-    }    
+    }
+
+    fun sendGoToDownload() {
+        val byteArray = "CMD${Constants.CMD_GO_TO_DOWNLOAD}${String.format("%06d",0)}".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
     
     fun requestListOfCorrals() {
         val byteArray = "CMD${Constants.CMD_REQ_CORRAL}000000".toByteArray()
@@ -908,6 +920,7 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
 
 }
 

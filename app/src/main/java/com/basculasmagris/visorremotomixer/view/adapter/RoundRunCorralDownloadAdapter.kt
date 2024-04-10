@@ -1,9 +1,11 @@
 package com.basculasmagris.visorremotomixer.view.adapter
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -30,11 +32,21 @@ class RoundRunCorralDownloadAdapter (
         val tvCorralName = view.tvCorralName
         val tvDiffWeight = view.tvDiffWeight
         val tvCurrentWeight = view.tvCurrentWeight
+        val llBarra1 = view.llBarra1
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemLineRoundRunCorralDownloadBinding = ItemLineRoundRunCorralDownloadBinding.inflate(
             LayoutInflater.from(fragment.requireActivity()), parent, false)
+        binding.tvDiffWeight.visibility = View.GONE
+        binding.llBarra2.visibility = View.GONE
+        val paramsCorralName = binding.tvCorralName.layoutParams as LinearLayout.LayoutParams
+        paramsCorralName.weight = 0.7f
+        binding.tvCorralName.layoutParams = paramsCorralName
+
+        val paramsCurrentWeight = binding.tvCurrentWeight.layoutParams as LinearLayout.LayoutParams
+        paramsCurrentWeight.weight = 0.3f
+        binding.tvCurrentWeight.layoutParams = paramsCurrentWeight
         return ViewHolder(binding)
     }
 
@@ -42,8 +54,20 @@ class RoundRunCorralDownloadAdapter (
         val corral = filteredRoundCorrals[position]
         fragment.context?.let {context->
             if((fragment as RemoteMixerFragment).isInFree()){
-                holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_ready_bkg)
-                holder.tvDiffWeight.text = "0Kg"
+                if(position < filteredRoundCorrals.size-1){
+                    holder.itemView.background = ContextCompat.getDrawable(context, R.drawable.item_round_run_product_ready_bkg)
+                    holder.tvCorralName.text = if(corral.description == "")corral.name else "${corral.name}\n${corral.description}"
+                    holder.tvCurrentWeight.text = "${corral.customTargetWeight}Kg"
+                    holder.tvCurrentWeight.visibility = View.VISIBLE
+                    holder.llBarra1.visibility = View.VISIBLE
+                }else{
+                    holder.itemView.background = ContextCompat.getDrawable(context, R.drawable.item_round_run_product_select_bkg)
+                    holder.tvCorralName.text = corral.name
+                    holder.tvCurrentWeight.visibility = View.GONE
+                    holder.llBarra1.visibility = View.GONE
+                }
+//                holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_ready_bkg)
+//                holder.tvDiffWeight.text = "0Kg"
             }else{
                 if(selectedPosition == position) {
                     holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_select_bkg)

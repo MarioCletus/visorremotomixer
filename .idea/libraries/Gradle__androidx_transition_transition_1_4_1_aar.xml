@@ -4,9 +4,9 @@
       <root url="jar://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/11e60dd9b850461c40b3de2b6f03d5dc/transformed/transition-1.4.1/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/11e60dd9b850461c40b3de2b6f03d5dc/transformed/transition-1.4.1/AndroidManifest.xml" />
-      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/11e60dd9b850461c40b3de2b6f03d5dc/transformed/transition-1.4.1/res" />
       <root url="jar://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/11e60dd9b850461c40b3de2b6f03d5dc/transformed/transition-1.4.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/11e60dd9b850461c40b3de2b6f03d5dc/transformed/transition-1.4.1/res" />
+      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/11e60dd9b850461c40b3de2b6f03d5dc/transformed/transition-1.4.1/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

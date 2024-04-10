@@ -41,6 +41,7 @@ import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.utils.MarginItemDecoration
+import com.basculasmagris.visorremotomixer.utils.MarginItemDecorationHorizontal
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunCorralDownloadAdapter
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunProductAdapter
@@ -93,6 +94,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private val REFRESH_DATA_TIME = 4
     private var countDataMsg: Int = REFRESH_DATA_TIME
     private var count_resume = 0
+    private var count_weight = 0
     private var contPressTara = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -170,6 +172,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         mBinding.btnJump.setOnLongClickListener {
             Log.i(TAG, "btnJump")
+            if(bInFree && bInLoad){
+                alertFinalDialog()
+                return@setOnLongClickListener false
+            }
             (requireActivity() as MainActivity).sendEndToMixer()
             return@setOnLongClickListener false
         }
@@ -200,7 +206,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
 
         loadRoundDetail()
-        mBinding.rvMixerProductsToLoad.addItemDecoration(MarginItemDecoration(resources.getDimensionPixelSize(R.dimen.margin_recycler_horizontal)))
+        mBinding.rvMixerProductsToLoad.addItemDecoration(MarginItemDecorationHorizontal(resources.getDimensionPixelSize(R.dimen.margin_recycler_horizontal)))
 
 
 
@@ -235,6 +241,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                 mBinding.rvMixerProductsToLoad.adapter = roundRunProductAdapter
 
+                if(bInFree){
+                    Log.i(TAG,"dietDetail ${dietDetail.products}")
+                }
                 dietDetail.products.let { products ->
                     if(products.isNotEmpty()){
                         var currentProduct = products[0]
@@ -335,6 +344,15 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 //                            Log.i(TAG,"touch tablet icon")
 //                            goToTabletMixerListFragment()
 //                        }
+                        return true
+                    }
+
+                    R.id.cancel_round -> {
+                        if ((bInCfg || bInLoad || bInDownload || bInRes)) {
+                            Log.i(TAG,"Cancel round")
+                            (requireActivity() as MainActivity).sendCancelToMixer()
+                            (requireActivity() as MainActivity).onBackPressed()
+                        }
                         return true
                     }
                     else -> false
@@ -532,7 +550,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                                 setMixer(mixer)
                             }
                             (requireActivity() as MainActivity).minRoundRunDetail?.let { minRoundRunDetail->
-                                val title = "Mixer: ${mixerDetail?.name} - ${minRoundRunDetail.round.name} : ${minRoundRunDetail.round.diet.name}"
+                                val title = if(bInFree)
+                                    "${getString(R.string.mixer)}: ${mixerDetail?.name} - ${minRoundRunDetail.round.name}"
+                                else
+                                    "${getString(R.string.mixer)}: ${mixerDetail?.name} - ${minRoundRunDetail.round.name} : ${minRoundRunDetail.round.diet.name}"
+
                                 activity?.changeActionBarTitle(title)
                             }
                             if(!bInFree){
@@ -695,10 +717,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     (requireActivity() as MainActivity).dlgCorral(message)
                 }
 
-
                 Constants.CMD_WEIGHT->{
+                    if(count_weight++<5){
+                        return
+                    }
                     Log.v("cmd_weight","CMD_WEIGHT")
-
                     if(oneBack){
                         (requireActivity()).onBackPressed()
                         oneBack = false
@@ -706,9 +729,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     return
                 }
 
-
                 Constants.CMD_WEIGHT_CONFIG->{
                     count_resume = 0
+                    count_weight = 0
                     try{
                         if(!bInCfg){
                             mBinding.btnJump.visibility = View.VISIBLE
@@ -752,6 +775,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_RESUME->{
+                    count_weight = 0
                     if(count_resume++ > 5){
                         Log.v("commandsWeight","CMD_WEIGHT_RESUME")
                         try{
@@ -764,6 +788,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                 Constants.CMD_WEIGHT_LOAD->{
                     count_resume = 0
+                    count_weight = 0
                     try{
                         if(!bInLoad){
                             mBinding.btnJump.visibility = View.VISIBLE
@@ -795,6 +820,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_DWNL->{
+                    count_weight = 0
                     count_resume = 0
                     try{
                         if(!bInDownload){
@@ -822,6 +848,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_LOAD_FREE->{
+                    count_weight = 0
                     count_resume = 0
                     try{
                         if(!bInLoad){
@@ -849,6 +876,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_DWNL_FREE->{
+                    count_weight = 0
                     count_resume = 0
                     try{
                         if(!bInDownload){
@@ -896,8 +924,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 else->{
                     Log.i(TAG,"else $command")
                 }
-
-
 
             }
         }
@@ -974,6 +1000,19 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
     }
 
+    private fun alertFinalDialog() {
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setTitle("Advertencia")
+        builder.setMessage("¿Seguro quiere pasar a descarga?")
+        builder.setPositiveButton("Descarga"){_,_->
+            (requireActivity() as MainActivity).sendGoToDownload()
+        }
+        builder.setNegativeButton("Cancelar"){dialog,_->
+            dialog.dismiss()
+        }
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
 
     private fun restDialog() : AlertDialog? {
         val dialogBuilder = AlertDialog.Builder(requireActivity() as MainActivity)
@@ -1198,7 +1237,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         Log.i(TAG,"Boton presionado")
         // Manejar el evento del botón de retroceso
         if (item.itemId == android.R.id.home && (bInCfg || bInLoad || bInDownload || bInRes)) {
-            (requireActivity() as MainActivity).sendEndToMixer()
+            (requireActivity()).onBackPressed()
+//            (requireActivity() as MainActivity).sendEndToMixer()
             return true
         }
         return super.onOptionsItemSelected(item)

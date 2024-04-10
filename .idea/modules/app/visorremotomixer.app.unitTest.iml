@@ -14,8 +14,6 @@
           <stringArguments>
             <stringArg name="classpath">
               <args>
-                <arg>$MODULE_DIR$/../../../app/build/intermediates/compile_and_runtime_not_namespaced_r_class_jar/debug/R.jar</arg>
-                <arg>$MODULE_DIR$/../../../app/build/intermediates/compile_app_classes_jar/debug/classes.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/854a55c2c18ee4efa96d35652f61c054/transformed/jetified-viewbinding-7.4.2-api.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/0f408ed8d94757f9425892151cbb68e6/transformed/navigation-fragment-ktx-2.5.0-api.jar</arg>
                 <arg>$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/f8fe52dbf0f6a7f73cfe7dadd183ac3a/transformed/navigation-fragment-2.5.0-api.jar</arg>

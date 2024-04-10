@@ -1,15 +1,16 @@
 package com.basculasmagris.visorremotomixer.view.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.ItemLineRoundRunProductStepLoadBinding
-import com.basculasmagris.visorremotomixer.model.entities.MinDietDetail
 import com.basculasmagris.visorremotomixer.model.entities.MinProductDetail
 import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunDetail
 import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
@@ -31,11 +32,23 @@ class RoundRunProductAdapter (
         val tvProductName = view.tvProductName
         val tvCurrentWeight = view.tvCurrentWeight
         val tvDiffWeight = view.tvDiffWeight
+        val llBarra1 = view.llBarra1
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemLineRoundRunProductStepLoadBinding = ItemLineRoundRunProductStepLoadBinding.inflate(
             LayoutInflater.from(fragment.context), parent, false)
+        if((fragment as RemoteMixerFragment).isInFree()){
+            binding.tvDiffWeight.visibility = View.GONE
+            binding.llBarra2.visibility = View.GONE
+            val paramsProductName = binding.tvProductName.layoutParams as LinearLayout.LayoutParams
+            paramsProductName.weight = 0.7f
+            binding.tvProductName.layoutParams = paramsProductName
+
+            val paramsCurrentWeight = binding.tvCurrentWeight.layoutParams as LinearLayout.LayoutParams
+            paramsCurrentWeight.weight = 0.3f
+            binding.tvCurrentWeight.layoutParams = paramsCurrentWeight
+        }
         return ViewHolder(binding)
     }
 
@@ -43,8 +56,22 @@ class RoundRunProductAdapter (
         val product = filteredProducts[position]
         fragment.context?.let {
             if((fragment as RemoteMixerFragment).isInFree()){
-                holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_ready_bkg)
-                holder.tvDiffWeight.text = "0Kg"
+                if(position < filteredProducts.size-1){
+                    holder.itemView.background = ContextCompat.getDrawable(it, R.drawable.item_round_run_product_ready_bkg)
+                    holder.tvProductName.text = if(product.description == "")product.name else "${product.name}\n${product.description}"
+                    holder.tvCurrentWeight.text = "${product.targetWeight}Kg"
+                    holder.tvCurrentWeight.visibility = View.VISIBLE
+                    holder.llBarra1.visibility = View.VISIBLE
+                    holder.tvCurrentWeight.layoutParams.width = 50
+                }else{
+                    holder.itemView.background = ContextCompat.getDrawable(it, R.drawable.item_round_run_product_select_bkg)
+                    holder.tvProductName.text = product.name
+                    holder.tvCurrentWeight.visibility = View.GONE
+                    holder.llBarra1.visibility = View.GONE
+
+                }
+//                holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_ready_bkg)
+//                holder.tvDiffWeight.text = "0Kg"
             }else{
                 if(selectedPosition == position && !endLoad) {
                     holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_select_bkg)

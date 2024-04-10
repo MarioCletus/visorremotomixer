@@ -4,8 +4,8 @@
       <root url="jar://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/2a7a091cc3639096aea25dffa61012fe/transformed/print-1.0.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/2a7a091cc3639096aea25dffa61012fe/transformed/print-1.0.0/AndroidManifest.xml" />
       <root url="jar://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/2a7a091cc3639096aea25dffa61012fe/transformed/print-1.0.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/StudioProjects/PesajeVolquetes/caches/transforms-3/2a7a091cc3639096aea25dffa61012fe/transformed/print-1.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

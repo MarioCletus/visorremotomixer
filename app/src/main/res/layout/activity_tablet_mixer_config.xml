@@ -195,14 +195,15 @@
                 android:background="@null"
                 android:cursorVisible="true"
                 android:layout_marginBottom="3dp"
-                android:gravity="left"
+                android:gravity="start"
                 android:paddingBottom="3dp"
                 android:text=""
+                android:inputType="text"
+                android:imeOptions="actionDone"
                 android:textColor="@color/color_acent_green"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="@id/titNombre"
-                app:layout_constraintBottom_toBottomOf="@id/lay_tablet_mixer_name">
-            </EditText>
+                app:layout_constraintBottom_toBottomOf="@id/lay_tablet_mixer_name"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -253,13 +254,15 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:cursorVisible="true"
-                android:gravity="left"
+                android:gravity="start"
                 android:paddingBottom="3dp"
                 android:text=""
+                android:inputType="text"
+                android:imeOptions="actionDone"
                 android:textColor="@color/color_acent_green"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="@id/lay_tablet_mixer_model"
-                app:layout_constraintStart_toStartOf="@id/titModelo"></EditText>
+                app:layout_constraintStart_toStartOf="@id/titModelo"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
