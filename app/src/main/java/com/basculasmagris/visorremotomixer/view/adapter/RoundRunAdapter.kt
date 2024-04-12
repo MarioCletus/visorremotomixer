@@ -86,6 +86,9 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
         return status
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if(filteredRoundsRun.isEmpty() || position>= filteredRoundsRun.size){
+            return
+        }
         val roundToRun = filteredRoundsRun[position]
         holder.tvRoundName.text = roundToRun.round.name
 

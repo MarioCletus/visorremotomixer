@@ -1,5 +1,6 @@
 package com.basculasmagris.visorremotomixer.view.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +25,6 @@ class RoundRunProductAdapter (
     private val TAG: String = "DEBRRA"
     private var products: List<MinProductDetail> = listOf()
     private var filteredProducts: List<MinProductDetail> = listOf()
-    var endLoad = false
     var selectedPosition = 0
 
 
@@ -57,6 +57,7 @@ class RoundRunProductAdapter (
         fragment.context?.let {
             if((fragment as RemoteMixerFragment).isInFree()){
                 if(position < filteredProducts.size-1){
+                    Log.i(TAG,"onBindViewHolder isInFree position < filteredProducts.size-1 $position $product")
                     holder.itemView.background = ContextCompat.getDrawable(it, R.drawable.item_round_run_product_ready_bkg)
                     holder.tvProductName.text = if(product.description == "")product.name else "${product.name}\n${product.description}"
                     holder.tvCurrentWeight.text = "${product.targetWeight}Kg"
@@ -64,19 +65,20 @@ class RoundRunProductAdapter (
                     holder.llBarra1.visibility = View.VISIBLE
                     holder.tvCurrentWeight.layoutParams.width = 50
                 }else{
+                    Log.i(TAG,"onBindViewHolder isInFree position >= filteredProducts.size-1 $position $product")
                     holder.itemView.background = ContextCompat.getDrawable(it, R.drawable.item_round_run_product_select_bkg)
                     holder.tvProductName.text = product.name
                     holder.tvCurrentWeight.visibility = View.GONE
                     holder.llBarra1.visibility = View.GONE
 
                 }
-//                holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_ready_bkg)
-//                holder.tvDiffWeight.text = "0Kg"
             }else{
-                if(selectedPosition == position && !endLoad) {
+                if(selectedPosition == position) {
+                    Log.i(TAG,"onBindViewHolder position = selectedPosition $position $product")
                     holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_select_bkg)
                 }
-                else if( position < selectedPosition || endLoad){
+                else if( position < selectedPosition){
+                    Log.i(TAG,"onBindViewHolder position < selectedPosition $position < $selectedPosition $product")
                     holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_ready_bkg)
                     val value = (product.finalWeight - product.initialWeight)-product.targetWeight
                     if(value >= 1){
@@ -85,6 +87,7 @@ class RoundRunProductAdapter (
                         holder.tvDiffWeight.text = "${value}Kg"
                     }
                 }else{
+                    Log.i(TAG,"onBindViewHolder default position $position selectedPosition $selectedPosition $product")
                     holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_bkg)
                 }
             }
@@ -139,6 +142,7 @@ class RoundRunProductAdapter (
     fun selectProduct(position : Int){
         if(position < filteredProducts.size){
             selectedPosition = position
+            Log.i(TAG,"selectProduct $selectedPosition ${filteredProducts[position]}")
             notifyDataSetChanged()
         }
     }
@@ -152,6 +156,10 @@ class RoundRunProductAdapter (
             productDetail.targetWeight = roundRunDetail.round.diet.products[position].targetWeight
             position++
         }
+    }
+
+    fun getItems(): List<MinProductDetail> {
+        return  filteredProducts
     }
 
 }

@@ -43,6 +43,7 @@ import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.utils.MarginItemDecoration
 import com.basculasmagris.visorremotomixer.utils.MarginItemDecorationHorizontal
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
+import com.basculasmagris.visorremotomixer.view.adapter.RoundRunAdapter
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunCorralDownloadAdapter
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunProductAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
@@ -246,18 +247,25 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
                 dietDetail.products.let { products ->
                     if(products.isNotEmpty()){
+                        products.forEach {
+                            Log.i("list_products","${it.name} ${it.order}")
+                        }
+
                         var currentProduct = products[0]
-                        products.sortedByDescending { it.order }.forEach{ productInRound ->
+                        var position = 0
+                        products.sortedBy { it.order }.forEachIndexed{index, productInRound ->
                             if(productInRound.finalWeight == 0L && productInRound.initialWeight != 0L){
                                 currentProduct = productInRound
-                                roundRunProductAdapter?.selectProduct(productInRound.order-1)
-                                return@forEach
+                                Log.i("select_product","Product selected: $index ${productInRound.name}  ")
+                                roundRunProductAdapter?.selectProduct(index)
+                                position = index
+                                return@forEachIndexed
                             }
                         }
                         currentProductDetail = currentProduct
-                        Log.i(TAG,"currentProductDetail ${currentProductDetail?.name?:""} position ${currentProduct.order}")
-                        if(currentProduct != products[0] && currentProduct.order > 2){
-                            mBinding.rvMixerProductsToLoad.scrollToPosition(currentProduct.order-2)
+
+                        if(currentProduct != products[0] && position > 2){
+                            mBinding.rvMixerProductsToLoad.scrollToPosition(position)
                         }
                     }else{
                         currentProductDetail = null
@@ -273,17 +281,19 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                 (requireActivity() as MainActivity).minRoundRunDetail?.round?.corrals?.let { corrals ->
                     if(corrals.isNotEmpty()){
+                        var position = 0
                         var currentCorral = corrals[0]
-                        corrals.sortedByDescending { it.order }.forEach{ corralInRound ->
+                        corrals.sortedBy { it.order }.forEachIndexed{index, corralInRound ->
                             if(corralInRound.initialWeight != 0L && corralInRound.finalWeight == 0L){
                                 currentCorral = corralInRound
-                                roundRunCorralAdapter?.selectCorral(corralInRound.order-1)
-                                return@forEach
+                                roundRunCorralAdapter?.selectCorral(index)
+                                position = index
+                                return@forEachIndexed
                             }
                         }
                         currentCorralDetail = currentCorral
-                        if(currentCorral != corrals[0] && currentCorral.order > 2){
-                            mBinding.rvMixerProductsToLoad.scrollToPosition(currentCorral.order-2)
+                        if(currentCorral != corrals[0] && position > 2){
+                            mBinding.rvMixerProductsToLoad.scrollToPosition(position)
                         }
                     }else{
                         currentCorralDetail = null
@@ -521,7 +531,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                 Constants.CMD_ROUNDDETAIL->{
                     val convertZip = ConvertZip()
-                    Log.i(TAG,"message.lenght ${message.size}")
+//                    Log.i(TAG,"message.lenght ${message.size}")
                     val byteArrayUtil = message.copyOfRange(9,message.size-1)
                     Log.i("showCommand","CMD_ROUNDDETAIL ${messageStr.length} byteArrayUtil ${byteArrayUtil.size} ")
                     try{
