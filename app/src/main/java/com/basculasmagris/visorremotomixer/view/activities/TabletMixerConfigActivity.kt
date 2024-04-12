@@ -541,7 +541,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
         opcion0[0] = this.getString(R.string.equipos_vinculados)
         opcion0[1] = this.getString(R.string.buscar_equipos)
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Buscar balanzas cercanas")
+        builder.setTitle(getString(R.string.conectar_mixers_cercanos))
         builder.setItems(opcion0) { _, which ->
             when (which) {
                 0 -> {

@@ -361,6 +361,7 @@
     <string name="ronda_libre">Ronda\nLibre</string>
     <string name="declarar_mixer">Declarar Mixer</string>
     <string name="usuarios">Usuarios</string>
+    <string name="conectar_mixers_cercanos">Conectar mixers cercanos</string>
 
 
 </resources>

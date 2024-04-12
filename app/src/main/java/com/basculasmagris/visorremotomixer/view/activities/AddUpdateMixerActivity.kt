@@ -37,18 +37,18 @@ class AddUpdateMixerActivity : AppCompatActivity() {
         MixerViewModelFactory((application as SpiMixerApplication).mixerRepository)
     }
 
-    private var mProgressDialog: Dialog? = null
+//    private var mProgressDialog: Dialog? = null
 
-    private fun showCustomProgressDialog(){
-        if(mProgressDialog != null && mProgressDialog!!.isShowing){
-            return
-        }
-        mProgressDialog = Dialog(this)
-        mProgressDialog?.let {
-            it.setContentView(R.layout.dialog_custom_progress)
-            it.show()
-        }
-    }
+//    private fun showCustomProgressDialog(){
+//        if(mProgressDialog != null && mProgressDialog!!.isShowing){
+//            return
+//        }
+//        mProgressDialog = Dialog(this)
+//        mProgressDialog?.let {
+//            it.setContentView(R.layout.dialog_custom_progress)
+//            it.show()
+//        }
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

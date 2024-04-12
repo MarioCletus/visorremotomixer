@@ -8,27 +8,15 @@
     tools:context=".view.fragments.HomeFragment">
 
     <Button
-        android:id="@+id/btn_mixer"
-        android:layout_width="350dp"
-        android:layout_height="180dp"
-        android:textSize="32sp"
-        android:text="@string/mixers"
-        android:background="@drawable/home_options_button"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_rondas"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btn_sincro"/>
-
-    <Button
         android:id="@+id/btn_rondas"
         android:layout_width="350dp"
         android:layout_height="180dp"
         android:textSize="32sp"
         android:text="@string/rondas"
         android:background="@drawable/home_options_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_mixer"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_mixer"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_ronda_libre"/>
 
     <Button
@@ -38,10 +26,24 @@
         android:background="@drawable/home_options_button"
         android:textSize="32sp"
         android:text="@string/ronda_libre"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_sincro"
         app:layout_constraintStart_toEndOf="@id/btn_rondas"
-        app:layout_constraintTop_toBottomOf="@id/btn_sincro"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        />
+
+
+    <Button
+        android:id="@+id/btn_mixer"
+        android:layout_width="350dp"
+        android:layout_height="180dp"
+        android:textSize="32sp"
+        android:text="@string/mixers"
+        android:background="@drawable/home_options_button"
+        app:layout_constraintTop_toBottomOf="@id/btn_rondas"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_sincro"/>
 
     <Button
         android:id="@+id/btn_sincro"
@@ -50,9 +52,10 @@
         android:background="@drawable/home_options_button"
         android:textSize="32sp"
         android:text="@string/sincronizar"
+        app:layout_constraintTop_toBottomOf="@id/btn_ronda_libre"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_mixer"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_ronda_libre"/>
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
