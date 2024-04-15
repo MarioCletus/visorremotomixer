@@ -102,7 +102,6 @@ class MainActivity : AppCompatActivity() {
     private var dialogEstablishment: AlertDialog? = null
     private var dialogCorral: AlertDialog? = null
     private var dialogTare: AlertDialog? = null
-    var bGoToRound: Boolean = true
 
     private var handlerBeacon = Handler(Looper.getMainLooper())
     private lateinit var timeoutRunnable: Runnable

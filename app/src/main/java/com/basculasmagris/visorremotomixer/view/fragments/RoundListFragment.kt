@@ -54,7 +54,8 @@ class RoundListFragment : Fragment() {
         RoundLocalViewModelFactory((requireActivity().application as SpiMixerApplication).roundLocalRepository)
     }
     private var mLocalRoundsLocal: List<RoundLocal>? = null
-
+    private var bGoToRound = false
+    private var fragmentRunning = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -236,6 +237,9 @@ class RoundListFragment : Fragment() {
                 Log.i(TAG,"command not enough large (${message?.size})")
                 return
             }
+            if(!fragmentRunning){
+                return
+            }
             (requireActivity() as MainActivity).commandReceibed()
             val messageStr = String(message,0, message.size)
             val command = messageStr.substring(0,3)
@@ -247,46 +251,62 @@ class RoundListFragment : Fragment() {
                     (requireActivity() as MainActivity).refreshRounds(message)
                 }
 
+                Constants.CMD_WEIGHT->{
+                    sincroRound(false)
+                }
+
                 Constants.CMD_WEIGHT_LOAD->{
-                    if((requireActivity() as MainActivity).bGoToRound){
-                        (requireActivity() as MainActivity).bGoToRound = false
+                    if(bGoToRound){
+                        bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
                         findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
+                    }else{
+                        sincroRound(true)
                     }
                 }
                 Constants.CMD_WEIGHT_LOAD_FREE->{
-                    if((requireActivity() as MainActivity).bGoToRound){
-                        (requireActivity() as MainActivity).bGoToRound = false
+                    if(bGoToRound){
+                        bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
                         findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
+                    }else{
+                        sincroRound(true)
                     }
                 }
                 Constants.CMD_WEIGHT_DWNL->{
-                    if((requireActivity() as MainActivity).bGoToRound){
-                        (requireActivity() as MainActivity).bGoToRound = false
+                    if(bGoToRound){
+                        bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
                         findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
+                    }else{
+                        sincroRound(true)
                     }
                 }
                 Constants.CMD_WEIGHT_DWNL_FREE->{
-                    if((requireActivity() as MainActivity).bGoToRound){
-                        (requireActivity() as MainActivity).bGoToRound = false
+                    if(bGoToRound){
+                        bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
                         findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
+                    }else{
+                        sincroRound(true)
                     }
                 }
                 Constants.CMD_WEIGHT_CONFIG->{
-                    if((requireActivity() as MainActivity).bGoToRound){
-                        (requireActivity() as MainActivity).bGoToRound = false
+                    if(bGoToRound){
+                        bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
                         findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
+                    }else{
+                        sincroRound(true)
                     }
                 }
                 Constants.CMD_WEIGHT_RESUME->{
-                    if((requireActivity() as MainActivity).bGoToRound){
-                        (requireActivity() as MainActivity).bGoToRound = false
+                    if(bGoToRound){
+                        bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
                         findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
+                    }else{
+                        sincroRound(true)
                     }
                 }
                 else->{
@@ -313,14 +333,37 @@ class RoundListFragment : Fragment() {
         override fun onBondedDevices(device: List<BluetoothDevice>?) {
         }
     }
+
+    private fun sincroRound(b: Boolean) {
+        val adapter = mBinding.rvRoundsList.adapter
+        if (adapter is RoundRunAdapter) {
+            adapter.sincroRound(b)
+        }
+    }
+
     override fun onDestroyView() {
         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
         super.onDestroyView()
     }
 
     fun sendGoToRound(id: Long) {
-        (requireActivity() as MainActivity).showCustomProgressDialog("Alerta","No se pudo iniciar ronda",R.layout.dialog_custom_progress_iniciar)
+        if(bGoToRound){
+            (requireActivity() as MainActivity).showCustomProgressDialog("Alerta","No se pudo iniciar ronda",R.layout.dialog_custom_progress_iniciar)
+        }else{
+            (requireActivity() as MainActivity).showCustomProgressDialog("Alerta","No se pudo emparejar ronda",R.layout.dialog_custom_progress_emparejar)
+
+        }
+        bGoToRound = true
         (requireActivity() as MainActivity).sendGoToRound(id)
     }
 
+    override fun onResume() {
+        fragmentRunning = true
+        super.onResume()
+    }
+
+    override fun onPause() {
+        fragmentRunning = false
+        super.onPause()
+    }
 }

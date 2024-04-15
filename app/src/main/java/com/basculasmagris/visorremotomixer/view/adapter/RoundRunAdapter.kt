@@ -29,6 +29,7 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
     private val CANT_HORAS_MUESTRA_RONDA_FINALIZADA : Int = 4
     private var roundsRun: List<MedRoundRunDetail> = ArrayList()
     private var filteredRoundsRun: List<MedRoundRunDetail> = ArrayList()
+    private var bRoundRunning: Boolean = false
 
     class ViewHolder (view: ItemRoundToRunLayoutBinding) : RecyclerView.ViewHolder(view.root) {
         val tvRoundName = view.tvRoundName
@@ -96,12 +97,20 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
             // Nunca iniciada
             holder.llProgressBar.visibility = GONE
             holder.btnStopRound.visibility = INVISIBLE
-            holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.iniciar)
+            if(bRoundRunning){
+                holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.emparejar)
+            }else {
+                holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.iniciar)
+            }
             holder.tvRoundRunDescription.text = getCurrentStatus(roundToRun)
 
         } else if (roundToRun.endDate.isEmpty()) {
             // En curso
-            holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.continuar)
+            if(bRoundRunning){
+                holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.emparejar)
+            }else{
+                holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.continuar)
+            }
             holder.tvRoundStartDate.text = "Iniciada el ${Helper.formattedDate(roundToRun.startDate, Constants.APP_DB_FORMAT_DATE, Constants.APP_SHOW_LARGE_FORMAT_DATE)}"
             holder.tvRoundRunDescription.text = getCurrentStatus(roundToRun)
             holder.pbRoundRun.progress = getProgress(roundToRun)
@@ -113,7 +122,11 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
             // Con ejecuciones previas
             holder.llProgressBar.visibility = GONE
             holder.btnStopRound.visibility = INVISIBLE
-            holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.iniciar)
+            if(bRoundRunning){
+                holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.emparejar)
+            }else {
+                holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.iniciar)
+            }
             holder.tvRoundRunDescription.text = getCurrentStatus(roundToRun)
             holder.tvRoundStartDate.text = "Iniciada el ${Helper.formattedDate(roundToRun.startDate, Constants.APP_DB_FORMAT_DATE, Constants.APP_SHOW_LARGE_FORMAT_DATE)}"
             val strDate = roundToRun.endDate
@@ -192,6 +205,13 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
                 }
                 notifyDataSetChanged()
             }
+        }
+    }
+
+    fun sincroRound(roundRunning:Boolean) {
+        if(!(this.bRoundRunning && roundRunning)){
+            this.bRoundRunning = roundRunning
+            notifyDataSetChanged()
         }
     }
 

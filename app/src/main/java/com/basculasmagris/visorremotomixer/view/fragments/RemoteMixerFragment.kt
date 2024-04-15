@@ -340,7 +340,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     R.id.cancel_round -> {
                         if ((bInCfg || bInLoad || bInDownload || bInRes)) {
                             Log.i(TAG,"Cancel round")
-                            (requireActivity() as MainActivity).bGoToRound = false
                             (requireActivity() as MainActivity).sendCancelToMixer()
                             (requireActivity() as MainActivity).onBackPressed()
                         }

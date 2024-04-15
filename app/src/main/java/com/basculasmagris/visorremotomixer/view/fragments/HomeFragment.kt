@@ -122,11 +122,7 @@ class HomeFragment : Fragment() {
         }
 
         mBinding.btnRondas.setOnClickListener{
-            if(bInCfg ||bInLoad || bInDownload || bInRes){
-                findNavController().navigate(HomeFragmentDirections.actionHomeToFreeRound(selectedTabletMixerInFragment))
-            }else{
-                findNavController().navigate(HomeFragmentDirections.actionHomeToRound())
-            }
+            findNavController().navigate(HomeFragmentDirections.actionHomeToRound())
         }
 
         mBinding.btnRondaLibre.setOnClickListener{
