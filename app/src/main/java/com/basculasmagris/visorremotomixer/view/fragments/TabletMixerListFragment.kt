@@ -154,13 +154,13 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
                         goToConfigMixer(null,false)
                         return true
                     }
-                    R.id.menu_selected_tabler_mixer ->{
-                        selectedTabletMixerInFragment?.let{
-                            goToRemoteMixerFragment(it)
-                        }
-                        return true
-                    }
-                    R.id.bluetooth_mixer_status ->{
+//                    R.id.menu_selected_remote_tablet ->{
+//                        selectedTabletMixerInFragment?.let{
+//                            goToRemoteMixerFragment(it)
+//                        }
+//                        return true
+//                    }
+                    R.id.menu_selected_remote_tablet ->{
                         selectedTabletMixerInFragment?.let{tabletMixer->
                             Log.v(TAG,"Force connection")
                             val deviceBluetooth = knowDevices?.firstOrNull { bd->
@@ -305,9 +305,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
             Log.i("command", "TabletMixerListFragment onCommandReceived ${message?.let { String(it) }}")
-            (requireActivity() as MainActivity).changeStatusConnected()
-
-
+            (requireActivity() as MainActivity).commandReceibed()
 
             if(message == null || message.size<9){
                 Log.i(TAG,"command not enough large (${message?.size})")
@@ -329,7 +327,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
-            (requireActivity() as MainActivity).changeStatusConnected()
+            (requireActivity() as MainActivity).beaconReceibed()
             Log.i("message", "TabletMixerListFragment onMessageReceived $message")
         }
 
@@ -497,7 +495,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
 
     fun setTabletMixer(tabletMixerIn: TabletMixer) {
         tabletMixerIn.let { tabletMixer ->
-            menu?.findItem(R.id.menu_selected_tabler_mixer)?.title = "  " + tabletMixer.name
+            menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + tabletMixer.name
             selectedTabletMixerInFragment = tabletMixer
             (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
             (mBinding.rvTabletMixersList.adapter as TabletMixerAdapter).selectedTabletMixer = tabletMixer

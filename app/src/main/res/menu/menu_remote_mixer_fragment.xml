@@ -11,15 +11,14 @@
         app:showAsAction="ifRoom|withText"
         />
 
-    <item android:id="@+id/bluetooth_tablet_mixer"
+    <item android:id="@+id/bluetooth_balance"
         android:title=""
-        android:icon="@drawable/ic_bluetooth_disconnected_24px"
-        android:iconTint="@color/color_full_red"
+        android:icon="@drawable/ic_balance_disconnected_48px"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/menu_selected_remote_tablet"
-        android:icon="@drawable/ic_tablet_48px"
+        android:icon="@drawable/ic_tablet_disconnected_48px"
         android:title="    Mixer"
         app:showAsAction="ifRoom|withText"
         />

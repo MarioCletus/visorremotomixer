@@ -362,6 +362,8 @@
     <string name="declarar_mixer">Declarar Mixer</string>
     <string name="usuarios">Usuarios</string>
     <string name="conectar_mixers_cercanos">Conectar mixers cercanos</string>
+    <string name="iniciando_ronda">Iniciando ronda</string>
+    <string name="atencion">Atención</string>
 
 
 </resources>

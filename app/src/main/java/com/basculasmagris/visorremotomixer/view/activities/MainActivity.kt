@@ -101,7 +101,11 @@ class MainActivity : AppCompatActivity() {
     private var dialogProduct: AlertDialog? = null
     private var dialogEstablishment: AlertDialog? = null
     private var dialogCorral: AlertDialog? = null
+    private var dialogTare: AlertDialog? = null
+    var bGoToRound: Boolean = true
 
+    private var handlerBeacon = Handler(Looper.getMainLooper())
+    private lateinit var timeoutRunnable: Runnable
     // -------------------
     // Mixer
     // -------------------
@@ -147,12 +151,12 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home,
+                R.id.nav_home
 //                R.id.nav_mixer_remoto,
-                R.id.nav_round,
-                R.id.nav_tablet_mixer,
-                R.id.nav_sync,
-                R.id.nav_user
+//                R.id.nav_round,
+//                R.id.nav_tablet_mixer,
+//                R.id.nav_sync,
+//                R.id.nav_user
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -208,6 +212,7 @@ class MainActivity : AppCompatActivity() {
 
         refreshLogo()
         getLocalData()
+        setupRunnable()
     }
 
     private fun fetchLocalData(): MediatorLiveData<MergedLocalData> {
@@ -305,21 +310,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun showCustomProgressDialog(){
-        if(mProgressDialog != null && mProgressDialog!!.isShowing){
-            return
+    fun showCustomProgressDialog(title: String? = null,message:String? = null,layoutId: Int? = null){
+        mProgressDialog?.let {
+            if(it.isShowing){
+                return
+            }
         }
+        val mTitle = title ?: "Alerta"
+        val mMessage = message ?: "No se pudo establecer la comunicación con el Mixer"
+        val mLayoutId = layoutId ?: R.layout.dialog_custom_progress
+
         mProgressDialog = Dialog(this)
         mProgressDialog?.setCancelable(false)
         mProgressDialog?.let {
-            it.setContentView(R.layout.dialog_custom_progress)
+            it.setContentView(mLayoutId)
             it.show()
             Handler(Looper.getMainLooper()).postDelayed({
                 if (it.isShowing){
                     it.dismiss()
                     val builder = AlertDialog.Builder(this)
-                    builder.setTitle("Alerta")
-                    builder.setMessage("No se pudo establecer la comunicación con el Mixer")
+                    builder.setTitle(mTitle)
+                    builder.setMessage(mMessage)
 
                     builder.setPositiveButton(android.R.string.yes) { _, _ ->
                         it.dismiss()
@@ -428,20 +439,31 @@ class MainActivity : AppCompatActivity() {
 
     private fun showDeviceDisconnected() {
         if(binding.appBarMain.toolbarMain.menu.size>0){
-            val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_tablet_mixer)
-            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_bluetooth_disconnected_24px)
-            menuItem?.icon?.setTint(getColor(R.color.color_full_red))
+            val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.menu_selected_remote_tablet)
+            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_tablet_disconnected_48px)
         }
     }
 
     private fun showDeviceConnected() {
         if(binding.appBarMain.toolbarMain.menu.size>0){
-            val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_tablet_mixer)
-            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_bluetooth_connected_24px)
-            menuItem?.icon?.setTint(getColor(R.color.white))
+            val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.menu_selected_remote_tablet)
+            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_tablet_connected_48px)
         }
     }
 
+    private fun showBalanceDisconnected() {
+        if(binding.appBarMain.toolbarMain.menu.size>0){
+            val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_balance)
+            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_balance_disconnected_48px)
+        }
+    }
+
+    private fun showBalanceConnected() {
+        if(binding.appBarMain.toolbarMain.menu.size>0){
+            val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_balance)
+            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_balance_connected_48px)
+        }
+    }
 
     private fun getSavedMixerTabletId() = datastore.data.map { preferences->
         preferences[longPreferencesKey("IDTABLET")]
@@ -641,6 +663,34 @@ class MainActivity : AppCompatActivity() {
         return alertDialog
     }
 
+
+    fun dlgTareToLoad(weight:Long) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.atencion))
+        builder.setMessage("Se registra un peso de $weight en el mixer.\nDesea añadirlos a la mezcla y continuar?" )
+        builder.setNeutralButton(getString(R.string.cancelar)){ dialog, _->
+            sendCancelToMixer()
+            dialog.dismiss()
+        }
+        builder.setPositiveButton(getText(R.string.aceptar)) { dialog, _ ->
+            sendIniToMixer()
+            dialog.dismiss()
+        }
+        builder.setNegativeButton(getString(R.string.no_add)) { dialog, _ ->
+            sendTareToMixer()
+            dialog.dismiss()
+        }
+        builder.setCancelable(false)
+        dialogTare = builder.create()
+        dialogTare?.show()
+    }
+
+
+    fun sendTareToMixer() {
+        val msg = "CMD${Constants.CMD_TARA}"
+        mService?.LocalBinder()?.write(msg.toByteArray())
+    }
+
     fun sendIniToMixer() {
         val byteArray = "CMD${Constants.CMD_INI}${String.format("%06d",0)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
@@ -677,12 +727,10 @@ class MainActivity : AppCompatActivity() {
         mService?.LocalBinder()?.write(byteArray)
     }
 
-
     fun sendGoToRound(id:Long) {
         val byteArray = "CMD${Constants.CMD_GO_TO_ROUND}${String.format("%06d",id)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
-
 
     fun sendBeacon() {
         Log.i(TAG,"send CMD_BEACON")
@@ -918,8 +966,38 @@ class MainActivity : AppCompatActivity() {
         dialogEstablishment?.dismiss()
         dialogEstablishment = null
 
+        dialogTare?.dismiss()
+        dialogTare = null
+
 
     }
+
+    fun beaconReceibed() {
+        changeStatusConnected()
+    }
+
+
+    fun commandReceibed() {
+        onCommandReceived()
+    }
+
+
+    private fun setupRunnable() {
+        timeoutRunnable = Runnable {
+            runOnUiThread {
+                showBalanceDisconnected()
+            }
+        }
+    }
+
+    fun onCommandReceived() {
+        runOnUiThread {
+            showBalanceConnected()
+        }
+        handlerBeacon.removeCallbacks(timeoutRunnable)
+        handlerBeacon.postDelayed(timeoutRunnable, 2500)
+    }
+
 
 
 }
@@ -953,3 +1031,5 @@ class CancellableNavigationView(context: Context, attrs: AttributeSet) :
     }
 
 }
+
+

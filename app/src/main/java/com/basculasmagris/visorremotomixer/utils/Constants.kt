@@ -171,6 +171,7 @@ object Constants {
     val CMD_DLG_PRODUCT = "DLP"
     val CMD_DLG_CORRAL = "DLC"
     val CMD_DLG_EST = "DLE"
+    val CMD_DLG_TARA = "DLT"
     val CMD_ESTAB_LIST = "ESL"
     val CMD_NXTCORRAL = "NXC"
     val CMD_WEIGHT = "WEI"

@@ -48,7 +48,6 @@ class RoundListFragment : Fragment() {
     private lateinit var mBinding: FragmentRoundListBinding
     private val TAG = "DEBRLF"
 
-    private var bGoToRound: Boolean = true
     private var bBlockButton = false
 
     private val mRoundLocalViewModel: RoundLocalViewModel by viewModels {
@@ -237,55 +236,55 @@ class RoundListFragment : Fragment() {
                 Log.i(TAG,"command not enough large (${message?.size})")
                 return
             }
+            (requireActivity() as MainActivity).commandReceibed()
             val messageStr = String(message,0, message.size)
             val command = messageStr.substring(0,3)
             Log.i("SHOWCOMAND","command $command")
             Log.i("message", String(message))
             when (command){
-
                 Constants.CMD_ROUNDS->{
                     Log.i("showCommand","CMD_ROUNDS")
                     (requireActivity() as MainActivity).refreshRounds(message)
                 }
 
                 Constants.CMD_WEIGHT_LOAD->{
-                    if(bGoToRound){
-                        bGoToRound = false
+                    if((requireActivity() as MainActivity).bGoToRound){
+                        (requireActivity() as MainActivity).bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
                         findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
                     }
                 }
                 Constants.CMD_WEIGHT_LOAD_FREE->{
-                    if(bGoToRound){
-                        bGoToRound = false
+                    if((requireActivity() as MainActivity).bGoToRound){
+                        (requireActivity() as MainActivity).bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
                         findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
                     }
                 }
                 Constants.CMD_WEIGHT_DWNL->{
-                    if(bGoToRound){
-                        bGoToRound = false
+                    if((requireActivity() as MainActivity).bGoToRound){
+                        (requireActivity() as MainActivity).bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
                         findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
                     }
                 }
                 Constants.CMD_WEIGHT_DWNL_FREE->{
-                    if(bGoToRound){
-                        bGoToRound = false
+                    if((requireActivity() as MainActivity).bGoToRound){
+                        (requireActivity() as MainActivity).bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
                         findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
                     }
                 }
                 Constants.CMD_WEIGHT_CONFIG->{
-                    if(bGoToRound){
-                        bGoToRound = false
+                    if((requireActivity() as MainActivity).bGoToRound){
+                        (requireActivity() as MainActivity).bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
                         findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
                     }
                 }
                 Constants.CMD_WEIGHT_RESUME->{
-                    if(bGoToRound){
-                        bGoToRound = false
+                    if((requireActivity() as MainActivity).bGoToRound){
+                        (requireActivity() as MainActivity).bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
                         findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
                     }
@@ -296,6 +295,7 @@ class RoundListFragment : Fragment() {
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
+            (requireActivity() as MainActivity).beaconReceibed()
         }
 
         override fun onMessageSent(device: BluetoothDevice?, message: String?) {
@@ -319,6 +319,8 @@ class RoundListFragment : Fragment() {
     }
 
     fun sendGoToRound(id: Long) {
+        (requireActivity() as MainActivity).showCustomProgressDialog("Alerta","No se pudo iniciar ronda",R.layout.dialog_custom_progress_iniciar)
         (requireActivity() as MainActivity).sendGoToRound(id)
     }
+
 }

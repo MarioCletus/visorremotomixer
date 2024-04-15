@@ -195,7 +195,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                             hideSoftKeyboard()
                         return true
                     }
-                    R.id.icon_bluetooth -> {
+                    R.id.menu_selected_remote_tablet -> {
                         Log.i(TAG,"try to connect " )
                         selectedBluetoothDevice?.let {
                             mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
@@ -694,20 +694,17 @@ class TabletMixerConfigActivity : AppCompatActivity(){
     }
 
     private fun showDeviceDisconnected() {
-        if(mBinding.toolbarConfigTabletMixer.menu != null && mBinding.toolbarConfigTabletMixer.menu?.size!! >0){
-            mBinding.toolbarConfigTabletMixer.menu?.getItem(0)?.icon =
-                ContextCompat.getDrawable(this@TabletMixerConfigActivity,R.drawable.ic_bluetooth_disconnected_24px)
-            mBinding.toolbarConfigTabletMixer.menu?.getItem(0)?.icon?.setTint(getColor(R.color.color_full_red))
-            mBinding.toolbarConfigTabletMixer.menu?.getItem(0)?.icon?.colorFilter
+        mBinding.toolbarConfigTabletMixer.menu?.let {
+            val menuItem = it.findItem(R.id.menu_selected_remote_tablet)
+            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_tablet_disconnected_48px)
         }
         isConnected = false
     }
 
     private fun showDeviceConnected() {
-        if(mBinding.toolbarConfigTabletMixer.menu != null && mBinding.toolbarConfigTabletMixer.menu?.size!! >0){
-            mBinding.toolbarConfigTabletMixer.menu?.getItem(0)?.icon =
-                ContextCompat.getDrawable(this@TabletMixerConfigActivity,R.drawable.ic_bluetooth_connected_24px)
-            mBinding.toolbarConfigTabletMixer.menu?.getItem(0)?.icon?.setTint(getColor(R.color.white))
+        mBinding.toolbarConfigTabletMixer.menu?.let {
+            val menuItem = it.findItem(R.id.menu_selected_remote_tablet)
+            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_tablet_connected_48px)
         }
         isConnected = true
     }

@@ -40,10 +40,8 @@ import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
-import com.basculasmagris.visorremotomixer.utils.MarginItemDecoration
 import com.basculasmagris.visorremotomixer.utils.MarginItemDecorationHorizontal
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
-import com.basculasmagris.visorremotomixer.view.adapter.RoundRunAdapter
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunCorralDownloadAdapter
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunProductAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
@@ -65,7 +63,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private var rest: Int = 0
     private var timerTask: TimerTask? = null
     private var estableTimer: Timer? = null
-    private var defaultStep = 5.0
     private var activity: MainActivity? = null
     private var noPrevAlert : Boolean = true
     private var countGreaterThanTarget: Int = 0
@@ -97,11 +94,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private var count_resume = 0
     private var count_weight = 0
     private var contPressTara = 0
+    private var weight:Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(TAG,"onCreate")
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         arguments?.let {
         }
     }
@@ -126,8 +123,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         mBinding.btnTara.setOnLongClickListener{
             Log.i(TAG,"Send CMD_TARA")
-            val msg = "CMD${Constants.CMD_TARA}"
-            activity?.mService?.LocalBinder()?.write(msg.toByteArray())
+            (requireActivity() as MainActivity).sendTareToMixer()
             contPressTara = 0
             return@setOnLongClickListener false
         }
@@ -139,10 +135,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         mBinding.btnJump.setOnClickListener{
             Log.i(TAG, "btnJump")
-
-//            if(!bInCfg && !bInLoad && !bInDownload && !bInRes){
-//                findNavController().navigate(RemoteMixerFragmentDirections.actionRemoteMixerFragmentToRoundListFragment())
-//            }
 
             if(bInCfg){
                 (requireActivity() as MainActivity).sendIniToMixer()
@@ -161,15 +153,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     sendNextProduct()
                     return@setOnClickListener
                 }
-
                 if(bInDownload){
                     sendNextCorral()
                     return@setOnClickListener
                 }
-
             }
         }
-
 
         mBinding.btnJump.setOnLongClickListener {
             Log.i(TAG, "btnJump")
@@ -209,8 +198,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         loadRoundDetail()
         mBinding.rvMixerProductsToLoad.addItemDecoration(MarginItemDecorationHorizontal(resources.getDimensionPixelSize(R.dimen.margin_recycler_horizontal)))
 
-
-
         //Conectar bluetooth
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
         (requireActivity() as MainActivity).minRoundRunDetail?.state = Constants.STATE_LOAD
@@ -227,7 +214,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
 
     }
-
 
     private fun loadRoundDetail() {
         Log.i("loadRoundDetail","loadRoundDetail ${(requireActivity() as MainActivity).minRoundRunDetail}")
@@ -323,7 +309,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
-                    R.id.bluetooth_tablet_mixer -> {
+                    R.id.menu_selected_remote_tablet -> {
                         Log.v(TAG,"Force connection")
                         val deviceBluetooth = (requireActivity() as MainActivity).knowDevices?.firstOrNull { bd->
                             bd.address == selectedTabletMixerInFragment?.mac
@@ -349,17 +335,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         }
                         return true
                     }
-                    R.id.menu_selected_remote_tablet -> {
-//                        if(!bInCfg && !bInLoad && !bInDownload && !bInRes){
-//                            Log.i(TAG,"touch tablet icon")
-//                            goToTabletMixerListFragment()
-//                        }
-                        return true
-                    }
+
 
                     R.id.cancel_round -> {
                         if ((bInCfg || bInLoad || bInDownload || bInRes)) {
                             Log.i(TAG,"Cancel round")
+                            (requireActivity() as MainActivity).bGoToRound = false
                             (requireActivity() as MainActivity).sendCancelToMixer()
                             (requireActivity() as MainActivity).onBackPressed()
                         }
@@ -512,7 +493,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
-            (requireActivity() as MainActivity).changeStatusConnected()
+            (requireActivity() as MainActivity).commandReceibed()
 
             if(message == null || message.size<9){
                 Log.i(TAG,"command not enough large (${message?.size})")
@@ -688,10 +669,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     dialogTara = null
                     targetReachedDialog?.dismiss()
                     targetReachedDialog = null
-
                     (requireActivity() as MainActivity).closeDialogs()
                 }
 
+                Constants.CMD_DLG_TARA->{
+                    (requireActivity() as MainActivity).dlgTareToLoad(weight)
+                }
 
                 Constants.CMD_REFRESH->{
                     Log.i("showCommand","CMD_REFRESH")
@@ -940,7 +923,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             Log.i("message","message $message")
-            (requireActivity() as MainActivity).changeStatusConnected()
+            (requireActivity() as MainActivity).beaconReceibed()
         }
 
         override fun onMessageSent(device: BluetoothDevice?,message: String?) {
@@ -967,7 +950,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     }
 
     private fun refreshWeight(message:ByteArray) {
-        val weight = String(message,4,8).toLong()
+        weight = String(message,4,8).toLong()
         val sign = String(message,3,1)
         val progress = String(message,12,3).toInt()
         val signRest = String(message,15,1)
@@ -1199,10 +1182,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         val msg = "CMD${Constants.CMD_NXTCORRAL}"
         activity?.mService?.LocalBinder()?.write(msg.toByteArray())
     }
-//
-//    fun goToTabletMixerListFragment(){
-//        findNavController().navigate(RemoteMixerFragmentDirections.actionRemoteMixerFragmentToTableMixerListFragment())
-//    }
 
     fun setTabletMixer(tabletMixerIn: TabletMixer) {
             tabletMixerIn.let { tabletMixer ->
@@ -1243,15 +1222,5 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         return bInFree
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.i(TAG,"Boton presionado")
-        // Manejar el evento del botón de retroceso
-        if (item.itemId == android.R.id.home && (bInCfg || bInLoad || bInDownload || bInRes)) {
-            (requireActivity()).onBackPressed()
-//            (requireActivity() as MainActivity).sendEndToMixer()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
 }

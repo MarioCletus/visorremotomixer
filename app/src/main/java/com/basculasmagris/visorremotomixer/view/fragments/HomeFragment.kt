@@ -77,7 +77,7 @@ class HomeFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
-                    R.id.bluetooth_tablet_mixer -> {
+                    R.id.menu_selected_remote_tablet -> {
                         Log.v(TAG,"Force connection")
                         val deviceBluetooth = (requireActivity() as MainActivity).knowDevices?.firstOrNull { bd->
                             bd.address == selectedTabletMixerInFragment?.mac
@@ -103,13 +103,7 @@ class HomeFragment : Fragment() {
                         }
                         return true
                     }
-                    R.id.menu_selected_remote_tablet -> {
-//                        if(!bInCfg && !bInLoad && !bInDownload && !bInRes){
-//                            Log.i(TAG,"touch tablet icon")
-//                            goToTabletMixerListFragment()
-//                        }
-                        return true
-                    }
+
                     else -> false
                 }
             }
@@ -187,7 +181,7 @@ class HomeFragment : Fragment() {
         }
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
-            (requireActivity() as MainActivity).changeStatusConnected()
+            (requireActivity() as MainActivity).commandReceibed()
 
             if(message == null || message.size<9){
                 Log.i(TAG,"command not enough large (${message?.size})")
@@ -340,7 +334,7 @@ class HomeFragment : Fragment() {
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             Log.i("message","message $message")
-            (requireActivity() as MainActivity).changeStatusConnected()
+            (requireActivity() as MainActivity).beaconReceibed()
         }
 
         override fun onMessageSent(device: BluetoothDevice?, message: String?) {

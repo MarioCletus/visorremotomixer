@@ -3,17 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/bluetooth_mixer_status"
-        android:icon="@drawable/ic_bluetooth_disconnected_24px"
-        android:iconTint="@color/color_full_red"
-        android:title="bluetooth"
-        android:orderInCategory="90"
-        app:showAsAction="always"
-        />
-
-    <item
-        android:id="@+id/menu_selected_tabler_mixer"
-        android:icon="@drawable/ic_tablet_48px"
+        android:id="@+id/menu_selected_remote_tablet"
+        android:icon="@drawable/ic_tablet_disconnected_48px"
         android:title="    Tablet Remota"
         app:showAsAction="always|withText"
         android:orderInCategory="101"
