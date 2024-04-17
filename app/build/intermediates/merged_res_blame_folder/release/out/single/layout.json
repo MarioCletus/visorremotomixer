@@ -1,0 +1,222 @@
+[
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/table_view_corner_layout.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/table_view_corner_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/fragment_step_configuration.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_step_configuration.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/spinner_tolvas.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/spinner_tolvas.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/fragment_tablet_mixer_list.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_tablet_mixer_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/item_diet_layout.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_diet_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/activity_add_update_user.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_add_update_user.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/table_view_image_cell_layout.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/table_view_image_cell_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/fragment_remote_mixer.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_remote_mixer.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/table_view_row_header_layout.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/table_view_row_header_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/activity_add_update_tablet_mixer.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_add_update_tablet_mixer.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/activity_splash.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_splash.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/fragment_sync.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_sync.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/dialog_custom_progress.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/dialog_custom_progress.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/item_tablet_mixer_layout.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_tablet_mixer_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/item_custom_list.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_custom_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/activity_add_update_round.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_add_update_round.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/fragment_resume.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_resume.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/item_line_round_run_product_resume.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_round_run_product_resume.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/dialog_custom_target_weight_reached.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/dialog_custom_target_weight_reached.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/dialog_custom_list.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/dialog_custom_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/dialog_custom_image_selection.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/dialog_custom_image_selection.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/item_line_report.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_report.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/item_line_round_run_corral_download.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_round_run_corral_download.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/fragment_user_list.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_user_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/content_main.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/content_main.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/item_line_round_run_product_step_load.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_round_run_product_step_load.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/activity_tablet_mixer_config.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_tablet_mixer_config.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/activity_main.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/item_line_round_run_corral_resume.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_round_run_corral_resume.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/item_line_diet_product.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_diet_product.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/activity_login.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/item_establishment_layout.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_establishment_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/fragment_round_list.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_round_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/table_view_column_header_layout.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/table_view_column_header_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/fragment_home.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/spinner_dropdown_tolva.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/spinner_dropdown_tolva.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/fragment_seleccion_calibracion.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_seleccion_calibracion.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/activity_round_run.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_round_run.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/item_line_round_run_corral_report.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_round_run_corral_report.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/nav_header_main.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/nav_header_main.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/activity_add_update_mixer.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_add_update_mixer.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/item_line_round_run_product_report.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_round_run_product_report.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/fragment_value_input_dialog.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_value_input_dialog.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/app_bar_main.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/app_bar_main.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/dailog_custom_confirm.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/dailog_custom_confirm.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/fragment_step_download.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_step_download.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/dialog_custom_progress_emparejar.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/dialog_custom_progress_emparejar.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/fragment_step_load.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_step_load.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/dialog_custom_progress_iniciar.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/dialog_custom_progress_iniciar.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/item_round_to_run_layout.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_round_to_run_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/table_view_cell_layout.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/table_view_cell_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/item_line_round_corral.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_round_corral.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/item_user_layout.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_user_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/fragment_confirm_dialog.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_confirm_dialog.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-58:/layout/item_corral_layout.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_corral_layout.xml"
+    }
+]

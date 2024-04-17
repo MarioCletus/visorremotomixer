@@ -1,0 +1,1254 @@
+[
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-mdpi_ic_diet_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-mdpi/ic_diet_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_check_circle.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_check_circle.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xhdpi_icon_ajustes_topbar.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xhdpi/icon_ajustes_topbar.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_icon_warning.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/icon_warning.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_calibration.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_calibration.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_eliminar_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_eliminar_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_logo_land.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/logo_land.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_bg_button_selected.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/bg_button_selected.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xxxhdpi_bg_tolvas_conf.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xxxhdpi/bg_tolvas_conf.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-hdpi_ic_launcher_foreground.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-hdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_item_line_diet_product.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_diet_product.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_spinner_dropdown_tolva.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/spinner_dropdown_tolva.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_menu_gallery.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_menu_gallery.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_calendar.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_calendar.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_bar_chart.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_bar_chart.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_item_line_round_run_corral_report.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_round_run_corral_report.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xhdpi_icon_touch_btn.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xhdpi/icon_touch_btn.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_nav_header_main.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/nav_header_main.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_side_nav_bar.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/side_nav_bar.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_spinner_tolvas.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/spinner_tolvas.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_keyboard_48px.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_keyboard_48px.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xhdpi_ic_productos_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xhdpi/ic_productos_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_menu_slideshow.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_menu_slideshow.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xhdpi_ic_establishment_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xhdpi/ic_establishment_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_mac.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_mac.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xxhdpi_ic_diet_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xxhdpi/ic_diet_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_dialog_custom_image_selection.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/dialog_custom_image_selection.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xxxhdpi_icon_ajustes_topbar.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xxxhdpi/icon_ajustes_topbar.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_food_bank.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_food_bank.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_icon_mixers_sel.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/icon_mixers_sel.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/font_rubik_regular.ttf.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/font/rubik_regular.ttf"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_tablet_disconnected_24px.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_tablet_disconnected_24px.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_round_list.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_round_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_arrow_downward.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_arrow_downward.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_item_line_round_run_product_report.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_round_run_product_report.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_dialog_custom_progress_emparejar.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/dialog_custom_progress_emparejar.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xxhdpi_icon_ajustes_topbar.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xxhdpi/icon_ajustes_topbar.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_border_btm_dialog.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/border_btm_dialog.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_round_to_run_normal_blue.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_round_to_run_normal_blue.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_buscar_normal.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_buscar_normal.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_round_red_normal.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_round_red_normal.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_mixer.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_mixer.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_adapter_corral.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_adapter_corral.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_search.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_search.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_activity_tablet_mixer_config.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_tablet_mixer_config.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_editar_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_editar_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_activity_round_run.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_round_run.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_bg_mixers_conf_large.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/bg_mixers_conf_large.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_rounded_green_normal.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_rounded_green_normal.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xhdpi_ic_sync_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xhdpi/ic_sync_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_config_circle.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/config_circle.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_refresh.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_refresh.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-hdpi_ic_productos_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-hdpi/ic_productos_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_style_spinner_mixers.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/style_spinner_mixers.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_rounded_green.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_rounded_green.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_bg_button.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/bg_button.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-hdpi_bg_tolvas_conf.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-hdpi/bg_tolvas_conf.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_round_rounded_green_normal.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_round_rounded_green_normal.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_dialog_custom_progress_iniciar.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/dialog_custom_progress_iniciar.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_activity_add_update_round.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_add_update_round.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_table_view_cell_layout.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/table_view_cell_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-hdpi_ic_route_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-hdpi/ic_route_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_more.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_more.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_bg_mixers_conf.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/bg_mixers_conf.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_user_list.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_user_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_cam.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_cam.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_balance.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_balance.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_item_tablet_mixer_layout.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_tablet_mixer_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-hdpi_ic_sync_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-hdpi/ic_sync_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-hdpi_ic_users_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-hdpi/ic_users_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_vector_edit.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_vector_edit.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_tablet_mixer_list.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_tablet_mixer_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_activity_add_update_mixer.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_add_update_mixer.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_table_view_row_header_layout.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/table_view_row_header_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_edit_pen.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_edit_pen.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_rf.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_rf.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_adapter_diet.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_adapter_diet.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_productos.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_productos.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_round_to_run_selected.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_round_to_run_selected.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_vector_photo_camera.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_vector_photo_camera.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_fragment_round_list.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_round_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_corrales.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_corrales.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_round_to_run_blue.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_round_to_run_blue.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_fragment_confirm_dialog.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_confirm_dialog.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xxhdpi_ic_establishment_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xxhdpi/ic_establishment_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_adapter_mixer.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_adapter_mixer.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_minus_circle.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_minus_circle.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_round_rounded_blue_selected.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_round_rounded_blue_selected.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_steer.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_steer.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_adapter_user.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_adapter_user.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-v24_magris_splash_logo.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-v24/magris_splash_logo.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_remote_mixer.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_remote_mixer.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xxxhdpi_ic_reports_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xxxhdpi/ic_reports_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-mdpi_ic_establishment_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-mdpi/ic_establishment_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_item_line_round_run_product_step_load.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_round_run_product_step_load.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_item_round_run_product_bkg.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/item_round_run_product_bkg.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xhdpi_bg_tolvas_conf.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xhdpi/bg_tolvas_conf.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-v24_ic_launcher_foreground.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-v24/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_item_line_report.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_report.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_add_update_round.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_add_update_round.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_add_update_diet.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_add_update_diet.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_remove.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_remove.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_balance_disconnected_48px.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_balance_disconnected_48px.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_buscar_selected.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_buscar_selected.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_round_rounded_blue_normal.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_round_rounded_blue_normal.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_bg_splash.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/bg_splash.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_arrow_upward.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_arrow_upward.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_activity_add_update_tablet_mixer.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_add_update_tablet_mixer.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_item_custom_list.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_custom_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_tablet_disconnected_48px.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_tablet_disconnected_48px.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_tara2.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_tara2.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xhdpi_ic_cam.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xhdpi/ic_cam.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_dialog.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_dialog.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_item_diet_layout.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_diet_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xxhdpi_ic_route_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xxhdpi/ic_route_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xxhdpi_bg_tolvas_conf.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xxhdpi/bg_tolvas_conf.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-hdpi_icon_touch_btn.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-hdpi/icon_touch_btn.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_arrow_back.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_arrow_back.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-mdpi_ic_route_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-mdpi/ic_route_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xxxhdpi_ic_diet_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xxxhdpi/ic_diet_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_round_corner.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/round_corner.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_adapter_establishment.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_adapter_establishment.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_bluetooth_40dp.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_bluetooth_40dp.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-mdpi_ic_reports_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-mdpi/ic_reports_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_round_rounded_blue.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_round_rounded_blue.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_activity_splash.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_splash.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xhdpi_ic_route_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xhdpi/ic_route_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_item_round_run_product_ready_bkg.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/item_round_run_product_ready_bkg.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xxhdpi_ic_cam.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xxhdpi/ic_cam.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_product.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_product.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_exit.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_exit.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_navigate_before.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_navigate_before.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_tablet_48px.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_tablet_48px.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_add.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_add.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/xml_searchable.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/xml/searchable.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_main.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/main.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xxhdpi_ic_sync_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xxhdpi/ic_sync_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xxxhdpi_ic_sync_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xxxhdpi/ic_sync_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_round_corner_green.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/round_corner_green.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_user_delete_edit.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_user_delete_edit.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_round_to_run_red.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_round_to_run_red.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_item_establishment_layout.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_establishment_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_usuarios.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_usuarios.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_item_line_round_corral.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_round_corral.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_activity_main_drawer.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/activity_main_drawer.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_round_rounded_green_selected.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_round_rounded_green_selected.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_tablet_connected_48px.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_tablet_connected_48px.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xhdpi_ic_reports_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xhdpi/ic_reports_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/font_poppins_bold.ttf.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/font/poppins_bold.ttf"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_bluetooth_disconnected_24px.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_bluetooth_disconnected_24px.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_home_options_button_normal.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/home_options_button_normal.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_play_arrow.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_play_arrow.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_vector_edit_big.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_vector_edit_big.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_adapter_round.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_adapter_round.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_balance_disconnected_24px.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_balance_disconnected_24px.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_energy.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_energy.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_vector_gallery.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_vector_gallery.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_rounded_green_select.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_rounded_green_select.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_item_line_round_run_corral_resume.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_round_run_corral_resume.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_product_list.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_product_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_fragment_step_download.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_step_download.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_bluetooth_connected.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_bluetooth_connected.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/anim_anim_splash.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/anim/anim_splash.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_fragment_seleccion_calibracion.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_seleccion_calibracion.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_adapter.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_adapter.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_dialog_custom_list.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/dialog_custom_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_home_options_button.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/home_options_button.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_add_circle.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_add_circle.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xxxhdpi_ic_establishment_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xxxhdpi/ic_establishment_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_fragment_sync.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_sync.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_mixer_config.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_mixer_config.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-hdpi_ic_establishment_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-hdpi/ic_establishment_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_icon_calib_btn.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/icon_calib_btn.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_mixer_white.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_mixer_white.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_cancel_round.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_cancel_round.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xxxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_logout_red.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_logout_red.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_farm_detail.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_farm_detail.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-v24_bluetooth_sync.gif.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-v24/bluetooth_sync.gif"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_bluetooth_connected_24px.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_bluetooth_connected_24px.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_info.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_info.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xxhdpi_icon_touch_btn.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xxhdpi/icon_touch_btn.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_dailog_custom_confirm.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/dailog_custom_confirm.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_bg_item_detail_mixer.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/bg_item_detail_mixer.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_route.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_route.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_fragment_value_input_dialog.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_value_input_dialog.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_navigate_next.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_navigate_next.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_icon_touch_btn.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/icon_touch_btn.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-mdpi_ic_cam.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-mdpi/ic_cam.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xxxhdpi_ic_productos_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xxxhdpi/ic_productos_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_corral.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_corral.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-mdpi_ic_sync_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-mdpi/ic_sync_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_app_bar_main.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/app_bar_main.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_tolva_2.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_tolva_2.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_tracker_red_manuel_vectorizing.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_tracker_red_manuel_vectorizing.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_logout.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_logout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_magris_logo_topbar_old.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/magris_logo_topbar_old.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-mdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_menu_24px.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_menu_24px.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-hdpi_icon_tolva_sel.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-hdpi/icon_tolva_sel.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/font_rubik_semibold.ttf.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/font/rubik_semibold.ttf"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xxhdpi_ic_reports_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xxhdpi/ic_reports_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xhdpi_ic_diet_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xhdpi/ic_diet_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-mdpi_icon_tolva_sel.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-mdpi/icon_tolva_sel.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/font_poppins_regular.ttf.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/font/poppins_regular.ttf"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-mdpi_icon_ajustes_topbar.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-mdpi/icon_ajustes_topbar.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_balance_connected_48px.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_balance_connected_48px.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_item_user_layout.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_user_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xxxhdpi_ic_route_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xxxhdpi/ic_route_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_table_view_image_cell_layout.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/table_view_image_cell_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_table_view_corner_layout.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/table_view_corner_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_table_view_column_header_layout.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/table_view_column_header_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_corral_detail.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_corral_detail.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_dialog_custom_progress.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/dialog_custom_progress.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xxxhdpi_ic_users_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xxxhdpi/ic_users_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_warning.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_warning.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_verified_user.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_verified_user.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_compress.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_compress.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_arrow_back_24px.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_arrow_back_24px.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-mdpi_ic_productos_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-mdpi/ic_productos_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/navigation_mobile_navigation.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/navigation/mobile_navigation.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-hdpi_icon_ajustes_topbar.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-hdpi/icon_ajustes_topbar.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_establishment.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_establishment.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_cancel.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_cancel.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_mixer_list.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_mixer_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_balance_connected_24px.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_balance_connected_24px.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_corral_list.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_corral_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_digital_out_of_home.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/digital_out_of_home.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xxxhdpi_icon_tolva_sel.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xxxhdpi/icon_tolva_sel.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_tara.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_tara.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_item_line_round_run_corral_download.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_round_run_corral_download.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_local_dining.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_local_dining.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_item_corral_layout.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_corral_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-mdpi_bg_tolvas_conf.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-mdpi/bg_tolvas_conf.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_round_rounded_green.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_round_rounded_green.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-hdpi_ic_diet_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-hdpi/ic_diet_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_activity_add_update_user.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_add_update_user.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_paw.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_paw.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_fragment_step_configuration.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_step_configuration.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/xml_file_path.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/xml/file_path.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_fragment_user_list.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_user_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_magris_logo_topbar.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/magris_logo_topbar.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_forward_circle.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_forward_circle.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_item_round_run_product_select_bkg.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/item_round_run_product_select_bkg.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xxxhdpi_icon_touch_btn.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xxxhdpi/icon_touch_btn.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xxhdpi_ic_productos_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xxhdpi/ic_productos_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_dialog_selected.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_dialog_selected.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_fragment_step_load.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_step_load.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_adjust.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_adjust.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_tablet_connected_24px.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_tablet_connected_24px.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_buscar.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_buscar.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_home.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_home.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_diet_list.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_diet_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_blender.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_blender.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_item_round_to_run_layout.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_round_to_run_layout.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_bluetooth_24dp.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_bluetooth_24dp.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_filter_list.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_filter_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_item_line_round_run_product_resume.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/item_line_round_run_product_resume.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_dialog_normal.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_dialog_normal.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-hdpi_ic_reports_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-hdpi/ic_reports_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-mdpi_ic_users_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-mdpi/ic_users_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_home_options_button_selected.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/home_options_button_selected.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_bluetooth_disconnected.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_bluetooth_disconnected.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_activity_login.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-hdpi_ic_cam.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-hdpi/ic_cam.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_dialog_custom_target_weight_reached.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/dialog_custom_target_weight_reached.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_report.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_report.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_activity_main.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xhdpi_ic_users_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xhdpi/ic_users_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-mdpi_icon_touch_btn.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-mdpi/icon_touch_btn.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_check.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_check.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_share.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_share.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_fragment_home.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_face.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_face.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-xxhdpi_ic_users_new.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-xxhdpi/ic_users_new.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xxhdpi_icon_tolva_sel.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xxhdpi/icon_tolva_sel.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_diet_2.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_diet_2.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-v24_icon_plus.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-v24/icon_plus.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_exit_round.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_exit_round.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_icon_ajustes_topbar.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/icon_ajustes_topbar.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_sync.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_sync.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_access_time.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_access_time.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_establishment_list.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_establishment_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_fragment_tablet_mixer_list.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_tablet_mixer_list.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_fragment_remote_mixer.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_remote_mixer.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_border_sync.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/border_sync.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_fragment_resume.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/fragment_resume.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_step_load.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_step_load.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/font_poppins_black.ttf.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/font/poppins_black.ttf"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable-v24_icon_minus.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable-v24/icon_minus.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_round_red_selected.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_round_red_selected.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_btn_r50.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/btn_r50.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/layout_content_main.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/layout/content_main.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_icon_balance.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/icon_balance.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/mipmap-xhdpi_icon_tolva_sel.png.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/mipmap-xhdpi/icon_tolva_sel.png"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_add_photo.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_add_photo.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_cow.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_cow.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/menu_menu_remote_mixer_fragment.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/menu/menu_remote_mixer_fragment.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-merged_res-59:/drawable_ic_menu_camera.xml.flat",
+        "source": "com.basculasmagris.visorremotomixer.app-main-60:/drawable/ic_menu_camera.xml"
+    }
+]

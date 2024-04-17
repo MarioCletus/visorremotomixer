@@ -1,0 +1,222 @@
+[
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\content_main.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\content_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\table_view_image_cell_layout.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\table_view_image_cell_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\table_view_column_header_layout.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\table_view_column_header_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\activity_add_update_user.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\activity_add_update_user.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\item_corral_layout.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\item_corral_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\fragment_round_list.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\fragment_round_list.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\item_line_round_run_product_report.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\item_line_round_run_product_report.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\activity_add_update_mixer.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\activity_add_update_mixer.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\fragment_user_list.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\fragment_user_list.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\nav_header_main.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\nav_header_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\item_line_round_corral.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\item_line_round_corral.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\dialog_custom_target_weight_reached.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\dialog_custom_target_weight_reached.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\activity_round_run.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\activity_round_run.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\item_line_round_run_corral_download.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\item_line_round_run_corral_download.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\dialog_custom_list.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\dialog_custom_list.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\fragment_value_input_dialog.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\fragment_value_input_dialog.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\item_line_report.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\item_line_report.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\activity_tablet_mixer_config.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\activity_tablet_mixer_config.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\fragment_confirm_dialog.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\fragment_confirm_dialog.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\item_custom_list.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\item_custom_list.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\item_round_to_run_layout.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\item_round_to_run_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\activity_add_update_tablet_mixer.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\activity_add_update_tablet_mixer.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\dialog_custom_image_selection.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\dialog_custom_image_selection.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\dailog_custom_confirm.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\dailog_custom_confirm.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\spinner_dropdown_tolva.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\spinner_dropdown_tolva.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\fragment_tablet_mixer_list.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\fragment_tablet_mixer_list.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\table_view_cell_layout.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\table_view_cell_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\item_line_round_run_product_step_load.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\item_line_round_run_product_step_load.xml"
+    },
+    {
+        "merged": "com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:/layout/dialog_custom_progress_emparejar.xml",
+        "source": "com.basculasmagris.visorremotomixer.app-main-61:/layout/dialog_custom_progress_emparejar.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\fragment_home.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\fragment_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\activity_splash.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\activity_splash.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\item_line_diet_product.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\item_line_diet_product.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\fragment_step_configuration.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\fragment_step_configuration.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\item_tablet_mixer_layout.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\item_tablet_mixer_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\item_line_round_run_corral_resume.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\item_line_round_run_corral_resume.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\fragment_step_load.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\fragment_step_load.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\item_line_round_run_product_resume.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\item_line_round_run_product_resume.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\spinner_tolvas.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\spinner_tolvas.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\fragment_remote_mixer.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\fragment_remote_mixer.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\table_view_row_header_layout.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\table_view_row_header_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\fragment_step_download.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\fragment_step_download.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\item_line_round_run_corral_report.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\item_line_round_run_corral_report.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\item_user_layout.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\item_user_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\activity_add_update_round.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\activity_add_update_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\fragment_sync.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\fragment_sync.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\fragment_seleccion_calibracion.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\fragment_seleccion_calibracion.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\app_bar_main.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\app_bar_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\table_view_corner_layout.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\table_view_corner_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\item_establishment_layout.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\item_establishment_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\fragment_resume.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\fragment_resume.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\dialog_custom_progress_iniciar.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\dialog_custom_progress_iniciar.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\dialog_custom_progress.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\dialog_custom_progress.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\item_diet_layout.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\item_diet_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-mergeDebugResources-58:\\layout\\activity_login.xml",
+        "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\daemon\\7.5\\com.basculasmagris.visorremotomixer.app-main-61:\\layout\\activity_login.xml"
+    }
+]

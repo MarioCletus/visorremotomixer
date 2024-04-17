@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.fragments.StepDownloadFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_round_corrals_to_load"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:visibility="visible"
+            android:layout_marginTop="10dp"
+            />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.67"
+            android:padding="@dimen/_2sdp"
+            android:layout_margin="10dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.kofigyan.stateprogressbar.StateProgressBar
+                android:id="@+id/sp_round_run_step"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:spb_animateToCurrentProgressState="true"
+                app:spb_checkStateCompleted="true"
+                app:spb_currentStateDescriptionColor="@color/color_step_bar"
+                app:spb_currentStateNumber="three"
+                app:spb_descriptionTopSpaceIncrementer="5dp"
+                app:spb_maxStateNumber="four"
+                app:spb_stateBackgroundColor="@color/color_light_grey"
+                app:spb_stateDescriptionColor="@color/color_medium_grey"
+                app:spb_stateForegroundColor="@color/color_step_bar"
+                app:spb_stateSize="@dimen/_20sdp" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.40">
+
+                <TextView
+                    android:id="@+id/tv_title_corral"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DESCARGAR"
+                    android:textColor="@color/black"
+                    android:textSize="24dp"
+                    app:layout_constraintBottom_toTopOf="@id/pb_current_corral"
+                    app:layout_constraintStart_toStartOf="@id/pb_current_corral" />
+
+                <ProgressBar
+                    android:id="@+id/pb_current_corral"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="5dp"
+                    android:max="100"
+
+                    android:progressBackgroundTint="@color/color_progress_bar_back"
+                    android:progressTint="@color/color_progress_bar"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_current_corral_weight_pending"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="50dp"
+                    app:layout_constraintBottom_toBottomOf="@id/pb_current_corral"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/pb_current_corral"
+                    app:layout_constraintVertical_bias="0.0" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.60">
+
+                <TextView
+                    android:id="@+id/tv_title_mixer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MIXER"
+                    android:textColor="@color/black"
+                    android:textSize="24dp"
+                    app:layout_constraintBottom_toTopOf="@id/pb_current_mixer"
+                    app:layout_constraintStart_toStartOf="@id/pb_current_mixer" />
+
+                <ProgressBar
+                    android:id="@+id/pb_current_mixer"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:max="100"
+                    android:progressBackgroundTint="@color/color_progress_bar"
+                    android:progressTint="@color/color_progress_bar_back"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_mixer_downloaded_title"
+                    android:layout_width="250dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="10dp"
+                    android:text="DESCARGADO:"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="32dp"
+                    app:layout_constraintBottom_toTopOf="@id/tv_mixer_target"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/pb_current_mixer" />
+
+                <TextView
+                    android:id="@+id/tv_mixer_downloaded"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="200dp"
+                    android:gravity="center_vertical|end"
+                    android:textColor="@color/white"
+                    android:textSize="32dp"
+                    app:layout_constraintBottom_toTopOf="@id/tv_mixer_target"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_mixer_target_title"
+                    app:layout_constraintTop_toTopOf="@id/pb_current_mixer" />
+
+                <TextView
+                    android:id="@+id/tv_mixer_target_title"
+                    android:layout_width="250dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="10dp"
+                    android:text="PROGRAMADO:"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="32dp"
+                    app:layout_constraintBottom_toBottomOf="@id/pb_current_mixer"
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_mixer_downloaded" />
+
+                <TextView
+                    android:id="@+id/tv_mixer_target"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="200dp"
+                    android:text="1000kg"
+                    android:gravity="center_vertical|end"
+                    android:textColor="@color/white"
+                    android:textSize="32dp"
+                    app:layout_constraintBottom_toBottomOf="@id/pb_current_mixer"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_mixer_target_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_mixer_downloaded" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btn_tara"
+                    android:layout_width="150dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/btn_round_rounded_green"
+                    android:gravity="center"
+                    android:text="Tara"
+                    android:textSize="18sp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <ToggleButton
+                    android:id="@+id/btn_pause"
+                    android:layout_width="150dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/btn_round_rounded_green"
+                    android:gravity="center"
+                    android:text="Pausa"
+                    android:textOff="Pausa"
+                    android:textOn="Continuar"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintStart_toEndOf="@id/btn_tara"
+                    app:layout_constraintEnd_toStartOf="@id/btn_jump"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+                <Button
+                    android:id="@+id/btn_jump"
+                    android:layout_width="150dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/btn_round_rounded_green"
+                    android:gravity="center"
+                    android:text="Salto"
+                    android:textSize="18sp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintStart_toEndOf="@id/btn_pause"
+                    app:layout_constraintEnd_toStartOf="@id/btn_rest"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+                <Button
+                    android:id="@+id/btn_rest"
+                    android:layout_width="150dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/btn_round_rounded_green"
+                    android:gravity="center"
+                    android:text="Resto"
+                    android:textSize="18sp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

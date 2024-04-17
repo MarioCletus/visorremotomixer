@@ -19,3 +19,24 @@ local.properties
 /build
 .idea/
 app/app.iml
+
+# Archivos temporales del sistema
+*.log
+*.tmp
+
+# Carpetas específicas de IDE
+.idea/
+*.iml
+
+
+# Archivos de configuración de usuario
+*.apk
+*.ap_
+
+# Archivos de prueba que no deseas incluir
+**/test/
+*.test.*
+**/*Test*/
+
+# Archivos de configuración específicos que pueden contener información sensible
+/release/

@@ -1,0 +1,562 @@
+-- Merging decision tree log ---
+manifest
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:2:1-116:12
+INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:2:1-116:12
+INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:2:1-116:12
+INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:2:1-116:12
+MERGED from [androidx.databinding:viewbinding:7.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\55437a63b2a904b1d84aaf7a1ba8650d\transformed\jetified-viewbinding-7.4.2\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.navigation:navigation-fragment-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\6874a6e44bf94bee206b20310f607688\transformed\navigation-fragment-ktx-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-fragment:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\aeaf1b50d49607330460c3fbf1150bd0\transformed\navigation-fragment-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.fragment:fragment-ktx:1.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\d11aedd878589191683b7c21b185ba60\transformed\jetified-fragment-ktx-1.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-ui-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\a9941f30d7006f3599c95e19d0cb94c7\transformed\navigation-ui-ktx-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-runtime-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\6093ee168457629e8ba6a068bd48d7d9\transformed\navigation-runtime-ktx-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-ui:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\4bae85dd5609513b91f50b5cf46e6f91\transformed\navigation-ui-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-runtime:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\f7ea13076248501a25861c2dd67b5591\transformed\navigation-runtime-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity-ktx:1.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\69f54fe3772dc90bd635d2951a16415e\transformed\jetified-activity-ktx-1.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-common-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\8c55e496fd153a6c9f4694a4b4de1092\transformed\navigation-common-ktx-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-common:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c8742fb309679489df63fa29eacfb24f\transformed\navigation-common-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c80f5f350570e775bc743acf9889cbd6\transformed\jetified-lifecycle-viewmodel-ktx-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.room:room-ktx:2.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\0e0fc1ebcbb0eadaa8f41ec465ac1330\transformed\jetified-room-ktx-2.4.2\AndroidManifest.xml:17:1-24:12
+MERGED from [com.karumi:dexter:6.2.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ab1afd2a6a28af22f5ad845446530db6\transformed\jetified-dexter-6.2.2\AndroidManifest.xml:17:1-32:12
+MERGED from [com.google.android.material:material:1.6.1] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\afb58326cc66276da2892c7a693a6345\transformed\material-1.6.1\AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\467e25a278c2016df417ae398bb1cec2\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
+MERGED from [com.kofigyan.stateprogressbar:stateprogressbar:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\e0df0ee8fa793caf2268eefd360fb87a\transformed\jetified-stateprogressbar-1.0.0\AndroidManifest.xml:2:1-14:12
+MERGED from [androidx.appcompat:appcompat:1.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\221795e6d9659ae9457c474ce80c08c8\transformed\appcompat-1.4.2\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\f32158ade4fec0bff50da265e7905684\transformed\legacy-support-v4-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\928c795f19430a8bc19f0113363e5453\transformed\legacy-support-core-ui-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\43b50dbf4a8bcd0d2808eab6b6f4c4ae\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\4c47d7ca736022d96855867e2f470f59\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.github.bumptech.glide:glide:4.13.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\e967c1ae479e9ad62fd725ecd4a6802a\transformed\jetified-glide-4.13.0\AndroidManifest.xml:2:1-12:12
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\960d76db0b97021a357bc4bcd3bc08fb\transformed\jetified-viewpager2-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.fragment:fragment:1.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\07ae722ae233d7c97b005a217b48bbb1\transformed\fragment-1.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\0db63a0e43deb61725885e290eb66822\transformed\loader-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.activity:activity:1.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\b274a7fcc377dd7848bb19ba9422576c\transformed\jetified-activity-1.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\fd3bb4f1ad5010180462c8b322c9e5de\transformed\lifecycle-viewmodel-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\8de8d715a6201c16ae5ba6ff98fc8ab7\transformed\jetified-lifecycle-viewmodel-savedstate-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\474b684a15669afacda141d106326921\transformed\jetified-lifecycle-livedata-ktx-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.datastore:datastore-preferences:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\128b0a70dc726dec9810f113e93eb78d\transformed\jetified-datastore-preferences-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.datastore:datastore:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\502c61df79ea07ecc5a392ed92da3cc2\transformed\jetified-datastore-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\3e0a51140b4a180625a0c829437316b5\transformed\slidingpanelayout-1.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\b58181441fd059c87a1987505175419e\transformed\jetified-lifecycle-runtime-ktx-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.core:core-ktx:1.8.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\25e195d3e9aa9aceb3b5e0e2329e3971\transformed\jetified-core-ktx-1.8.0\AndroidManifest.xml:2:1-9:12
+MERGED from [com.evrencoskun.library:tableview:0.8.9.4] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c6d2620eabc9329169f6099b664864bb\transformed\jetified-tableview-0.8.9.4\AndroidManifest.xml:25:1-34:12
+MERGED from [androidx.media:media:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\67fe2a8667aa21c237d58311734c0c35\transformed\media-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.appcompat:appcompat-resources:1.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\574ca07f9b9d6de80edd0adb2aaffad3\transformed\jetified-appcompat-resources-1.4.2\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.emoji2:emoji2-views-helper:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\f7eea5465c81d460eb6b4d35c640a0e1\transformed\jetified-emoji2-views-helper-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:17:1-37:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\8e0ee2ae40046804b4df02fa59a1cd6f\transformed\drawerlayout-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\9e797fcb5076aaac9da8bf1aa72d3754\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\4cbe5f70b6855245d9e1190911aed51a\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\59f6b454925b0aabae90d3c093aaf831\transformed\vectordrawable-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\047cc4cdb8bdf62bdc3b61935f89f75a\transformed\recyclerview-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\9cf9de42823ba4448f4542df271e4802\transformed\viewpager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\30bef419307e5013c57916490579544e\transformed\swiperefreshlayout-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\def7d8547adc13422fbe20afc1f1bb1e\transformed\asynclayoutinflater-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c070895627ed4d9e0536861417691a85\transformed\customview-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.transition:transition:1.4.1] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\11e60dd9b850461c40b3de2b6f03d5dc\transformed\transition-1.4.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.core:core:1.8.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\121b947d94f06faccefda129698d8542\transformed\core-1.8.0\AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\629b89c47122494d49fc0b4ef8ed9c5e\transformed\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\b9c2030b23fa72ef4e64a11103f917c7\transformed\cardview-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.room:room-runtime:2.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\eeb9e91afc774cf9c0a596b0d9c4da91\transformed\room-runtime-2.4.2\AndroidManifest.xml:17:1-31:12
+MERGED from [androidx.sqlite:sqlite-framework:2.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\942041327aebc8a31113c76ce5b00a34\transformed\sqlite-framework-2.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.sqlite:sqlite:2.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\d500ca67054fe28b6182bd77c43e1da1\transformed\sqlite-2.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.github.bumptech.glide:gifdecoder:4.13.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\377a95d3c30a664f887a55b3f32be47e\transformed\jetified-gifdecoder-4.13.0\AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.exifinterface:exifinterface:1.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\698467dad466345bfa710edf933ebbf0\transformed\exifinterface-1.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\cd93cece7b3668f57255cc2333afac8f\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:17:1-37:12
+MERGED from [androidx.startup:startup-runtime:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\dbe1b1b53a9ce6fa10744c35725f2fa8\transformed\jetified-startup-runtime-1.0.0\AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\4b528cf8edb9356457cafcd5ebafafc2\transformed\jetified-tracing-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\fc404877e827971769774376990307ca\transformed\documentfile-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\7619591b13872d157c61c4a4ca57ba87\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2a7a091cc3639096aea25dffa61012fe\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ec762a3b8e11b3cf9d168d246bef5b8c\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\39162570226cbbf6ed0191a737d48733\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\1e7e492827319e3f38883d039a3c3951\transformed\lifecycle-livedata-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\5aadcc14772c9daa9e71e3ca902e7fc7\transformed\jetified-lifecycle-livedata-core-ktx-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\4f61e1f44eec3455f745f49b420ea258\transformed\lifecycle-livedata-core-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\a80e262eba68c95a0238ad1c5a3f6944\transformed\lifecycle-runtime-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\3dd50c775190340bcabdb95ef4de9797\transformed\core-runtime-2.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\1811976215eb4533fddc204e6c7cca43\transformed\jetified-savedstate-ktx-1.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.savedstate:savedstate:1.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ac145d93c9092f67df2aa375cc7ff128\transformed\jetified-savedstate-1.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.intuit.sdp:sdp-android:1.0.6] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c248ef54100d613483df84854966b34c\transformed\jetified-sdp-android-1.0.6\AndroidManifest.xml:2:1-11:12
+MERGED from [io.reactivex.rxjava3:rxandroid:3.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c2a151ebf83d7e2edf8f83d6a49b6076\transformed\jetified-rxandroid-3.0.0\AndroidManifest.xml:15:1-20:12
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c9c6aaaf1e228fa36d7429198d9f86a4\transformed\jetified-annotation-experimental-1.1.0\AndroidManifest.xml:17:1-24:12
+INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:2:1-116:12
+INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:2:1-116:12
+INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:2:1-116:12
+	package
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:3:5-50
+		INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+		INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:2:1-116:12
+		INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:2:1-116:12
+		INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:2:11-69
+uses-permission#android.permission.BLUETOOTH
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:5:5-68
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:5:22-65
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:6:5-74
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:6:22-71
+uses-permission#android.permission.BLUETOOTH_SCAN
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:7:5-73
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:7:22-70
+uses-permission#android.permission.BLUETOOTH_CONNECT
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:8:5-76
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:8:22-73
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:9:5-79
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:9:22-76
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:10:5-81
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:10:22-78
+uses-permission#android.permission.INTERNET
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:11:5-67
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:11:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:12:5-79
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:12:22-76
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:13:5-76
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:13:22-73
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:14:5-80
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:14:22-77
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:15:5-17:38
+	android:maxSdkVersion
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:17:9-35
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:16:9-65
+application
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:19:5-114:19
+MERGED from [com.karumi:dexter:6.2.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ab1afd2a6a28af22f5ad845446530db6\transformed\jetified-dexter-6.2.2\AndroidManifest.xml:26:5-30:19
+MERGED from [com.karumi:dexter:6.2.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ab1afd2a6a28af22f5ad845446530db6\transformed\jetified-dexter-6.2.2\AndroidManifest.xml:26:5-30:19
+MERGED from [com.google.android.material:material:1.6.1] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\afb58326cc66276da2892c7a693a6345\transformed\material-1.6.1\AndroidManifest.xml:24:5-20
+MERGED from [com.google.android.material:material:1.6.1] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\afb58326cc66276da2892c7a693a6345\transformed\material-1.6.1\AndroidManifest.xml:24:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\467e25a278c2016df417ae398bb1cec2\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\467e25a278c2016df417ae398bb1cec2\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
+MERGED from [com.kofigyan.stateprogressbar:stateprogressbar:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\e0df0ee8fa793caf2268eefd360fb87a\transformed\jetified-stateprogressbar-1.0.0\AndroidManifest.xml:11:5-12:19
+MERGED from [com.kofigyan.stateprogressbar:stateprogressbar:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\e0df0ee8fa793caf2268eefd360fb87a\transformed\jetified-stateprogressbar-1.0.0\AndroidManifest.xml:11:5-12:19
+MERGED from [com.github.bumptech.glide:glide:4.13.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\e967c1ae479e9ad62fd725ecd4a6802a\transformed\jetified-glide-4.13.0\AndroidManifest.xml:10:5-20
+MERGED from [com.github.bumptech.glide:glide:4.13.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\e967c1ae479e9ad62fd725ecd4a6802a\transformed\jetified-glide-4.13.0\AndroidManifest.xml:10:5-20
+MERGED from [androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:24:5-31:19
+MERGED from [androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:24:5-31:19
+MERGED from [androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:25:5-35:19
+MERGED from [androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:25:5-35:19
+MERGED from [androidx.core:core:1.8.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\121b947d94f06faccefda129698d8542\transformed\core-1.8.0\AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.8.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\121b947d94f06faccefda129698d8542\transformed\core-1.8.0\AndroidManifest.xml:24:5-89
+MERGED from [androidx.room:room-runtime:2.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\eeb9e91afc774cf9c0a596b0d9c4da91\transformed\room-runtime-2.4.2\AndroidManifest.xml:24:5-29:19
+MERGED from [androidx.room:room-runtime:2.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\eeb9e91afc774cf9c0a596b0d9c4da91\transformed\room-runtime-2.4.2\AndroidManifest.xml:24:5-29:19
+MERGED from [com.github.bumptech.glide:gifdecoder:4.13.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\377a95d3c30a664f887a55b3f32be47e\transformed\jetified-gifdecoder-4.13.0\AndroidManifest.xml:9:5-20
+MERGED from [com.github.bumptech.glide:gifdecoder:4.13.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\377a95d3c30a664f887a55b3f32be47e\transformed\jetified-gifdecoder-4.13.0\AndroidManifest.xml:9:5-20
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\cd93cece7b3668f57255cc2333afac8f\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:25:5-35:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\cd93cece7b3668f57255cc2333afac8f\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:25:5-35:19
+MERGED from [androidx.startup:startup-runtime:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\dbe1b1b53a9ce6fa10744c35725f2fa8\transformed\jetified-startup-runtime-1.0.0\AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\dbe1b1b53a9ce6fa10744c35725f2fa8\transformed\jetified-startup-runtime-1.0.0\AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\39162570226cbbf6ed0191a737d48733\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\39162570226cbbf6ed0191a737d48733\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.8.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\121b947d94f06faccefda129698d8542\transformed\core-1.8.0\AndroidManifest.xml:24:18-86
+	android:supportsRtl
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:25:9-35
+	android:label
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:23:9-41
+	android:roundIcon
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:24:9-54
+	android:icon
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:22:9-43
+	android:allowBackup
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:21:9-36
+	android:theme
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:26:9-46
+	android:usesCleartextTraffic
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:27:9-44
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:20:9-56
+activity#com.basculasmagris.visorremotomixer.view.activities.TabletMixerConfigActivity
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:28:9-33:65
+	android:screenOrientation
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:32:13-50
+	android:label
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:31:13-71
+	android:exported
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:30:13-37
+	android:theme
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:33:13-62
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:29:13-70
+activity#com.basculasmagris.visorremotomixer.view.activities.AddUpdateTabletMixerActivity
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:34:9-39:65
+	android:screenOrientation
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:37:13-50
+	android:label
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:38:13-75
+	android:exported
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:36:13-37
+	android:theme
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:39:13-62
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:35:13-73
+activity#com.basculasmagris.visorremotomixer.view.activities.AddUpdateUserActivity
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:40:9-49:20
+	android:screenOrientation
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:43:13-50
+	android:windowSoftInputMode
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:45:13-56
+	android:exported
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:42:13-36
+	android:theme
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:44:13-62
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:41:13-66
+meta-data#android.app.lib_name
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:46:13-48:36
+	android:value
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:48:17-33
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:47:17-52
+activity#com.basculasmagris.visorremotomixer.view.activities.LoginActivity
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:50:9-55:59
+	android:screenOrientation
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:54:13-50
+	android:label
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:53:13-57
+	android:windowSoftInputMode
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:55:13-56
+	android:exported
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:52:13-37
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:51:13-58
+service#com.basculasmagris.visorremotomixer.services.BluetoothSDKService
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:57:9-61:59
+	android:enabled
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:59:13-35
+	android:windowSoftInputMode
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:61:13-56
+	android:exported
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:60:13-36
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:58:13-57
+activity#com.basculasmagris.visorremotomixer.view.activities.AddUpdateRoundActivity
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:64:9-69:59
+	android:screenOrientation
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:67:13-50
+	android:windowSoftInputMode
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:69:13-56
+	android:exported
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:66:13-36
+	android:theme
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:68:13-62
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:65:13-67
+activity#com.basculasmagris.visorremotomixer.view.activities.AddUpdateMixerActivity
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:71:9-76:59
+	android:screenOrientation
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:74:13-50
+	android:windowSoftInputMode
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:76:13-56
+	android:exported
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:73:13-36
+	android:theme
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:75:13-62
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:72:13-67
+activity#com.basculasmagris.visorremotomixer.view.activities.SplashActivity
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:78:9-89:20
+	android:screenOrientation
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:81:13-50
+	android:windowSoftInputMode
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:83:13-56
+	android:exported
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:80:13-36
+	android:theme
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:82:13-62
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:79:13-59
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:84:13-88:29
+action#android.intent.action.MAIN
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:85:17-69
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:85:25-66
+category#android.intent.category.LAUNCHER
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:87:17-77
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:87:27-74
+activity#com.basculasmagris.visorremotomixer.view.activities.MainActivity
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:91:9-103:20
+	android:screenOrientation
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:95:13-50
+	android:label
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:94:13-45
+	android:windowSoftInputMode
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:97:13-56
+	android:exported
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:93:13-36
+	android:theme
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:96:13-62
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:92:13-57
+intent-filter#action:name:android.intent.action.SEND+category:name:android.intent.category.DEFAULT
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:98:13-102:29
+action#android.intent.action.SEND
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:99:17-69
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:99:25-66
+category#android.intent.category.DEFAULT
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:101:17-76
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:101:27-73
+provider#androidx.core.content.FileProvider
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:105:9-113:20
+	android:grantUriPermissions
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:109:13-47
+	android:authorities
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:107:13-108
+	android:exported
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:108:13-37
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:106:13-62
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:110:13-112:53
+	android:resource
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:112:17-50
+	android:name
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:111:17-67
+uses-sdk
+INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+MERGED from [androidx.databinding:viewbinding:7.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\55437a63b2a904b1d84aaf7a1ba8650d\transformed\jetified-viewbinding-7.4.2\AndroidManifest.xml:5:5-44
+MERGED from [androidx.databinding:viewbinding:7.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\55437a63b2a904b1d84aaf7a1ba8650d\transformed\jetified-viewbinding-7.4.2\AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-fragment-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\6874a6e44bf94bee206b20310f607688\transformed\navigation-fragment-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-fragment-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\6874a6e44bf94bee206b20310f607688\transformed\navigation-fragment-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-fragment:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\aeaf1b50d49607330460c3fbf1150bd0\transformed\navigation-fragment-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-fragment:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\aeaf1b50d49607330460c3fbf1150bd0\transformed\navigation-fragment-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment-ktx:1.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\d11aedd878589191683b7c21b185ba60\transformed\jetified-fragment-ktx-1.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment-ktx:1.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\d11aedd878589191683b7c21b185ba60\transformed\jetified-fragment-ktx-1.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-ui-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\a9941f30d7006f3599c95e19d0cb94c7\transformed\navigation-ui-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-ui-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\a9941f30d7006f3599c95e19d0cb94c7\transformed\navigation-ui-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-runtime-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\6093ee168457629e8ba6a068bd48d7d9\transformed\navigation-runtime-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-runtime-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\6093ee168457629e8ba6a068bd48d7d9\transformed\navigation-runtime-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-ui:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\4bae85dd5609513b91f50b5cf46e6f91\transformed\navigation-ui-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-ui:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\4bae85dd5609513b91f50b5cf46e6f91\transformed\navigation-ui-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-runtime:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\f7ea13076248501a25861c2dd67b5591\transformed\navigation-runtime-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-runtime:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\f7ea13076248501a25861c2dd67b5591\transformed\navigation-runtime-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity-ktx:1.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\69f54fe3772dc90bd635d2951a16415e\transformed\jetified-activity-ktx-1.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity-ktx:1.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\69f54fe3772dc90bd635d2951a16415e\transformed\jetified-activity-ktx-1.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-common-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\8c55e496fd153a6c9f4694a4b4de1092\transformed\navigation-common-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-common-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\8c55e496fd153a6c9f4694a4b4de1092\transformed\navigation-common-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-common:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c8742fb309679489df63fa29eacfb24f\transformed\navigation-common-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-common:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c8742fb309679489df63fa29eacfb24f\transformed\navigation-common-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c80f5f350570e775bc743acf9889cbd6\transformed\jetified-lifecycle-viewmodel-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c80f5f350570e775bc743acf9889cbd6\transformed\jetified-lifecycle-viewmodel-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.room:room-ktx:2.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\0e0fc1ebcbb0eadaa8f41ec465ac1330\transformed\jetified-room-ktx-2.4.2\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.room:room-ktx:2.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\0e0fc1ebcbb0eadaa8f41ec465ac1330\transformed\jetified-room-ktx-2.4.2\AndroidManifest.xml:20:5-22:41
+MERGED from [com.karumi:dexter:6.2.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ab1afd2a6a28af22f5ad845446530db6\transformed\jetified-dexter-6.2.2\AndroidManifest.xml:22:5-24:41
+MERGED from [com.karumi:dexter:6.2.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ab1afd2a6a28af22f5ad845446530db6\transformed\jetified-dexter-6.2.2\AndroidManifest.xml:22:5-24:41
+MERGED from [com.google.android.material:material:1.6.1] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\afb58326cc66276da2892c7a693a6345\transformed\material-1.6.1\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.material:material:1.6.1] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\afb58326cc66276da2892c7a693a6345\transformed\material-1.6.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\467e25a278c2016df417ae398bb1cec2\transformed\constraintlayout-2.1.4\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\467e25a278c2016df417ae398bb1cec2\transformed\constraintlayout-2.1.4\AndroidManifest.xml:5:5-7:41
+MERGED from [com.kofigyan.stateprogressbar:stateprogressbar:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\e0df0ee8fa793caf2268eefd360fb87a\transformed\jetified-stateprogressbar-1.0.0\AndroidManifest.xml:7:5-9:41
+MERGED from [com.kofigyan.stateprogressbar:stateprogressbar:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\e0df0ee8fa793caf2268eefd360fb87a\transformed\jetified-stateprogressbar-1.0.0\AndroidManifest.xml:7:5-9:41
+MERGED from [androidx.appcompat:appcompat:1.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\221795e6d9659ae9457c474ce80c08c8\transformed\appcompat-1.4.2\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat:1.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\221795e6d9659ae9457c474ce80c08c8\transformed\appcompat-1.4.2\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\f32158ade4fec0bff50da265e7905684\transformed\legacy-support-v4-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\f32158ade4fec0bff50da265e7905684\transformed\legacy-support-v4-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\928c795f19430a8bc19f0113363e5453\transformed\legacy-support-core-ui-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\928c795f19430a8bc19f0113363e5453\transformed\legacy-support-core-ui-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\43b50dbf4a8bcd0d2808eab6b6f4c4ae\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\43b50dbf4a8bcd0d2808eab6b6f4c4ae\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\4c47d7ca736022d96855867e2f470f59\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\4c47d7ca736022d96855867e2f470f59\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.github.bumptech.glide:glide:4.13.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\e967c1ae479e9ad62fd725ecd4a6802a\transformed\jetified-glide-4.13.0\AndroidManifest.xml:6:5-8:41
+MERGED from [com.github.bumptech.glide:glide:4.13.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\e967c1ae479e9ad62fd725ecd4a6802a\transformed\jetified-glide-4.13.0\AndroidManifest.xml:6:5-8:41
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\960d76db0b97021a357bc4bcd3bc08fb\transformed\jetified-viewpager2-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\960d76db0b97021a357bc4bcd3bc08fb\transformed\jetified-viewpager2-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\07ae722ae233d7c97b005a217b48bbb1\transformed\fragment-1.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\07ae722ae233d7c97b005a217b48bbb1\transformed\fragment-1.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\0db63a0e43deb61725885e290eb66822\transformed\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\0db63a0e43deb61725885e290eb66822\transformed\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\b274a7fcc377dd7848bb19ba9422576c\transformed\jetified-activity-1.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\b274a7fcc377dd7848bb19ba9422576c\transformed\jetified-activity-1.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\fd3bb4f1ad5010180462c8b322c9e5de\transformed\lifecycle-viewmodel-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\fd3bb4f1ad5010180462c8b322c9e5de\transformed\lifecycle-viewmodel-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\8de8d715a6201c16ae5ba6ff98fc8ab7\transformed\jetified-lifecycle-viewmodel-savedstate-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\8de8d715a6201c16ae5ba6ff98fc8ab7\transformed\jetified-lifecycle-viewmodel-savedstate-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\474b684a15669afacda141d106326921\transformed\jetified-lifecycle-livedata-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\474b684a15669afacda141d106326921\transformed\jetified-lifecycle-livedata-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.datastore:datastore-preferences:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\128b0a70dc726dec9810f113e93eb78d\transformed\jetified-datastore-preferences-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.datastore:datastore-preferences:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\128b0a70dc726dec9810f113e93eb78d\transformed\jetified-datastore-preferences-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.datastore:datastore:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\502c61df79ea07ecc5a392ed92da3cc2\transformed\jetified-datastore-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.datastore:datastore:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\502c61df79ea07ecc5a392ed92da3cc2\transformed\jetified-datastore-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\3e0a51140b4a180625a0c829437316b5\transformed\slidingpanelayout-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\3e0a51140b4a180625a0c829437316b5\transformed\slidingpanelayout-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\b58181441fd059c87a1987505175419e\transformed\jetified-lifecycle-runtime-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\b58181441fd059c87a1987505175419e\transformed\jetified-lifecycle-runtime-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core-ktx:1.8.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\25e195d3e9aa9aceb3b5e0e2329e3971\transformed\jetified-core-ktx-1.8.0\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.core:core-ktx:1.8.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\25e195d3e9aa9aceb3b5e0e2329e3971\transformed\jetified-core-ktx-1.8.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.evrencoskun.library:tableview:0.8.9.4] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c6d2620eabc9329169f6099b664864bb\transformed\jetified-tableview-0.8.9.4\AndroidManifest.xml:30:5-32:41
+MERGED from [com.evrencoskun.library:tableview:0.8.9.4] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c6d2620eabc9329169f6099b664864bb\transformed\jetified-tableview-0.8.9.4\AndroidManifest.xml:30:5-32:41
+MERGED from [androidx.media:media:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\67fe2a8667aa21c237d58311734c0c35\transformed\media-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.media:media:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\67fe2a8667aa21c237d58311734c0c35\transformed\media-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\574ca07f9b9d6de80edd0adb2aaffad3\transformed\jetified-appcompat-resources-1.4.2\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat-resources:1.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\574ca07f9b9d6de80edd0adb2aaffad3\transformed\jetified-appcompat-resources-1.4.2\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.emoji2:emoji2-views-helper:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\f7eea5465c81d460eb6b4d35c640a0e1\transformed\jetified-emoji2-views-helper-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.emoji2:emoji2-views-helper:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\f7eea5465c81d460eb6b4d35c640a0e1\transformed\jetified-emoji2-views-helper-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\8e0ee2ae40046804b4df02fa59a1cd6f\transformed\drawerlayout-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\8e0ee2ae40046804b4df02fa59a1cd6f\transformed\drawerlayout-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\9e797fcb5076aaac9da8bf1aa72d3754\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\9e797fcb5076aaac9da8bf1aa72d3754\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\4cbe5f70b6855245d9e1190911aed51a\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\4cbe5f70b6855245d9e1190911aed51a\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\59f6b454925b0aabae90d3c093aaf831\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\59f6b454925b0aabae90d3c093aaf831\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\047cc4cdb8bdf62bdc3b61935f89f75a\transformed\recyclerview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\047cc4cdb8bdf62bdc3b61935f89f75a\transformed\recyclerview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\9cf9de42823ba4448f4542df271e4802\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\9cf9de42823ba4448f4542df271e4802\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\30bef419307e5013c57916490579544e\transformed\swiperefreshlayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\30bef419307e5013c57916490579544e\transformed\swiperefreshlayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\def7d8547adc13422fbe20afc1f1bb1e\transformed\asynclayoutinflater-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\def7d8547adc13422fbe20afc1f1bb1e\transformed\asynclayoutinflater-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c070895627ed4d9e0536861417691a85\transformed\customview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c070895627ed4d9e0536861417691a85\transformed\customview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.4.1] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\11e60dd9b850461c40b3de2b6f03d5dc\transformed\transition-1.4.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.4.1] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\11e60dd9b850461c40b3de2b6f03d5dc\transformed\transition-1.4.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.8.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\121b947d94f06faccefda129698d8542\transformed\core-1.8.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.8.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\121b947d94f06faccefda129698d8542\transformed\core-1.8.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\629b89c47122494d49fc0b4ef8ed9c5e\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\629b89c47122494d49fc0b4ef8ed9c5e\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\b9c2030b23fa72ef4e64a11103f917c7\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\b9c2030b23fa72ef4e64a11103f917c7\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.room:room-runtime:2.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\eeb9e91afc774cf9c0a596b0d9c4da91\transformed\room-runtime-2.4.2\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.room:room-runtime:2.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\eeb9e91afc774cf9c0a596b0d9c4da91\transformed\room-runtime-2.4.2\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.sqlite:sqlite-framework:2.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\942041327aebc8a31113c76ce5b00a34\transformed\sqlite-framework-2.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.sqlite:sqlite-framework:2.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\942041327aebc8a31113c76ce5b00a34\transformed\sqlite-framework-2.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.sqlite:sqlite:2.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\d500ca67054fe28b6182bd77c43e1da1\transformed\sqlite-2.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.sqlite:sqlite:2.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\d500ca67054fe28b6182bd77c43e1da1\transformed\sqlite-2.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.github.bumptech.glide:gifdecoder:4.13.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\377a95d3c30a664f887a55b3f32be47e\transformed\jetified-gifdecoder-4.13.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.github.bumptech.glide:gifdecoder:4.13.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\377a95d3c30a664f887a55b3f32be47e\transformed\jetified-gifdecoder-4.13.0\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.exifinterface:exifinterface:1.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\698467dad466345bfa710edf933ebbf0\transformed\exifinterface-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\698467dad466345bfa710edf933ebbf0\transformed\exifinterface-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\cd93cece7b3668f57255cc2333afac8f\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\cd93cece7b3668f57255cc2333afac8f\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\dbe1b1b53a9ce6fa10744c35725f2fa8\transformed\jetified-startup-runtime-1.0.0\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\dbe1b1b53a9ce6fa10744c35725f2fa8\transformed\jetified-startup-runtime-1.0.0\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\4b528cf8edb9356457cafcd5ebafafc2\transformed\jetified-tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\4b528cf8edb9356457cafcd5ebafafc2\transformed\jetified-tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\fc404877e827971769774376990307ca\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\fc404877e827971769774376990307ca\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\7619591b13872d157c61c4a4ca57ba87\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\7619591b13872d157c61c4a4ca57ba87\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2a7a091cc3639096aea25dffa61012fe\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2a7a091cc3639096aea25dffa61012fe\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ec762a3b8e11b3cf9d168d246bef5b8c\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ec762a3b8e11b3cf9d168d246bef5b8c\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\39162570226cbbf6ed0191a737d48733\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\39162570226cbbf6ed0191a737d48733\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\1e7e492827319e3f38883d039a3c3951\transformed\lifecycle-livedata-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\1e7e492827319e3f38883d039a3c3951\transformed\lifecycle-livedata-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\5aadcc14772c9daa9e71e3ca902e7fc7\transformed\jetified-lifecycle-livedata-core-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\5aadcc14772c9daa9e71e3ca902e7fc7\transformed\jetified-lifecycle-livedata-core-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\4f61e1f44eec3455f745f49b420ea258\transformed\lifecycle-livedata-core-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\4f61e1f44eec3455f745f49b420ea258\transformed\lifecycle-livedata-core-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\a80e262eba68c95a0238ad1c5a3f6944\transformed\lifecycle-runtime-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\a80e262eba68c95a0238ad1c5a3f6944\transformed\lifecycle-runtime-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\3dd50c775190340bcabdb95ef4de9797\transformed\core-runtime-2.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\3dd50c775190340bcabdb95ef4de9797\transformed\core-runtime-2.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\1811976215eb4533fddc204e6c7cca43\transformed\jetified-savedstate-ktx-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\1811976215eb4533fddc204e6c7cca43\transformed\jetified-savedstate-ktx-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ac145d93c9092f67df2aa375cc7ff128\transformed\jetified-savedstate-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.2.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ac145d93c9092f67df2aa375cc7ff128\transformed\jetified-savedstate-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.intuit.sdp:sdp-android:1.0.6] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c248ef54100d613483df84854966b34c\transformed\jetified-sdp-android-1.0.6\AndroidManifest.xml:7:5-9:41
+MERGED from [com.intuit.sdp:sdp-android:1.0.6] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c248ef54100d613483df84854966b34c\transformed\jetified-sdp-android-1.0.6\AndroidManifest.xml:7:5-9:41
+MERGED from [io.reactivex.rxjava3:rxandroid:3.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c2a151ebf83d7e2edf8f83d6a49b6076\transformed\jetified-rxandroid-3.0.0\AndroidManifest.xml:18:5-43
+MERGED from [io.reactivex.rxjava3:rxandroid:3.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c2a151ebf83d7e2edf8f83d6a49b6076\transformed\jetified-rxandroid-3.0.0\AndroidManifest.xml:18:5-43
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c9c6aaaf1e228fa36d7429198d9f86a4\transformed\jetified-annotation-experimental-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\c9c6aaaf1e228fa36d7429198d9f86a4\transformed\jetified-annotation-experimental-1.1.0\AndroidManifest.xml:20:5-22:41
+INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+		INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+		ADDED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+		INJECTED from D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+activity#com.karumi.dexter.DexterActivity
+ADDED from [com.karumi:dexter:6.2.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ab1afd2a6a28af22f5ad845446530db6\transformed\jetified-dexter-6.2.2\AndroidManifest.xml:27:9-29:72
+	android:theme
+		ADDED from [com.karumi:dexter:6.2.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ab1afd2a6a28af22f5ad845446530db6\transformed\jetified-dexter-6.2.2\AndroidManifest.xml:29:13-69
+	android:name
+		ADDED from [com.karumi:dexter:6.2.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ab1afd2a6a28af22f5ad845446530db6\transformed\jetified-dexter-6.2.2\AndroidManifest.xml:28:13-60
+uses-library#androidx.window.extensions
+ADDED from [androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:25:9-27:40
+	android:required
+		ADDED from [androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:26:13-54
+uses-library#androidx.window.sidecar
+ADDED from [androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:28:9-30:40
+	android:required
+		ADDED from [androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:30:13-37
+	android:name
+		ADDED from [androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:29:13-51
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:26:9-34:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\cd93cece7b3668f57255cc2333afac8f\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:26:9-34:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\cd93cece7b3668f57255cc2333afac8f\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:26:9-34:20
+MERGED from [androidx.startup:startup-runtime:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\dbe1b1b53a9ce6fa10744c35725f2fa8\transformed\jetified-startup-runtime-1.0.0\AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\dbe1b1b53a9ce6fa10744c35725f2fa8\transformed\jetified-startup-runtime-1.0.0\AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:30:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:28:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:29:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:27:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:31:13-33:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:33:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:32:17-75
+service#androidx.room.MultiInstanceInvalidationService
+ADDED from [androidx.room:room-runtime:2.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\eeb9e91afc774cf9c0a596b0d9c4da91\transformed\room-runtime-2.4.2\AndroidManifest.xml:25:9-28:40
+	android:exported
+		ADDED from [androidx.room:room-runtime:2.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\eeb9e91afc774cf9c0a596b0d9c4da91\transformed\room-runtime-2.4.2\AndroidManifest.xml:28:13-37
+	android:directBootAware
+		ADDED from [androidx.room:room-runtime:2.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\eeb9e91afc774cf9c0a596b0d9c4da91\transformed\room-runtime-2.4.2\AndroidManifest.xml:27:13-43
+	android:name
+		ADDED from [androidx.room:room-runtime:2.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\eeb9e91afc774cf9c0a596b0d9c4da91\transformed\room-runtime-2.4.2\AndroidManifest.xml:26:13-74
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\cd93cece7b3668f57255cc2333afac8f\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:31:13-33:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\cd93cece7b3668f57255cc2333afac8f\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:33:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\cd93cece7b3668f57255cc2333afac8f\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:32:17-78

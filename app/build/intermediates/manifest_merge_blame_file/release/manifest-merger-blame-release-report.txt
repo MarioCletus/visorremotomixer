@@ -1,0 +1,281 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.basculasmagris.visorremotomixer"
+4    android:versionCode="4"
+5    android:versionName="1.240415" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+8-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="32" />
+9-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.BLUETOOTH" />
+11-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:5:5-68
+11-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:5:22-65
+12    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+12-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:6:5-74
+12-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:6:22-71
+13    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+13-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:7:5-73
+13-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:7:22-70
+14    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+14-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:8:5-76
+14-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:8:22-73
+15    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+15-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:9:5-79
+15-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:9:22-76
+16    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+16-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:10:5-81
+16-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:10:22-78
+17    <uses-permission android:name="android.permission.INTERNET" />
+17-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:11:5-67
+17-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:11:22-64
+18    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+18-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:12:5-79
+18-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:12:22-76
+19    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+19-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:13:5-76
+19-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:13:22-73
+20    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+20-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:14:5-80
+20-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:14:22-77
+21    <uses-permission
+21-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:15:5-17:38
+22        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+22-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:16:9-65
+23        android:maxSdkVersion="28" />
+23-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:17:9-35
+24
+25    <application
+25-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:19:5-114:19
+26        android:name="com.basculasmagris.visorremotomixer.application.SpiMixerApplication"
+26-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:20:9-56
+27        android:allowBackup="false"
+27-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:21:9-36
+28        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+28-->[androidx.core:core:1.8.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\121b947d94f06faccefda129698d8542\transformed\core-1.8.0\AndroidManifest.xml:24:18-86
+29        android:extractNativeLibs="false"
+30        android:icon="@mipmap/ic_launcher"
+30-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:22:9-43
+31        android:label="@string/app_name"
+31-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:23:9-41
+32        android:roundIcon="@mipmap/ic_launcher_round"
+32-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:24:9-54
+33        android:supportsRtl="true"
+33-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:25:9-35
+34        android:theme="@style/Theme.Spimixer"
+34-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:26:9-46
+35        android:usesCleartextTraffic="true" >
+35-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:27:9-44
+36        <activity
+36-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:28:9-33:65
+37            android:name="com.basculasmagris.visorremotomixer.view.activities.TabletMixerConfigActivity"
+37-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:29:13-70
+38            android:exported="false"
+38-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:30:13-37
+39            android:label="@string/title_activity_tablet_mixer_config"
+39-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:31:13-71
+40            android:screenOrientation="landscape"
+40-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:32:13-50
+41            android:theme="@style/Theme.Spimixer.NoActionBar" />
+41-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:33:13-62
+42        <activity
+42-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:34:9-39:65
+43            android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateTabletMixerActivity"
+43-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:35:13-73
+44            android:exported="false"
+44-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:36:13-37
+45            android:label="@string/title_activity_add_update_tablet_mixer"
+45-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:38:13-75
+46            android:screenOrientation="landscape"
+46-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:37:13-50
+47            android:theme="@style/Theme.Spimixer.NoActionBar" />
+47-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:39:13-62
+48        <activity
+48-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:40:9-49:20
+49            android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateUserActivity"
+49-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:41:13-66
+50            android:exported="true"
+50-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:42:13-36
+51            android:screenOrientation="landscape"
+51-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:43:13-50
+52            android:theme="@style/Theme.Spimixer.NoActionBar"
+52-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:44:13-62
+53            android:windowSoftInputMode="adjustNothing" >
+53-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:45:13-56
+54            <meta-data
+54-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:46:13-48:36
+55                android:name="android.app.lib_name"
+55-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:47:17-52
+56                android:value="" />
+56-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:48:17-33
+57        </activity>
+58        <activity
+58-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:50:9-55:59
+59            android:name="com.basculasmagris.visorremotomixer.view.activities.LoginActivity"
+59-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:51:13-58
+60            android:exported="false"
+60-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:52:13-37
+61            android:label="@string/title_activity_login"
+61-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:53:13-57
+62            android:screenOrientation="landscape"
+62-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:54:13-50
+63            android:windowSoftInputMode="adjustNothing" />
+63-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:55:13-56
+64
+65        <service
+65-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:57:9-61:59
+66            android:name="com.basculasmagris.visorremotomixer.services.BluetoothSDKService"
+66-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:58:13-57
+67            android:enabled="true"
+67-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:59:13-35
+68            android:exported="true"
+68-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:60:13-36
+69            android:windowSoftInputMode="adjustNothing" />
+69-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:61:13-56
+70
+71        <activity
+71-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:64:9-69:59
+72            android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateRoundActivity"
+72-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:65:13-67
+73            android:exported="true"
+73-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:66:13-36
+74            android:screenOrientation="landscape"
+74-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:67:13-50
+75            android:theme="@style/Theme.Spimixer.NoActionBar"
+75-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:68:13-62
+76            android:windowSoftInputMode="adjustNothing" />
+76-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:69:13-56
+77        <activity
+77-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:71:9-76:59
+78            android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateMixerActivity"
+78-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:72:13-67
+79            android:exported="true"
+79-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:73:13-36
+80            android:screenOrientation="landscape"
+80-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:74:13-50
+81            android:theme="@style/Theme.Spimixer.NoActionBar"
+81-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:75:13-62
+82            android:windowSoftInputMode="adjustNothing" />
+82-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:76:13-56
+83        <activity
+83-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:78:9-89:20
+84            android:name="com.basculasmagris.visorremotomixer.view.activities.SplashActivity"
+84-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:79:13-59
+85            android:exported="true"
+85-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:80:13-36
+86            android:screenOrientation="landscape"
+86-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:81:13-50
+87            android:theme="@style/Theme.Spimixer.NoActionBar"
+87-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:82:13-62
+88            android:windowSoftInputMode="adjustNothing" >
+88-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:83:13-56
+89            <intent-filter>
+89-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:84:13-88:29
+90                <action android:name="android.intent.action.MAIN" />
+90-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:85:17-69
+90-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:85:25-66
+91
+92                <category android:name="android.intent.category.LAUNCHER" />
+92-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:87:17-77
+92-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:87:27-74
+93            </intent-filter>
+94        </activity>
+95        <activity
+95-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:91:9-103:20
+96            android:name="com.basculasmagris.visorremotomixer.view.activities.MainActivity"
+96-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:92:13-57
+97            android:exported="true"
+97-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:93:13-36
+98            android:label="@string/app_name"
+98-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:94:13-45
+99            android:screenOrientation="landscape"
+99-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:95:13-50
+100            android:theme="@style/Theme.Spimixer.NoActionBar"
+100-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:96:13-62
+101            android:windowSoftInputMode="adjustNothing" >
+101-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:97:13-56
+102            <intent-filter>
+102-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:98:13-102:29
+103                <action android:name="android.intent.action.SEND" />
+103-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:99:17-69
+103-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:99:25-66
+104
+105                <category android:name="android.intent.category.DEFAULT" />
+105-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:101:17-76
+105-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:101:27-73
+106            </intent-filter>
+107        </activity>
+108
+109        <provider
+109-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:105:9-113:20
+110            android:name="androidx.core.content.FileProvider"
+110-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:106:13-62
+111            android:authorities="com.basculasmagris.visorremotomixer.view.activities.MainActivity.provider"
+111-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:107:13-108
+112            android:exported="false"
+112-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:108:13-37
+113            android:grantUriPermissions="true" >
+113-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:109:13-47
+114            <meta-data
+114-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:110:13-112:53
+115                android:name="android.support.FILE_PROVIDER_PATHS"
+115-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:111:17-67
+116                android:resource="@xml/file_path" />
+116-->D:\AndroidStudioProjects\visor-remoto-mixer\app\src\main\AndroidManifest.xml:112:17-50
+117        </provider>
+118
+119        <activity
+119-->[com.karumi:dexter:6.2.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ab1afd2a6a28af22f5ad845446530db6\transformed\jetified-dexter-6.2.2\AndroidManifest.xml:27:9-29:72
+120            android:name="com.karumi.dexter.DexterActivity"
+120-->[com.karumi:dexter:6.2.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ab1afd2a6a28af22f5ad845446530db6\transformed\jetified-dexter-6.2.2\AndroidManifest.xml:28:13-60
+121            android:theme="@style/Dexter.Internal.Theme.Transparent" />
+121-->[com.karumi:dexter:6.2.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\ab1afd2a6a28af22f5ad845446530db6\transformed\jetified-dexter-6.2.2\AndroidManifest.xml:29:13-69
+122
+123        <uses-library
+123-->[androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:25:9-27:40
+124            android:name="androidx.window.extensions"
+124-->[androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:26:13-54
+125            android:required="false" />
+125-->[androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:27:13-37
+126        <uses-library
+126-->[androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:28:9-30:40
+127            android:name="androidx.window.sidecar"
+127-->[androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:29:13-51
+128            android:required="false" />
+128-->[androidx.window:window:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\299f4b10b01706080c71000628cec3ba\transformed\jetified-window-1.0.0\AndroidManifest.xml:30:13-37
+129
+130        <provider
+130-->[androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:26:9-34:20
+131            android:name="androidx.startup.InitializationProvider"
+131-->[androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:27:13-67
+132            android:authorities="com.basculasmagris.visorremotomixer.androidx-startup"
+132-->[androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:28:13-68
+133            android:exported="false" >
+133-->[androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:29:13-37
+134            <meta-data
+134-->[androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:31:13-33:52
+135                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+135-->[androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:32:17-75
+136                android:value="androidx.startup" />
+136-->[androidx.emoji2:emoji2:1.0.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\2e5cb79f5972be999c0728672669ce13\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:33:17-49
+137            <meta-data
+137-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\cd93cece7b3668f57255cc2333afac8f\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:31:13-33:52
+138                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+138-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\cd93cece7b3668f57255cc2333afac8f\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:32:17-78
+139                android:value="androidx.startup" />
+139-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\cd93cece7b3668f57255cc2333afac8f\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:33:17-49
+140        </provider>
+141
+142        <service
+142-->[androidx.room:room-runtime:2.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\eeb9e91afc774cf9c0a596b0d9c4da91\transformed\room-runtime-2.4.2\AndroidManifest.xml:25:9-28:40
+143            android:name="androidx.room.MultiInstanceInvalidationService"
+143-->[androidx.room:room-runtime:2.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\eeb9e91afc774cf9c0a596b0d9c4da91\transformed\room-runtime-2.4.2\AndroidManifest.xml:26:13-74
+144            android:directBootAware="true"
+144-->[androidx.room:room-runtime:2.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\eeb9e91afc774cf9c0a596b0d9c4da91\transformed\room-runtime-2.4.2\AndroidManifest.xml:27:13-43
+145            android:exported="false" />
+145-->[androidx.room:room-runtime:2.4.2] C:\Users\tanto\StudioProjects\PesajeVolquetes\caches\transforms-3\eeb9e91afc774cf9c0a596b0d9c4da91\transformed\room-runtime-2.4.2\AndroidManifest.xml:28:13-37
+146    </application>
+147
+148</manifest>

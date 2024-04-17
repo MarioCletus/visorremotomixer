@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.basculasmagris.visorremotomixer.app-mergeReleaseResources-57:/values-h720dp-v13/values-h720dp-v13.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\tanto\\StudioProjects\\PesajeVolquetes\\caches\\transforms-3\\221795e6d9659ae9457c474ce80c08c8\\transformed\\appcompat-1.4.2\\res\\values-h720dp-v13\\values-h720dp-v13.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "66",
+                        "endOffsets": "117"
+                    }
+                }
+            ]
+        }
+    ]
+}
