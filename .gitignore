@@ -40,3 +40,5 @@ app/app.iml
 
 # Archivos de configuración específicos que pueden contener información sensible
 /release/
+
+**/output-metadata.json
