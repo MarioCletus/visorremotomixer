@@ -104,6 +104,14 @@ class HomeFragment : Fragment() {
                         return true
                     }
 
+
+                    R.id.bluetooth_balance -> {
+                        (requireActivity() as MainActivity).sendReconnectBalance()
+                        (requireActivity() as MainActivity).showCustomProgressDialog()
+                        return true
+                    }
+
+
                     else -> false
                 }
             }

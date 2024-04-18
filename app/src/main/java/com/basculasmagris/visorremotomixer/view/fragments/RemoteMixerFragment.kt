@@ -336,6 +336,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         return true
                     }
 
+                    R.id.bluetooth_balance -> {
+                        (requireActivity() as MainActivity).sendReconnectBalance()
+                        (requireActivity() as MainActivity).showCustomProgressDialog()
+                        return true
+                    }
 
                     R.id.cancel_round -> {
                         if ((bInCfg || bInLoad || bInDownload || bInRes)) {
@@ -454,7 +459,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     }
 
     var countMessage = 0
-    var oneBack = true
     private val mBluetoothListener: IBluetoothSDKListener = object : IBluetoothSDKListener {
         init {
             Log.i(TAG,"create mBluetoothListener")
@@ -714,10 +718,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         return
                     }
                     Log.v("cmd_weight","CMD_WEIGHT")
-                    if(oneBack){
-                        (requireActivity()).onBackPressed()
-                        oneBack = false
-                    }
+                    (requireActivity()).onBackPressed()
                     return
                 }
 

@@ -58,6 +58,7 @@ import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
+import com.basculasmagris.visorremotomixer.view.fragments.RoundListFragment
 import com.basculasmagris.visorremotomixer.view.fragments.TabletMixerListFragment
 import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModelFactory
@@ -481,6 +482,13 @@ class MainActivity : AppCompatActivity() {
         mService?.LocalBinder()?.write(msg.toByteArray())
     }
 
+
+    fun sendReconnectBalance() {
+        val msg = "CMD${Constants.CMD_RECONNECT_SCALE}"
+        Log.i("send_cmd","Send reconnect balance $msg")
+        mService?.LocalBinder()?.write(msg.toByteArray())
+    }
+
     fun requestDataRoundRunDetail() {
         val msg = "CMD${Constants.CMD_ROUNDDATA}"
         Log.i("send_cmd","Send requestRoundRunData $msg")
@@ -562,6 +570,26 @@ class MainActivity : AppCompatActivity() {
                     mRoundLocalViewModel.update(roundLocal)
                 }
             }
+
+            val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
+            navHost?.childFragmentManager?.primaryNavigationFragment?.let { fragment ->
+                when (fragment) {
+                    is HomeFragment -> {
+                        Log.i(TAG, "refreshRounds in HomeFragment")
+                    }
+                    is RemoteMixerFragment -> {
+                        Log.i(TAG, "refreshRounds in RemoteMixerFragment")
+                    }
+                    is TabletMixerListFragment -> {
+                        Log.i(TAG, "refreshRounds in TabletMixerListFragment")
+                    }
+                    is RoundListFragment->{
+                        Log.i(TAG, "refreshRounds in RoundListFragment")
+                    }
+                    else->{}
+                }
+            }
+
 
             return true
         }catch (e: NumberFormatException){
@@ -991,6 +1019,7 @@ class MainActivity : AppCompatActivity() {
 
     fun onCommandReceived() {
         runOnUiThread {
+            mProgressDialog?.dismiss()
             showBalanceConnected()
         }
         handlerBeacon.removeCallbacks(timeoutRunnable)

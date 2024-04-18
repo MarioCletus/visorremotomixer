@@ -49,9 +49,7 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
         return ViewHolder(binding)
     }
 
-    private fun getProgress(roundRunDetail: MedRoundRunDetail) : Int{
-        return 0
-    }
+
 
     private fun getCurrentStatus(roundToRun: MedRoundRunDetail) : String {
 
@@ -67,24 +65,14 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
             return  "$state   ${Helper.formattedDate(roundToRun.endDate, Constants.APP_DB_FORMAT_DATE, Constants.APP_SHOW_LARGE_FORMAT_DATE)}"
         }
 
-        val currentProgress = getProgress(roundToRun)
-        if (currentProgress < 50){
-            return Constants.STATUS_LOAD_IN_PROGRESS
+        when(roundToRun.state){
+            Constants.STATE_LOAD -> return Constants.STATUS_LOAD_IN_PROGRESS
+            Constants.STATE_DOWNLOAD -> return Constants.STATUS_DOWNLOAD_IN_PROGRESS
+            Constants.STATE_CONFIG -> return  Constants.STATUS_CONFIG
+            Constants.STATE_RESUME -> return  Constants.STATUS_RESUME
+            else-> return ""
         }
 
-        if (currentProgress == 50){
-            return Constants.STATUS_LOAD_COMPLETED
-        }
-
-        if (currentProgress > 50){
-            return Constants.STATUS_DOWNLOAD_IN_PROGRESS
-        }
-
-        if (currentProgress == 100){
-            return Constants.STATUS_DOWNLOAD_COMPLETED
-        }
-
-        return status
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if(filteredRoundsRun.isEmpty() || position>= filteredRoundsRun.size){
@@ -98,22 +86,38 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
             holder.llProgressBar.visibility = GONE
             holder.btnStopRound.visibility = INVISIBLE
             if(bRoundRunning){
-                holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.emparejar)
+                if((fragment.requireActivity() as MainActivity).minRoundRunDetail?.round?.id == roundToRun.round.id){
+                    holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.ver_ronda)
+                    holder.btnStartRound.isEnabled = true
+                }
+                else{
+                    holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.iniciar)
+                    holder.btnStartRound.isEnabled = false
+                }
             }else {
                 holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.iniciar)
+                holder.btnStartRound.isEnabled = true
             }
             holder.tvRoundRunDescription.text = getCurrentStatus(roundToRun)
 
         } else if (roundToRun.endDate.isEmpty()) {
             // En curso
             if(bRoundRunning){
-                holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.emparejar)
-            }else{
+                if((fragment.requireActivity() as MainActivity).minRoundRunDetail?.round?.id == roundToRun.round.id){
+                    holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.ver_ronda)
+                    holder.btnStartRound.isEnabled = true
+                }
+                else{
+                    holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.continuar)
+                    holder.btnStartRound.isEnabled = false
+                }
+            }else {
                 holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.continuar)
+                holder.btnStartRound.isEnabled = true
             }
             holder.tvRoundStartDate.text = "Iniciada el ${Helper.formattedDate(roundToRun.startDate, Constants.APP_DB_FORMAT_DATE, Constants.APP_SHOW_LARGE_FORMAT_DATE)}"
             holder.tvRoundRunDescription.text = getCurrentStatus(roundToRun)
-            holder.pbRoundRun.progress = getProgress(roundToRun)
+            holder.pbRoundRun.progress = 0 //TODO hay que hacer esto!
             holder.tvRoundRunPercentage.text = "${holder.pbRoundRun.progress}%"
             holder.btnStopRound.text = fragment.resources.getString(R.string.detener)
             holder.btnStopRound.background = fragment.context?.let { getDrawable(it,R.drawable.btn_round_to_run_red) }
@@ -123,9 +127,17 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
             holder.llProgressBar.visibility = GONE
             holder.btnStopRound.visibility = INVISIBLE
             if(bRoundRunning){
-                holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.emparejar)
+                if((fragment.requireActivity() as MainActivity).minRoundRunDetail?.round?.id == roundToRun.round.id){
+                    holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.ver_ronda)
+                    holder.btnStartRound.isEnabled = true
+                }
+                else{
+                    holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.iniciar)
+                    holder.btnStartRound.isEnabled = false
+                }
             }else {
                 holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.iniciar)
+                holder.btnStartRound.isEnabled = true
             }
             holder.tvRoundRunDescription.text = getCurrentStatus(roundToRun)
             holder.tvRoundStartDate.text = "Iniciada el ${Helper.formattedDate(roundToRun.startDate, Constants.APP_DB_FORMAT_DATE, Constants.APP_SHOW_LARGE_FORMAT_DATE)}"

@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:text="@string/emparejando_ronda"
+        android:text="@string/ver_ronda"
         android:textSize="@dimen/_16sdp"
         />
 

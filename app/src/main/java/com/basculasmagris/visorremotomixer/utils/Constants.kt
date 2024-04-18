@@ -49,6 +49,8 @@ object Constants {
     const val STATUS_LOAD_COMPLETED = "CARGA COMPLETA"
     const val STATUS_DOWNLOAD_IN_PROGRESS = "DESCARGA INCOMPLETA"
     const val STATUS_DOWNLOAD_COMPLETED = "DESCARGA COMPLETA"
+    const val STATUS_CONFIG = "CONFIGURACION"
+    const val STATUS_RESUME = "RESUMEN"
 
     const val KEY_PREFIX_DEVICE = "TB"
 
@@ -150,6 +152,7 @@ object Constants {
     val CMD_ROUNDDETAIL = "RRD"
     val CMD_ROUNDDATA = "RDD"
     val CMD_NXTPRODUCT = "NXP"
+    val CMD_RECONNECT_SCALE = "RSC"
     val CMD_END = "END"
     val CMD_ACK = "ACK"
     val CMD_CANCEL = "CNL"

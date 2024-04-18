@@ -100,9 +100,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:text=""
-                android:textColor="@color/color_acent_green">
-
-            </TextView>
+                android:textColor="@color/color_acent_green"/>
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -132,7 +130,8 @@
                 android:layout_height="36dp"
                 android:background="@drawable/btn_rounded_green"
                 android:gravity="center"
-                android:text="Iniciar"
+                android:text="@string/iniciar"
+                android:enabled="false"
                 android:textSize="13sp"
                 app:backgroundTint="@null"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -364,8 +364,7 @@
     <string name="conectar_mixers_cercanos">Conectar mixers cercanos</string>
     <string name="iniciando_ronda">Iniciando ronda</string>
     <string name="atencion">Atención</string>
-    <string name="emparejar">Emparejar</string>
-    <string name="emparejando_ronda">Emparejando ronda</string>
+    <string name="ver_ronda">Ver ronda</string>
 
 
 </resources>

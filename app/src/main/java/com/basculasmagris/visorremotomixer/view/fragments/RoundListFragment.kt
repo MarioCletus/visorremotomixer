@@ -30,10 +30,12 @@ import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
 import com.basculasmagris.visorremotomixer.databinding.FragmentRoundListBinding
 import com.basculasmagris.visorremotomixer.model.entities.MedRoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.MinRound
+import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.RoundLocal
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
+import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
 import com.basculasmagris.visorremotomixer.view.activities.MergedLocalData
 import com.basculasmagris.visorremotomixer.view.activities.RoundLocalData
@@ -41,6 +43,7 @@ import com.basculasmagris.visorremotomixer.view.adapter.RoundRunAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.basculasmagris.visorremotomixer.viewmodel.RoundLocalViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.RoundLocalViewModelFactory
+import com.google.gson.Gson
 
 
 class RoundListFragment : Fragment() {
@@ -56,6 +59,10 @@ class RoundListFragment : Fragment() {
     private var mLocalRoundsLocal: List<RoundLocal>? = null
     private var bGoToRound = false
     private var fragmentRunning = false
+
+    private val REFRESH_VIEW_TIME = 20
+    private var countMsg: Int = REFRESH_VIEW_TIME
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -113,7 +120,7 @@ class RoundListFragment : Fragment() {
             (requireActivity() as MainActivity).requestListOfRounds()
             val handler = Handler(Looper.getMainLooper())
             val action = Runnable {
-                getLocalRound()
+
                 bBlockButton = false
             }
             handler.postDelayed(action, 500)
@@ -187,7 +194,7 @@ class RoundListFragment : Fragment() {
                 mBinding.rvRoundsList.visibility = View.GONE
                 mBinding.tvNoData.visibility = View.VISIBLE
             } else {
-                Log.i("SYNC", "Se actualiza UI Roundas: ${it.size} ")
+                Log.i(TAG, "Se actualiza UI Roundas: ${it.size} ")
                 mBinding.rvRoundsList.visibility = View.VISIBLE
                 mBinding.tvNoData.visibility = View.GONE
                 roundAdapter.roundList(it)
@@ -246,9 +253,32 @@ class RoundListFragment : Fragment() {
             Log.i("SHOWCOMAND","command $command")
             Log.i("message", String(message))
             when (command){
+
+                Constants.CMD_ROUNDDETAIL->{
+                    val convertZip = ConvertZip()
+                    val byteArrayUtil = message.copyOfRange(9,message.size-1)
+                    Log.i("showCommand","CMD_ROUNDDETAIL ${messageStr.length} byteArrayUtil ${byteArrayUtil.size} ")
+                    try{
+                        val jsonString : String = convertZip.decompressText(byteArrayUtil)
+                        Log.i("Json","jsonString * ${jsonString}")
+                        if(jsonString.isNotEmpty()){
+                            val gson = Gson()
+                            val roundRunDetail : MinRoundRunDetail = gson.fromJson(jsonString,  MinRoundRunDetail::class.java)
+                            (requireActivity() as MainActivity).minRoundRunDetail = roundRunDetail
+                            (mBinding.rvRoundsList.adapter as RoundRunAdapter).notifyDataSetChanged()
+                            }
+                    }catch (e: NumberFormatException){
+                        Log.i("showCommand","CMD_ROUNDDETAIL NumberFormatException $e")
+                    }catch (e:Exception){
+                        Log.i("showCommand","CMD_ROUNDDETAIL Exception $e")
+                    }
+                }
+
+
                 Constants.CMD_ROUNDS->{
                     Log.i("showCommand","CMD_ROUNDS")
                     (requireActivity() as MainActivity).refreshRounds(message)
+                    getLocalRound()
                 }
 
                 Constants.CMD_WEIGHT->{
@@ -256,6 +286,9 @@ class RoundListFragment : Fragment() {
                 }
 
                 Constants.CMD_WEIGHT_LOAD->{
+                    if(countMsg++ > REFRESH_VIEW_TIME){
+                        refreshRound()
+                    }
                     if(bGoToRound){
                         bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
@@ -265,6 +298,9 @@ class RoundListFragment : Fragment() {
                     }
                 }
                 Constants.CMD_WEIGHT_LOAD_FREE->{
+                    if(countMsg++ > REFRESH_VIEW_TIME){
+                        refreshRound()
+                    }
                     if(bGoToRound){
                         bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
@@ -274,6 +310,9 @@ class RoundListFragment : Fragment() {
                     }
                 }
                 Constants.CMD_WEIGHT_DWNL->{
+                    if(countMsg++ > REFRESH_VIEW_TIME){
+                        refreshRound()
+                    }
                     if(bGoToRound){
                         bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
@@ -283,6 +322,9 @@ class RoundListFragment : Fragment() {
                     }
                 }
                 Constants.CMD_WEIGHT_DWNL_FREE->{
+                    if(countMsg++ > REFRESH_VIEW_TIME){
+                        refreshRound()
+                    }
                     if(bGoToRound){
                         bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
@@ -292,6 +334,9 @@ class RoundListFragment : Fragment() {
                     }
                 }
                 Constants.CMD_WEIGHT_CONFIG->{
+                    if(countMsg++ > REFRESH_VIEW_TIME){
+                        refreshRound()
+                    }
                     if(bGoToRound){
                         bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
@@ -301,6 +346,9 @@ class RoundListFragment : Fragment() {
                     }
                 }
                 Constants.CMD_WEIGHT_RESUME->{
+                    if(countMsg++ > REFRESH_VIEW_TIME){
+                        refreshRound()
+                    }
                     if(bGoToRound){
                         bGoToRound = false
                         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
@@ -341,6 +389,12 @@ class RoundListFragment : Fragment() {
         }
     }
 
+    private fun refreshRound() {
+        countMsg = 0
+        Log.i(TAG,"refreshRound")
+        (requireActivity() as MainActivity).sendRequestRoundRunDetail()
+    }
+
     override fun onDestroyView() {
         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
         super.onDestroyView()
@@ -350,7 +404,7 @@ class RoundListFragment : Fragment() {
         if(bGoToRound){
             (requireActivity() as MainActivity).showCustomProgressDialog("Alerta","No se pudo iniciar ronda",R.layout.dialog_custom_progress_iniciar)
         }else{
-            (requireActivity() as MainActivity).showCustomProgressDialog("Alerta","No se pudo emparejar ronda",R.layout.dialog_custom_progress_emparejar)
+            (requireActivity() as MainActivity).showCustomProgressDialog("Alerta","No se puede ver ronda",R.layout.dialog_custom_progress_ver)
 
         }
         bGoToRound = true
