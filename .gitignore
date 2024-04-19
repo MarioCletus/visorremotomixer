@@ -17,6 +17,8 @@
 local.properties
 /app/schemas/com.basculasmagris.visorremotomixer.model.database.SpiMixerRoomDatabase/1.json
 /build
+app/build/
+
 .idea/
 app/app.iml
 
