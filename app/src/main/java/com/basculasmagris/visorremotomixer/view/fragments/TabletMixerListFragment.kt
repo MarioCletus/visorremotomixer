@@ -60,7 +60,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
     private var selectedBluetoothDevice : BluetoothDevice? = null
     var selectedTabletMixerInFragment: TabletMixer? = null
     private lateinit var mCustomListDialog : Dialog
-    private var knowDevices: List<BluetoothDevice>? = null
+
 
     private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
         TabletMixerViewModelFactory((requireActivity().application as SpiMixerApplication).tabletMixerRepository)
@@ -163,10 +163,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
                     R.id.menu_selected_remote_tablet ->{
                         selectedTabletMixerInFragment?.let{tabletMixer->
                             Log.v(TAG,"Force connection")
-                            val deviceBluetooth = knowDevices?.firstOrNull { bd->
-                                bd.address == tabletMixer.mac
-                            }
-                            deviceBluetooth?.let {
+                            selectedBluetoothDevice?.let {
                                 val name = (requireActivity() as MainActivity).getName(it)
                                 val macAddress = (requireActivity() as MainActivity).getAddress(it)
                                 Log.v(TAG,"Force connection $name $macAddress")
@@ -367,6 +364,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
                 val deviceBluetooth = bluetoothDevices.firstOrNull { bd ->
                     bd.address == it.mac
                 }
+                selectedBluetoothDevice = deviceBluetooth
                 (requireActivity() as MainActivity).connectDevice(deviceBluetooth)
             }
         }

@@ -166,6 +166,7 @@ class RoundListFragment : Fragment() {
                                     round = minRoundRun,
                                     startDate = roundLocal.startDate,
                                     endDate = roundLocal.endDate,
+                                    progress = roundLocal.progress,
                                     state = roundLocal.state
                                 )
                                 (requireActivity() as MainActivity).listOfMedRoundsRun.add(medRoundRunRun)
@@ -197,6 +198,7 @@ class RoundListFragment : Fragment() {
                 Log.i(TAG, "Se actualiza UI Roundas: ${it.size} ")
                 mBinding.rvRoundsList.visibility = View.VISIBLE
                 mBinding.tvNoData.visibility = View.GONE
+                Log.i(TAG,"roundList $it")
                 roundAdapter.roundList(it)
             }
         }

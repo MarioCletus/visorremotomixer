@@ -22,6 +22,7 @@ import com.basculasmagris.visorremotomixer.view.fragments.RoundListFragment
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.math.roundToInt
 
 class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<RoundRunAdapter.ViewHolder>(),
     Filterable {
@@ -80,6 +81,8 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
         }
         val roundToRun = filteredRoundsRun[position]
         holder.tvRoundName.text = roundToRun.round.name
+        holder.pbRoundRun.progress = roundToRun.progress
+        holder.tvRoundRunPercentage.text = "${holder.pbRoundRun.progress}%"
 
         if (roundToRun.endDate.isEmpty() && roundToRun.startDate.isEmpty()){
             // Nunca iniciada
@@ -117,8 +120,7 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
             }
             holder.tvRoundStartDate.text = "Iniciada el ${Helper.formattedDate(roundToRun.startDate, Constants.APP_DB_FORMAT_DATE, Constants.APP_SHOW_LARGE_FORMAT_DATE)}"
             holder.tvRoundRunDescription.text = getCurrentStatus(roundToRun)
-            holder.pbRoundRun.progress = 0 //TODO hay que hacer esto!
-            holder.tvRoundRunPercentage.text = "${holder.pbRoundRun.progress}%"
+
             holder.btnStopRound.text = fragment.resources.getString(R.string.detener)
             holder.btnStopRound.background = fragment.context?.let { getDrawable(it,R.drawable.btn_round_to_run_red) }
             holder.llProgressBar.visibility = VISIBLE

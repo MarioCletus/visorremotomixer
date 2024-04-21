@@ -13,6 +13,7 @@ data class RoundLocal (
     @ColumnInfo val description: String,
     @ColumnInfo val startDate: String,
     @ColumnInfo val endDate: String,
+    @ColumnInfo val progress: Int,
     @ColumnInfo val state: Int,
     @ColumnInfo(name = "remote_id") var remoteId: Long,
     @ColumnInfo(name = "tablet_mixer_id") var tabletMixerId: Long,

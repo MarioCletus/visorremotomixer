@@ -559,6 +559,7 @@ class MainActivity : AppCompatActivity() {
                     remoteId = minRound.round.remoteId,
                     startDate = minRound.startDate,
                     endDate = minRound.endDate,
+                    progress = minRound.progress,
                     state = minRound.state,
                     tabletMixerId = minRound.round.id,
                     tabletMixerMac = selectedTabletMixerInActivity?.mac?:"",
@@ -760,7 +761,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun sendBeacon() {
-        Log.i(TAG,"send CMD_BEACON")
         val byteArray = "CMD${Constants.CMD_BEACON}${String.format("%06d",0)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }

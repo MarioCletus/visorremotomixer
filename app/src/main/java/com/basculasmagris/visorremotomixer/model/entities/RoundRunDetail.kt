@@ -334,5 +334,6 @@ data class MedRoundRunDetail (
     val round: MinRound,
     var startDate: String,
     val endDate: String,
+    val progress: Int,
     var state: Int
 )  : Parcelable

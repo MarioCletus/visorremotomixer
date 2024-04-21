@@ -33,9 +33,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.size
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
@@ -176,8 +179,11 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                 menuInflater.inflate(R.menu.menu_mixer_config, menu)
                 checkBTStatus()
                 if(bIsDetail){
-                    menu.getItem(1).isVisible = false
-                    menu.getItem(2).isVisible = false
+                    menu.findItem(R.id.action_hide_keyboard)?.isVisible = false
+                    menu.findItem(R.id.action_save_mixer)?.isVisible = false
+                }
+                if(bIsFirstIn){
+                    menu.findItem(R.id.action_save_mixer)?.isVisible = false
                 }
             }
 
@@ -264,6 +270,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
 
         mBinding.btnSincro.setOnClickListener{
             GlobalScope.launch (Dispatchers.Main) {
+
                 syncData()
             }
         }
@@ -778,6 +785,11 @@ class TabletMixerConfigActivity : AppCompatActivity(){
 
                     result(tabletMixer)
                     if(bIsFirstIn){
+                        lifecycleScope.launch(Dispatchers.IO){
+                            datastore.edit { preferences->
+                                preferences[longPreferencesKey("IDTABLET")] = tabletMixer.id
+                            }
+                        }
                         cleanObservers()
                         finish()
                     }
@@ -1044,6 +1056,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                     remoteId = minRound.round.remoteId,
                     startDate = minRound.startDate,
                     endDate = minRound.endDate,
+                    progress = minRound.progress,
                     state = minRound.state,
                     tabletMixerId = minRound.round.id,
                     tabletMixerMac = tabletMixerReceibed?.mac?:"",
