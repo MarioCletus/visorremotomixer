@@ -188,9 +188,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         mBinding.btnRest.setOnClickListener{
             dialogResto = if(dialogResto == null){
+                (requireActivity() as MainActivity).sendRestToMixer()
                 restDialog()
             }else{
                 dialogResto?.dismiss()
+                (requireActivity() as MainActivity).sendCloseDlgToMixer()
                 null
             }
         }
@@ -713,6 +715,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     (requireActivity() as MainActivity).dlgCorral(message)
                 }
 
+                Constants.CMD_DLG_REST->{
+                    Log.i("showCommand","CMD_REST")
+                    dialogResto = restDialog()
+                }
+
                 Constants.CMD_WEIGHT->{
                     if(count_weight++<5){
                         return
@@ -1007,23 +1014,30 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         alertDialog.show()
     }
 
-    private fun restDialog() : AlertDialog? {
-        val dialogBuilder = AlertDialog.Builder(requireActivity() as MainActivity)
+    private fun restDialog(): AlertDialog? {
+        // Verifica si el fragmento está adjunto a una actividad antes de proceder
+        if (!isAdded) return null
+
+        val dialogBuilder = AlertDialog.Builder(requireActivity())
         // set message of alert dialog
         dialogBuilder.setMessage("${rest}Kg")
             .setCancelable(false)
             .setPositiveButton("Aceptar") { dialog, _ ->
+                if (isAdded) { // Verifica nuevamente antes de usar requireActivity()
+                    (requireActivity() as MainActivity).sendCloseDlgToMixer()
+                }
                 dialog.dismiss()
                 dialogResto = null
             }
         val alert = dialogBuilder.create()
         alert.setTitle(getString(R.string.rest))
         alert.show()
-        val textView : TextView = alert.findViewById(android.R.id.message)
+        val textView: TextView = alert.findViewById(android.R.id.message)
         textView.textSize = 40F
         textView.gravity = Gravity.CENTER
         return alert
     }
+
 
     fun setMixer(mixerIn: Mixer?) {
         if(selectedMixerInFragment?.equals(mixerIn) == true && mixerDetail != null){
@@ -1136,6 +1150,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             builder.dismiss()
         }
         btnCancel.setOnClickListener {
+            (requireActivity() as MainActivity).sendCloseDlgToMixer()
             builder.dismiss()
         }
         builder.setCanceledOnTouchOutside(false)

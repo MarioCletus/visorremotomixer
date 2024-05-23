@@ -546,8 +546,19 @@ class MainActivity : AppCompatActivity() {
             val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
             val gson = Gson()
             val listType = object : TypeToken<ArrayList<MedRoundRunDetail>>() {}.type
-            listOfMedRoundsRun = gson.fromJson<ArrayList<MedRoundRunDetail>>(json, listType)?:ArrayList()
-            Log.i(TAG,"listOfMinRounds $(requireactivity() as MainActivity).listOfMedRoundsRun")
+            val listaRecibida =  gson.fromJson<ArrayList<MedRoundRunDetail>>(json, listType)?:ArrayList()
+            if(listaRecibida == null || listaRecibida.isEmpty()){
+                Log.i(TAG,"listaRecibida = null or empty")
+                return false
+            }
+            listaRecibida.forEach {
+                if(it.round == null){
+                    Log.i(TAG,"listaRecibida.round = null")
+                    return false
+                }
+            }
+            listOfMedRoundsRun = listaRecibida
+            Log.i(TAG,"listOfMinRounds $(requireactivity() as MainActivity).listOfMedRoundsRun $gson")
 
             listOfMedRoundsRun.forEach{ minRound ->
                 val isRound = mLocalRoundsLocal?.firstOrNull{
@@ -719,6 +730,12 @@ class MainActivity : AppCompatActivity() {
         mService?.LocalBinder()?.write(msg.toByteArray())
     }
 
+
+    fun sendRestToMixer() {
+        val byteArray = "CMD${Constants.CMD_DLG_REST}${String.format("%06d",0)}".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
     fun sendIniToMixer() {
         val byteArray = "CMD${Constants.CMD_INI}${String.format("%06d",0)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
@@ -731,6 +748,11 @@ class MainActivity : AppCompatActivity() {
 
     fun sendCancelToMixer() {
         val byteArray = "CMD${Constants.CMD_CANCEL}${String.format("%06d",0)}".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
+    fun sendCloseDlgToMixer() {
+        val byteArray = "CMD${Constants.CMD_CLOSE_DLG}${String.format("%06d",0)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
@@ -1025,7 +1047,6 @@ class MainActivity : AppCompatActivity() {
         handlerBeacon.removeCallbacks(timeoutRunnable)
         handlerBeacon.postDelayed(timeoutRunnable, 2500)
     }
-
 
 
 }

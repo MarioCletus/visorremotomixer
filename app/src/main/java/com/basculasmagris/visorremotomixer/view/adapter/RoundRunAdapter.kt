@@ -80,6 +80,15 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
             return
         }
         val roundToRun = filteredRoundsRun[position]
+        if(roundToRun == null || roundToRun.round == null){
+            if(roundToRun == null){
+                Log.i("DEBUG","Esto no debería pasar!! roundToRun null")
+            }else{
+                Log.i("DEBUG","Esto no debería pasar!! rounToRun.round = null")
+            }
+            return
+        }
+
         holder.tvRoundName.text = roundToRun.round.name
         holder.pbRoundRun.progress = roundToRun.progress
         holder.tvRoundRunPercentage.text = "${holder.pbRoundRun.progress}%"

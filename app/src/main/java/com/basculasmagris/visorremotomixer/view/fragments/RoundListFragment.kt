@@ -142,6 +142,7 @@ class RoundListFragment : Fragment() {
 
     private fun getLocalData(){
         // Sync local data
+        Log.i(TAG,"getLocalData")
         (requireActivity() as MainActivity).selectedTabletMixerInActivity?.let {
             val liveData = fetchLocalData(it)
             liveData.observe(viewLifecycleOwner, object : Observer<MergedLocalData> {

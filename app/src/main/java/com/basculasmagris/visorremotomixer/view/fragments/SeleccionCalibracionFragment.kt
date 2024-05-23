@@ -67,17 +67,22 @@ class SeleccionCalibracionDlgFragment : DialogFragment() {
     }
 
     private fun listeners() {
-        btnAceptar!!.setOnClickListener {
-            if (radioButton1!!.isChecked) {
-                seleccionCalibracionListener!!.onSeleccionCalibracion(1)
+        btnAceptar?.let{
+            it.setOnClickListener {
+                if (radioButton1?.isChecked == true) {
+                    seleccionCalibracionListener?.onSeleccionCalibracion(1)
+                }
+                if (radioButton2?.isChecked == true) {
+                    seleccionCalibracionListener?.onSeleccionCalibracion(2)
+                }
+                dismiss()
             }
-            if (radioButton2!!.isChecked) {
-                seleccionCalibracionListener!!.onSeleccionCalibracion(2)
-            }
+        }
+        btnCancelar?.let{
             dismiss()
         }
-        btnCancelar!!.setOnClickListener { dismiss() }
     }
+
 
     //Interface para crear el evento on complete dialog
     interface OnSeleccionCalibracionListener {
