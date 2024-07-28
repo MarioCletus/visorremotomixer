@@ -526,7 +526,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         if(jsonString.isNotEmpty()){
                             val gson = Gson()
                             val roundRunDetail : MinRoundRunDetail = gson.fromJson(jsonString,  MinRoundRunDetail::class.java)
-                            (requireActivity() as MainActivity).minRoundRunDetail = roundRunDetail
+                            (requireActivity() as MainActivity).updateRoundDetail(roundRunDetail)
                             loadRoundDetail()
                             roundRunDetail.mixer?.let {mixerDetail->
                                 val mixer = Mixer(

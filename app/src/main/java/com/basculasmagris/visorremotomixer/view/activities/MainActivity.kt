@@ -541,28 +541,36 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun refreshRounds(message: ByteArray): Boolean {
-        try{
+        try {
             val convertZip = ConvertZip()
-            val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
+            val json = convertZip.decompressText(message.copyOfRange(7, message.size - 1))
             val gson = Gson()
             val listType = object : TypeToken<ArrayList<MedRoundRunDetail>>() {}.type
-            val listaRecibida =  gson.fromJson<ArrayList<MedRoundRunDetail>>(json, listType)?:ArrayList()
-            if(listaRecibida == null || listaRecibida.isEmpty()){
-                Log.i(TAG,"listaRecibida = null or empty")
+            val listaRecibida = gson.fromJson<ArrayList<MedRoundRunDetail>>(json, listType) ?: ArrayList()
+            if (listaRecibida.isEmpty()) {
+                Log.i(TAG, "listaRecibida = null or empty")
                 return false
             }
+
+            val uniqueRounds = mutableSetOf<Pair<String, String>>()
             listaRecibida.forEach {
-                if(it.round == null){
-                    Log.i(TAG,"listaRecibida.round = null")
+                val round = it.round ?: run {
+                    Log.i(TAG, "listaRecibida.round = null")
+                    return false
+                }
+                val roundKey = round.name to round.description
+                if (!uniqueRounds.add(roundKey)) {
+                    Log.i(TAG, "Duplicate round found: ${round.name} - ${round.description}")
                     return false
                 }
             }
-            listOfMedRoundsRun = listaRecibida
-            Log.i(TAG,"listOfMinRounds $(requireactivity() as MainActivity).listOfMedRoundsRun $gson")
 
-            listOfMedRoundsRun.forEach{ minRound ->
-                val isRound = mLocalRoundsLocal?.firstOrNull{
-                    it.id == minRound.round.id
+            listOfMedRoundsRun = listaRecibida
+            Log.i(TAG, "listOfMinRounds $listOfMedRoundsRun $gson")
+
+            listOfMedRoundsRun.forEach { minRound ->
+                val isRound = mLocalRoundsLocal?.firstOrNull {
+                    it.id == minRound.round.id || (it.name == minRound.round.name && it.description == minRound.round.description)
                 }
                 val roundLocal = RoundLocal(
                     name = minRound.round.name,
@@ -573,12 +581,12 @@ class MainActivity : AppCompatActivity() {
                     progress = minRound.progress,
                     state = minRound.state,
                     tabletMixerId = minRound.round.id,
-                    tabletMixerMac = selectedTabletMixerInActivity?.mac?:"",
-                    id = isRound?.id?:0L
+                    tabletMixerMac = selectedTabletMixerInActivity?.mac ?: "",
+                    id = isRound?.id ?: 0L
                 )
-                if(isRound == null){
+                if (isRound == null) {
                     mRoundLocalViewModel.insert(roundLocal)
-                }else{
+                } else {
                     mRoundLocalViewModel.update(roundLocal)
                 }
             }
@@ -595,23 +603,21 @@ class MainActivity : AppCompatActivity() {
                     is TabletMixerListFragment -> {
                         Log.i(TAG, "refreshRounds in TabletMixerListFragment")
                     }
-                    is RoundListFragment->{
+                    is RoundListFragment -> {
                         Log.i(TAG, "refreshRounds in RoundListFragment")
                     }
-                    else->{}
+                    else -> {}
                 }
             }
 
-
             return true
-        }catch (e: NumberFormatException){
-            Log.i(TAG,"bSyncroRounds NumberFormatException $e")
+        } catch (e: NumberFormatException) {
+            Log.i(TAG, "bSyncroRounds NumberFormatException $e")
             return false
-        }catch (e:Exception){
-            Log.i(TAG,"bSyncroRounds Exception $e")
+        } catch (e: Exception) {
+            Log.i(TAG, "bSyncroRounds Exception $e")
             return false
         }
-
     }
 
     private fun selectProductDialog(productsToSelect : ArrayList<MinProduct>): AlertDialog? {
@@ -1046,6 +1052,14 @@ class MainActivity : AppCompatActivity() {
         }
         handlerBeacon.removeCallbacks(timeoutRunnable)
         handlerBeacon.postDelayed(timeoutRunnable, 2500)
+    }
+
+    fun deleteRoundsFromDB() {
+        mRoundLocalViewModel.deleteAllRoundLocal()
+    }
+
+    fun updateRoundDetail(roundRunDetail: MinRoundRunDetail) {
+        minRoundRunDetail = roundRunDetail
     }
 
 

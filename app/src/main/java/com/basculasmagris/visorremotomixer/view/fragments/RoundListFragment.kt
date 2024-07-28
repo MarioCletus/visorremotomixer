@@ -148,7 +148,7 @@ class RoundListFragment : Fragment() {
             liveData.observe(viewLifecycleOwner, object : Observer<MergedLocalData> {
                 override fun onChanged(it: MergedLocalData?) {
                     when (it) {
-                        is RoundLocalData -> mLocalRoundsLocal = it.roundsLocal
+                        is RoundLocalData -> mLocalRoundsLocal = it.roundsLocal.sortedBy { rLocal -> rLocal.remoteId }
                         else -> {}
                     }
 
@@ -267,7 +267,7 @@ class RoundListFragment : Fragment() {
                         if(jsonString.isNotEmpty()){
                             val gson = Gson()
                             val roundRunDetail : MinRoundRunDetail = gson.fromJson(jsonString,  MinRoundRunDetail::class.java)
-                            (requireActivity() as MainActivity).minRoundRunDetail = roundRunDetail
+                            (requireActivity() as MainActivity).updateRoundDetail(roundRunDetail)
                             (mBinding.rvRoundsList.adapter as RoundRunAdapter).notifyDataSetChanged()
                             }
                     }catch (e: NumberFormatException){

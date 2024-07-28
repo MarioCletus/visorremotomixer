@@ -455,6 +455,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                     bSyncroUsers = refreshUsers(message)
                     if(bSyncroUsers){
                         mBinding.pbUsers.progress = 100
+                        mBinding.tvUsersPercentage.text = "100%"
                     }
                     bSyncroUsers = false
                 }
@@ -464,6 +465,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                     bSyncroRounds = refreshRounds(message)
                     if(bSyncroRounds){
                         mBinding.pbRounds.progress = 100
+                        mBinding.tvRoundsPercentage.text = "100%"
                         saveTabletMixer()
                     }
                     bSyncroRounds = false
@@ -472,9 +474,6 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                 Constants.CMD_MIXERS->{
                     Log.i("showCommand","CMD_MIXERS")
                     bSyncroMixers = refreshMixer(message)
-                    if(bSyncroMixers){
-                        mBinding.pbMixers.progress = 100
-                    }
                     bSyncroMixers = false
                 }
             }
@@ -1020,6 +1019,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                     codeClient = "",
                     id = minUser.id
                 )
+                Log.i(TAG,"user $user")
                 if(isUser == null){
                     mUserViewModel.insert(user)
                 }else{

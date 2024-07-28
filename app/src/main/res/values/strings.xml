@@ -252,9 +252,8 @@
     <string name="factor_conversion">Factor de conversion</string>
     <string name="divisiones_externas">Divisiones externas</string>
     <string name="peso_conocido">Peso conocido</string>
-    <string name="caja_bluetooth_asoc">Caja bluetooth asociada</string>
-    <string name="equipos_vinculados">Mixers vinculadas</string>
-    <string name="buscar_equipos">Buscar Mixers</string>
+    <string name="equipos_vinculados">Tablets vinculadas</string>
+    <string name="buscar_equipos">Buscar Tablets</string>
     <string name="ingrese_macaddress">Ingrese Macaddress</string>
     <string name="aceptar">Aceptar</string>
     <string name="cancelar">Cancelar</string>
@@ -312,15 +311,12 @@
 
     <string name="title_activity_add_update_tablet_mixer">AddUpdateTabletMixerActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_tablet_mixer_config">TabletMixerConfigActivity</string>
-    <string name="caja_bluetooth_asociada">Caja Bluetooth asociada</string>
+    <string name="caja_bluetooth_asoc">Tablet asociada</string>
     <string name="eliminar">Eliminar</string>
     <string name="carga">Carga</string>
     <string name="volver">Volver</string>
@@ -361,7 +357,7 @@
     <string name="ronda_libre">Ronda\nLibre</string>
     <string name="declarar_mixer">Declarar Mixer</string>
     <string name="usuarios">Usuarios</string>
-    <string name="conectar_mixers_cercanos">Conectar mixers cercanos</string>
+    <string name="conectar_mixers_cercanos">Conectar tablets cercanas</string>
     <string name="iniciando_ronda">Iniciando ronda</string>
     <string name="atencion">Atención</string>
     <string name="ver_ronda">Ver ronda</string>

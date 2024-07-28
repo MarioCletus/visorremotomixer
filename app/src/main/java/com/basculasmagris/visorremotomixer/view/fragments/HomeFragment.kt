@@ -213,7 +213,7 @@ class HomeFragment : Fragment() {
                         if(jsonString.isNotEmpty()){
                             val gson = Gson()
                             val roundRunDetail : MinRoundRunDetail = gson.fromJson(jsonString,  MinRoundRunDetail::class.java)
-                            (requireActivity() as MainActivity).minRoundRunDetail = roundRunDetail
+                            (requireActivity() as MainActivity).updateRoundDetail(roundRunDetail)
                             roundRunDetail.mixer?.let {mixerDetail->
                                 val mixer = Mixer(
                                     mixerDetail.name,

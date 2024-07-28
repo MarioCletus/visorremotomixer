@@ -129,6 +129,7 @@ class SyncFragment : Fragment() {
                     bSyncroUsers = (requireActivity() as MainActivity).refreshUsers(message)
                     if(bSyncroUsers){
                         mBinding.pbUsers.progress = 100
+                        mBinding.tvUsersPercentage.text = "100%"
                     }
                     bSyncroUsers = false
                 }
@@ -138,6 +139,7 @@ class SyncFragment : Fragment() {
                     bSyncroRounds = (requireActivity() as MainActivity).refreshRounds(message)
                     if(bSyncroRounds){
                         mBinding.pbRounds.progress = 100
+                        mBinding.tvRoundsPercentage.text = "100%"
                     }
                     bSyncroRounds = false
                 }
@@ -197,9 +199,9 @@ class SyncFragment : Fragment() {
 
     private suspend fun syncData(){
         (requireActivity() as MainActivity).requestListOfUsers()
+        (requireActivity() as MainActivity).deleteRoundsFromDB()
         delay(1000)
         (requireActivity() as MainActivity).requestListOfRounds()
-
     }
 
 
