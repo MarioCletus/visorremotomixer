@@ -508,7 +508,7 @@ class MainActivity : AppCompatActivity() {
             listOfMinUsers = gson.fromJson<ArrayList<MinUser>>(json, listType)?:ArrayList()
             listOfMinUsers.forEach{ minUser ->
                 val isUser = mLocalUsers?.firstOrNull{
-                    it.id == minUser.id
+                    it.id == minUser.id || (it.remoteId == minUser.remoteId && it.remoteId > 0) || (it.name == minUser.name && it.lastname == minUser.lastname)
                 }
                 val user = User(
                     username = minUser.username,
@@ -570,7 +570,7 @@ class MainActivity : AppCompatActivity() {
 
             listOfMedRoundsRun.forEach { minRound ->
                 val isRound = mLocalRoundsLocal?.firstOrNull {
-                    it.id == minRound.round.id || (it.name == minRound.round.name && it.description == minRound.round.description)
+                    it.id == minRound.round.id || (it.remoteId == minRound.round.remoteId && it.remoteId > 0)|| (it.name == minRound.round.name && it.description == minRound.round.description)
                 }
                 val roundLocal = RoundLocal(
                     name = minRound.round.name,

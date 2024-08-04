@@ -331,7 +331,7 @@ class AddUpdateRoundActivity : AppCompatActivity(), View.OnClickListener {
                 currentRound?.let {
                     if (it.id != 0L){
                         roundId = it.id
-                        updatedDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
+                        updatedDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
                     }
                 }
 
@@ -643,7 +643,7 @@ class AddUpdateRoundActivity : AppCompatActivity(), View.OnClickListener {
                 val corralDetail = mLocalCorral?.firstOrNull {
                     it.id == item.id
                 }
-                if(corralDetail!=null){
+                if(corralDetail != null){
                     Log.i("DEBUG","corralDetail $corralDetail")
                 }
 

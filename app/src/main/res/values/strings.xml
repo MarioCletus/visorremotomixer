@@ -73,7 +73,7 @@
     <string name="lbl_remote_id">Remote Id:</string>
     <string name="tv_building">Sección en construcción</string>
     <string name="please_wait">Por favor espere</string>
-    <string name="conectando_el_mixer">Conectando con Mixer</string>
+    <string name="conectando_el_mixer">Conectando con Tablet</string>
 
 
     <string name="err_msg_establishment_name">El nombre de establecimiento es obligatorio</string>
