@@ -553,22 +553,22 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                                 activity?.changeActionBarTitle(title)
                             }
-                            if(!bInFree){
-                                if(bInLoad){
-                                    (requireActivity() as MainActivity).minRoundRunDetail?.round?.diet?.products?.let{
-                                        if(it.isNotEmpty() && it[it.size-1].initialWeight != 0L){
-                                            mBinding.btnJump.text = getString(R.string.descarga)
-                                        }
-                                    }
-                                }else{
-                                    (requireActivity() as MainActivity).minRoundRunDetail?.round?.corrals?.let{
-                                        if(it.isNotEmpty() && it[it.size-1].initialWeight != 0L){
-                                            mBinding.btnJump.text = getString(R.string.fin)
-                                        }
-                                    }
-                                }
-
-                            }
+//                            if(!bInFree){
+//                                if(bInLoad){
+//                                    (requireActivity() as MainActivity).minRoundRunDetail?.round?.diet?.products?.let{
+//                                        if(it.isNotEmpty() && it[it.size-1].initialWeight != 0L){
+//                                            mBinding.btnJump.text = getString(R.string.descarga)
+//                                        }
+//                                    }
+//                                }else{
+//                                    (requireActivity() as MainActivity).minRoundRunDetail?.round?.corrals?.let{
+//                                        if(it.isNotEmpty() && it[it.size-1].initialWeight != 0L){
+//                                            mBinding.btnJump.text = getString(R.string.fin)
+//                                        }
+//                                    }
+//                                }
+//
+//                            }
                         }
                     }catch (e: NumberFormatException){
                         Log.i("showCommand","CMD_ROUNDDETAIL NumberFormatException $e")
