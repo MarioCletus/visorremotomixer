@@ -144,6 +144,11 @@ object Constants {
     const val STATE_FINISH = 10
     const val STATE_INTERRUPT = 11
 
+    //Load & Download state
+//    const val STATE_NONE = 0
+    const val STATE_STARTED = 1
+    const val STATE_FINISHED = 2
+
     //Remote comunication protocol
     val CMD_ACK  = "ACK"
     val CMD_BEACON  = "BEA"

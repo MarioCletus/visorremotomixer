@@ -551,6 +551,7 @@ class MainActivity : AppCompatActivity() {
                 Log.i(TAG, "listaRecibida = null or empty")
                 return false
             }
+            Log.i("MEP", "listaRecibida ${listaRecibida}")
 
             val uniqueRounds = mutableSetOf<Pair<String, String>>()
             listaRecibida.forEach {

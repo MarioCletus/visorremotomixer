@@ -242,7 +242,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         var currentProduct = products[0]
                         var position = 0
                         products.sortedBy { it.order }.forEachIndexed{index, productInRound ->
-                            if(productInRound.finalWeight == 0L && productInRound.initialWeight != 0L){
+                            if(productInRound.status == Constants.STATE_STARTED /*productInRound.finalWeight == 0L && productInRound.initialWeight != 0L*/){
                                 currentProduct = productInRound
                                 Log.i("select_product","Product selected: $index ${productInRound.name}  ")
                                 roundRunProductAdapter?.selectProduct(index)
@@ -272,7 +272,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         var position = 0
                         var currentCorral = corrals[0]
                         corrals.sortedBy { it.order }.forEachIndexed{index, corralInRound ->
-                            if(corralInRound.initialWeight != 0L && corralInRound.finalWeight == 0L){
+                            if(corralInRound.status == Constants.STATE_STARTED /*corralInRound.initialWeight != 0L && corralInRound.finalWeight == 0L*/){
                                 currentCorral = corralInRound
                                 roundRunCorralAdapter?.selectCorral(index)
                                 position = index
@@ -599,6 +599,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                                             product.currentWeight = data.currentWeight
                                             product.finalWeight = data.finalWeight
                                             product.targetWeight = data.targetWeight
+                                            product.status = data.status
                                         }
                                         if(newProductData == null) {
                                             refreshRound()
@@ -618,6 +619,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                                             corral.finalWeight = data.finalWeight
                                             corral.customTargetWeight = data.customTargetWeight
                                             corral.actualTargetWeight = data.actualTargetWeight
+                                            corral.status = data.status
                                         }
                                         if(newCorralData == null) {
                                             refreshRound()

@@ -110,7 +110,7 @@ class RoundListFragment : Fragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
-        refreshData()
+
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
     }
 
@@ -173,14 +173,17 @@ class RoundListFragment : Fragment() {
                                 (requireActivity() as MainActivity).listOfMedRoundsRun.add(medRoundRunRun)
                             }
                         }
-
+                        Log.i("MEP","getLocalRound() 1 ")
                         getLocalRound()
+                        refreshData()
                     }
                 }
             })
             return
         }
+        Log.i("MEP","getLocalRound() 2 ")
         getLocalRound()
+        refreshData()
     }
 
 
@@ -200,6 +203,7 @@ class RoundListFragment : Fragment() {
                 mBinding.rvRoundsList.visibility = View.VISIBLE
                 mBinding.tvNoData.visibility = View.GONE
                 Log.i(TAG,"roundList $it")
+                Log.i("MEP","roundAdapter.roundList(it) $it")
                 roundAdapter.roundList(it)
             }
         }
@@ -280,7 +284,9 @@ class RoundListFragment : Fragment() {
 
                 Constants.CMD_ROUNDS->{
                     Log.i("showCommand","CMD_ROUNDS")
+                    Log.i("MEP","CMD_ROUNDS")
                     (requireActivity() as MainActivity).refreshRounds(message)
+                    Log.i("MEP","getLocalRound() 3 ")
                     getLocalRound()
                 }
 

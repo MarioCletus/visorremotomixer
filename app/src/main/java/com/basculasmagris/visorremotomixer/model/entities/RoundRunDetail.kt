@@ -219,6 +219,7 @@ data class MinCorralDetail (
     var finalWeight: Long,
     var customTargetWeight: Long,
     var actualTargetWeight: Long,
+    var status: Int,
     var id: Long
 ) : Parcelable
 
@@ -245,6 +246,7 @@ data class MinProductDetail (
     var currentWeight: Long,
     var finalWeight: Long,
     var targetWeight: Long,
+    var status: Int,
     val id: Long
 ) : Parcelable
 
@@ -302,6 +304,7 @@ data class MinProduct (
 data class MinRoundRunData (
     var corralsData: ArrayList<MinCorralData>,
     var productsData: ArrayList<MinProductData>,
+    var status: Int,
     var id: Long
 )  : Parcelable
 
@@ -313,6 +316,7 @@ data class MinCorralData (
     var finalWeight: Long,
     var customTargetWeight: Long,
     var actualTargetWeight: Long,
+    var status: Int,
     var id: Long
 ) : Parcelable
 
@@ -323,6 +327,7 @@ data class MinProductData (
     var currentWeight: Long,
     var finalWeight: Long,
     var targetWeight: Long,
+    var status: Int,
     val id: Long
 ) : Parcelable
 
