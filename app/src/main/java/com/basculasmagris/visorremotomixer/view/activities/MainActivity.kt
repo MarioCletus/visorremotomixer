@@ -580,7 +580,7 @@ class MainActivity : AppCompatActivity() {
                     startDate = minRound.startDate,
                     endDate = minRound.endDate,
                     progress = minRound.progress,
-                    state = minRound.state,
+                    status = minRound.status,
                     tabletMixerId = minRound.round.id,
                     tabletMixerMac = selectedTabletMixerInActivity?.mac ?: "",
                     id = isRound?.id ?: 0L

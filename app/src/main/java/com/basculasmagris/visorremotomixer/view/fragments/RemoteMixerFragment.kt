@@ -202,7 +202,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         //Conectar bluetooth
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
-        (requireActivity() as MainActivity).minRoundRunDetail?.state = Constants.STATE_LOAD
+        (requireActivity() as MainActivity).minRoundRunDetail?.status = Constants.STATE_LOAD
         Log.i(TAG,"onViewCreated ready")
         if(tipoRonda == 1){
             (requireActivity() as MainActivity).sendGoToFreeRound()
@@ -1055,7 +1055,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mixer1.btBox,
                     mixer1.tara,
                     mixer1.calibration,
-                    mixer1.rfid,
                     mixer1.remoteId,
                     mixer1.updatedDate,
                     mixer1.archiveDate,

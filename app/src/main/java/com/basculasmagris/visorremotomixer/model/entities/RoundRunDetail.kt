@@ -18,7 +18,7 @@ data class RoundRunDetail (
     var customPercentage: Double,
     var customTara: Double,
     var addedBlend: Double,
-    var state: Int,
+    var status: Int,
     var id: Long
 
 )  : Parcelable
@@ -31,7 +31,6 @@ data class MixerDetail (
     val btBox: String,
     var tara: Double,
     val calibration: Float,
-    val rfid: Long,
     var remoteId: Long,
     var updatedDate: String,
     val archiveDate: String?,
@@ -64,7 +63,6 @@ data class CorralDetail (
     var updatedDate: String,
     val archiveDate: String?,
     var animalQuantity: Int,
-    val rfid: Long,
     val order: Int,
     var weight: Double,
     var actualTargetWeight: Double,
@@ -73,7 +71,15 @@ data class CorralDetail (
     var currentWeight: Double,
     var finalWeight: Double,
     val percentage: Double,
-    var id: Long
+    var id: Long,
+    var startDate: String,
+    var endDate: String,
+    var status: Int,
+    val rest: Long,
+    var latitudeStart: Double?,
+    var longitudeStart: Double?,
+    var latitudeEnd: Double?,
+    var longitudeEnd: Double?
 ) : Parcelable
 
 @Parcelize
@@ -94,29 +100,16 @@ data class DietDetail (
     val updatedDate: String,
     val archiveDate: String?,
     val usePercentage: Boolean,
+    val mixingTime: Long,
     var products: MutableList<ProductDetail>,
     val id: Long
-
-
-) : Parcelable {
-    fun getTotalKg() : Double{
-        var totalKg = 0.0
-
-        products.forEach {
-            totalKg += it.targetWeight
-        }
-
-        return totalKg
-    }
-}
-
+) : Parcelable
 
 @Parcelize
 data class ProductDetail (
     val name: String,
     val description: String,
     val specificWeight: Double,
-    val rfid: Long,
     val image: String,
     val imageSource: String,
     val remoteId: Long,
@@ -127,22 +120,74 @@ data class ProductDetail (
     var currentWeight: Double,
     var finalWeight: Double,
     var targetWeight: Double,
-    val percentage: Double,
-    val id: Long
+    var percentage: Double,
+    val id: Long,
+    var startDate: String,
+    var endDate: String,
+    var status: Int,
+    var rest: Long
 ) : Parcelable
 
 //    private val columnsLoad = arrayOf("Ronda", "Planificado (Kg)", "Real (Kg)", "Dieta", "Producto", "Esperado (Kg)","Real (Kg)")
 //    private val columnsDownload = arrayOf("Ronda", "Planificado (Kg)", "Real (Kg)", "Dieta", "Corral", "Esperado (Kg)", "Real (Kg)")
 @Parcelize
-data class LoadReport (
+data class LoadDownloadReport (
+    val userId: Long,
+    val userName: String,
+    val roundName: String,
+    val mixerName: String,
+    val establishmentName: String,
+    val roundStartDate: String,
+    val dietName: String,
+    val productName: String,
+    val corralName: String,
+    val planingWeight: Double,
+    val realWeight: Double,
+    val diffWeight: Double,
+    val roundDuration: String,
+    val latitudeStart: Double?,
+    val longitudeStart: Double?,
+    val latitudeEnd: Double?,
+    val longitudeEnd: Double?
+) : Parcelable
+
+@Parcelize
+data class LoadDownloadReportResumed (
     val userId: Long,
     val userName: String,
     val roundName: String,
     val roundStartDate: String,
-    val roundDuration: Double,
-    val roundPlaningWeight: Double,
-    val roundRealWeight: Double,
-    val roundDiffWeight: Double,
+    val dietName: String,
+    val productName: String,
+    val corralName: String,
+    val productPlaningWeight: Double,
+    val productRealWeight: Double,
+    val productDiffWeight: Double,
+) : Parcelable
+
+
+@Parcelize
+data class LoadReport (
+    val userId: Long,
+    val userName: String,
+    val roundName: String,
+    val mixerName: String,
+    val establishmentName: String,
+    val loadStartDate: String,
+    val dietName: String,
+    val productName: String,
+    val productPlaningWeight: Double,
+    val productRealWeight: Double,
+    val productDiffWeight: Double,
+    val loadDuration: String
+) : Parcelable
+
+@Parcelize
+data class LoadReportResumed (
+    val userId: Long,
+    val userName: String,
+    val roundName: String,
+    val loadStartDate: String,
     val dietName: String,
     val productName: String,
     val productPlaningWeight: Double,
@@ -155,11 +200,26 @@ data class DownloadReport (
     val userId: Long,
     val userName: String,
     val roundName: String,
-    val roundStartDate: String,
-    val roundDuration: Double,
-    val roundPlaningWeight: Double,
-    val roundRealWeight: Double,
-    val roundDiffWeight: Double,
+    val mixerName: String,
+    val establishmentName: String,
+    val downloadStartDate: String,
+    val dietName: String,
+    val corralName: String,
+    val corralPlaningWeight: Double,
+    val corralRealWeight: Double,
+    val corralDiffWeight: Double,
+    val downloadDuration: String,
+    val latitudeStart: Double?,
+    val longitudeStart: Double?,
+    val latitudeEnd: Double?,
+    val longitudeEnd: Double?
+) : Parcelable
+
+@Parcelize
+data class DownloadReportResumed (
+    val userId: Long,
+    val userName: String,
+    val roundName: String,
     val dietName: String,
     val corralName: String,
     val corralPlaningWeight: Double,
@@ -187,7 +247,7 @@ data class MinRoundRunDetail (
     val userDisplayName: String,
     val round: MinRoundDetail,
     var mixer: MinMixerDetail?,
-    var state: Int,
+    var status: Int,
     var id: Long
 )  : Parcelable
 @Parcelize
@@ -340,5 +400,5 @@ data class MedRoundRunDetail (
     var startDate: String,
     val endDate: String,
     val progress: Int,
-    var state: Int
+    var status: Int
 )  : Parcelable

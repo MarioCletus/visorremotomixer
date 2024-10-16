@@ -168,7 +168,7 @@ class RoundListFragment : Fragment() {
                                     startDate = roundLocal.startDate,
                                     endDate = roundLocal.endDate,
                                     progress = roundLocal.progress,
-                                    state = roundLocal.state
+                                    status = roundLocal.status
                                 )
                                 (requireActivity() as MainActivity).listOfMedRoundsRun.add(medRoundRunRun)
                             }

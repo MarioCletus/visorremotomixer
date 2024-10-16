@@ -32,7 +32,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.size
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.lifecycle.Lifecycle
@@ -1057,7 +1056,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                     startDate = minRound.startDate,
                     endDate = minRound.endDate,
                     progress = minRound.progress,
-                    state = minRound.state,
+                    status = minRound.status,
                     tabletMixerId = minRound.round.id,
                     tabletMixerMac = tabletMixerReceibed?.mac?:"",
                     id = isRound?.id?:0L
