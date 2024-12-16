@@ -133,9 +133,9 @@ class HomeFragment : Fragment() {
             findNavController().navigate(HomeFragmentDirections.actionHomeToRound())
         }
 
-        mBinding.btnRondaLibre.setOnClickListener{
-            findNavController().navigate(HomeFragmentDirections.actionHomeToFreeRound(selectedTabletMixerInFragment,1))
-        }
+//        mBinding.btnRondaLibre.setOnClickListener{
+//            findNavController().navigate(HomeFragmentDirections.actionHomeToFreeRound(selectedTabletMixerInFragment,1))
+//        }
 
 
         return mBinding.root
@@ -275,6 +275,7 @@ class HomeFragment : Fragment() {
                     bInRes = false
                     bInFree = false
                     Log.v("cmd_weight","CMD_WEIGHT")
+                    refreshWeight(message)
                 }
 
 
@@ -285,6 +286,7 @@ class HomeFragment : Fragment() {
                     bInRes = false
                     bInFree = false
                     Log.v("cmd_weight","CMD_WEIGHT_CONFIG")
+                    refreshWeight(message)
                 }
 
                 Constants.CMD_WEIGHT_RESUME->{
@@ -294,6 +296,7 @@ class HomeFragment : Fragment() {
                     bInRes = true
                     bInFree = false
                     Log.v("cmd_weight","CMD_WEIGHT_RESUME")
+                    refreshWeight(message)
                 }
 
                 Constants.CMD_WEIGHT_LOAD->{
@@ -302,6 +305,7 @@ class HomeFragment : Fragment() {
                     bInDownload = false
                     bInRes = false
                     bInFree = false
+                    refreshWeight(message)
                 }
 
                 Constants.CMD_WEIGHT_DWNL->{
@@ -310,6 +314,8 @@ class HomeFragment : Fragment() {
                     bInDownload = true
                     bInRes = false
                     bInFree = false
+                    refreshWeight(message)
+
                 }
 
                 Constants.CMD_WEIGHT_LOAD_FREE->{
@@ -318,6 +324,7 @@ class HomeFragment : Fragment() {
                     bInDownload = false
                     bInRes = false
                     bInFree = true
+                    refreshWeight(message)
                 }
 
                 Constants.CMD_WEIGHT_DWNL_FREE->{
@@ -326,6 +333,7 @@ class HomeFragment : Fragment() {
                     bInDownload = true
                     bInRes = false
                     bInFree = true
+                    refreshWeight(message)
                 }
 
                 Constants.CMD_MIXER ->{
@@ -366,6 +374,13 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
+    private fun refreshWeight(message:ByteArray) {
+        val weight = String(message,4,8).toLong()
+        val sign = String(message,3,1)
+//        mBinding.tvPeso.setText("${sign}${weight}")
+    }
+
 
     fun selectTablet(tabletMixer :TabletMixer){
         val activity = requireActivity() as MainActivity

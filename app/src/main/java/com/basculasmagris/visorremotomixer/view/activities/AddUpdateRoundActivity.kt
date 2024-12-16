@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.basculasmagris.visorremotomixer.R
-import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
+import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
 import com.basculasmagris.visorremotomixer.databinding.ActivityAddUpdateRoundBinding
 import com.basculasmagris.visorremotomixer.databinding.DialogCustomListBinding
 import com.basculasmagris.visorremotomixer.model.entities.*
@@ -55,18 +55,18 @@ class AddUpdateRoundActivity : AppCompatActivity(), View.OnClickListener {
     private var selectedDiet: CustomListItem? = null
 
     private val mRoundViewModel: RoundViewModel by viewModels {
-        RoundViewModelFactory((application as SpiMixerApplication).roundRepository)
+        RoundViewModelFactory((application as SpiMixerVRApplication).roundRepository)
     }
 
 //    private lateinit var mRoundViewModelRemote: RoundRemoteViewModel
 //    private var mProgressDialog: Dialog? = null
 
     private val mCorralViewModel: CorralViewModel by viewModels {
-        CorralViewModelFactory((this.application as SpiMixerApplication).corralRepository)
+        CorralViewModelFactory((this.application as SpiMixerVRApplication).corralRepository)
     }
 
     private val mDietViewModel: DietViewModel by viewModels {
-        DietViewModelFactory((this.application as SpiMixerApplication).dietRepository)
+        DietViewModelFactory((this.application as SpiMixerVRApplication).dietRepository)
     }
 
     private var mLocalRoundCorralDetail: List<RoundCorralDetail>? = null

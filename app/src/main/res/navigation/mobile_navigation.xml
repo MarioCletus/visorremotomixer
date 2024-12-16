@@ -11,7 +11,7 @@
         android:id="@+id/nav_home"
         android:name="com.basculasmagris.visorremotomixer.view.fragments.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_remote_mixer" >
+        tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_home_to_mixer"
             app:destination="@id/nav_tablet_mixer" />

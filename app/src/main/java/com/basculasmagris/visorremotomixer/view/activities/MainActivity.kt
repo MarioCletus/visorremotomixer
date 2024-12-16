@@ -40,7 +40,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.basculasmagris.visorremotomixer.R
-import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
+import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
 import com.basculasmagris.visorremotomixer.databinding.ActivityMainBinding
 import com.basculasmagris.visorremotomixer.model.entities.MedRoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.MinCorral
@@ -110,21 +110,21 @@ class MainActivity : AppCompatActivity() {
     // Mixer
     // -------------------
     private val mMixerViewModel: MixerViewModel by viewModels {
-        MixerViewModelFactory((application as SpiMixerApplication).mixerRepository)
+        MixerViewModelFactory((application as SpiMixerVRApplication).mixerRepository)
     }
 
     private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
-        TabletMixerViewModelFactory((application as SpiMixerApplication).tabletMixerRepository)
+        TabletMixerViewModelFactory((application as SpiMixerVRApplication).tabletMixerRepository)
     }
 
     private var mLocalUsers: List<User>? = null
     private var mLocalRoundsLocal: List<RoundLocal>? = null
     private val mRoundLocalViewModel: RoundLocalViewModel by viewModels {
-        RoundLocalViewModelFactory((application as SpiMixerApplication).roundLocalRepository)
+        RoundLocalViewModelFactory((application as SpiMixerVRApplication).roundLocalRepository)
     }
 
     private val mUserViewModel: UserViewModel by viewModels {
-        UserViewModelFactory((application as SpiMixerApplication).userRepository)
+        UserViewModelFactory((application as SpiMixerVRApplication).userRepository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -152,11 +152,6 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home
-//                R.id.nav_mixer_remoto,
-//                R.id.nav_round,
-//                R.id.nav_tablet_mixer,
-//                R.id.nav_sync,
-//                R.id.nav_user
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -395,6 +390,10 @@ class MainActivity : AppCompatActivity() {
                     Log.i(TAG, "setTabletMixer in TabletMixerListFragment $selectedTabletMixerInActivity")
                     fragment.setTabletMixer(tabletMixer)
                 }
+                is RoundListFragment -> {
+                    Log.i(TAG, "setTabletMixer in TabletMixerListFragment $selectedTabletMixerInActivity")
+                    fragment.setTabletMixer(tabletMixer)
+                }
             }
         }
     }
@@ -452,6 +451,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showBalanceDisconnected() {
+        Log.i(TAG,"showBalanceDisconnected")
         if(binding.appBarMain.toolbarMain.menu.size>0){
             val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_balance)
             menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_balance_disconnected_48px)
@@ -459,6 +459,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showBalanceConnected() {
+        Log.i(TAG,"showBalanceConnected")
         if(binding.appBarMain.toolbarMain.menu.size>0){
             val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_balance)
             menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_balance_connected_48px)

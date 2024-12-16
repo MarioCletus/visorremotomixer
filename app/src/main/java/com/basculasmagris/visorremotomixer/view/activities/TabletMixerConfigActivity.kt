@@ -40,7 +40,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basculasmagris.visorremotomixer.R
-import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
+import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
 import com.basculasmagris.visorremotomixer.databinding.ActivityTabletMixerConfigBinding
 import com.basculasmagris.visorremotomixer.databinding.DialogCustomListBinding
 import com.basculasmagris.visorremotomixer.model.entities.MedRoundRunDetail
@@ -107,13 +107,13 @@ class TabletMixerConfigActivity : AppCompatActivity(){
     // Bluetooth
     var mService: BluetoothSDKService? = null
     private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
-        TabletMixerViewModelFactory((this.application as SpiMixerApplication).tabletMixerRepository)
+        TabletMixerViewModelFactory((this.application as SpiMixerVRApplication).tabletMixerRepository)
     }
     private val mRoundLocalViewModel: RoundLocalViewModel by viewModels {
-        RoundLocalViewModelFactory((this.application as SpiMixerApplication).roundLocalRepository)
+        RoundLocalViewModelFactory((this.application as SpiMixerVRApplication).roundLocalRepository)
     }
     private val mUserViewModel: UserViewModel by viewModels {
-        UserViewModelFactory((this.application as SpiMixerApplication).userRepository)
+        UserViewModelFactory((this.application as SpiMixerVRApplication).userRepository)
     }
     private var mLocalTabletMixers: List<TabletMixer>? = null
     private var selectedTabletMixer: TabletMixer? = null

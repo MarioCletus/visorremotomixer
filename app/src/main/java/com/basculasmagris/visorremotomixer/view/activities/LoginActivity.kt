@@ -19,7 +19,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basculasmagris.visorremotomixer.R
-import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
+import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
 import com.basculasmagris.visorremotomixer.databinding.ActivityLoginBinding
 import com.basculasmagris.visorremotomixer.databinding.DialogCustomListBinding
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
@@ -43,12 +43,9 @@ import com.basculasmagris.visorremotomixer.utils.Constants.PREF_LOGIN_KEY_ROLE
 import com.basculasmagris.visorremotomixer.utils.Constants.PREF_LOGIN_KEY_ROLE_DESC
 import com.basculasmagris.visorremotomixer.utils.Constants.PREF_LOGIN_KEY_USERNAME
 import com.basculasmagris.visorremotomixer.utils.Helper
-import com.basculasmagris.visorremotomixer.utils.Helper.Companion.checkForInternet
 import com.basculasmagris.visorremotomixer.utils.Session
 import com.basculasmagris.visorremotomixer.view.adapter.CustomListItem
 import com.basculasmagris.visorremotomixer.view.adapter.CustomListItemAdapter
-import com.basculasmagris.visorremotomixer.viewmodel.EstablishmentViewModel
-import com.basculasmagris.visorremotomixer.viewmodel.EstablishmentViewModelFactory
 import com.basculasmagris.visorremotomixer.viewmodel.UserViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.UserViewModelFactory
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -68,7 +65,7 @@ class LoginActivity : AppCompatActivity() {
     private val mUsersList: ArrayList<CustomListItem> = ArrayList<CustomListItem>()
     private var selectedUser: CustomListItem? = null
     private val mUserViewModel: UserViewModel by viewModels {
-        UserViewModelFactory((application as SpiMixerApplication).userRepository)
+        UserViewModelFactory((application as SpiMixerVRApplication).userRepository)
     }
     private val mUserList: ArrayList<CustomListItem> = ArrayList<CustomListItem>()
     private val originUserList: ArrayList<User> = ArrayList()

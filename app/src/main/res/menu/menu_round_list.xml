@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/bluetooth_balance"
+        android:title=""
+        android:icon="@drawable/ic_balance_disconnected_48px"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_selected_remote_tablet"
+        android:icon="@drawable/ic_tablet_disconnected_48px"
+        android:title="    Mixer"
+        app:showAsAction="ifRoom|withText"
+        />
     <item
         android:id="@+id/menu_refresh_data"
-        android:icon="@drawable/ic_refresh"
+        android:icon="@drawable/cloud_sync_48px"
         android:title=""
         app:showAsAction="ifRoom"
         android:orderInCategory="101"

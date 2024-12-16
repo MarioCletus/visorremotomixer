@@ -197,6 +197,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             }
         }
 
+        mBinding.btnStartTimer.setOnClickListener {
+            val byteArray = "CMD${Constants.CMD_START_TIMER}".toByteArray()
+            (requireActivity() as MainActivity).mService?.LocalBinder()?.write(byteArray)
+        }
+
         loadRoundDetail()
         mBinding.rvMixerProductsToLoad.addItemDecoration(MarginItemDecorationHorizontal(resources.getDimensionPixelSize(R.dimen.margin_recycler_horizontal)))
 
@@ -517,7 +522,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                 Constants.CMD_ROUNDDETAIL->{
                     val convertZip = ConvertZip()
-//                    Log.i(TAG,"message.lenght ${message.size}")
                     val byteArrayUtil = message.copyOfRange(9,message.size-1)
                     Log.i("showCommand","CMD_ROUNDDETAIL ${messageStr.length} byteArrayUtil ${byteArrayUtil.size} ")
                     try{
@@ -553,22 +557,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                                 activity?.changeActionBarTitle(title)
                             }
-//                            if(!bInFree){
-//                                if(bInLoad){
-//                                    (requireActivity() as MainActivity).minRoundRunDetail?.round?.diet?.products?.let{
-//                                        if(it.isNotEmpty() && it[it.size-1].initialWeight != 0L){
-//                                            mBinding.btnJump.text = getString(R.string.descarga)
-//                                        }
-//                                    }
-//                                }else{
-//                                    (requireActivity() as MainActivity).minRoundRunDetail?.round?.corrals?.let{
-//                                        if(it.isNotEmpty() && it[it.size-1].initialWeight != 0L){
-//                                            mBinding.btnJump.text = getString(R.string.fin)
-//                                        }
-//                                    }
-//                                }
-//
-//                            }
                         }
                     }catch (e: NumberFormatException){
                         Log.i("showCommand","CMD_ROUNDDETAIL NumberFormatException $e")
@@ -723,6 +711,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT->{
+                    mBinding.llLoadDownload.visibility = View.VISIBLE
+                    mBinding.flTimer.visibility = View.INVISIBLE
                     if(count_weight++<5){
                         return
                     }
@@ -732,6 +722,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_CONFIG->{
+                    mBinding.llLoadDownload.visibility = View.VISIBLE
+                    mBinding.flTimer.visibility = View.INVISIBLE
                     count_resume = 0
                     count_weight = 0
                     try{
@@ -777,6 +769,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_RESUME->{
+                    mBinding.llLoadDownload.visibility = View.VISIBLE
+                    mBinding.flTimer.visibility = View.INVISIBLE
                     count_weight = 0
                     if(count_resume++ > 5){
                         Log.v("commandsWeight","CMD_WEIGHT_RESUME")
@@ -789,6 +783,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_LOAD->{
+                    mBinding.llLoadDownload.visibility = View.VISIBLE
+                    mBinding.flTimer.visibility = View.INVISIBLE
                     count_resume = 0
                     count_weight = 0
                     try{
@@ -822,6 +818,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_DWNL->{
+                    mBinding.llLoadDownload.visibility = View.VISIBLE
+                    mBinding.flTimer.visibility = View.INVISIBLE
                     count_weight = 0
                     count_resume = 0
                     try{
@@ -850,6 +848,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_LOAD_FREE->{
+                    mBinding.llLoadDownload.visibility = View.VISIBLE
+                    mBinding.flTimer.visibility = View.INVISIBLE
                     count_weight = 0
                     count_resume = 0
                     try{
@@ -878,6 +878,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_DWNL_FREE->{
+                    mBinding.llLoadDownload.visibility = View.VISIBLE
+                    mBinding.flTimer.visibility = View.INVISIBLE
                     count_weight = 0
                     count_resume = 0
                     try{
@@ -901,6 +903,36 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         bInFree = true
                     }catch (e : Exception){
                         Log.i("showCommand","CMD_WEIGHT_DWNL Exception $e")
+                    }
+                }
+
+                Constants.CMD_WEIGHT_TIMER->{
+                    Log.i("showCommand","CMD_WEIGHT_TIMER ${String(message)}")
+                    mBinding.llLoadDownload.visibility = View.INVISIBLE
+                    mBinding.flTimer.visibility = View.VISIBLE
+                    mBinding.btnStartTimer.isEnabled = false
+                    count_weight = 0
+                    count_resume = 0
+                    try{
+                        val time = String(message,3,3).toLong()
+                        mBinding.tvTimer.text = "$time"
+                    }catch (e : Exception){
+                        Log.i("showCommand","CMD_WEIGHT_TIMER Exception $e")
+                    }
+                }
+
+                Constants.CMD_START_TIMER->{
+                    Log.i("showCommand","CMD_START_TIMER ${String(message)}")
+                    mBinding.llLoadDownload.visibility = View.INVISIBLE
+                    mBinding.flTimer.visibility = View.VISIBLE
+                    mBinding.btnStartTimer.isEnabled = true
+                    count_weight = 0
+                    count_resume = 0
+                    try{
+                        val time = String(message,3,3).toLong()
+                        mBinding.tvTimer.text = "$time"
+                    }catch (e : Exception){
+                        Log.i("showCommand","CMD_WEIGHT_TIMER Exception $e")
                     }
                 }
 
@@ -972,7 +1004,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         mBinding.tvCurrentProductWeightPending.text = "${sign}${weight}Kg"
         mBinding.pbCurrentProduct.progress = progress
         dialogResto?.setMessage("$signRest${rest}Kg")
-
     }
 
     private fun refreshRound() {

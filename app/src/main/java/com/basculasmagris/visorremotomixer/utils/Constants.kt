@@ -199,5 +199,6 @@ object Constants {
     val CMD_WEIGHT_LOAD  = "WEL"
     val CMD_WEIGHT_LOAD_FREE  = "WFL"
     val CMD_WEIGHT_RESUME  = "WRE"
-
+    val CMD_WEIGHT_TIMER  = "WTI"
+    val CMD_START_TIMER  = "STI"
 }

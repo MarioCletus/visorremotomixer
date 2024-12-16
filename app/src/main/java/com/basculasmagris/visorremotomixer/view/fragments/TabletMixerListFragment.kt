@@ -32,7 +32,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basculasmagris.visorremotomixer.R
-import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
+import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
 import com.basculasmagris.visorremotomixer.databinding.DialogCustomListBinding
 import com.basculasmagris.visorremotomixer.databinding.FragmentTabletMixerListBinding
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
@@ -63,7 +63,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
 
 
     private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
-        TabletMixerViewModelFactory((requireActivity().application as SpiMixerApplication).tabletMixerRepository)
+        TabletMixerViewModelFactory((requireActivity().application as SpiMixerVRApplication).tabletMixerRepository)
     }
     private var mLocalTabletMixers: List<TabletMixer>? = null
     private var likingTabletMixer: TabletMixer? = null

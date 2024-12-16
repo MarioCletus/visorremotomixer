@@ -17,7 +17,7 @@
         android:maxSdkVersion="28" />
 
     <application
-        android:name=".application.SpiMixerApplication"
+        android:name=".application.SpiMixerVRApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -30,6 +30,7 @@
             android:exported="false"
             android:label="@string/title_activity_tablet_mixer_config"
             android:screenOrientation="landscape"
+            android:windowFullscreen="true"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.Spimixer.NoActionBar" />
         <activity
@@ -38,12 +39,14 @@
             android:screenOrientation="landscape"
             android:label="@string/title_activity_add_update_tablet_mixer"
             android:windowSoftInputMode="adjustResize"
+            android:windowFullscreen="true"
             android:theme="@style/Theme.Spimixer.NoActionBar" />
         <activity
             android:name=".view.activities.AddUpdateUserActivity"
             android:exported="true"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Spimixer.NoActionBar"
+            android:windowFullscreen="true"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.app.lib_name"
@@ -54,6 +57,7 @@
             android:exported="false"
             android:label="@string/title_activity_login"
             android:screenOrientation="landscape"
+            android:windowFullscreen="true"
             android:windowSoftInputMode="adjustResize" />
 
         <service
@@ -68,6 +72,7 @@
             android:exported="true"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Spimixer.NoActionBar"
+            android:windowFullscreen="true"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
@@ -75,6 +80,7 @@
             android:exported="true"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Spimixer.NoActionBar"
+            android:windowFullscreen="true"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
@@ -82,10 +88,10 @@
             android:exported="true"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Spimixer.NoActionBar"
+            android:windowFullscreen="true"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -96,10 +102,10 @@
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Spimixer.NoActionBar"
+            android:windowFullscreen="true"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

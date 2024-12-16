@@ -15,6 +15,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -26,7 +27,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.basculasmagris.visorremotomixer.R
-import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
+import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
 import com.basculasmagris.visorremotomixer.databinding.FragmentRoundListBinding
 import com.basculasmagris.visorremotomixer.model.entities.MedRoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.MinRound
@@ -54,7 +55,7 @@ class RoundListFragment : Fragment() {
     private var bBlockButton = false
 
     private val mRoundLocalViewModel: RoundLocalViewModel by viewModels {
-        RoundLocalViewModelFactory((requireActivity().application as SpiMixerApplication).roundLocalRepository)
+        RoundLocalViewModelFactory((requireActivity().application as SpiMixerVRApplication).roundLocalRepository)
     }
     private var mLocalRoundsLocal: List<RoundLocal>? = null
     private var bGoToRound = false
@@ -62,6 +63,10 @@ class RoundListFragment : Fragment() {
 
     private val REFRESH_VIEW_TIME = 20
     private var countMsg: Int = REFRESH_VIEW_TIME
+
+    private var menu:Menu? = null
+    private var selectedTabletMixerInFragment: TabletMixer? = null
+    private var tabletMixerBluetoothDevice : BluetoothDevice? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,7 +88,7 @@ class RoundListFragment : Fragment() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 // Add menu items here
                 menuInflater.inflate(R.menu.menu_round_list, menu)
-
+                this@RoundListFragment.menu = menu
                 // Associate searchable configuration with the SearchView
                 val search = menu.findItem(R.id.search_round)
                 val searchView = search.actionView as SearchView
@@ -103,6 +108,39 @@ class RoundListFragment : Fragment() {
                 return when (menuItem.itemId) {
                     R.id.menu_refresh_data ->{
                         refreshData()
+                        return true
+                    }
+                    R.id.menu_selected_remote_tablet -> {
+                        Log.v(TAG,"Force connection")
+                        val deviceBluetooth = (requireActivity() as MainActivity).knowDevices?.firstOrNull { bd->
+                            bd.address == selectedTabletMixerInFragment?.mac
+                        }
+                        deviceBluetooth?.let {
+                            val name = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                                if (ActivityCompat.checkSelfPermission(
+                                        requireActivity() as MainActivity,
+                                        Manifest.permission.BLUETOOTH_CONNECT
+                                    ) == PackageManager.PERMISSION_GRANTED
+                                ) {
+                                    if (it.name == null) "" else it.name
+                                }else{
+                                    ""
+                                }
+                            }else{
+                                if (it.name == null) "" else it.name
+                            }
+                            Log.v(TAG,"Force connection $name")
+                            (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
+                            (requireActivity() as MainActivity).mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                            (requireActivity() as MainActivity).showCustomProgressDialog()
+                        }
+                        return true
+                    }
+
+
+                    R.id.bluetooth_balance -> {
+                        (requireActivity() as MainActivity).sendReconnectBalance()
+                        (requireActivity() as MainActivity).showCustomProgressDialog()
                         return true
                     }
                     else -> false
@@ -127,7 +165,6 @@ class RoundListFragment : Fragment() {
         }
 
     }
-
 
 
     private fun fetchLocalData(tabletMixer: TabletMixer): MediatorLiveData<MergedLocalData> {
@@ -388,6 +425,11 @@ class RoundListFragment : Fragment() {
         }
 
         override fun onBondedDevices(device: List<BluetoothDevice>?) {
+            Log.i(TAG, "[RoundListFragment]onBondedDevices ${device?.size} \n$device")
+            (requireActivity() as MainActivity).knowDevices = device
+            selectedTabletMixerInFragment?.let {
+                selectTablet(it)
+            }
         }
     }
 
@@ -423,6 +465,65 @@ class RoundListFragment : Fragment() {
     override fun onResume() {
         fragmentRunning = true
         super.onResume()
+    }
+
+
+
+    fun connectTable(tabletMixer: TabletMixer){
+        Log.i(TAG, "Cantidad: ${(requireActivity() as MainActivity).knowDevices?.size}")
+        val deviceBluetooth = (requireActivity() as MainActivity).knowDevices?.firstOrNull { bd->
+            bd.address == tabletMixer.mac
+        }
+
+        if (deviceBluetooth != null){
+            Log.i(TAG,"Try to connect with ${deviceBluetooth}")
+            (requireActivity() as MainActivity).showCustomProgressDialog()
+            (requireActivity() as MainActivity).connectDevice(deviceBluetooth)
+        } else {
+            Toast.makeText(requireActivity(), "No se pudo conectar", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    fun setTabletMixer(tabletMixerIn: TabletMixer) {
+        tabletMixerIn.let { tabletMixer ->
+            menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + tabletMixer.name
+            selectedTabletMixerInFragment = tabletMixer
+            Log.i(
+                TAG,
+                "setTabletMixer $tabletMixer  \nmService ${(requireActivity() as MainActivity).mService}"
+            )
+            (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
+        }
+    }
+
+    fun selectTablet(tabletMixer :TabletMixer){
+        val activity = requireActivity() as MainActivity
+        Log.i(TAG,"tabletMixerInFragment ${tabletMixer.name} ${tabletMixer.mac}")
+        activity.knowDevices?.forEach{
+            Log.i(TAG,"bluetoothKnowed ${it.name} ${it.address}")
+            if(tabletMixer.mac.equals(it.address)){
+                var name = ""
+                var address = ""
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                    if (ActivityCompat.checkSelfPermission(
+                            activity,
+                            Manifest.permission.BLUETOOTH_CONNECT
+                        ) == PackageManager.PERMISSION_GRANTED) {
+                        name = it.name
+                        address = it.address
+                    }
+                }else{
+                    name = it.name
+                    address = it.address
+                }
+                Log.i(TAG,"Se seleccionó $name : $address")
+                if(tabletMixerBluetoothDevice != it){
+                    connectTable(tabletMixer)
+                }
+                tabletMixerBluetoothDevice = it
+            }
+        }
     }
 
     override fun onPause() {

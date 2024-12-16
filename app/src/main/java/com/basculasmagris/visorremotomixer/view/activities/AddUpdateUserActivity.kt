@@ -31,7 +31,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basculasmagris.visorremotomixer.R
-import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
+import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
 import com.basculasmagris.visorremotomixer.databinding.ActivityAddUpdateUserBinding
 import com.basculasmagris.visorremotomixer.databinding.DialogCustomImageSelectionBinding
 import com.basculasmagris.visorremotomixer.databinding.DialogCustomListBinding
@@ -75,7 +75,7 @@ class AddUpdateUserActivity : AppCompatActivity() {
     private var mNewUserDetails: User? = null
 
     private val mUserViewModel: UserViewModel by viewModels {
-        UserViewModelFactory((application as SpiMixerApplication).userRepository)
+        UserViewModelFactory((application as SpiMixerVRApplication).userRepository)
     }
 
     private var roles: ArrayList<Pair<Long, String>> = arrayListOf(

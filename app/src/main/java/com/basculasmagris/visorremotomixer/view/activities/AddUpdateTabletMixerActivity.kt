@@ -22,7 +22,7 @@ import androidx.core.view.MenuProvider
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import com.basculasmagris.visorremotomixer.R
-import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
+import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
 import com.basculasmagris.visorremotomixer.databinding.ActivityAddUpdateTabletMixerBinding
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
@@ -43,7 +43,7 @@ class AddUpdateTabletMixerActivity : AppCompatActivity() {
     private lateinit var mService: BluetoothSDKService
 
     private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
-        TabletMixerViewModelFactory((application as SpiMixerApplication).tabletMixerRepository)
+        TabletMixerViewModelFactory((application as SpiMixerVRApplication).tabletMixerRepository)
     }
 
     private var mProgressDialog: Dialog? = null

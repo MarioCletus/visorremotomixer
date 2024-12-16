@@ -1,7 +1,6 @@
 package com.basculasmagris.visorremotomixer.view.activities
 
 import android.app.Activity
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
@@ -17,7 +16,7 @@ import androidx.core.view.MenuProvider
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import com.basculasmagris.visorremotomixer.R
-import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
+import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
 import com.basculasmagris.visorremotomixer.databinding.ActivityAddUpdateMixerBinding
 import com.basculasmagris.visorremotomixer.model.entities.Mixer
 import com.basculasmagris.visorremotomixer.utils.Constants
@@ -34,7 +33,7 @@ class AddUpdateMixerActivity : AppCompatActivity() {
     private var mNewMixerDetails: Mixer? = null
 
     private val mMixerViewModel: MixerViewModel by viewModels {
-        MixerViewModelFactory((application as SpiMixerApplication).mixerRepository)
+        MixerViewModelFactory((application as SpiMixerVRApplication).mixerRepository)
     }
 
 //    private var mProgressDialog: Dialog? = null

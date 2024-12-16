@@ -11,11 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.basculasmagris.visorremotomixer.R
-import com.basculasmagris.visorremotomixer.application.SpiMixerApplication
+import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
 import com.basculasmagris.visorremotomixer.databinding.FragmentUserListBinding
-import com.basculasmagris.visorremotomixer.model.entities.Corral
 import com.basculasmagris.visorremotomixer.model.entities.User
-import com.basculasmagris.visorremotomixer.view.activities.CorralData
 import com.basculasmagris.visorremotomixer.view.activities.MergedLocalData
 import com.basculasmagris.visorremotomixer.view.activities.UserData
 import com.basculasmagris.visorremotomixer.view.adapter.UserAdapter
@@ -26,7 +24,7 @@ class UserListFragment : Fragment() {
     private lateinit var mBinding: FragmentUserListBinding
 
     private val mUserViewModel: UserViewModel by viewModels {
-        UserViewModelFactory((requireActivity().application as SpiMixerApplication).userRepository)
+        UserViewModelFactory((requireActivity().application as SpiMixerVRApplication).userRepository)
     }
 
     private var mLocalUsers: List<User>? = null

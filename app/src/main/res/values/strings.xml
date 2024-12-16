@@ -363,4 +363,13 @@
     <string name="ver_ronda">Ver ronda</string>
 
 
+    <string name="picar">Picar</string>
+    <string name="picando">Picando</string>
+    <string name="corrales">Corrales</string>
+    <string name="nombre">Nombre</string>
+    <string name="descripcion">Descripción</string>
+    <string name="cero">0</string>
+    <string name="configuracion">Configuración</string>
+
+
 </resources>
