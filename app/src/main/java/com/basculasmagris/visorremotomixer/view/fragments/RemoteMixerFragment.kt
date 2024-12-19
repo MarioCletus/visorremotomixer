@@ -5,10 +5,12 @@ import android.app.AlertDialog
 import android.bluetooth.BluetoothDevice
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
@@ -503,7 +505,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
-            (requireActivity() as MainActivity).commandReceibed()
+
 
             if(message == null || message.size<9){
                 Log.i(TAG,"command not enough large (${message?.size})")
@@ -512,11 +514,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
             val messageStr = String(message,0, message.size)
             if(countMessage++>20){
-                Log.d("message","message $messageStr")
+                Log.d("message","RMF message $messageStr")
                 countMessage = 0
             }
             val command = messageStr.substring(0,3)
-            Log.i("SHOWCOMAND","command $command")
+            Log.i("SHOWCOMAND","RMF command $command")
 
             when (command){
 
@@ -664,11 +666,13 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     dialogTara = null
                     targetReachedDialog?.dismiss()
                     targetReachedDialog = null
-                    (requireActivity() as MainActivity).closeDialogs()
+                    if(isAdded)
+                        (requireActivity() as MainActivity).closeDialogs()
                 }
 
                 Constants.CMD_DLG_TARA->{
-                    (requireActivity() as MainActivity).dlgTareToLoad(weight)
+                    if(isAdded)
+                        (requireActivity() as MainActivity).dlgTareToLoad(weight)
                 }
 
                 Constants.CMD_REFRESH->{
@@ -679,30 +683,34 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                 Constants.CMD_USER_LIST->{
                     Log.i("showCommand","CMD_USER_LIST")
-                    bSyncroUsers = (requireActivity() as MainActivity).refreshUsers(message)
-
+                    if(isAdded)
+                        bSyncroUsers = (requireActivity() as MainActivity).refreshUsers(message)
                 }
 
                 Constants.CMD_ROUNDS->{
                     Log.i("showCommand","CMD_ROUNDS")
-                    bSyncroRounds = (requireActivity() as MainActivity).refreshRounds(message)
+                    if(isAdded)
+                        bSyncroRounds = (requireActivity() as MainActivity).refreshRounds(message)
                 }
 
                 Constants.CMD_DLG_PRODUCT->{
                     Log.i("showCommand","CMD_DLG_PRODUCT")
-                    (requireActivity() as MainActivity).dlgProduct(message)
+                    if(isAdded)
+                        (requireActivity() as MainActivity).dlgProduct(message)
                 }
 
 
                 Constants.CMD_DLG_EST->{
                     Log.i("showCommand","CMD_DLG_EST")
-                    (requireActivity() as MainActivity).dlgEstablishment(message)
+                    if(isAdded)
+                        (requireActivity() as MainActivity).dlgEstablishment(message)
                 }
 
 
                 Constants.CMD_DLG_CORRAL->{
                     Log.i("showCommand","CMD_DLG_CORRAL")
-                    (requireActivity() as MainActivity).dlgCorral(message)
+                    if(isAdded)
+                        (requireActivity() as MainActivity).dlgCorral(message)
                 }
 
                 Constants.CMD_DLG_REST->{
@@ -717,7 +725,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         return
                     }
                     Log.v("cmd_weight","CMD_WEIGHT")
-                    (requireActivity()).onBackPressed()
+                    if(isAdded)
+                        (requireActivity()).onBackPressed()
                     return
                 }
 
@@ -955,6 +964,14 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         return
                     }
                 }
+
+                Constants.CMD_NTA ->{
+                    Log.i("showCommand","CMD_NTA")
+                    if(isAdded){
+                        (requireActivity() as MainActivity).alertDialog(getString(R.string.atencion),getString(R.string.no_disponible))
+                    }
+                }
+
                 else->{
                     Log.i(TAG,"else $command")
                 }
@@ -963,8 +980,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
-            Log.i("message","message $message")
-            (requireActivity() as MainActivity).beaconReceibed()
+            Log.i("message","RMF message $message")
+            if(isAdded)
+                (requireActivity() as MainActivity).beaconReceibed()
         }
 
         override fun onMessageSent(device: BluetoothDevice?,message: String?) {
@@ -977,22 +995,40 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         override fun onError(message: String?) {
             Log.i(TAG, "[MixRem] ACT onError")
-            (requireActivity() as MainActivity).changeStatusDisconnected()        }
+            if(isAdded)
+                (requireActivity() as MainActivity).changeStatusDisconnected()
+        }
 
         override fun onDeviceDisconnected() {
-            (requireActivity() as MainActivity).changeStatusDisconnected()
+            if(isAdded)
+                (requireActivity() as MainActivity).changeStatusDisconnected()
             Log.i(TAG, "[MixRem]ACT onDeviceDisconnected")
         }
 
         override fun onBondedDevices(device: List<BluetoothDevice>?) {
             Log.i(TAG, "[MixRem]onBondedDevices ${device?.size} \n$device")
-            (requireActivity() as MainActivity).knowDevices = device
+            if(isAdded)
+                (requireActivity() as MainActivity).knowDevices = device
         }
     }
 
     private fun refreshWeight(message:ByteArray) {
         weight = String(message,4,8).toLong()
-        val sign = String(message,3,1)
+        var sign = String(message,3,1)
+        Log.i("message","RMF sign ${sign}")
+        var bConnected = true
+        if(sign.contains("N")){
+            Log.i("message","RMF bConnected false sign +")
+            sign = " "
+            bConnected = false
+        }
+        if(sign.contains("n")){
+            Log.i("message","RMF bConnected false sign -")
+            sign = "-"
+            bConnected = false
+        }
+        if(bConnected)
+           (requireActivity() as MainActivity).weightReceibed()
         val progress = String(message,12,3).toInt()
         val signRest = String(message,15,1)
         rest = String(message,16,8).toIntOrNull()?:0
@@ -1001,10 +1037,17 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             Log.i(TAG,"isChecket ${String(message)}")
         }
         mBinding.btnPause.isChecked = isChecked
-        mBinding.tvCurrentProductWeightPending.text = "${sign}${weight}Kg"
+        if(bConnected){
+            mBinding.tvCurrentProductWeightPending.setTextSize(TypedValue.COMPLEX_UNIT_SP, 150f)
+            mBinding.tvCurrentProductWeightPending.text = "${sign}${weight}Kg"
+        }else{
+            mBinding.tvCurrentProductWeightPending.setTextSize(TypedValue.COMPLEX_UNIT_SP, 62f)
+            mBinding.tvCurrentProductWeightPending.text = "${getString(R.string.desconectado)}    ${sign}${weight}Kg"
+        }
         mBinding.pbCurrentProduct.progress = progress
         dialogResto?.setMessage("$signRest${rest}Kg")
     }
+
 
     private fun refreshRound() {
         countMsg = 0

@@ -182,10 +182,11 @@ class HomeFragment : Fragment() {
                 address = device?.address.toString()
             }
             Log.i(TAG, "onDeviceConnected $name $address")
+            if(isAdded)
+                (requireActivity() as MainActivity).requestListOfRounds()
         }
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
-            (requireActivity() as MainActivity).commandReceibed()
 
             if(message == null || message.size<9){
                 Log.i(TAG,"command not enough large (${message?.size})")
@@ -194,11 +195,11 @@ class HomeFragment : Fragment() {
 
             val messageStr = String(message,0, message.size)
             if(countMessage++>20){
-                Log.d("message","message $messageStr")
+                Log.d("message","HF message $messageStr")
                 countMessage = 0
             }
             val command = messageStr.substring(0,3)
-            Log.i("SHOWCOMAND","command $command")
+            Log.i("SHOWCOMAND","HF command $command")
 
             when (command){
 
@@ -251,6 +252,9 @@ class HomeFragment : Fragment() {
 
                 Constants.CMD_ROUNDS->{
                     Log.i("showCommand","CMD_ROUNDS")
+                    if(isAdded)
+                        (requireActivity() as MainActivity).refreshRounds(message)
+
                 }
 
                 Constants.CMD_DLG_PRODUCT->{
@@ -338,6 +342,15 @@ class HomeFragment : Fragment() {
 
                 Constants.CMD_MIXER ->{
                 }
+
+
+                Constants.CMD_NTA ->{
+                    Log.i("showCommand","CMD_NTA")
+                    if(isAdded){
+                        (requireActivity() as MainActivity).alertDialog(getString(R.string.atencion),getString(R.string.no_disponible))
+                    }
+                }
+
                 else->{
                     Log.i(TAG,"else $command")
                 }
@@ -345,7 +358,7 @@ class HomeFragment : Fragment() {
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
-            Log.i("message","message $message")
+            Log.i("message","HF message $message")
             (requireActivity() as MainActivity).beaconReceibed()
         }
 
@@ -376,11 +389,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun refreshWeight(message:ByteArray) {
-        val weight = String(message,4,8).toLong()
-        val sign = String(message,3,1)
-//        mBinding.tvPeso.setText("${sign}${weight}")
+        val weight = String(message, 4, 8).toLong()
+        val sign = String(message, 3, 1)
+        mBinding.tvPeso.setText("${sign}${weight}")
+        if(!sign.contains("N") && !sign.contains("n")){
+            (requireActivity() as MainActivity).weightReceibed()
+        }
     }
-
 
     fun selectTablet(tabletMixer :TabletMixer){
         val activity = requireActivity() as MainActivity

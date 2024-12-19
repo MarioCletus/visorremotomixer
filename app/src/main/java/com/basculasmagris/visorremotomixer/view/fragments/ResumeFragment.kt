@@ -249,6 +249,14 @@ class ResumeFragment : Fragment() {
                     }
 
                 }
+
+                Constants.CMD_NTA ->{
+                    Log.i("showCommand","CMD_NTA")
+                    if(isAdded){
+                        (requireActivity() as MainActivity).alertDialog(getString(R.string.atencion),getString(R.string.no_disponible))
+                    }
+                }
+
                 else->{
                     Log.i(TAG,"else $command")
                 }

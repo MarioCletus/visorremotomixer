@@ -133,7 +133,7 @@ class Helper {
                 return "0.0"
             }
 
-            var pattern = "#"
+            var pattern = "n"
             if (decimals > 0){
                 pattern += "."
             } else {
@@ -141,7 +141,7 @@ class Helper {
             }
 
             for (index in 1..decimals){
-                pattern += "#"
+                pattern += "n"
             }
 
             return if  (value > 0.0) {

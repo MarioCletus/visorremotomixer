@@ -172,6 +172,7 @@ object Constants {
     val CMD_MIXERS  = "MXS"
     val CMD_NEXT_CORRAL_DLG  = "NCD"
     val CMD_NEXT_PRODUCT_DLG  = "NPD"
+    val CMD_NTA  = "NTA"
     val CMD_NXTCORRAL  = "NXC"
     val CMD_NXTPRODUCT  = "NXP"
     val CMD_PAUSE  = "PAU"

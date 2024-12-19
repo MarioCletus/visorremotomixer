@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.FragmentSyncBinding
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
@@ -130,20 +131,24 @@ class SyncFragment : Fragment() {
                     Log.i("showCommand","CMD_DLG_PRODUCT")
                 }
 
-
                 Constants.CMD_DLG_EST->{
                     Log.i("showCommand","CMD_DLG_EST")
                 }
-
 
                 Constants.CMD_DLG_CORRAL->{
                     Log.i("showCommand","CMD_DLG_CORRAL")
                 }
 
-                else->{
+                Constants.CMD_NTA ->{
+                    Log.i("showCommand","CMD_NTA")
+                    if(isAdded){
+                        (requireActivity() as MainActivity).alertDialog(getString(R.string.atencion),getString(
+                            R.string.no_disponible))
+                    }
                 }
 
-
+                else->{
+                }
 
             }
         }
@@ -163,10 +168,12 @@ class SyncFragment : Fragment() {
 
         override fun onError(message: String?) {
             Log.i(TAG, "[Sync] ACT onError")
-            (requireActivity() as MainActivity).changeStatusDisconnected()        }
+            if(isAdded)
+                (requireActivity() as MainActivity).changeStatusDisconnected()        }
 
         override fun onDeviceDisconnected() {
-            (requireActivity() as MainActivity).changeStatusDisconnected()
+            if(isAdded)
+                (requireActivity() as MainActivity).changeStatusDisconnected()
             Log.i(TAG, "[Sync]ACT onDeviceDisconnected")
         }
 

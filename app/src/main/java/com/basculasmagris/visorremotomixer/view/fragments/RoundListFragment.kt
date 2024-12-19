@@ -54,10 +54,6 @@ class RoundListFragment : Fragment() {
 
     private var bBlockButton = false
 
-    private val mRoundLocalViewModel: RoundLocalViewModel by viewModels {
-        RoundLocalViewModelFactory((requireActivity().application as SpiMixerVRApplication).roundLocalRepository)
-    }
-    private var mLocalRoundsLocal: List<RoundLocal>? = null
     private var bGoToRound = false
     private var fragmentRunning = false
 
@@ -167,57 +163,9 @@ class RoundListFragment : Fragment() {
     }
 
 
-    private fun fetchLocalData(tabletMixer: TabletMixer): MediatorLiveData<MergedLocalData> {
-        val liveDataMerger = MediatorLiveData<MergedLocalData>()
-        liveDataMerger.addSource(mRoundLocalViewModel.allRoundLocalListByMac(tabletMixer.mac)) {
-            if (it != null) {
-                liveDataMerger.value = RoundLocalData(it)
-            }
-        }
-        return liveDataMerger
-    }
-
     private fun getLocalData(){
         // Sync local data
         Log.i(TAG,"getLocalData")
-        (requireActivity() as MainActivity).selectedTabletMixerInActivity?.let {
-            val liveData = fetchLocalData(it)
-            liveData.observe(viewLifecycleOwner, object : Observer<MergedLocalData> {
-                override fun onChanged(it: MergedLocalData?) {
-                    when (it) {
-                        is RoundLocalData -> mLocalRoundsLocal = it.roundsLocal.sortedBy { rLocal -> rLocal.remoteId }
-                        else -> {}
-                    }
-
-                    if (mLocalRoundsLocal != null) {
-                        liveData.removeObserver(this)
-                        (requireActivity() as MainActivity).listOfMedRoundsRun.clear()
-                        mLocalRoundsLocal?.let {roundsLocal->
-                            roundsLocal.forEach {roundLocal->
-                                val minRoundRun   = MinRound (
-                                    name = roundLocal.name,
-                                    description = roundLocal.description,
-                                    remoteId = roundLocal.remoteId,
-                                    id = roundLocal.id
-                                )
-                                val medRoundRunRun = MedRoundRunDetail(
-                                    round = minRoundRun,
-                                    startDate = roundLocal.startDate,
-                                    endDate = roundLocal.endDate,
-                                    progress = roundLocal.progress,
-                                    status = roundLocal.status
-                                )
-                                (requireActivity() as MainActivity).listOfMedRoundsRun.add(medRoundRunRun)
-                            }
-                        }
-                        Log.i("MEP","getLocalRound() 1 ")
-                        getLocalRound()
-                        refreshData()
-                    }
-                }
-            })
-            return
-        }
         Log.i("MEP","getLocalRound() 2 ")
         getLocalRound()
         refreshData()
@@ -225,7 +173,6 @@ class RoundListFragment : Fragment() {
 
 
     private fun getLocalRound(){
-
         mBinding.rvRoundsList.layoutManager = GridLayoutManager(requireActivity(), 3)
         val roundAdapter =  RoundRunAdapter(this@RoundListFragment)
         mBinding.rvRoundsList.adapter = roundAdapter
@@ -291,11 +238,10 @@ class RoundListFragment : Fragment() {
             if(!fragmentRunning){
                 return
             }
-            (requireActivity() as MainActivity).commandReceibed()
             val messageStr = String(message,0, message.size)
             val command = messageStr.substring(0,3)
-            Log.i("SHOWCOMAND","command $command")
-            Log.i("message", String(message))
+            Log.i("SHOWCOMAND","RLF command $command")
+            Log.i("message", "RLF message ${String(message)}")
             when (command){
 
                 Constants.CMD_ROUNDDETAIL->{
@@ -322,16 +268,21 @@ class RoundListFragment : Fragment() {
                 Constants.CMD_ROUNDS->{
                     Log.i("showCommand","CMD_ROUNDS")
                     Log.i("MEP","CMD_ROUNDS")
-                    (requireActivity() as MainActivity).refreshRounds(message)
+                    if(isAdded)
+                        (requireActivity() as MainActivity).refreshRounds(message)
                     Log.i("MEP","getLocalRound() 3 ")
                     getLocalRound()
                 }
 
                 Constants.CMD_WEIGHT->{
+                    Log.i("CMD_WEIGHT","CMD_WEIGHT $message")
                     sincroRound(false)
+                    refreshData()
+                    refreshWeight(message)
                 }
 
                 Constants.CMD_WEIGHT_LOAD->{
+                    Log.i("CMD_WEIGHT","CMD_WEIGHT_LOAD $message")
                     if(countMsg++ > REFRESH_VIEW_TIME){
                         refreshRound()
                     }
@@ -342,8 +293,10 @@ class RoundListFragment : Fragment() {
                     }else{
                         sincroRound(true)
                     }
+                    refreshWeight(message)
                 }
                 Constants.CMD_WEIGHT_LOAD_FREE->{
+                    Log.i("CMD_WEIGHT","CMD_WEIGHT_LOAD_FREE $message")
                     if(countMsg++ > REFRESH_VIEW_TIME){
                         refreshRound()
                     }
@@ -354,8 +307,10 @@ class RoundListFragment : Fragment() {
                     }else{
                         sincroRound(true)
                     }
+                    refreshWeight(message)
                 }
                 Constants.CMD_WEIGHT_DWNL->{
+                    Log.i("CMD_WEIGHT","CMD_WEIGHT_DWNL $message")
                     if(countMsg++ > REFRESH_VIEW_TIME){
                         refreshRound()
                     }
@@ -366,6 +321,7 @@ class RoundListFragment : Fragment() {
                     }else{
                         sincroRound(true)
                     }
+                    refreshWeight(message)
                 }
                 Constants.CMD_WEIGHT_DWNL_FREE->{
                     if(countMsg++ > REFRESH_VIEW_TIME){
@@ -378,6 +334,7 @@ class RoundListFragment : Fragment() {
                     }else{
                         sincroRound(true)
                     }
+                    refreshWeight(message)
                 }
                 Constants.CMD_WEIGHT_CONFIG->{
                     if(countMsg++ > REFRESH_VIEW_TIME){
@@ -390,6 +347,7 @@ class RoundListFragment : Fragment() {
                     }else{
                         sincroRound(true)
                     }
+                    refreshWeight(message)
                 }
                 Constants.CMD_WEIGHT_RESUME->{
                     if(countMsg++ > REFRESH_VIEW_TIME){
@@ -402,7 +360,16 @@ class RoundListFragment : Fragment() {
                     }else{
                         sincroRound(true)
                     }
+                    refreshWeight(message)
                 }
+
+                Constants.CMD_NTA ->{
+                    Log.i("showCommand","CMD_NTA")
+                    if(isAdded){
+                        (requireActivity() as MainActivity).alertDialog(getString(R.string.atencion),getString(R.string.no_disponible))
+                    }
+                }
+
                 else->{
                 }
             }
@@ -419,9 +386,15 @@ class RoundListFragment : Fragment() {
         }
 
         override fun onError(message: String?) {
+            Log.i(TAG,"onError")
+            if(isAdded)
+                (requireActivity() as MainActivity).changeStatusDisconnected()
         }
 
         override fun onDeviceDisconnected() {
+            Log.i(TAG,"onDeviceDisconnected")
+            if(isAdded)
+                (requireActivity() as MainActivity).changeStatusDisconnected()
         }
 
         override fun onBondedDevices(device: List<BluetoothDevice>?) {
@@ -437,6 +410,15 @@ class RoundListFragment : Fragment() {
         val adapter = mBinding.rvRoundsList.adapter
         if (adapter is RoundRunAdapter) {
             adapter.sincroRound(b)
+        }
+    }
+
+    private fun refreshWeight(message:ByteArray) {
+        val weight = String(message, 4, 8).toLong()
+        val sign = String(message, 3, 1)
+//        mBinding.tvPeso.setText("${sign}${weight}")
+        if(!sign.contains("N") && !sign.contains("n")){
+            (requireActivity() as MainActivity).weightReceibed()
         }
     }
 
@@ -467,8 +449,6 @@ class RoundListFragment : Fragment() {
         super.onResume()
     }
 
-
-
     fun connectTable(tabletMixer: TabletMixer){
         Log.i(TAG, "Cantidad: ${(requireActivity() as MainActivity).knowDevices?.size}")
         val deviceBluetooth = (requireActivity() as MainActivity).knowDevices?.firstOrNull { bd->
@@ -483,7 +463,6 @@ class RoundListFragment : Fragment() {
             Toast.makeText(requireActivity(), "No se pudo conectar", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     fun setTabletMixer(tabletMixerIn: TabletMixer) {
         tabletMixerIn.let { tabletMixer ->

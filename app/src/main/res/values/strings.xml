@@ -370,6 +370,9 @@
     <string name="descripcion">Descripción</string>
     <string name="cero">0</string>
     <string name="configuracion">Configuración</string>
+    <string name="no_disponible">El mixer no puede realizar esta acción en este momento.</string>
+    <string name="desconectado">Desconectado</string>
+    <string name="sincronice_con_mixer">Sincronice las rondas con el mixer</string>
 
 
 </resources>

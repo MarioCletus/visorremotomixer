@@ -67,7 +67,8 @@
                 android:textSize="150sp"
                 app:layout_constraintEnd_toEndOf="@id/pb_current_product"
                 app:layout_constraintStart_toStartOf="@id/pb_current_product"
-                app:layout_constraintTop_toTopOf="@id/pb_current_product"/>
+                app:layout_constraintTop_toTopOf="@id/pb_current_product"
+                app:layout_constraintBottom_toBottomOf="@id/pb_current_product"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -98,6 +99,7 @@
                 android:textSize="18sp"
                 app:backgroundTint="@null"
                 android:visibility="invisible"
+                android:layout_marginBottom="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -113,6 +115,7 @@
                 android:textSize="14sp"
                 app:backgroundTint="@null"
                 android:visibility="invisible"
+                android:layout_marginBottom="20dp"
                 app:layout_constraintStart_toEndOf="@id/btn_tara"
                 app:layout_constraintEnd_toStartOf="@id/btn_jump"
                 app:layout_constraintTop_toTopOf="parent"
@@ -130,6 +133,7 @@
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 app:backgroundTint="@null"
+                android:layout_marginBottom="20dp"
                 app:layout_constraintStart_toEndOf="@id/btn_tara"
                 app:layout_constraintEnd_toStartOf="@id/btn_jump"
                 app:layout_constraintTop_toTopOf="parent"
@@ -146,6 +150,7 @@
                 android:textSize="18sp"
                 app:backgroundTint="@null"
                 android:visibility="invisible"
+                android:layout_marginBottom="20dp"
                 app:layout_constraintStart_toEndOf="@id/btn_pause"
                 app:layout_constraintEnd_toStartOf="@id/btn_rest"
                 app:layout_constraintTop_toTopOf="parent"
@@ -161,6 +166,7 @@
                 android:textSize="18sp"
                 app:backgroundTint="@null"
                 android:visibility="invisible"
+                android:layout_marginBottom="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>

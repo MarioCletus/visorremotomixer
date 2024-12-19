@@ -302,7 +302,6 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
             Log.i("command", "TabletMixerListFragment onCommandReceived ${message?.let { String(it) }}")
-            (requireActivity() as MainActivity).commandReceibed()
 
             if(message == null || message.size<9){
                 Log.i(TAG,"command not enough large (${message?.size})")
@@ -310,22 +309,52 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
             }
             val messageStr = String(message,0, message.size)
             if(countMessage++>20){
-                Log.d("message","message $messageStr")
+                Log.d("message","TMLF message $messageStr")
                 countMessage = 0
             }
             val command = messageStr.substring(0,3)
-            Log.i("SHOWCOMAND","tabletMixerList command $command")
+            Log.i("SHOWCOMAND","TMLF command $command")
             when (command) {
                 Constants.CMD_ACK->{
                     Log.i(TAG,"CMD_ACK")
                     handlerBaliza.removeCallbacks(runnable)
                 }
+
+                Constants.CMD_NTA ->{
+                    Log.i("showCommand","CMD_NTA")
+                    if(isAdded){
+                        (requireActivity() as MainActivity).alertDialog(getString(R.string.atencion),getString(R.string.no_disponible))
+                    }
+                }
+                Constants.CMD_WEIGHT->{
+                    refreshWeight(message)
+                }
+                Constants.CMD_WEIGHT_CONFIG->{
+                    refreshWeight(message)
+                }
+                Constants.CMD_WEIGHT_LOAD->{
+                    refreshWeight(message)
+                }
+                Constants.CMD_WEIGHT_DWNL->{
+                    refreshWeight(message)
+                }
+                Constants.CMD_WEIGHT_RESUME->{
+                    refreshWeight(message)
+                }
+                Constants.CMD_WEIGHT_LOAD_FREE->{
+                    refreshWeight(message)
+                }
+                Constants.CMD_WEIGHT_DWNL_FREE->{
+                    refreshWeight(message)
+                }
+                else->{}
             }
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
-            (requireActivity() as MainActivity).beaconReceibed()
-            Log.i("message", "TabletMixerListFragment onMessageReceived $message")
+            if(isAdded)
+                (requireActivity() as MainActivity).beaconReceibed()
+            Log.i("message", "TMLF onMessageReceived $message")
         }
 
         override fun onMessageSent(device: BluetoothDevice?,message: String?) {
@@ -338,12 +367,14 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
 
         override fun onError(message: String?) {
             Log.i(TAG, "[TabletMixerListFragment] onError")
-            (requireActivity() as MainActivity).changeStatusDisconnected()
+            if(isAdded)
+                (requireActivity() as MainActivity).changeStatusDisconnected()
         }
 
         override fun onDeviceDisconnected() {
             Log.i(TAG, "[TabletMixerListFragment] onDeviceDisconnected")
-            (requireActivity() as MainActivity).changeStatusDisconnected()
+            if(isAdded)
+                (requireActivity() as MainActivity).changeStatusDisconnected()
         }
 
         override fun onBondedDevices(device: List<BluetoothDevice>?) {
@@ -501,4 +532,12 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
         }
     }
 
+    private fun refreshWeight(message:ByteArray) {
+        val weight = String(message, 4, 8).toLong()
+        val sign = String(message, 3, 1)
+//        mBinding.tvPeso.setText("${sign}${weight}")
+        if(!sign.contains("N") && !sign.contains("n")){
+            (requireActivity() as MainActivity).weightReceibed()
+        }
+    }
 }

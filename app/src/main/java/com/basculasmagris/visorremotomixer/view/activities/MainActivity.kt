@@ -305,6 +305,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun alertDialog(title: String, message: String) : AlertDialog? {
+        val dialogBuilder = AlertDialog.Builder(this)
+        // set message of alert dialog
+        dialogBuilder.setMessage(message)
+            .setCancelable(false)
+            .setPositiveButton("Aceptar") { dialog, _ ->
+                dialog.dismiss()
+            }
+        val alert = dialogBuilder.create()
+        alert.setTitle(title)
+        alert.show()
+        return alert
+    }
+
+
     fun showCustomProgressDialog(title: String? = null,message:String? = null,layoutId: Int? = null){
         mProgressDialog?.let {
             if(it.isShowing){
@@ -1034,8 +1049,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun commandReceibed() {
-        onCommandReceived()
+    fun weightReceibed() {
+        onWeightReceived()
     }
 
 
@@ -1047,7 +1062,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onCommandReceived() {
+    fun onWeightReceived() {
         runOnUiThread {
             mProgressDialog?.dismiss()
             showBalanceConnected()
