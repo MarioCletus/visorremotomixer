@@ -396,6 +396,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
                     bd.address == it.mac
                 }
                 selectedBluetoothDevice = deviceBluetooth
+                Log.i(TAG,"onBondedDevices connectDevice")
                 (requireActivity() as MainActivity).connectDevice(deviceBluetooth)
             }
         }

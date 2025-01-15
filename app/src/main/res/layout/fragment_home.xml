@@ -34,28 +34,29 @@
             app:layout_constraintLeft_toLeftOf="@id/btn_rondas"
             app:layout_constraintTop_toTopOf="@id/bg_buttons_main" />
 
+
         <Button
             android:id="@+id/btn_mixer"
             android:layout_width="160dp"
             android:layout_height="160dp"
             android:layout_marginStart="20dp"
             android:background="@drawable/btn_132"
-            app:backgroundTint="@null"
+            android:drawableTop="@drawable/mixer_icon_resized_75"
             android:drawableTint="@color/white"
             android:enabled="true"
             android:paddingTop="20dp"
             android:text="@string/mixers"
             android:textSize="12sp"
+            app:backgroundTint="@null"
             app:layout_constraintStart_toEndOf="@id/btn_rondas"
-            app:layout_constraintTop_toTopOf="@id/btn_rondas"/>
-
+            app:layout_constraintTop_toTopOf="@id/btn_rondas" />
 
         <Button
             android:id="@+id/btn_sincro"
             android:layout_width="160dp"
             android:layout_height="160dp"
             android:background="@drawable/btn_ajustes_main"
-            android:drawableTop="@drawable/cloud_sync_48px"
+            android:drawableTop="@drawable/cloud_sync_56px"
             app:backgroundTint="@null"
             android:drawableTint="@color/white"
             android:enabled="true"

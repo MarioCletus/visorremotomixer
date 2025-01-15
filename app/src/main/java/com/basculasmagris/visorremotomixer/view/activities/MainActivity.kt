@@ -431,14 +431,15 @@ class MainActivity : AppCompatActivity() {
                 connectDevice(bluetoothDevice)
                 isActionRunning = false
             }, 1500)
-        }    }
+        }
+    }
+
     fun connectDevice(bluetoothDevice: BluetoothDevice?){
         this.bluetoothDevice = bluetoothDevice
         if(mService?.isConnected() == true){
             changeStatusConnected()
             return
         }
-
         bluetoothDevice?.let {deviceBluetooth->
             if(mService?.LocalBinder()?.isConnected() == false){
                 Log.i(TAG,"connectDevice connectKnowDeviceWithTransfer $deviceBluetooth")
@@ -447,11 +448,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         Handler(Looper.getMainLooper()).postDelayed({
+            Log.i(TAG,"Re connectDevice ${this.bluetoothDevice?.name}")
             connectDevice(this.bluetoothDevice)
         }, 2000)
     }
 
+    private var bShowDeviceConnected = false
     private fun showDeviceDisconnected() {
+        if(!bShowDeviceConnected){
+            return
+        }
+        bShowDeviceConnected = false
         if(binding.appBarMain.toolbarMain.menu.size>0){
             val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.menu_selected_remote_tablet)
             menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_tablet_disconnected_48px)
@@ -459,13 +466,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showDeviceConnected() {
+        if(bShowDeviceConnected){
+            return
+        }
+        bShowDeviceConnected = true
         if(binding.appBarMain.toolbarMain.menu.size>0){
             val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.menu_selected_remote_tablet)
             menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_tablet_connected_48px)
         }
     }
 
+    private var bShowBalanceConnected = false
     private fun showBalanceDisconnected() {
+        if(bShowBalanceConnected){
+            return
+        }
+        bShowBalanceConnected = true
         Log.i(TAG,"showBalanceDisconnected")
         if(binding.appBarMain.toolbarMain.menu.size>0){
             val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_balance)
@@ -474,6 +490,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showBalanceConnected() {
+        if(bShowBalanceConnected){
+            return
+        }
+        bShowBalanceConnected = false
         Log.i(TAG,"showBalanceConnected")
         if(binding.appBarMain.toolbarMain.menu.size>0){
             val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_balance)
@@ -484,7 +504,6 @@ class MainActivity : AppCompatActivity() {
     private fun getSavedMixerTabletId() = datastore.data.map { preferences->
         preferences[longPreferencesKey("IDTABLET")]
     }
-
 
     fun changeActionBarTitle(title: String) {
         supportActionBar?.let {
