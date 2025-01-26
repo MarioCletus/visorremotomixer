@@ -460,7 +460,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                 }
 
                 Constants.CMD_ROUNDS->{
-                    Log.i("showCommand","CMD_ROUNDS")
+                    Log.i("showCommand","CMD_ROUNDS TMCA")
                     bSyncroRounds = refreshRounds(message)
                     if(bSyncroRounds){
                         mBinding.pbRounds.progress = 100

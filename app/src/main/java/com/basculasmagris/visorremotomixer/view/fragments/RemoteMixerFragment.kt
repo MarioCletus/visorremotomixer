@@ -90,6 +90,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private var dialogCountDown: AlertDialog? = null
 
     private val REFRESH_VIEW_TIME = 20
+    private val REFRESH_VIEW_TIME_CONFIG = 5
     private var countMsg: Int = REFRESH_VIEW_TIME
     private val REFRESH_DATA_TIME = 4
     private var countDataMsg: Int = REFRESH_DATA_TIME
@@ -156,10 +157,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
             if(bInFree){
                 if(bInLoad){
-                    (requireActivity() as MainActivity).requestListOfProducts()
+                    (requireActivity() as MainActivity).sendRequestListOfProducts()
                     return@setOnClickListener
                 }else{
-                    (requireActivity() as MainActivity).requestListOfCorrals()
+                    (requireActivity() as MainActivity).sendRequestListOfCorrals()
                     return@setOnClickListener
                 }
             }else{
@@ -692,7 +693,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_ROUNDS->{
-                    Log.i("showCommand","CMD_ROUNDS")
+                    Log.i("showCommand","CMD_ROUNDS RMF")
                     if(isAdded)
                         bSyncroRounds = (requireActivity() as MainActivity).refreshRounds(message)
                 }
@@ -737,29 +738,37 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_CONFIG->{
+                    Log.v("cmd_weight","CMD_WEIGHT_CONFIG")
                     mBinding.flStepConfig.visibility = View.VISIBLE
-                    mBinding.llLoadDownload.visibility = View.INVISIBLE
-                    mBinding.flTimer.visibility = View.INVISIBLE
+                    mBinding.llLoadDownload.visibility = View.GONE
+                    mBinding.flTimer.visibility = View.GONE
                     mBinding.tvRest.text = "${getString(R.string.rest)}: ${rest}Kg"
                     count_resume = 0
                     count_weight = 0
                     try{
                         if(!bInCfg){
+                            Log.i(TAG,"primer ingreso STEP CONFIG")
                             refreshRound()
+                            mBinding.rvRoundCorralToLoad.layoutManager = LinearLayoutManager(requireActivity(),
+                                RecyclerView.HORIZONTAL,false)
+                            val runCorralAdapter =  RoundRunCorralAdapter(
+                                this@RemoteMixerFragment)
+                            if(isAdded){
+                                val round = (requireActivity() as MainActivity).minRoundRunDetail?.round
+                                mBinding.tvMixer.text = mixerDetail?.name?:""
+                                round?.corrals?.let { corrals ->
+                                    runCorralAdapter.corralList(corrals)
+                                    mBinding.tvRoundTargetWeight.text = "${corrals.sumOf{ it.actualTargetWeight }}Kg"
+                                    mBinding.tvEstablishment.text = round.establishment?.name?:""
+                                    mBinding.rvRoundCorralToLoad.adapter = runCorralAdapter
+                                }
+                            }
                         }
-                        if(countMsg++ > REFRESH_VIEW_TIME){
+                        if(countMsg++ > REFRESH_VIEW_TIME_CONFIG){
                             refreshRound()
-                        }
-
-                        countMsg = 0
-
-                        mBinding.rvRoundCorralToLoad.layoutManager = LinearLayoutManager(requireActivity(),
-                            RecyclerView.HORIZONTAL,false)
-                        val runCorralAdapter =  RoundRunCorralAdapter(
-                            this@RemoteMixerFragment)
-                        if(isAdded){
+                            countMsg = 0
+                            val runCorralAdapter = mBinding.rvRoundCorralToLoad.adapter as RoundRunCorralAdapter
                             val round = (requireActivity() as MainActivity).minRoundRunDetail?.round
-                            mBinding.tvMixer.text = mixerDetail?.name?:""
                             round?.corrals?.let { corrals ->
                                 runCorralAdapter.corralList(corrals)
                                 mBinding.tvRoundTargetWeight.text = "${corrals.sumOf{ it.actualTargetWeight }}Kg"
@@ -767,7 +776,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                                 mBinding.rvRoundCorralToLoad.adapter = runCorralAdapter
                             }
                         }
-
                         refreshWeight(message)
                         bInLoad = false
                         bInDownload = false
@@ -781,6 +789,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_RESUME->{
+                    Log.v("cmd_weight","CMD_WEIGHT_RESUME")
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
@@ -833,6 +842,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_DWNL->{
+                    Log.v("cmd_weight","CMD_WEIGHT_DWNL")
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
@@ -864,6 +874,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_LOAD_FREE->{
+                    Log.v("cmd_weight","CMD_WEIGHT_LOAD_FREE")
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
@@ -895,6 +906,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_DWNL_FREE->{
+                    Log.v("cmd_weight","CMD_WEIGHT_DWNL_FREE")
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
@@ -925,6 +937,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT_TIMER->{
+                    Log.v("cmd_weight","CMD_WEIGHT_TIMER")
                     Log.i("showCommand","CMD_WEIGHT_TIMER ${String(message)}")
                     mBinding.llLoadDownload.visibility = View.INVISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
@@ -1078,7 +1091,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
     private fun refreshDataRound() {
         countDataMsg = 0
-        (requireActivity() as MainActivity).requestDataRoundRunDetail()
+        (requireActivity() as MainActivity).sendRequestDataRoundRunDetail()
     }
 
     override fun onDestroyView() {

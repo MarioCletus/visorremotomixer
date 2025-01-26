@@ -120,7 +120,7 @@ class SyncFragment : Fragment() {
                 }
 
                 Constants.CMD_ROUNDS->{
-                    Log.i("showCommand","CMD_ROUNDS")
+                    Log.i("showCommand","CMD_ROUNDS SF")
                     bSyncroRounds = (requireActivity() as MainActivity).refreshRounds(message)
                     if(bSyncroRounds){
                         mBinding.pbRounds.progress = 100
@@ -189,10 +189,10 @@ class SyncFragment : Fragment() {
     }
 
     private suspend fun syncData(){
-        (requireActivity() as MainActivity).requestListOfUsers()
+        (requireActivity() as MainActivity).sendRequestListOfUsers()
         (requireActivity() as MainActivity).deleteRoundsFromDB()
         delay(1000)
-        (requireActivity() as MainActivity).requestListOfRounds()
+        (requireActivity() as MainActivity).sendRequestListOfRounds()
     }
 
 

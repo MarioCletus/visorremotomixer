@@ -187,7 +187,7 @@ class HomeFragment : Fragment() {
             }
             Log.i(TAG, "onDeviceConnected $name $address")
             if(isAdded)
-                (requireActivity() as MainActivity).requestListOfRounds()
+                (requireActivity() as MainActivity).sendRequestListOfRounds()
         }
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
@@ -255,7 +255,7 @@ class HomeFragment : Fragment() {
                 }
 
                 Constants.CMD_ROUNDS->{
-                    Log.i("showCommand","CMD_ROUNDS")
+                    Log.i("showCommand","CMD_ROUNDS Home")
                     if(isAdded)
                         (requireActivity() as MainActivity).refreshRounds(message)
 

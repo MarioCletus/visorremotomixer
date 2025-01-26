@@ -20,30 +20,19 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.basculasmagris.visorremotomixer.R
-import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
 import com.basculasmagris.visorremotomixer.databinding.FragmentRoundListBinding
-import com.basculasmagris.visorremotomixer.model.entities.MedRoundRunDetail
-import com.basculasmagris.visorremotomixer.model.entities.MinRound
 import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunDetail
-import com.basculasmagris.visorremotomixer.model.entities.RoundLocal
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
-import com.basculasmagris.visorremotomixer.view.activities.MergedLocalData
-import com.basculasmagris.visorremotomixer.view.activities.RoundLocalData
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
-import com.basculasmagris.visorremotomixer.viewmodel.RoundLocalViewModel
-import com.basculasmagris.visorremotomixer.viewmodel.RoundLocalViewModelFactory
 import com.google.gson.Gson
 
 
@@ -58,6 +47,7 @@ class RoundListFragment : Fragment() {
     private var fragmentRunning = false
 
     private val REFRESH_VIEW_TIME = 20
+    private val TIME_REFRESH_ROUNDS = 2000L
     private var countMsg: Int = REFRESH_VIEW_TIME
 
     private var menu:Menu? = null
@@ -154,13 +144,13 @@ class RoundListFragment : Fragment() {
     private fun refreshData() {
         if(!bBlockButton){
             bBlockButton = true
-            (requireActivity() as MainActivity).requestListOfRounds()
+            (requireActivity() as MainActivity).sendRequestListOfRounds()
             val handler = Handler(Looper.getMainLooper())
             val action = Runnable {
 
                 bBlockButton = false
             }
-            handler.postDelayed(action, 500)
+            handler.postDelayed(action, TIME_REFRESH_ROUNDS)
         }
 
     }
@@ -169,7 +159,6 @@ class RoundListFragment : Fragment() {
     private fun getLocalData(){
         // Sync local data
         Log.i(TAG,"getLocalData")
-        Log.i("MEP","getLocalRound() 2 ")
         getLocalRound()
         refreshData()
     }
@@ -269,7 +258,7 @@ class RoundListFragment : Fragment() {
 
 
                 Constants.CMD_ROUNDS->{
-                    Log.i("showCommand","CMD_ROUNDS")
+                    Log.i("showCommand","CMD_ROUNDS RLF")
                     Log.i("MEP","CMD_ROUNDS")
                     if(isAdded)
                         (requireActivity() as MainActivity).refreshRounds(message)
@@ -340,6 +329,7 @@ class RoundListFragment : Fragment() {
                     refreshWeight(message)
                 }
                 Constants.CMD_WEIGHT_CONFIG->{
+                    Log.i("CMD_WEIGHT","CMD_WEIGHT_CONFIG")
                     if(countMsg++ > REFRESH_VIEW_TIME){
                         refreshRound()
                     }

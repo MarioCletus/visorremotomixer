@@ -233,7 +233,7 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
     fun sincroRound(roundRunning:Boolean) {
         if(!(this.bRoundRunning && roundRunning)){
             this.bRoundRunning = roundRunning
-            notifyDataSetChanged()
+
         }
     }
 

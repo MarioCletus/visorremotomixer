@@ -577,28 +577,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun sendRequestRoundRunDetail() {
-        val msg = "CMD${Constants.CMD_ROUNDDETAIL}"
-        Log.i("send_cmd","Send requestRoundRunDetail $msg")
-        mService?.LocalBinder()?.write(msg.toByteArray())
-    }
-
-
-    fun sendReconnectBalance() {
-        val msg = "CMD${Constants.CMD_RECONNECT_SCALE}"
-        Log.i("send_cmd","Send reconnect balance $msg")
-        mService?.LocalBinder()?.write(msg.toByteArray())
-    }
-
-    fun requestDataRoundRunDetail() {
-        val msg = "CMD${Constants.CMD_ROUNDDATA}"
-        Log.i("send_cmd","Send requestRoundRunData $msg")
-        mService?.LocalBinder()?.write(msg.toByteArray())
-    }
-    fun requestMixer() {
-        val msg = "CMD${Constants.CMD_MIXER}"
-        mService?.LocalBinder()?.write(msg.toByteArray())
-    }
 
     fun refreshUsers(message: ByteArray):Boolean {
         try{
@@ -833,95 +811,138 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+    fun sendRequestRoundRunDetail() {
+        val msg = "CMD${Constants.CMD_ROUNDDETAIL}"
+        Log.i("send_cmd","Send requestRoundRunDetail $msg")
+        mService?.LocalBinder()?.write(msg.toByteArray())
+    }
+
+
+    fun sendReconnectBalance() {
+        val msg = "CMD${Constants.CMD_RECONNECT_SCALE}"
+        Log.i("send_cmd","Send reconnect balance $msg")
+        mService?.LocalBinder()?.write(msg.toByteArray())
+    }
+
+    fun sendRequestDataRoundRunDetail() {
+        val msg = "CMD${Constants.CMD_ROUNDDATA}"
+        Log.i("send_cmd","Send requestRoundRunData $msg")
+        mService?.LocalBinder()?.write(msg.toByteArray())
+    }
+    fun requestMixer() {
+        val msg = "CMD${Constants.CMD_MIXER}"
+        Log.i("send_cmd","Send requestMixer $msg")
+        mService?.LocalBinder()?.write(msg.toByteArray())
+    }
+
     fun sendTareToMixer() {
+        Log.i("send_cmd","Send Tare")
         val msg = "CMD${Constants.CMD_TARA}"
         mService?.LocalBinder()?.write(msg.toByteArray())
     }
 
 
     fun sendRestToMixer() {
+        Log.i("send_cmd","Send rest")
         val byteArray = "CMD${Constants.CMD_DLG_REST}${String.format("%06d",0)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
     fun sendIniToMixer() {
+        Log.i("send_cmd","Send iniToMixer")
         val byteArray = "CMD${Constants.CMD_INI}${String.format("%06d",0)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
     fun sendEndToMixer() {
+        Log.i("send_cmd","Send end")
         val byteArray = "CMD${Constants.CMD_END}${String.format("%06d",0)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
     fun sendCancelToMixer() {
+        Log.i("send_cmd","Send cancel")
         val byteArray = "CMD${Constants.CMD_CANCEL}${String.format("%06d",0)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
     fun sendCloseDlgToMixer() {
+        Log.i("send_cmd","Send closeDlg")
         val byteArray = "CMD${Constants.CMD_CLOSE_DLG}${String.format("%06d",0)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
     private fun sendSelectCorralToMixer(minCorral: MinCorral) {
+        Log.i("send_cmd","Send selectCorral $minCorral")
         val byteArray = "CMD${Constants.CMD_SELECT_CORRAL}${String.format("%06d",minCorral.id)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
     private fun sendSelectProductToMixer(minProduct: MinProduct) {
+        Log.i("send_cmd","sendSelectProductToMixer $minProduct")
         Log.i(TAG,"sendSelectProductToMixer $minProduct")
         val byteArray = "CMD${Constants.CMD_SELECT_PRODUCT}${String.format("%06d",minProduct.id)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
     private fun sendSelectEstablishmentToMixer(minEstablishment: MinEstablishment) {
+        Log.i("send_cmd","sendSelectEstablishment $minEstablishment")
         val byteArray = "CMD${Constants.CMD_SELECT_ESTAB}${String.format("%06d",minEstablishment.id)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
-    fun requestListOfProducts() {
+    fun sendRequestListOfProducts() {
+        Log.i("send_cmd","sendRequeslListOfProducts")
         val byteArray = "CMD${Constants.CMD_REQ_PRODUCT}000000".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
     fun sendGoToRound(id:Long) {
+        Log.i("send_cmd","sendGoToRound $id")
         Log.i("seguimiento","sendGoToRound $id")
         val byteArray = "CMD${Constants.CMD_GO_TO_ROUND}${String.format("%06d",id)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
     fun sendBeacon() {
+        Log.i("send_cmd","sendBeacon")
         val byteArray = "CMD${Constants.CMD_BEACON}${String.format("%06d",0)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
     fun sendGoToFreeRound() {
+        Log.i("send_cmd","sendGoToFreeRound")
         val byteArray = "CMD${Constants.CMD_GO_TO_FREE_ROUND}000000".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
     fun sendGoToResume(id:Long) {
+        Log.i("send_cmd","sendGoToResume")
         val byteArray = "CMD${Constants.CMD_GO_TO_RESUME}${String.format("%06d",id)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
     fun sendGoToDownload() {
+        Log.i("send_cmd","sendGoToDownload")
         val byteArray = "CMD${Constants.CMD_GO_TO_DOWNLOAD}${String.format("%06d",0)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
     
-    fun requestListOfCorrals() {
+    fun sendRequestListOfCorrals() {
+        Log.i("send_cmd","sendRequestListOfCorrals")
         val byteArray = "CMD${Constants.CMD_REQ_CORRAL}000000".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
-    fun requestListOfUsers() {
+    fun sendRequestListOfUsers() {
+        Log.i("send_cmd","sendRequestListOfUsers")
         val byteArray = "CMD${Constants.CMD_USER_LIST}000000".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
 
-    fun requestListOfRounds() {
+    fun sendRequestListOfRounds() {
+        Log.i("send_cmd","sendRequestListOfRounds")
         val byteArray = "CMD${Constants.CMD_ROUNDS}000000".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
