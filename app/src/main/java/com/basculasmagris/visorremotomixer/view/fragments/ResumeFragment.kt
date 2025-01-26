@@ -47,6 +47,9 @@ class ResumeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         showResume()
+        if(isAdded){
+            (requireActivity() as MainActivity).clearbShowDevice()
+        }
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
     }
 

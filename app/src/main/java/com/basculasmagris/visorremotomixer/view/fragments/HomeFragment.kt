@@ -66,10 +66,14 @@ class HomeFragment : Fragment() {
                 menuInflater.inflate(R.menu.menu_remote_mixer_fragment, menu)
                 this@HomeFragment.menu = menu
                 val activity = requireActivity() as MainActivity
+                if(isAdded){
+                    activity.clearbShowDevice()
+                }
                 activity.supportActionBar?.let {
                     val user = Helper.getCurrentUser(activity)
                     val title = "Inicio - ${user.name} ${user.lastname}"
                     it.title = title
+
                 }
                 menu.findItem(R.id.cancel_round).isVisible = false
 

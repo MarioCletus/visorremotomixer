@@ -1,6 +1,8 @@
 package com.basculasmagris.visorremotomixer.utils
 
 object Constants {
+
+    const val RECONNECT_TIME: Long = 2000
     const val PRODUCT_TYPE = "PRODUCT_TYPE"
     const val ESTABLISHMENT_REF = "ESTABLISHMENT_REF"
     const val PRODUCT_REF = "PRODUCT_REF"

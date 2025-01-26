@@ -49,7 +49,9 @@ class SyncFragment : Fragment() {
             }
             
         }
-
+        if(isAdded){
+            (requireActivity() as MainActivity).clearbShowDevice()
+        }
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
 
     }

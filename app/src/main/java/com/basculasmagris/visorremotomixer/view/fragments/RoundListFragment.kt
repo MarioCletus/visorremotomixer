@@ -88,6 +88,9 @@ class RoundListFragment : Fragment() {
                 // Associate searchable configuration with the SearchView
                 val search = menu.findItem(R.id.search_round)
                 val searchView = search.actionView as SearchView
+                if(isAdded){
+                    (requireActivity() as MainActivity).clearbShowDevice()
+                }
                 searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         (mBinding.rvRoundsList.adapter as RoundRunAdapter).filter.filter(query)
@@ -440,6 +443,7 @@ class RoundListFragment : Fragment() {
             (requireActivity() as MainActivity).showCustomProgressDialog("Alerta","No se puede ver ronda",R.layout.dialog_custom_progress_ver)
 
         }
+        Log.i("seguimiento","sendGoToRound ${id}")
         bGoToRound = true
         (requireActivity() as MainActivity).sendGoToRound(id)
     }

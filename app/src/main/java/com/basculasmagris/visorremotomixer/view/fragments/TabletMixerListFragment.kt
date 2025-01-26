@@ -132,6 +132,9 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
                 // Add menu items here
                 this@TabletMixerListFragment.menu = menu
                 menuInflater.inflate(R.menu.menu_tablet_mixer_list, menu)
+                if(isAdded){
+                    (requireActivity() as MainActivity).clearbShowDevice()
+                }
 
                 // Associate searchable configuration with the SearchView
                 val search = menu.findItem(R.id.search_tablet_mixer)

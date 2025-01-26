@@ -433,7 +433,64 @@ class MainActivity : AppCompatActivity() {
             }, 1500)
         }
     }
+    private var countRecursive = 0
+    private var isReconnecting = false // Variable para evitar múltiples Handlers
+    private val handlerRecconect = Handler(Looper.getMainLooper()) // El Handler se define a nivel de clase
+    private var reconnectRunnable: Runnable? = null // Guardamos la referencia al Runnable
 
+    fun connectDevice(bluetoothDevice: BluetoothDevice?) {
+        Log.d("connection", "Recursive connection $countRecursive  bluetoothDevice $bluetoothDevice" )
+        if(bluetoothDevice != null) {
+            this.bluetoothDevice = bluetoothDevice
+        }
+        else {
+            return
+        }
+        // Verificamos si ya hay un Handler en proceso
+        if (isReconnecting) {
+            Log.d("connection", "Reconnection already in progress")
+            return
+        }
+
+        if (mService?.isConnected() == true) {
+            Log.d("connection", "activity.mService?.isConnected() == true")
+            changeStatusConnected()
+            countRecursive = 0
+            isReconnecting = false // Se completó la conexión
+            return
+        }
+
+        countRecursive++
+
+        bluetoothDevice?.let { deviceBluetooth ->
+            Log.d("connection", "bluetoothDevice ${deviceBluetooth.name}")
+            if (mService?.LocalBinder()?.isConnected() == false) {
+                Log.d("connection", "connectKnowDeviceWithTransfer ${deviceBluetooth.name}")
+                mService?.LocalBinder()?.connectKnowDeviceWithTransfer(bluetoothDevice)
+            }
+        }
+
+        // Marcamos que hay un Handler en proceso
+        isReconnecting = true
+
+        // Creamos el Runnable y lo almacenamos en reconnectRunnable
+        reconnectRunnable = Runnable {
+            isReconnecting = false // Permitir nueva reconexión después del delay
+            if (!bReconnect) {
+                Log.d("connection", "Reconnect disable")
+                return@Runnable
+            }
+            Log.i("connection","Re connect Runnable")
+            connectDevice(bluetoothDevice)
+        }
+
+        // Posteamos el Runnable
+        reconnectRunnable?.let {
+            Log.i("connection","reconnectRunnable lanza el postDelayed")
+            handlerRecconect.postDelayed(it, Constants.RECONNECT_TIME)
+        }
+    }
+/*
     fun connectDevice(bluetoothDevice: BluetoothDevice?){
         this.bluetoothDevice = bluetoothDevice
         if(mService?.isConnected() == true){
@@ -451,7 +508,7 @@ class MainActivity : AppCompatActivity() {
             Log.i(TAG,"Re connectDevice ${this.bluetoothDevice?.name}")
             connectDevice(this.bluetoothDevice)
         }, 2000)
-    }
+    }*/
 
     private var bShowDeviceConnected = false
     private fun showDeviceDisconnected() {
@@ -465,10 +522,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun clearbShowDevice(){
+        bShowDeviceConnected = false
+        bShowBalanceConnected = false
+    }
+
+    var countDevConect = 0
     private fun showDeviceConnected() {
-        if(bShowDeviceConnected){
+        if(bShowDeviceConnected && countDevConect++ < 10){
             return
         }
+        countDevConect = 0
         bShowDeviceConnected = true
         if(binding.appBarMain.toolbarMain.menu.size>0){
             val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.menu_selected_remote_tablet)
@@ -489,10 +553,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    var countBalConect = 0
     private fun showBalanceConnected() {
-        if(bShowBalanceConnected){
+        if(bShowBalanceConnected && countBalConect++ < 10){
             return
         }
+        countBalConect = 0
         bShowBalanceConnected = false
         Log.i(TAG,"showBalanceConnected")
         if(binding.appBarMain.toolbarMain.menu.size>0){
@@ -820,6 +886,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun sendGoToRound(id:Long) {
+        Log.i("seguimiento","sendGoToRound $id")
         val byteArray = "CMD${Constants.CMD_GO_TO_ROUND}${String.format("%06d",id)}".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }

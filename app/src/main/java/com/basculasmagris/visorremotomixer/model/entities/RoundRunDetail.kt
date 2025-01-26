@@ -264,7 +264,7 @@ data class MinRoundDetail (
     val description: String,
     var diet: MinDietDetail,
     var corrals: ArrayList<MinCorralDetail>,
-    var establishment: MinEstablishmentDetail,
+    var establishment: MinEstablishmentDetail?,
     var id: Long
 ) : Parcelable
 
@@ -274,6 +274,7 @@ data class MinCorralDetail (
     val description: String,
     val establishmentId: Long,
     val order: Int,
+    var animalQuantity: Int,
     var initialWeight: Long,
     var currentWeight: Long,
     var finalWeight: Long,
