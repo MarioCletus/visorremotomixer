@@ -140,11 +140,12 @@ object Constants {
     //RoundDetail
     const val STATE_NONE = 0
     const val STATE_CONFIG = 1
-    const val STATE_LOAD = 2
-    const val STATE_DOWNLOAD = 3
-    const val STATE_RESUME = 4
+    const val STATE_LOAD = 3
+    const val STATE_DOWNLOAD = 4
+    const val STATE_RESUME = 6
     const val STATE_FINISH = 10
-    const val STATE_INTERRUPT = 11
+    const val STATE_INTERRUPTED = 11
+    const val STATE_CANCELED = 12
 
     //Load & Download state
 //    const val STATE_NONE = 0

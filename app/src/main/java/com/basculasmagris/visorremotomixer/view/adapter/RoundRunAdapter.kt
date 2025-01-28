@@ -61,7 +61,7 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
 
         Log.i("RUN", "Fecha de fin: ${roundToRun.endDate} de ${roundToRun.round.name}")
         if (roundToRun.endDate.isNotEmpty()) {
-            val state = if(roundToRun.status == Constants.STATE_INTERRUPT) Constants.STATUS_INCOMPLETED else Constants.STATUS_FINISHED
+            val state = if(roundToRun.status == Constants.STATE_INTERRUPTED) Constants.STATUS_INCOMPLETED else Constants.STATUS_FINISHED
             return  "$state   ${Helper.formattedDate(roundToRun.endDate, Constants.APP_DB_FORMAT_DATE, Constants.APP_SHOW_LARGE_FORMAT_DATE)}"
         }
 

@@ -90,7 +90,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private var dialogCountDown: AlertDialog? = null
 
     private val REFRESH_VIEW_TIME = 20
-    private val REFRESH_VIEW_TIME_CONFIG = 5
+    private val REFRESH_VIEW_TIME_CONFIG = 20
     private var countMsg: Int = REFRESH_VIEW_TIME
     private val REFRESH_DATA_TIME = 4
     private var countDataMsg: Int = REFRESH_DATA_TIME
