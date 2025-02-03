@@ -82,10 +82,10 @@ class HomeFragment : Fragment() {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
                     R.id.menu_selected_remote_tablet -> {
-                        Log.v(TAG,"Force connection")
                         val deviceBluetooth = (requireActivity() as MainActivity).knowDevices?.firstOrNull { bd->
                             bd.address == selectedTabletMixerInFragment?.mac
                         }
+                        Log.v(TAG,"Force connection ${deviceBluetooth?.name} $selectedTabletMixerInFragment")
                         deviceBluetooth?.let {
                             val name = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
                                 if (ActivityCompat.checkSelfPermission(
@@ -282,7 +282,7 @@ class HomeFragment : Fragment() {
                     bInDownload = false
                     bInRes = false
                     bInFree = false
-                    Log.v("cmd_weight","CMD_WEIGHT")
+                    Log.v("cmd_weight","CMD_WEIGHT Home $message")
                     refreshWeight(message)
                 }
 
@@ -344,6 +344,20 @@ class HomeFragment : Fragment() {
                     refreshWeight(message)
                 }
 
+                Constants.CMD_WEIGHT_TIMER->{
+                    Log.v("cmd_weight","Home CMD_WEIGHT_TIMER")
+                    Log.i("showCommand","Home CMD_WEIGHT_TIMER ${String(message)}")
+                    if(isAdded)
+                        (requireActivity() as MainActivity).weightReceibed()
+                }
+
+                Constants.CMD_START_TIMER->{
+                    Log.v("cmd_weight","Home CMD_START_TIMER ${String(message)}")
+                    Log.i("showCommand","Home CMD_START_TIMER ${String(message)}")
+                    if(isAdded)
+                        (requireActivity() as MainActivity).weightReceibed()
+                }
+
                 Constants.CMD_MIXER ->{
                 }
 
@@ -396,9 +410,17 @@ class HomeFragment : Fragment() {
         val weight = String(message, 4, 8).toLong()
         val sign = String(message, 3, 1)
         mBinding.tvPeso.setText("${sign}${weight}")
-        if(!sign.contains("N") && !sign.contains("n")){
-            (requireActivity() as MainActivity).weightReceibed()
+        var bConnected = true
+        if(sign.contains("N")){
+            Log.i("message","RMF bConnected false sign +")
+            bConnected = false
         }
+        if(sign.contains("n")){
+            Log.i("message","RMF bConnected false sign -")
+            bConnected = false
+        }
+        if(bConnected && isAdded)
+            (requireActivity() as MainActivity).weightReceibed()
     }
 
     fun selectTablet(tabletMixer :TabletMixer){

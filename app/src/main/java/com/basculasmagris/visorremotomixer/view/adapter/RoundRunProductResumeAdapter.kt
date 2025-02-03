@@ -2,8 +2,10 @@ package com.basculasmagris.visorremotomixer.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.ItemLineRoundRunProductResumeBinding
 import com.basculasmagris.visorremotomixer.model.entities.MinProductDetail
 
@@ -40,10 +42,13 @@ class RoundRunProductResumeAdapter (
 
         if (difference == 0L){
             holder.tvProductDifference.text = "${difference}Kg"
+            holder.tvProductDifference.setTextColor(ContextCompat.getColor(fragment.requireActivity(), R.color.green_500_primary))
         } else if (difference > 0){
             holder.tvProductDifference.text = "+${difference}Kg"
+            holder.tvProductDifference.setTextColor(ContextCompat.getColor(fragment.requireActivity(), R.color.red_500_primary))
         } else {
             holder.tvProductDifference.text = "${difference}Kg"
+            holder.tvProductDifference.setTextColor(ContextCompat.getColor(fragment.requireActivity(), R.color.red_500_primary))
         }
     }
 

@@ -97,7 +97,7 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
             holder.llProgressBar.visibility = GONE
             holder.btnStopRound.visibility = INVISIBLE
             if(bRoundRunning){
-                if((fragment.requireActivity() as MainActivity).minRoundRunDetail?.round?.id == roundToRun.round.id){
+                if((fragment.requireActivity() as MainActivity).minRoundRunDetail?.round?.id == roundToRun.round.id || ((fragment.requireActivity() as MainActivity).minRoundRunDetail?.round?.id == 0L && roundToRun.round.id == -1L)){
                     holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.ver_ronda)
                     holder.btnStartRound.isEnabled = true
                 }
@@ -114,7 +114,7 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
         } else if (roundToRun.endDate.isEmpty()) {
             // En curso
             if(bRoundRunning){
-                if((fragment.requireActivity() as MainActivity).minRoundRunDetail?.round?.id == roundToRun.round.id){
+                if((fragment.requireActivity() as MainActivity).minRoundRunDetail?.round?.id == roundToRun.round.id || ((fragment.requireActivity() as MainActivity).minRoundRunDetail?.round?.id == 0L && roundToRun.round.id == -1L)){
                     holder.btnStartRound.text = holder.btnStartRound.context.getString(R.string.ver_ronda)
                     holder.btnStartRound.isEnabled = true
                 }
@@ -131,7 +131,11 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
 
             holder.btnStopRound.text = fragment.resources.getString(R.string.detener)
             holder.btnStopRound.background = fragment.context?.let { getDrawable(it,R.drawable.btn_round_to_run_red) }
-            holder.llProgressBar.visibility = VISIBLE
+            if(((fragment.requireActivity() as MainActivity).minRoundRunDetail?.round?.id == 0L && roundToRun.round.id == -1L)){//Condicion de ronda libre
+                holder.tvRoundRunDescription.text = holder.tvRoundRunDescription.context.getString(R.string.en_ejecucion)
+                holder.llProgressBar.visibility = GONE
+            }else
+                holder.llProgressBar.visibility = VISIBLE
         } else {
             // Con ejecuciones previas
             holder.llProgressBar.visibility = GONE
@@ -233,7 +237,6 @@ class RoundRunAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<R
     fun sincroRound(roundRunning:Boolean) {
         if(!(this.bRoundRunning && roundRunning)){
             this.bRoundRunning = roundRunning
-
         }
     }
 

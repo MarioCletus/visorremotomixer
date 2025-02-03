@@ -2,8 +2,10 @@ package com.basculasmagris.visorremotomixer.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.ItemLineRoundRunCorralResumeBinding
 import com.basculasmagris.visorremotomixer.model.entities.MinCorralDetail
 import com.basculasmagris.visorremotomixer.utils.Helper
@@ -45,10 +47,13 @@ class RoundRunCorralResumeAdapter (
         holder.pbCurrentCorral.progress = percentage.toInt()
 
         if (difference == 0L){
+            holder.tvCorralDifference.setTextColor(ContextCompat.getColor(fragment.requireActivity(), R.color.green_500_primary))
             holder.tvCorralDifference.text = "${difference}Kg"
         } else if (difference >= 0){
+            holder.tvCorralDifference.setTextColor(ContextCompat.getColor(fragment.requireActivity(), R.color.red_500_primary))
             holder.tvCorralDifference.text = "+${difference}Kg"
         } else {
+            holder.tvCorralDifference.setTextColor(ContextCompat.getColor(fragment.requireActivity(), R.color.red_500_primary))
             holder.tvCorralDifference.text = "${difference}Kg"
         }
     }

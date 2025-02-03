@@ -724,13 +724,14 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_WEIGHT->{
+                    if(count_weight++<5){
+                        return
+                    }
+                    count_weight = 0
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
                     mBinding.tvRest.text = "${getString(R.string.rest)}: ${rest}Kg"
-                    if(count_weight++<5){
-                        return
-                    }
                     Log.v("cmd_weight","CMD_WEIGHT")
                     if(isAdded)
                         (requireActivity()).onBackPressed()
@@ -946,6 +947,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.tvRest.text = "${getString(R.string.rest)}: ${rest}Kg"
                     count_weight = 0
                     count_resume = 0
+                    if(isAdded)
+                        (requireActivity() as MainActivity).weightReceibed()
                     try{
                         val time = String(message,3,3).toLong()
                         mBinding.tvTimer.text = "$time"
@@ -955,6 +958,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
                 Constants.CMD_START_TIMER->{
+                    Log.v("cmd_weight","CMD_START_TIMER ${String(message)}")
                     Log.i("showCommand","CMD_START_TIMER ${String(message)}")
                     mBinding.llLoadDownload.visibility = View.INVISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
@@ -962,6 +966,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.btnStartTimer.isEnabled = true
                     count_weight = 0
                     count_resume = 0
+                    if(isAdded)
+                        (requireActivity() as MainActivity).weightReceibed()
                     try{
                         val time = String(message,3,3).toLong()
                         mBinding.tvTimer.text = "$time"
@@ -1075,13 +1081,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         dialogResto?.setMessage("$signRest${rest}Kg")
     }
 
-
-
-
-
-
-
-
     private fun refreshRound() {
         countMsg = 0
         (requireActivity() as MainActivity).sendRequestRoundRunDetail()
@@ -1120,6 +1119,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             dialog.dismiss()
         }
         val alertDialog = builder.create()
+        alertDialog.setOnShowListener {dialogInterface->
+            dialogInterface as androidx.appcompat.app.AlertDialog
+            dialogInterface.window?.decorView?.setBackgroundResource(R.drawable.custom_dialog_background)
+        }
+
         alertDialog.show()
     }
 
@@ -1144,9 +1148,13 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         val textView: TextView = alert.findViewById(android.R.id.message)
         textView.textSize = 40F
         textView.gravity = Gravity.CENTER
+        alert.setOnShowListener {dialogInterface->
+            dialogInterface as androidx.appcompat.app.AlertDialog
+            dialogInterface.window?.decorView?.setBackgroundResource(R.drawable.custom_dialog_background)
+        }
+
         return alert
     }
-
 
     fun setMixer(mixerIn: Mixer?) {
         if(selectedMixerInFragment?.equals(mixerIn) == true && mixerDetail != null){
@@ -1267,6 +1275,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             private val AUTO_DISMISS_MILLIS = 10000
             override fun onShow(dialog: DialogInterface) {
                 (dialog as AlertDialog)
+                dialog.window?.decorView?.setBackgroundResource(R.drawable.custom_dialog_background)
                 object : CountDownTimer(AUTO_DISMISS_MILLIS.toLong(), 100) {
                     override fun onTick(millisUntilFinished: Long) {
                         tvCount?.text = String.format(
@@ -1337,6 +1346,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         if(gravity != Gravity.NO_GRAVITY){
             val textView : TextView = alert.findViewById(android.R.id.message)
             textView.gravity = gravity
+        }
+        alert.setOnShowListener {dialogInterface->
+            dialogInterface as androidx.appcompat.app.AlertDialog
+            dialogInterface.window?.decorView?.setBackgroundResource(R.drawable.custom_dialog_background)
         }
         return alert
     }

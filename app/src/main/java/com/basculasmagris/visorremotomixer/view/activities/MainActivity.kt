@@ -55,6 +55,7 @@ import com.basculasmagris.visorremotomixer.model.entities.User
 import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
+import com.basculasmagris.visorremotomixer.utils.CustomAlertDialogBuilder
 import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
@@ -316,6 +317,10 @@ class MainActivity : AppCompatActivity() {
         val alert = dialogBuilder.create()
         alert.setTitle(title)
         alert.show()
+        alert.setOnShowListener {dialogInterface->
+            dialogInterface as androidx.appcompat.app.AlertDialog
+            dialogInterface.window?.decorView?.setBackgroundResource(R.drawable.custom_dialog_background)
+        }
         return alert
     }
 
@@ -345,7 +350,11 @@ class MainActivity : AppCompatActivity() {
                     builder.setPositiveButton(android.R.string.yes) { _, _ ->
                         it.dismiss()
                     }
-                    builder.show()
+                    val alertDialog = builder.show()
+                    alertDialog.setOnShowListener {dialogInterface->
+                        dialogInterface as androidx.appcompat.app.AlertDialog
+                        dialogInterface.window?.decorView?.setBackgroundResource(R.drawable.custom_dialog_background)
+                    }
                 }
             }, 10000)
         }
@@ -729,6 +738,10 @@ class MainActivity : AppCompatActivity() {
         }
         val alertDialog = builder.create()
         alertDialog.show()
+        alertDialog.setOnShowListener {dialogInterface->
+            dialogInterface as androidx.appcompat.app.AlertDialog
+            dialogInterface.window?.decorView?.setBackgroundResource(R.drawable.custom_dialog_background)
+        }
         return alertDialog
     }
 
@@ -753,6 +766,11 @@ class MainActivity : AppCompatActivity() {
         }
         val alertDialog = builder.create()
         alertDialog.show()
+        alertDialog.setOnShowListener {dialogInterface->
+            dialogInterface as androidx.appcompat.app.AlertDialog
+            dialogInterface.window?.decorView?.setBackgroundResource(R.drawable.custom_dialog_background)
+        }
+
         return alertDialog
     }
 
@@ -785,12 +803,17 @@ class MainActivity : AppCompatActivity() {
         }
         val alertDialog = builder.create()
         alertDialog.show()
+        alertDialog.setOnShowListener {dialogInterface->
+            dialogInterface as androidx.appcompat.app.AlertDialog
+            dialogInterface.window?.decorView?.setBackgroundResource(R.drawable.custom_dialog_background)
+        }
+
         return alertDialog
     }
 
 
     fun dlgTareToLoad(weight:Long) {
-        val builder = AlertDialog.Builder(this)
+        val builder = CustomAlertDialogBuilder(this)
         builder.setTitle(getString(R.string.atencion))
         builder.setMessage("Se registra un peso de $weight en el mixer.\nDesea añadirlos a la mezcla y continuar?" )
         builder.setNeutralButton(getString(R.string.cancelar)){ dialog, _->
@@ -808,6 +831,8 @@ class MainActivity : AppCompatActivity() {
         builder.setCancelable(false)
         dialogTare = builder.create()
         dialogTare?.show()
+
+
     }
 
 

@@ -267,7 +267,7 @@ class RoundListFragment : Fragment() {
                 }
 
                 Constants.CMD_WEIGHT->{
-                    Log.i("CMD_WEIGHT","CMD_WEIGHT $message")
+                    Log.i("CMD_WEIGHT","RoundListFragment CMD_WEIGHT $message")
                     sincroRound(false)
                     refreshData()
                     refreshWeight(message)
@@ -410,9 +410,17 @@ class RoundListFragment : Fragment() {
         val weight = String(message, 4, 8).toLong()
         val sign = String(message, 3, 1)
 //        mBinding.tvPeso.setText("${sign}${weight}")
-        if(!sign.contains("N") && !sign.contains("n")){
-            (requireActivity() as MainActivity).weightReceibed()
+        var bConnected = true
+        if(sign.contains("N")){
+            Log.i("message","RMF bConnected false sign +")
+            bConnected = false
         }
+        if(sign.contains("n")){
+            Log.i("message","RMF bConnected false sign -")
+            bConnected = false
+        }
+        if(bConnected && isAdded)
+            (requireActivity() as MainActivity).weightReceibed()
     }
 
     private fun refreshRound() {
