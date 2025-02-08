@@ -33,7 +33,7 @@ class RoundRunProductResumeAdapter (
         val product = filteredProducts[position]
         val targetProductWeight = product.targetWeight
         val difference = (product.finalWeight-product.initialWeight) - targetProductWeight
-        val percentage = (product.finalWeight-product.initialWeight)*100/targetProductWeight
+        val percentage = if(targetProductWeight != 0L)(product.finalWeight-product.initialWeight)*100/targetProductWeight else 0
 
         holder.tvProductName.text = product.name
         holder.tvCurrentProductPercentage.text = "${percentage}%"

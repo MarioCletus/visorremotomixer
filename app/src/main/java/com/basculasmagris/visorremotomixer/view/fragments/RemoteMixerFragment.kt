@@ -156,19 +156,25 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             Log.i(TAG, "btnJump")
 
             if(bInFree){
+                Log.i(TAG,"bInFree")
                 if(bInLoad){
+                    Log.i(TAG,"bInLoad")
                     (requireActivity() as MainActivity).sendRequestListOfProducts()
                     return@setOnClickListener
-                }else{
+                }else if (bInDownload){
+                    Log.i(TAG,"bInDownload")
                     (requireActivity() as MainActivity).sendRequestListOfCorrals()
                     return@setOnClickListener
                 }
             }else{
+                Log.i(TAG,"!bInFree")
                 if(bInLoad){
+                    Log.i(TAG,"bInLoad")
                     sendNextProduct()
                     return@setOnClickListener
                 }
                 if(bInDownload){
+                    Log.i(TAG,"bInDownload")
                     sendNextCorral()
                     return@setOnClickListener
                 }
@@ -176,9 +182,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
 
         mBinding.btnJump.setOnLongClickListener {
-            Log.i(TAG, "btnJump")
-            if(bInFree && bInLoad){
-                alertFinalDialog()
+            Log.i(TAG, "btnJump setOnLongClick")
+            if(bInFree){
+                if(bInLoad)
+                    alertFinalDialog(getString(R.string.quiere_pasar_a_descarga),getString(R.string.descarga))
+                else if(bInDownload)
+                    alertFinalDialog(getString(R.string.quiere_cerrar_ronda),getString(R.string.finalizar))
                 return@setOnLongClickListener false
             }
             (requireActivity() as MainActivity).sendEndToMixer()
@@ -944,6 +953,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.VISIBLE
                     mBinding.btnStartTimer.isEnabled = false
+                    mBinding.tvTimerTitle.text = getString(R.string.picando)
                     mBinding.tvRest.text = "${getString(R.string.rest)}: ${rest}Kg"
                     count_weight = 0
                     count_resume = 0
@@ -1108,24 +1118,45 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
     }
 
-    private fun alertFinalDialog() {
-        val builder = AlertDialog.Builder(requireActivity())
-        builder.setTitle("Advertencia")
-        builder.setMessage("¿Seguro quiere pasar a descarga?")
-        builder.setPositiveButton("Descarga"){_,_->
-            (requireActivity() as MainActivity).sendGoToDownload()
-        }
-        builder.setNegativeButton("Cancelar"){dialog,_->
-            dialog.dismiss()
-        }
-        val alertDialog = builder.create()
-        alertDialog.setOnShowListener {dialogInterface->
-            dialogInterface as androidx.appcompat.app.AlertDialog
-            dialogInterface.window?.decorView?.setBackgroundResource(R.drawable.custom_dialog_background)
+    private fun alertFinalDialog(message:String,btnAceptarTitle:String) {
+        Log.i(TAG,"alertFinalDialog")
+        // Verificar si el fragment sigue asociado a la actividad
+        if (!isAdded || activity == null) {
+            Log.e(TAG, "El fragment no está adjunto, no se puede mostrar el diálogo")
+            return
         }
 
+        val builder = AlertDialog.Builder(requireContext()) // Usa requireContext() en lugar de requireActivity()
+        builder.setTitle("Advertencia")
+            .setMessage(message)
+            .setPositiveButton(btnAceptarTitle) { _, _ ->
+                Log.i(TAG,"alertFinalDialog positiveButton")
+                if(bInLoad)
+                    (requireActivity() as MainActivity).sendGoToDownload()
+                else if(bInDownload){
+                    (requireActivity() as MainActivity).sendEndToMixer()
+                }
+
+            }
+            .setNegativeButton("Cancelar") { dialog, _ ->
+                Log.i(TAG,"alertFinalDialog cancelButton")
+                dialog.dismiss()
+            }
+
+        val alertDialog = builder.create()
+
+        // Verificar si la ventana está disponible antes de modificarla
+        alertDialog.setOnShowListener { dialogInterface ->
+            (dialogInterface as? androidx.appcompat.app.AlertDialog)?.window?.decorView?.let {
+                it.setBackgroundResource(R.drawable.custom_dialog_background)
+                Log.i(TAG,"alertFinalDialog setOnShowListener")
+            }
+        }
+
+        Log.i(TAG,"alertFinalDialog show")
         alertDialog.show()
     }
+
 
     private fun restDialog(): AlertDialog? {
         // Verifica si el fragmento está adjunto a una actividad antes de proceder

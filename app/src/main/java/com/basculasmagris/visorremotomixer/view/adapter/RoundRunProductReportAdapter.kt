@@ -37,7 +37,7 @@ class RoundRunProductReportAdapter (
         val roundTargetWeight = roundRunDetail.round.customRoundRunWeight
         val targetProductWeight = Helper.getNumberWithDecimals(product.percentage*roundTargetWeight/100,0).toDouble()
         val difference = product.currentWeight - targetProductWeight
-        val percentage = product.currentWeight*100/targetProductWeight
+        val percentage = if(targetProductWeight != 0.0) product.currentWeight*100/targetProductWeight else 0.0
 
         holder.tvProductName.text = product.name
         holder.tvCurrentProductPercentage.text = "${Helper.getNumberWithDecimals (percentage, 0)}%"

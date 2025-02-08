@@ -374,6 +374,8 @@
     <string name="desconectado">Desconectado</string>
     <string name="sincronice_con_mixer">Sincronice las rondas con el mixer</string>
     <string name="en_ejecucion">Ejecutandose</string>
+    <string name="quiere_pasar_a_descarga">¿Quiere pasar a descarga?</string>
+    <string name="quiere_cerrar_ronda">¿Quiere cerrar la ro5nda?</string>
 
 
 </resources>

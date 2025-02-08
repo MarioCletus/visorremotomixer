@@ -35,12 +35,11 @@ class RoundRunCorralResumeAdapter (
 
         val targetCorralWeight = corral.actualTargetWeight
         holder.tvCorralName.text = corral.name
-        var percentage = 0L
         val difference = (corral.initialWeight - corral.finalWeight) - targetCorralWeight
 
-        if (targetCorralWeight > 0) {
-            percentage = (corral.initialWeight - corral.finalWeight)*100/targetCorralWeight
-        }
+        val percentage = if (targetCorralWeight > 0)
+            (corral.initialWeight - corral.finalWeight)*100/targetCorralWeight
+         else 0
 
         holder.tvCurrentCorralPercentage.text = "${percentage}%"
         holder.tvCurrentCorralWeightOf.text = "${corral.initialWeight - corral.finalWeight}Kg de ${targetCorralWeight}Kg"

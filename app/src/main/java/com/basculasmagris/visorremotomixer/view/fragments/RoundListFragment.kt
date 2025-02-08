@@ -94,16 +94,17 @@ class RoundListFragment : Fragment() {
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
+                Log.i(TAG,"Menu pressed ${menuItem.itemId}\n$menuItem")
                 return when (menuItem.itemId) {
                     R.id.menu_refresh_data ->{
                         refreshData()
                         return true
                     }
                     R.id.menu_selected_remote_tablet -> {
-                        Log.v(TAG,"Force connection")
                         val deviceBluetooth = (requireActivity() as MainActivity).knowDevices?.firstOrNull { bd->
                             bd.address == selectedTabletMixerInFragment?.mac
                         }
+                        Log.v(TAG,"Force connection $deviceBluetooth")
                         deviceBluetooth?.let {
                             val name = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
                                 if (ActivityCompat.checkSelfPermission(
