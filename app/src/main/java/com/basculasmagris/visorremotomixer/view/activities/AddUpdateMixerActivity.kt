@@ -2,6 +2,7 @@ package com.basculasmagris.visorremotomixer.view.activities
 
 import android.app.Activity
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -35,19 +36,6 @@ class AddUpdateMixerActivity : AppCompatActivity() {
     private val mMixerViewModel: MixerViewModel by viewModels {
         MixerViewModelFactory((application as SpiMixerVRApplication).mixerRepository)
     }
-
-//    private var mProgressDialog: Dialog? = null
-
-//    private fun showCustomProgressDialog(){
-//        if(mProgressDialog != null && mProgressDialog!!.isShowing){
-//            return
-//        }
-//        mProgressDialog = Dialog(this)
-//        mProgressDialog?.let {
-//            it.setContentView(R.layout.dialog_custom_progress)
-//            it.show()
-//        }
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,7 +78,7 @@ class AddUpdateMixerActivity : AppCompatActivity() {
                 binding.tiMixerName.setText(it.name)
                 binding.tiMixerDescription.setText(it.description)
                 binding.tiRfid.setText(it.rfid.toString())
-                binding.btnAddMixer.text = resources.getString(R.string.lbl_update_mixer)
+                binding.btnAddMixer.text = resources.getString(R.string.actualizar_mixer)
                 binding.etBtBox.setText(it.btBox)
                 binding.etCalibration.setText(it.calibration.toString())
                 binding.etMac.setText(it.mac)
@@ -111,11 +99,11 @@ class AddUpdateMixerActivity : AppCompatActivity() {
 
         if (mMixerDetails != null && mMixerDetails!!.id != 0L){
             supportActionBar?.let {
-                it.title = resources.getString(R.string.title_edit_mixer)
+                it.title = resources.getString(R.string.editar)
             }
         } else {
             supportActionBar?.let {
-                it.title = resources.getString(R.string.title_add_mixer)
+                it.title = resources.getString(R.string.agregar_mixer)
             }
         }
 
@@ -224,8 +212,15 @@ class AddUpdateMixerActivity : AppCompatActivity() {
     }
 
     fun isKeyBoardShowing(): Boolean {
-        val view: View = binding.root
-        return view.rootWindowInsets.isVisible(WindowInsetsCompat.Type.ime())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val view: View = binding.root
+            return view.rootWindowInsets.isVisible(WindowInsetsCompat.Type.ime())
+        }else{
+            val view: View = binding.root
+            val decorView = view.rootView
+            val rootViewHeight = decorView.height
+            val insets = decorView.rootWindowInsets
+            return rootViewHeight > insets.stableInsetBottom + insets.stableInsetTop
+        }
     }
-
 }

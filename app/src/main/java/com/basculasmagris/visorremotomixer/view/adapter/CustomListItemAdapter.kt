@@ -37,22 +37,12 @@ class CustomListItemAdapter (
             holder.iconItem.setImageDrawable(activity.getDrawable(R.drawable.ic_adjust))
         }
 
-        holder.tvDescription.text = item.description.ifEmpty { activity.getString(R.string.no_description) }
+        holder.tvDescription.text = item.description.ifEmpty { activity.getString(R.string.sin_descripcion) }
 
         holder.itemView.setOnClickListener{
-
-            if (activity is AddUpdateRoundActivity){
-                activity.selectedListItem(item, selection)
-            }
-
             if (activity is LoginActivity){
                 activity.selectedListItem(item, selection)
             }
-
-            if (activity is AddUpdateUserActivity){
-                activity.selectedListItem(item, selection)
-            }
-
             if (activity is TabletMixerConfigActivity){
                 activity.selectedListItem(item, selection)
             }
@@ -97,7 +87,7 @@ class CustomListItemAdapterFragment (
             holder.iconItem.setImageDrawable(fragment.requireActivity().getDrawable(R.drawable.ic_adjust))
         }
 
-        holder.tvDescription.text = item.description.ifEmpty { fragment.requireActivity().getString(R.string.no_description) }
+        holder.tvDescription.text = item.description.ifEmpty { fragment.requireActivity().getString(R.string.sin_descripcion) }
 
         holder.itemView.setOnClickListener{
 
@@ -137,7 +127,7 @@ class CustomDynamicListItemAdapterFragment (
             holder.iconItem.setImageDrawable(fragment.requireActivity().getDrawable(R.drawable.ic_adjust))
         }
 
-        holder.tvDescription.text = item.description.ifEmpty { fragment.requireActivity().getString(R.string.no_description) }
+        holder.tvDescription.text = item.description.ifEmpty { fragment.requireActivity().getString(R.string.sin_descripcion) }
 
         holder.itemView.setOnClickListener{
         }

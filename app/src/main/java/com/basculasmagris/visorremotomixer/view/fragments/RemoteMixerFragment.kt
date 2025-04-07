@@ -119,7 +119,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         mBinding.btnTara.setOnClickListener{
             if(contPressTara++ > 3 ){
-                dialogTara = tareDialog("Tara","Mantenga presionado el boton para hacer tara")
+                dialogTara = tareDialog(getString(R.string.tara),getString(R.string.mantenga_el_boton_presionado))
                 contPressTara = 0
             }
         }
@@ -740,7 +740,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
-                    mBinding.tvRest.text = "${getString(R.string.rest)}: ${rest}Kg"
+                    mBinding.tvRest.text = "${getString(R.string.resto)}: ${rest}kg"
                     Log.v("cmd_weight","CMD_WEIGHT")
                     if(isAdded)
                         (requireActivity()).onBackPressed()
@@ -752,7 +752,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.flStepConfig.visibility = View.VISIBLE
                     mBinding.llLoadDownload.visibility = View.GONE
                     mBinding.flTimer.visibility = View.GONE
-                    mBinding.tvRest.text = "${getString(R.string.rest)}: ${rest}Kg"
+                    mBinding.tvRest.text = "${getString(R.string.resto)}: ${rest}kg"
                     count_resume = 0
                     count_weight = 0
                     try{
@@ -768,7 +768,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                                 mBinding.tvMixer.text = mixerDetail?.name?:""
                                 round?.corrals?.let { corrals ->
                                     runCorralAdapter.corralList(corrals)
-                                    mBinding.tvRoundTargetWeight.text = "${corrals.sumOf{ it.actualTargetWeight }}Kg"
+                                    mBinding.tvRoundTargetWeight.text = "${corrals.sumOf{ it.actualTargetWeight }}kg"
                                     mBinding.tvEstablishment.text = round.establishment?.name?:""
                                     mBinding.rvRoundCorralToLoad.adapter = runCorralAdapter
                                 }
@@ -781,7 +781,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                             val round = (requireActivity() as MainActivity).minRoundRunDetail?.round
                             round?.corrals?.let { corrals ->
                                 runCorralAdapter.corralList(corrals)
-                                mBinding.tvRoundTargetWeight.text = "${corrals.sumOf{ it.actualTargetWeight }}Kg"
+                                mBinding.tvRoundTargetWeight.text = "${corrals.sumOf{ it.actualTargetWeight }}kg"
                                 mBinding.tvEstablishment.text = round.establishment?.name?:""
                                 mBinding.rvRoundCorralToLoad.adapter = runCorralAdapter
                             }
@@ -803,7 +803,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
-                    mBinding.tvRest.text = "${getString(R.string.rest)}: ${rest}Kg"
+                    mBinding.tvRest.text = "${getString(R.string.resto)}: ${rest}kg"
                     count_weight = 0
                     if(count_resume++ > 5){
                         Log.v("commandsWeight","CMD_WEIGHT_RESUME")
@@ -819,7 +819,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
-                    mBinding.tvRest.text = "${getString(R.string.rest)}: ${rest}Kg"
+                    mBinding.tvRest.text = "${getString(R.string.resto)}: ${rest}kg"
                     count_resume = 0
                     count_weight = 0
                     try{
@@ -856,7 +856,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
-                    mBinding.tvRest.text = "${getString(R.string.rest)}: ${rest}Kg"
+                    mBinding.tvRest.text = "${getString(R.string.resto)}: ${rest}kg"
                     count_weight = 0
                     count_resume = 0
                     try{
@@ -888,7 +888,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
-                    mBinding.tvRest.text = "${getString(R.string.rest)}: ${rest}Kg"
+                    mBinding.tvRest.text = "${getString(R.string.resto)}: ${rest}kg"
                     count_weight = 0
                     count_resume = 0
                     try{
@@ -904,7 +904,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                             refreshRound()
                         }
                         mBinding.tvTitleProduct.text = getString(R.string.cargar)
-                        mBinding.tvCurrentProduct.text = getString(R.string.product)
+                        mBinding.tvCurrentProduct.text = getString(R.string.producto)
                         refreshWeight(message)
                         bInLoad = true
                         bInDownload = false
@@ -920,7 +920,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
-                    mBinding.tvRest.text = "${getString(R.string.rest)}: ${rest}Kg"
+                    mBinding.tvRest.text = "${getString(R.string.resto)}: ${rest}kg"
                     count_weight = 0
                     count_resume = 0
                     try{
@@ -953,8 +953,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.VISIBLE
                     mBinding.btnStartTimer.isEnabled = false
-                    mBinding.tvTimerTitle.text = getString(R.string.picando)
-                    mBinding.tvRest.text = "${getString(R.string.rest)}: ${rest}Kg"
+                    mBinding.tvTimerTitle.text = getString(R.string.mezclando)
+                    mBinding.tvRest.text = "${getString(R.string.resto)}: ${rest}kg"
                     count_weight = 0
                     count_resume = 0
                     if(isAdded)
@@ -1009,7 +1009,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 Constants.CMD_NTA ->{
                     Log.i("showCommand","CMD_NTA")
                     if(isAdded){
-                        (requireActivity() as MainActivity).alertDialog(getString(R.string.atencion),getString(R.string.no_disponible))
+                        (requireActivity() as MainActivity).alertDialog(getString(R.string.warning),getString(R.string.no_disponible))
                     }
                 }
 
@@ -1080,15 +1080,15 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         mBinding.btnPause.isChecked = isChecked
         if(bConnected){
             mBinding.tvCurrentProductWeightPending.setTextSize(TypedValue.COMPLEX_UNIT_SP, 150f)
-            mBinding.tvCurrentProductWeightPending.text = "${sign}${weight}Kg"
-            mBinding.tvRoundCustomWeight.text = "${sign}${weight}Kg"
+            mBinding.tvCurrentProductWeightPending.text = "${sign}${weight}kg"
+            mBinding.tvRoundCustomWeight.text = "${sign}${weight}kg"
         }else{
             mBinding.tvCurrentProductWeightPending.setTextSize(TypedValue.COMPLEX_UNIT_SP, 62f)
-            mBinding.tvCurrentProductWeightPending.text = "${getString(R.string.desconectado)}    ${sign}${weight}Kg"
+            mBinding.tvCurrentProductWeightPending.text = "${getString(R.string.desconectado)}    ${sign}${weight}kg"
         }
-        mBinding.tvRoundCustomWeight.text = "${sign}${weight}Kg"
+        mBinding.tvRoundCustomWeight.text = "${sign}${weight}kg"
         mBinding.pbCurrentProduct.progress = progress
-        dialogResto?.setMessage("$signRest${rest}Kg")
+        dialogResto?.setMessage("$signRest${rest}kg")
     }
 
     private fun refreshRound() {
@@ -1127,7 +1127,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
 
         val builder = AlertDialog.Builder(requireContext()) // Usa requireContext() en lugar de requireActivity()
-        builder.setTitle("Advertencia")
+        builder.setTitle(getString(R.string.warning))
             .setMessage(message)
             .setPositiveButton(btnAceptarTitle) { _, _ ->
                 Log.i(TAG,"alertFinalDialog positiveButton")
@@ -1138,7 +1138,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 }
 
             }
-            .setNegativeButton("Cancelar") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancelar)) { dialog, _ ->
                 Log.i(TAG,"alertFinalDialog cancelButton")
                 dialog.dismiss()
             }
@@ -1164,9 +1164,9 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         val dialogBuilder = AlertDialog.Builder(requireActivity())
         // set message of alert dialog
-        dialogBuilder.setMessage("${rest}Kg")
+        dialogBuilder.setMessage("${rest}kg")
             .setCancelable(false)
-            .setPositiveButton("Aceptar") { dialog, _ ->
+            .setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
                 if (isAdded) { // Verifica nuevamente antes de usar requireActivity()
                     (requireActivity() as MainActivity).sendCloseDlgToMixer()
                 }
@@ -1174,7 +1174,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 dialogResto = null
             }
         val alert = dialogBuilder.create()
-        alert.setTitle(getString(R.string.rest))
+        alert.setTitle(getString(R.string.resto))
         alert.show()
         val textView: TextView = alert.findViewById(android.R.id.message)
         textView.textSize = 40F
@@ -1212,7 +1212,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun dialogAlertTargetWeight(nextItem : String ="", strKg :String="") : AlertDialog? {
+    private fun dialogAlertTargetWeight(nextItem : String ="", strkg :String="") : AlertDialog? {
         Log.i(TAG,"dialogAlertTargetWeight")
         dialogCountDown?.let {
             if(it.isShowing){
@@ -1222,7 +1222,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
         var title: String? = null
         var message: String? = null
-        val strkg : String =  strKg
+        val strkg : String =  strkg
 
         if(bInLoad)
             if(bInFree){
@@ -1364,7 +1364,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         // set message of alert dialog
         dialogBuilder.setMessage(message)
             .setCancelable(false)
-            .setPositiveButton("Aceptar") { dialog, _ ->
+            .setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
                 dialog.dismiss()
             }
         val alert = dialogBuilder.create()

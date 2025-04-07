@@ -76,7 +76,7 @@ class Helper {
 
         fun logOut(context: Context){
             var sharedpreferences: SharedPreferences? = null
-            sharedpreferences = context.getSharedPreferences(Constants.PREF_LOGIN, Context.MODE_PRIVATE);
+            sharedpreferences = context.getSharedPreferences(Constants.PREF_LOGIN, Context.MODE_PRIVATE)
             sharedpreferences?.edit()
                 //?.remove(PREF_LOGIN_KEY_ACCESS_TOKEN)
                 //?.remove(PREF_LOGIN_KEY_NAME)
@@ -85,7 +85,7 @@ class Helper {
                 ?.remove(PREF_IS_LOGGED)
                 //?.remove(PREF_LOGIN_KEY_USERNAME)
                 //?.remove(PREF_LOGIN_KEY_ENCRYPTED_PASSWORD)
-                ?.apply();
+                ?.apply()
 
         }
         fun getFormattedWeight(weight: Double, context: Context) : String {
@@ -100,13 +100,13 @@ class Helper {
             }
         }
 
-        fun getWeightKg(readData: Double,mixer: Mixer) : Double {
+        fun getWeightkg(readData: Double,mixer: Mixer) : Double {
             var weight:Double = 0.0
             weight = (readData-mixer.tara) * mixer.calibration
             return weight
         }
 
-        fun getFormattedWeightKg(weight: Double, context: Context) : String {
+        fun getFormattedWeightkg(weight: Double, context: Context) : String {
 
             if  (weight > 0.0) {
                 val df = DecimalFormat("#.###")
@@ -117,7 +117,7 @@ class Helper {
                 return context.getString(R.string.lbl_empty)
             }
         }
-        fun getFormattedWeightKg(weight: Double, context: Context, defaultValue: String) : String {
+        fun getFormattedWeightkg(weight: Double, context: Context, defaultValue: String) : String {
 
             if  (weight > 0.0) {
                 val df = DecimalFormat("#.###")

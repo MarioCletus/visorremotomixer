@@ -42,18 +42,18 @@ class RoundRunCorralResumeAdapter (
          else 0
 
         holder.tvCurrentCorralPercentage.text = "${percentage}%"
-        holder.tvCurrentCorralWeightOf.text = "${corral.initialWeight - corral.finalWeight}Kg de ${targetCorralWeight}Kg"
+        holder.tvCurrentCorralWeightOf.text = "${corral.initialWeight - corral.finalWeight}kg de ${targetCorralWeight}kg"
         holder.pbCurrentCorral.progress = percentage.toInt()
 
         if (difference == 0L){
             holder.tvCorralDifference.setTextColor(ContextCompat.getColor(fragment.requireActivity(), R.color.green_500_primary))
-            holder.tvCorralDifference.text = "${difference}Kg"
+            holder.tvCorralDifference.text = "${difference}kg"
         } else if (difference >= 0){
             holder.tvCorralDifference.setTextColor(ContextCompat.getColor(fragment.requireActivity(), R.color.red_500_primary))
-            holder.tvCorralDifference.text = "+${difference}Kg"
+            holder.tvCorralDifference.text = "+${difference}kg"
         } else {
             holder.tvCorralDifference.setTextColor(ContextCompat.getColor(fragment.requireActivity(), R.color.red_500_primary))
-            holder.tvCorralDifference.text = "${difference}Kg"
+            holder.tvCorralDifference.text = "${difference}kg"
         }
     }
 

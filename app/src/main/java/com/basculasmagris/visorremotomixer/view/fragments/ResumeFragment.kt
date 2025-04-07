@@ -81,20 +81,20 @@ class ResumeFragment : Fragment() {
 
         val loadDiff = activity.getLoadDifference()
         if (loadDiff > -1 && loadDiff < 1){
-            mBinding.tvTotalLoadDiff.text = "${Helper.getNumberWithDecimals(activity.getFinalLoad(), 0)}Kg     +${Helper.getNumberWithDecimals(loadDiff, 0)}Kg"
+            mBinding.tvTotalLoadDiff.text = "${Helper.getNumberWithDecimals(activity.getFinalLoad(), 0)}kg     +${Helper.getNumberWithDecimals(loadDiff, 0)}kg"
         } else if (loadDiff >= 1){
-            mBinding.tvTotalLoadDiff.text = "${Helper.getNumberWithDecimals(activity.getFinalLoad(), 0)}Kg     +${Helper.getNumberWithDecimals(loadDiff, 0)}Kg"
+            mBinding.tvTotalLoadDiff.text = "${Helper.getNumberWithDecimals(activity.getFinalLoad(), 0)}kg     +${Helper.getNumberWithDecimals(loadDiff, 0)}kg"
         } else {
-            mBinding.tvTotalLoadDiff.text = "${Helper.getNumberWithDecimals(activity.getFinalLoad(), 0)}Kg     ${Helper.getNumberWithDecimals(loadDiff, 0)}Kg"
+            mBinding.tvTotalLoadDiff.text = "${Helper.getNumberWithDecimals(activity.getFinalLoad(), 0)}kg     ${Helper.getNumberWithDecimals(loadDiff, 0)}kg"
         }
 
         val downloadDiff = activity.getDownloadDifference()
         if (downloadDiff >-1 && downloadDiff < 1){
-            mBinding.tvTotalDownloadDiff.text = "${Helper.getNumberWithDecimals(activity.getFinalDownload(),0)}Kg     +${Helper.getNumberWithDecimals(downloadDiff,0)}Kg"
+            mBinding.tvTotalDownloadDiff.text = "${Helper.getNumberWithDecimals(activity.getFinalDownload(),0)}kg     +${Helper.getNumberWithDecimals(downloadDiff,0)}kg"
         } else if (downloadDiff >= 1){
-            mBinding.tvTotalDownloadDiff.text = "${Helper.getNumberWithDecimals(activity.getFinalDownload(),0)}Kg     +${Helper.getNumberWithDecimals(downloadDiff,0)}Kg"
+            mBinding.tvTotalDownloadDiff.text = "${Helper.getNumberWithDecimals(activity.getFinalDownload(),0)}kg     +${Helper.getNumberWithDecimals(downloadDiff,0)}kg"
         } else {
-            mBinding.tvTotalDownloadDiff.text = "${Helper.getNumberWithDecimals(activity.getFinalDownload(),0)}Kg     ${Helper.getNumberWithDecimals(downloadDiff,0)}Kg"
+            mBinding.tvTotalDownloadDiff.text = "${Helper.getNumberWithDecimals(activity.getFinalDownload(),0)}kg     ${Helper.getNumberWithDecimals(downloadDiff,0)}kg"
         }
 
     }
@@ -256,7 +256,7 @@ class ResumeFragment : Fragment() {
                 Constants.CMD_NTA ->{
                     Log.i("showCommand","CMD_NTA")
                     if(isAdded){
-                        (requireActivity() as MainActivity).alertDialog(getString(R.string.atencion),getString(R.string.no_disponible))
+                        (requireActivity() as MainActivity).alertDialog(getString(R.string.warning),getString(R.string.no_disponible))
                     }
                 }
 

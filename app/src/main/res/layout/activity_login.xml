@@ -47,8 +47,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:autofillHints="@string/prompt_email"
-                    android:hint="@string/prompt_email"
+                    android:autofillHints="@string/usuario"
+                    android:hint="@string/usuario"
                     android:inputType="textEmailAddress"
                     android:selectAllOnFocus="true" />
 
@@ -67,7 +67,7 @@
                         android:inputType="text"
                         android:digits="0123456789qwertyuiopasdfghjklzxcvbnmñQWERTYUIOPASDFGHJKLZXCVBNMÑÇ-_,.:@ "
                         android:focusableInTouchMode="false"
-                        android:hint="@string/ph_user_ref" />
+                        android:hint="@string/nombre" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <EditText

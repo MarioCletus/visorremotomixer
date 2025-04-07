@@ -40,7 +40,7 @@ class RoundRunCorralAdapter (
         val roundCorral = roundCorrals[position]
         fragment.context?.let{
             val newWeight = roundCorral.actualTargetWeight
-            holder.tvWeight.text = "${newWeight}Kg"
+            holder.tvWeight.text = "${newWeight}kg"
             holder.tvCorralName.text = roundCorral.name
             holder.tvCorralAnimalCount.text = roundCorral.animalQuantity.toString()
         }

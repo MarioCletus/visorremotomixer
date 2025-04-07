@@ -60,7 +60,7 @@ class RoundRunProductAdapter (
                     Log.i(TAG,"onBindViewHolder isInFree position < filteredProducts.size-1 $position $product")
                     holder.itemView.background = ContextCompat.getDrawable(it, R.drawable.item_round_run_product_ready_bkg)
                     holder.tvProductName.text = if(product.description == "")product.name else "${product.name}\n${product.description}"
-                    holder.tvCurrentWeight.text = "${product.targetWeight}Kg"
+                    holder.tvCurrentWeight.text = "${product.targetWeight}kg"
                     holder.tvCurrentWeight.visibility = View.VISIBLE
                     holder.llBarra1.visibility = View.VISIBLE
                     holder.tvCurrentWeight.layoutParams.width = 50
@@ -82,9 +82,9 @@ class RoundRunProductAdapter (
                     holder.itemView.background = ContextCompat.getDrawable(it,R.drawable.item_round_run_product_ready_bkg)
                     val value = (product.finalWeight - product.initialWeight)-product.targetWeight
                     if(value >= 1){
-                        holder.tvDiffWeight.text = "+${value}Kg"
+                        holder.tvDiffWeight.text = "+${value}kg"
                     }else {
-                        holder.tvDiffWeight.text = "${value}Kg"
+                        holder.tvDiffWeight.text = "${value}kg"
                     }
                 }else{
                     Log.i(TAG,"onBindViewHolder default position $position selectedPosition $selectedPosition $product")
@@ -92,7 +92,7 @@ class RoundRunProductAdapter (
                 }
             }
             holder.tvProductName.text = product.name
-            holder.tvCurrentWeight.text = "${product.targetWeight}Kg"
+            holder.tvCurrentWeight.text = "${product.targetWeight}kg"
         }
 
     }

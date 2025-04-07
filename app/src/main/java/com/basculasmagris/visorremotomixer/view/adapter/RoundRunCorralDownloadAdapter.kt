@@ -1,5 +1,4 @@
 package com.basculasmagris.visorremotomixer.view.adapter
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,7 +56,7 @@ class RoundRunCorralDownloadAdapter (
                 if(position < filteredRoundCorrals.size-1){
                     holder.itemView.background = ContextCompat.getDrawable(context, R.drawable.item_round_run_product_ready_bkg)
                     holder.tvCorralName.text = if(corral.description == "")corral.name else "${corral.name}\n${corral.description}"
-                    holder.tvCurrentWeight.text = "${corral.customTargetWeight}Kg"
+                    holder.tvCurrentWeight.text = "${corral.customTargetWeight}kg"
                     holder.tvCurrentWeight.visibility = View.VISIBLE
                     holder.llBarra1.visibility = View.VISIBLE
                 }else{
@@ -67,7 +66,7 @@ class RoundRunCorralDownloadAdapter (
                     holder.llBarra1.visibility = View.GONE
                 }
 //                holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_ready_bkg)
-//                holder.tvDiffWeight.text = "0Kg"
+//                holder.tvDiffWeight.text = "0kg"
             }else{
                 if(selectedPosition == position) {
                     holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_select_bkg)
@@ -76,16 +75,16 @@ class RoundRunCorralDownloadAdapter (
                     holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_ready_bkg)
                     val diff = (corral.initialWeight - corral.finalWeight) - corral.actualTargetWeight
                     if(diff >= 1){
-                        holder.tvDiffWeight.text = "+${diff}Kg"
+                        holder.tvDiffWeight.text = "+${diff}kg"
                     }else {
-                        holder.tvDiffWeight.text = "${diff}Kg"
+                        holder.tvDiffWeight.text = "${diff}kg"
                     }
                 }else{
                     holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_bkg)
                 }
             }
             holder.tvCorralName.text = corral.name
-            holder.tvCurrentWeight.text = "${corral.actualTargetWeight}Kg"
+            holder.tvCurrentWeight.text = "${corral.actualTargetWeight}kg"
         }
 
     }

@@ -62,7 +62,6 @@ class LoginActivity : AppCompatActivity() {
     private val TAG = "DEBLogin"
     private var sharedpreferences: SharedPreferences? = null
     private lateinit var mCustomListDialog : Dialog
-    private val mUsersList: ArrayList<CustomListItem> = ArrayList<CustomListItem>()
     private var selectedUser: CustomListItem? = null
     private val mUserViewModel: UserViewModel by viewModels {
         UserViewModelFactory((application as SpiMixerVRApplication).userRepository)
@@ -140,7 +139,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        alertDialog = Helper.setProgressDialog(this, "Validando credenciales")
+        alertDialog = Helper.setProgressDialog(this, getString(R.string.validando_credenciales))
         binding.login.setOnClickListener {
 
             val isAvailableInternet = false //checkForInternet(this)
@@ -150,7 +149,7 @@ class LoginActivity : AppCompatActivity() {
             when (Helper.isAllowedLoginOffline(this, originUserList, username.toString(), binding.password.text.toString())) {
                 LOGIN_OFFLINE_INVALID_CREDENTIALS -> {
                     if (!isAvailableInternet) {
-                        Toast.makeText(this@LoginActivity, "Usuario o contraseña inválida", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@LoginActivity, getString(R.string.usuario_invalido), Toast.LENGTH_SHORT).show()
                     } else {
                         connectionOnline()
                     }
@@ -170,7 +169,7 @@ class LoginActivity : AppCompatActivity() {
                     editor?.putLong(PREF_LOGIN_KEY_ID, userLogged.id)
                     editor?.putBoolean(PREF_IS_LOGGED, true)
                     editor?.commit()
-                    Toast.makeText(this, "Conexión OFFLINE ${username} | ${userLogged.name}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.conexion_ofline,"${username} | ${userLogged.name}"), Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
                    // connectionOnline()
@@ -181,7 +180,7 @@ class LoginActivity : AppCompatActivity() {
                         connectionOnline()
                     } else {
                         alertDialog?.dismiss()
-                        Toast.makeText(this@LoginActivity, "Se requiere conexión a internet para iniciar sesión por primera vez", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@LoginActivity, getString(R.string.se_requiere_internet), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -250,7 +249,7 @@ class LoginActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : DisposableSingleObserver<UserRemote>() {
                 override fun onSuccess(value: UserRemote) {
-                    Toast.makeText(this@LoginActivity, "Conexión ONLINE ${value.role.description}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginActivity, getString(R.string.conexion_online,"${value.role.description}"), Toast.LENGTH_SHORT).show()
 
                     val editor = sharedpreferences?.edit()
                     editor?.putString(PREF_LOGIN_KEY_NAME, value.name)
@@ -274,7 +273,7 @@ class LoginActivity : AppCompatActivity() {
                 }
 
                 override fun onError(e: Throwable?) {
-                    Toast.makeText(this@LoginActivity, "Usuario o contraseña inválida", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginActivity, getString(R.string.usuario_invalido), Toast.LENGTH_SHORT).show()
                     Log.i(TAG, "Login onError: ${e?.message}")
                     alertDialog?.hide()
                     e!!.printStackTrace()

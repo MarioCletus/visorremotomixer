@@ -65,7 +65,7 @@
         android:textSize="15sp"
         android:textColor="@color/color_acent_green"
         android:layout_marginEnd="10dp"
-        android:text="+39Kg"
+        android:text="+39kg"
         app:layout_constraintTop_toBottomOf="@id/pb_current_corral"
         app:layout_constraintEnd_toEndOf="@id/pb_current_corral"/>
 

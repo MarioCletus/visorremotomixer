@@ -543,10 +543,10 @@ class TabletMixerConfigActivity : AppCompatActivity(){
 
     private fun bluetoothDialog() {
         val opcion0 = arrayOfNulls<String>(2)
-        opcion0[0] = this.getString(R.string.equipos_vinculados)
-        opcion0[1] = this.getString(R.string.buscar_equipos)
+        opcion0[0] = this.getString(R.string.tablets_vinculadas)
+        opcion0[1] = this.getString(R.string.buscar_tablets)
         val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.conectar_mixers_cercanos))
+        builder.setTitle(getString(R.string.conectar_tablets_cercanas))
         builder.setItems(opcion0) { _, which ->
             when (which) {
                 0 -> {
@@ -588,12 +588,12 @@ class TabletMixerConfigActivity : AppCompatActivity(){
             i++
         }
         if (i == 0) {
-            Toast.makeText(this, "No hay equipos", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.no_hay_dispositivos), Toast.LENGTH_SHORT).show()
             return
         }
 
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Dispositivo")
+        builder.setTitle(getString(R.string.dispositivo))
         builder.setItems(dispositivos) { dialog, which ->
             selectDevice(devices[which])
             dialog.dismiss()
@@ -628,7 +628,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
 
 
     fun showCustomProgressDialog(){
-        if(mProgressDialog != null && mProgressDialog!!.isShowing){
+        if(mProgressDialog?.isShowing == true){
             return
         }
         mProgressDialog = Dialog(this)
@@ -640,8 +640,9 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                 if (it.isShowing){
                     it.dismiss()
                     val builder = androidx.appcompat.app.AlertDialog.Builder(this)
-                    builder.setTitle("Alerta")
-                    builder.setMessage("No se pudo establecer la comunicación con el TabletMixer")
+                    builder.setTitle(getString(R.string.warning))
+                    val strMixer = getString(R.string.la_tablet_de_mixer)
+                    builder.setMessage(getString(R.string.no_se_pudo_establecer_comunicacion_con,strMixer,""))
 
                     builder.setPositiveButton(android.R.string.yes) { _, _ ->
                         it.dismiss()
@@ -775,10 +776,10 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                     if (tabletMixerId == 0L){
                         tabletMixer.id = mTabletMixerViewModel.insertSync(tabletMixer)
                         tabletMixerReceibed = tabletMixer
-                        Toast.makeText(this@TabletMixerConfigActivity, "TabletMixer guardado", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@TabletMixerConfigActivity, getString(R.string.guardado), Toast.LENGTH_SHORT).show()
                     } else {
                         mTabletMixerViewModel.updateSync(tabletMixer)
-                        Toast.makeText(this@TabletMixerConfigActivity, "TabletMixer actualizado", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@TabletMixerConfigActivity, getString(R.string.actualizado), Toast.LENGTH_SHORT).show()
                     }
 
                     result(tabletMixer)

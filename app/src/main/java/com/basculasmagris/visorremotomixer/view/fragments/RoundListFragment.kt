@@ -360,7 +360,7 @@ class RoundListFragment : Fragment() {
                 Constants.CMD_NTA ->{
                     Log.i("showCommand","CMD_NTA")
                     if(isAdded){
-                        (requireActivity() as MainActivity).alertDialog(getString(R.string.atencion),getString(R.string.no_disponible))
+                        (requireActivity() as MainActivity).alertDialog(getString(R.string.warning),getString(R.string.no_disponible))
                     }
                 }
 
@@ -437,9 +437,9 @@ class RoundListFragment : Fragment() {
 
     fun sendGoToRound(id: Long) {
         if(bGoToRound){
-            (requireActivity() as MainActivity).showCustomProgressDialog("Alerta","No se pudo iniciar ronda",R.layout.dialog_custom_progress_iniciar)
+            (requireActivity() as MainActivity).showCustomProgressDialog(getString(R.string.warning),getString(R.string.no_se_pudo_iniciar_ronda),R.layout.dialog_custom_progress_iniciar)
         }else{
-            (requireActivity() as MainActivity).showCustomProgressDialog("Alerta","No se puede ver ronda",R.layout.dialog_custom_progress_ver)
+            (requireActivity() as MainActivity).showCustomProgressDialog(getString(R.string.warning),getString(R.string.no_se_puede_ver_ronda),R.layout.dialog_custom_progress_ver)
 
         }
         Log.i("seguimiento","sendGoToRound ${id}")
@@ -463,7 +463,7 @@ class RoundListFragment : Fragment() {
             (requireActivity() as MainActivity).showCustomProgressDialog()
             (requireActivity() as MainActivity).connectDevice(deviceBluetooth)
         } else {
-            Toast.makeText(requireActivity(), "No se pudo conectar", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity(), getString(R.string.no_se_pudo_conectar), Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -378,7 +378,7 @@
                     android:layout_weight="0.2"
                     android:textSize="15sp"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/sync_users_title"
+                    android:text="@string/usuarios"
                     android:textColor="@color/color_deep_green"
                     />
 
@@ -400,7 +400,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.15"
-                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
                     android:layout_gravity="center_vertical"
                     android:text="0%"
                     />
@@ -423,7 +423,7 @@
                     android:layout_weight="0.2"
                     android:textSize="15sp"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/sync_round_title"
+                    android:text="@string/rondas"
                     android:textColor="@color/color_deep_green"
                     />
 
@@ -445,7 +445,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.15"
-                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
                     android:layout_gravity="center_vertical"
                     android:text="0%"
                     />

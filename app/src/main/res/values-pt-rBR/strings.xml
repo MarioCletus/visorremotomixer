@@ -1,0 +1,510 @@
+<resources>
+    <string name="app_name">Mass70</string>
+    <string name="navigation_drawer_open">Abrir menu de navegação</string>
+    <string name="navigation_drawer_close">Fechar menu de navegação</string>
+    <string name="nav_header_desc">Cabeçalho de navegação</string>
+    <string name="action_settings">Configurações</string>
+
+    <!-- MENU -->
+    <string name="inicio">Início</string>
+    <string name="menu_gallery">Galeria</string>
+    <string name="menu_slideshow">Apresentação</string>
+    <string name="tv_no_additional_data">Nenhuma informação complementar</string>
+
+    <!-- TITLES -->
+
+    <!-- Usuario -->
+    <string name="usuario">Usuário</string>
+    <string name="usuarios">Usuários</string>
+    <string name="nombre">Nome</string>
+    <string name="apellido">Sobrenome</string>
+    <string name="nav_header_title">Nome de usuário</string>
+    <string name="nav_header_subtitle">Administrador</string>
+    <string name="tv_no_user_list">Nenhum usuário cadastrado</string>
+    <string name="agregar_usuario">Adicionar usuário</string>
+    <string name="borrar_usuario">Excluir usuário</string>
+    <string name="msg_delete_user_dialog">Deseja excluir o usuário %s?</string>
+    <string name="editar_usuario">Editar usuário</string>
+    <string name="ph_role_ref">Função</string>
+    <string name="actualizar_usuario">Atualizar usuário</string>
+    <string name="err_msg_user_name">Você deve inserir um nome de usuário</string>
+    <string name="ph_user_mail">E-mail</string>
+    <string name="ph_user_password">Senha</string>
+
+    <!-- Mixer -->
+    <string name="mixer">Misturador</string>
+    <string name="mixers">Misturadores</string>
+    <string name="actualizar_mixer">Atualizar Misturador</string>
+    <string name="editar_mixer">Editar Misturador</string>
+    <string name="agregar_mixer">Adicionar Misturador</string>
+    <string name="err_msg_mixer_name">O nome do Misturador é obrigatório</string>
+    <string name="borrar_mixer">Excluir Misturador</string>
+    <string name="configurar_mixer">Configurar Misturador</string>
+    <string name="detalle_de_mixer">Detalhe do Misturador</string>
+    <string name="nuevo_mixer">Novo Misturador</string>
+    <string name="mixer_libre">Misturador Livre</string>
+    <string name="msg_delete_mixer_dialog">Tem certeza de que deseja excluir o misturador %1$s?</string>
+    <string name="tv_no_mixer_list">Nenhum misturador cadastrado</string>
+    <string name="ph_mac">Endereço MAC</string>
+    <string name="ph_tara">Tara</string>
+    <string name="ph_bt_box">Caixa BT</string>
+    <string name="ph_calibration">Calibração</string>
+    <string name="screen_mixer_config">Configuração do misturador</string>
+    <string name="tara">Tara</string>
+    <string name="peso">Peso</string>
+    <string name="capacidad_m3">Capacidade m³</string>
+    <string name="modelo">Modelo</string>
+    <string name="factor_conversion">Fator de conversão</string>
+    <string name="divisiones_externas">Divisões externas</string>
+    <string name="divisiones_externas_2_p">"Divisões externas: "</string>
+    <string name="peso_conocido">Peso conhecido</string>
+    <string name="caja_bluetooth_asoc">Caixa bluetooth associada</string>
+    <string name="tablets_vinculadas">Tablets vinculadas</string>
+    <string name="buscar_tablets">Buscar Tablet</string>
+    <string name="ingrese_macaddress">Informe o endereço MAC</string>
+    <string name="calibrar">Calibrar</string>
+    <string name="calibracion">Calibrando</string>
+    <string name="cargar_mixer_peso_conocido">Carregar misturador com peso conhecido</string>
+    <string name="presione_aceptar">Pressione aceitar</string>
+    <string name="vaciar_mixer">Esvazie o misturador e depois pressione aceitar</string>
+    <string name="calibracion_ok">Calibração OK</string>
+    <string name="calibracion_done">Calibração salva</string>
+    <string name="desea_guardar">Deseja salvar?</string>
+    <string name="calibracion_mal">Não é possível calibrar</string>
+    <string name="ingrese_peso_conocido">Informe um peso conhecido</string>
+    <string name="selecione_valor">Selecione um valor</string>
+    <string name="cargar_mixer_con">Carregar misturador com um peso conhecido</string>
+    <string name="datorecibido">Dado recebido</string>
+    <string name="ingrese_peso">Digite o peso</string>
+    <string name="ph_diet_mixing_time">Tempo de mistura</string>
+    <string name="instrucciones">Instruções</string>
+    <string name="instrucciones_calibracion">Para calibrar o equipamento, primeiro esvazie o misturador. Uma vez vazio, pressione tara. Depois, carregue o misturador com um peso conhecido. Informe esse valor em peso conhecido e pressione calibrar.</string>
+    <string name="instrucciones_cal_otra">Para este processo você precisa:\nO valor de uma carga pesada nesta balança.\nO valor dessa carga pesada em uma balança externa.</string>
+    <string name="ingrese_peso_mixer">Digite o peso segundo a balança do misturador</string>
+    <string name="ingrese_peso_valanza_externa">Digite o peso da balança externa</string>
+    <string name="selecciona_calibracion">Selecione o método de calibração</string>
+    <string name="cargando_peso_conocido">Carregando um peso conhecido sobre a balança</string>
+    <string name="ajustando_balanza_al_peso_de_otra">Ajustando a balança ao peso indicado por outra</string>
+    <string name="luego_aceptar">Depois pressione aceitar</string>
+    <string name="advertencia_sincronizacion_en_ronda">Aviso de sincronização ao entrar na ronda</string>
+    <string name="recuerde_sincronizar">Lembre-se de sincronizar as rondas</string>
+
+    <!-- Producto -->
+    <string name="productos">Produtos</string>
+    <string name="agregar_producto">Adicionar produto</string>
+    <string name="editar_producto">Editar produto</string>
+    <string name="borrar_producto">Excluir produto</string>
+    <string name="actualizar_producto">Atualizar produto</string>
+    <string name="detalle_de_producto">Detalhes do produto</string>
+    <string name="nuevo_producto">Novo produto</string>
+    <string name="buscar_producto">Buscar produto</string>
+    <string name="producto_libre">Produto Livre</string>
+    <string name="product_diet_count">%1$s produtos</string>
+    <string name="msg_delete_product_dialog">Tem certeza de que deseja excluir o produto %1$s?</string>
+    <string name="err_msg_product_name">O nome do produto é obrigatório</string>
+    <string name="tv_no_product_list">Nenhum produto cadastrado</string>
+    <string name="ph_product_specific_weight">Peso específico</string>
+
+    <!-- Dieta -->
+    <string name="dieta">Dieta</string>
+    <string name="dietas">Dietas</string>
+    <string name="actualizar_dieta">Atualizar dieta</string>
+    <string name="editar_dieta">Editar dieta</string>
+    <string name="agregar_dieta">Adicionar dieta</string>
+    <string name="dieta_libre">Dieta Livre</string>
+    <string name="title_delete_diet">Excluir dieta</string>
+    <string name="detalle_de_dieta">Detalhes da dieta</string>
+    <string name="nueva_dieta">Nova dieta</string>
+    <string name="msg_delete_diet_dialog">Tem certeza de que deseja excluir a dieta %1$s?</string>
+    <string name="tv_no_diet_list">Nenhuma dieta cadastrada</string>
+    <string name="err_msg_diet_name">O nome da dieta é obrigatório</string>
+    <string name="no_products">Nenhum produto atribuído à dieta</string>
+
+    <!-- Establecimiento -->
+    <string name="establecimiento">Estabelecimento</string>
+    <string name="establecimientos">Estabelecimentos</string>
+    <string name="lbl_establishment">Estabelecimento:</string>
+    <string name="lbl_update_establishment">Atualizar Estabelecimento</string>
+    <string name="editar_establecimiento">Editar estabelecimento</string>
+    <string name="title_add_establishment">Adicionar estabelecimento</string>
+    <string name="buscar_establecimiento">Buscar estabelecimento</string>
+    <string name="borrar_establecimiento">Excluir estabelecimento</string>
+    <string name="establecimiento_libre">Estabelecimento Livre</string>
+    <string name="tv_no_establishment_list">Nenhum estabelecimento cadastrado</string>
+    <string name="msg_delete_establishment_dialog">Tem certeza de que deseja excluir o estabelecimento %1$s?</string>
+    <string name="tv_no_additional_data_establishment">Nenhum curral atribuído ao estabelecimento</string>
+    <string name="tv_corral_title">Currais do estabelecimento</string>
+    <string name="alert_msg_no_establishment_sync_all">Nenhum estabelecimento cadastrado. Não é possível sincronizar os currais.</string>
+    <string name="detalle_de_establecimiento">Detalhes do estabelecimento</string>
+    <string name="nuevo_establecimiento">Novo estabelecimento</string>
+    <string name="err_msg_establishment_name">O nome do estabelecimento é obrigatório</string>
+
+    <!-- Corral -->
+    <string name="corral">Curral</string>
+    <string name="corrales">Currais</string>
+    <string name="agregar_corral">Adicionar curral</string>
+    <string name="editar_corral">Editar curral</string>
+    <string name="borrar_corral">Excluir curral</string>
+    <string name="actualizar_corral">Atualizar curral</string>
+    <string name="detalle_de_corral">Detalhes do curral</string>
+    <string name="corral_round_count">%1$s currais</string>
+    <string name="corral_libre">Curral Livre</string>
+    <string name="nuevo_corral">Novo curral</string>
+    <string name="tv_no_corral_list">Nenhum curral cadastrado</string>
+    <string name="err_msg_corral_name">O nome do curral é obrigatório</string>
+    <string name="msg_delete_corral_dialog">Tem certeza de que deseja excluir o curral %1$s?</string>
+    <string name="corral_establishment_count">%1$s currais</string>
+    <string name="no_corrals">Sem currais</string>
+    <string name="lbl_animal_quantity">Quantidade de animais:</string>
+    <string name="ph_animal_quantity">Quantidade de animais</string>
+    <string name="tv_no_additional_data_corral">Nenhuma informação adicional para este curral</string>
+    <string name="alert_msg_no_establishment_sync">Não foi possível sincronizar o curral porque o estabelecimento associado está ausente</string>
+    <string name="no_establishment">Não é possível criar currais porque não há estabelecimentos</string>
+
+    <!-- Rondas -->
+    <string name="ronda">Ronda</string>
+    <string name="rondas">Rondas</string>
+    <string name="tv_no_round_list">Nenhuma ronda cadastrada</string>
+    <string name="agregar_ronda">Adicionar ronda</string>
+    <string name="borrar_ronda">Excluir ronda</string>
+    <string name="editar_ronda">Editar ronda</string>
+    <string name="ronda_libre">Ronda Livre</string>
+    <string name="detalle_de_ronda">Detalhe da ronda</string>
+    <string name="err_msg_round_name">O título da ronda é obrigatório</string>
+    <string name="msg_delete_round_dialog">Tem certeza de que deseja excluir a ronda %1$s?</string>
+    <string name="msg_hide_round_dialog">Tem certeza de que deseja ocultar a ronda %1$s?</string>
+
+    <!-- General -->
+    <string name="descripcion">Descrição</string>
+    <string name="editar">Editar</string>
+    <string name="nuevo">Novo</string>
+    <string name="guardar">Salvar</string>
+    <string name="borrar">Excluir</string>
+    <string name="cero">0</string>
+    <string name="mezclar">Misturar</string>
+    <string name="mezclando">Misturando</string>
+    <string name="configuracion">Configuração</string>
+    <string name="menu_admin">Administração</string>
+    <string name="opciones">Opções</string>
+    <string name="lbl_camera">Câmera</string>
+    <string name="lbl_gallery">Galeria</string>
+    <string name="seleccione_opcion">Selecione uma opção</string>
+    <string name="more_contentDescription">Ações possíveis</string>
+    <string name="lbl_yes">Sim</string>
+    <string name="lbl_no">Não</string>
+    <string name="search_title">Buscar</string>
+    <string name="search_hint">Buscar...</string>
+    <string name="lbl_specific_weight">Peso específico:</string>
+    <string name="lbl_empty">Não informado</string>
+
+    <!-- Unidadades Placeholders -->
+    <string name="lb_weight_unit">kg/m³</string>
+    <string name="lb_weight_unit_kg">kg</string>
+    <string name="lb_percentage_symbol">%</string>
+    <string name="ph_product_rfid">RF ID</string>
+    <string name="lbl_rfid">RfId:</string>
+    <string name="lbl_app_id">App Id:</string>
+    <string name="lbl_remote_id">Remote Id:</string>
+    <string name="tv_building">Seção em construção</string>
+    <string name="please_wait">Por favor, aguarde</string>
+    <string name="conectando_la_balanza">Conectando com a balança</string>
+    <string name="conectando_la_antena">Conectando com a antena</string>
+
+
+    <string name="next">Próximo</string>
+    <string name="previous">Anterior</string>
+
+    <!-- Mensajes de error, advertencias y estado -->
+    <string name="la_balanza_esta_desconectada">A balança está desconectada.\nConecte-a para continuar</string>
+    <string name="err_msg_diet_empty">A dieta deve conter pelo menos um produto</string>
+    <string name="err_msg_round_empty">A rodada deve conter pelo menos um curral</string>
+    <string name="err_msg_free_round_empty">Você deve carregar pelo menos um produto</string>
+    <string name="err_msg_free_round_cero">Você deve carregar algum produto</string>
+    <string name="msg_delete_round_sincronized_dialog">A rodada está sincronizada. Só pode ser excluída do servidor.</string>
+
+    <!-- Mensajes informativos y botones -->
+    <string name="aceptar">Aceitar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="cerrar">Fechar</string>
+    <string name="cerrar_sesion">Encerrar sessão</string>
+    <string name="cerrar_ronda">Descartar rodada?</string>
+    <string name="continuar">CONTINUAR</string>
+    <string name="iniciar">INICIAR</string>
+    <string name="volver">Voltar</string>
+
+    <string name="sincronizar">Sincronizar</string>
+    <string name="sync">Sincronizado</string>
+    <string name="sincronizacion">Sincronização</string>
+    <string name="pending_sync">Sincronização pendente</string>
+    <string name="seleccione_un_establecimiento">Selecione um estabelecimento</string>
+    <string name="reintentar">Tentar novamente</string>
+    <string name="add_mezcla">Adicionar à mistura</string>
+    <string name="no_add">Não adicionar</string>
+    <string name="caja_bluetooth_asociada">Caixa Bluetooth associada</string>
+
+    <!-- Varios -->
+    <string name="sync_reports_title">Relatórios</string>
+    <string name="sync_round_run_title">Execuções</string>
+    <string name="detener">Parar</string>
+    <string name="resumen">Resumo</string>
+
+    <string name="sort_ascending">Ascendente</string>
+    <string name="sort_descending">Descendente</string>
+    <string name="hiding_row_sample">Ocultando a linha 3 de exemplo</string>
+    <string name="showing_row_sample">Mostrando a linha 3 de exemplo</string>
+    <string name="scroll_to_column_position">Rolar para a posição da coluna 15</string>
+    <string name="scroll_to_row_position">Rolar para a posição da linha 5</string>
+    <string name="show_hide_the_column">Mostrando / Ocultando a coluna 1</string>
+    <string name="table_pagination_details">Página %s, mostrando itens %s - %s.</string>
+    <string name="title_activity_login">Login</string>
+    <string name="prompt_password">Senha</string>
+    <string name="action_sign_in">Entrar</string>
+
+    <string name="additional_info">Informação adicional</string>
+    <string name="lbl_sin_descripcion">Nenhuma descrição foi carregada</string>
+    <string name="lbl_sin_descripcion_short">Sem descrição</string>
+
+    <string name="switch_percentage">Usar porcentagem</string>
+    <string name="animal_count">Qtd. de animais</string>
+    <string name="percentage">Porcentagem</string>
+    <string name="ph_round_proportion">Preparado em</string>
+    <string name="ph_round_total_weight">Total</string>
+
+    <string name="sin_descripcion">Sem descrição</string>
+
+    <string name="sync_intro">A sincronização pode demorar alguns minutos.</string>
+    <string name="title_round_run">Execução da rodada</string>
+    <string name="reporte">Relatório</string>
+
+    <string name="eliminar">Excluir</string>
+    <string name="carga">Carregar</string>
+    <string name="salto">Pular</string>
+    <string name="descarga">Descarregar</string>
+    <string name="debe_seleccionar_dieta">Você deve selecionar uma dieta</string>
+    <string name="select_mixer">Selecionar misturador</string>
+    <string name="cantidad_animales">Quantidade de animais</string>
+    <string name="alimento_animal">Alimento por animal</string>
+    <string name="kg_por_animal">kg por animal</string>
+    <string name="menu_exit">Sair</string>
+    <string name="libre">Livre</string>
+
+    <string name="warning">Aviso</string>
+    <string name="save_mixer_before">Você deve salvar o misturador antes de calibrar</string>
+    <string name="todo">Tudo</string>
+    <string name="todos">Todos</string>
+
+
+    <string name="ingrese_porcentaje">Digite a porcentagem</string>
+    <string name="ingrese_cantidad_de_animales">Digite a quantidade de animais</string>
+    <string name="ingrese_kg_por_animal">Digite os kg por animal</string>
+    <string name="no_identificado">Não identificado</string>
+    <string name="salto_fin">Pulo/Fim</string>
+    <string name="fin">Fim</string>
+    <string name="cargue_producto">Carregue o Produto</string>
+    <string name="descargue_corral">Descarregue no Curral</string>
+    <string name="logo_basculas">Logo balanças</string>
+    <string name="operario">Operador</string>
+    <string name="supervisor">Supervisor</string>
+    <string name="nutricionista">Nutricionista</string>
+    <string name="roles">Funções</string>
+    <string name="nutricionista_no_empieza_ronda">O nutricionista não pode iniciar uma rodada</string>
+    <string name="borrar_base">Apagar BD</string>
+    <string name="menu_base_datos">Banco de dados</string>
+    <string name="esto_borrara_todo">Isso apagará todos os dados do tablet</string>
+    <string name="hay_datos_de_otro_cliente">Há dados de outro cliente no tablet.\nPara fazer login com outro cliente, é necessário apagar os dados do cliente anterior</string>
+
+    <string name="ronda_de_a">Rodadas %1$d a %2$d de %3$d</string>
+    <string name="fecha_desde_al">%1$s a %2$s</string>
+    <string name="iniciada_el">Iniciada em %1$s</string>
+    <string name="datos_borrados">Dados apagados</string>
+    <string name="la_suma_de_los_porcentajes_debe_ser_100_00">A soma das porcentagens deve ser 100.00%</string>
+    <string name="ninguno">Nenhum</string>
+    <string name="borrar_historial">Apagar relatórios</string>
+    <string name="esto_borrara_historial">Isso apagará os relatórios do tablet</string>
+    <string name="pages_num">Rodadas por página</string>
+    <string name="total">Total</string>
+    <string name="error_subiendo_al_servidor">Erro ao enviar os dados ao servidor. Tente novamente.</string>
+    <string name="action_hide_round">Ocultar</string>
+    <string name="title_hide_round">Ocultar Rodada</string>
+
+    <string name="show_all_rounds">Mostrar todas as rodadas</string>
+    <string name="hide_archived_rounds">Ocultar rodadas arquivadas</string>
+    <string name="show_archived_rounds">Mostrar rodadas arquivadas</string>
+    <string name="hide_workorders">Ocultar ordens de serviço</string>
+    <string name="mezcla">Mistura</string>
+    <string name="debe_conectar_un_mixer">Para começar,\nvocê deve conectar um mixer.</string>
+    <string name="no_discount">Não descontar</string>
+    <string name="discount">Descontar</string>
+    <string name="corrales_disponibles">Currais disponíveis.</string>
+    <string name="no_hay_corrales">Não há currais disponíveis.</string>
+    <string name="productos_disponibles">Produtos disponíveis.</string>
+    <string name="no_hay_productos">Não há produtos disponíveis.</string>
+
+    <!-- Settings -->
+    <string name="nuevaUrl">Nova URL</string>
+    <string name="sin_permiso">Você não tem permissão para realizar esta operação.</string>
+    <string name="configuraci_n_de_ronda">Configuração da rodada</string>
+    <string name="las_rondas_se_resetean_a_las_">As rodadas são reiniciadas às: %sHs</string>
+    <string name="sensibilidad_de_descarga">Sensibilidade de Descarga</string>
+    <string name="url_del_servidor">URL do servidor</string>
+    <string name="sensibilidad_de_carga">Sensibilidade de Carga</string>
+    <string name="configuracion_de_servidor">Configuração do servidor</string>
+    <string name="calculo_de_posicion_de_corral">Cálculo da posição do Curral</string>
+    <string name="ronda_libre_habilitada">Rodada livre habilitada</string>
+    <string name="peso_con_kg">%skg</string>
+    <string name="pausa_despues_de_salto">Pausa ao mudar de curral</string>
+    <string name="warning_pause_product">Para mudar de produto, desative a pausa</string>
+    <string name="warning_pause_corral">Para mudar de curral, desative a pausa</string>
+    <string name="sensibilidad_de_GPS">Sensibilidade do GPS</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="resto">Resto</string>
+    <string name="por_defecto">Padrão</string>
+    <string name="si">Sim</string>
+    <string name="no">Não</string>
+    <string name="menu_opciones">Opções</string>
+    <string name="exportar">Exportar</string>
+    <string name="se_puede_exportar_db">É possível exportar o banco de dados?</string>
+    <string name="total_kg">Total kg</string>
+    <string name="segundos">Segundos</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="calibracion_coordenadas">Calibrar coordenadas do curral</string>
+    <string name="corral_gps">Curral GPS:</string>
+    <string name="marcar_gps">Marcar GPS</string>
+    <string name="longitude_actual">Longitude atual</string>
+    <string name="latitude_actual">Latitude atual</string>
+    <string name="longitude_corral">Longitude do Curral</string>
+    <string name="latitude_corral">Latitude do curral</string>
+    <string name="desconocido">Desconhecido</string>
+    <string name="rfid_actual">RFID atual</string>
+    <string name="rfid_guardada">RFID do curral</string>
+    <string name="marcar_rfid">Marcar RFID</string>
+    <string name="antena_rfid">Antena RFID</string>
+    <string name="escanear">Escanear</string>
+    <string name="corral_rfid">Curral RFID</string>
+    <string name="reenviar_todo">Reenviar tudo</string>
+    <string name="no_hay_conexi_n_de_internet">Sem conexão com a internet</string>
+    <string name="revise_su_conexi_n_y_vuelva_a_intentar_nuevamente">Verifique sua conexão e tente novamente</string>
+    <string name="_0_percent">0%</string>
+    <string name="total_mezcla">Mistura Total</string>
+    <string name="preparado_al">Preparado a</string>
+
+    <string name="_0">0</string>
+    <string name="_0_1">0.1</string>
+    <string name="_1">1</string>
+    <string name="_5">5</string>
+    <string name="_10">10</string>
+    <string name="_100">100</string>
+    <string name="_100_por_100">100%</string>
+    <string name="total_en_mixer">Total no misturador:</string>
+    <string name="reportes">Relatórios</string>
+    <string name="pausar">Pausar</string>
+    <string name="producto">Produto</string>
+    <string name="fecha_inicio">Data início:</string>
+    <string name="descargar">Descarregar</string>
+    <string name="descargado_dp">Dispensado:</string>
+    <string name="programado_dp">Programado:</string>
+    <string name="cargado_dp">Carregado:</string>
+    <string name="lista_de_usuarios">Lista de usuários</string>
+    <string name="a_n_no_hay_usuarios_creados">Ainda não há usuários criados</string>
+    <string name="para_visualizar_la_lista_de_usuarios_se_debe_ingresar_con_conexi_n_a_internet_y_realizar_una_sincronizaci_n_desde_el_menu_de_la_aplicaci_n">Para visualizar a lista de usuários você deve fazer login com conexão à internet e realizar uma sincronização no menu do aplicativo</string>
+    <string name="pase_autom_tico_de_productos">Passagem automática de produto</string>
+    <string name="pase_autom_tico_de_corral">Passagem automática do curral</string>
+    <string name="ajuste_de_descarga_en_base_resto">Ajuste de descarga na base / resto</string>
+    <string name="muestra_alerta">Exibição de alerta</string>
+    <string name="usuario_dp">Usuario:</string>
+    <string name="_100kg">100kg</string>
+    <string name="iniciar_mezclar">Comece a mixar</string>
+    <string name="nombre_del_dispositivo">Nome do dispositivo</string>
+    <string name="direcci_n_mac">Endereço MAC</string>
+    <string name="nombre_del_producto">Nome do produto</string>
+    <string name="descripcion_del_producto">Descrição do produto</string>
+    <string name="esp_blank_mixer">     Misturador</string>
+    <string name="blank_spaces" >            </string>
+    <string name="visor_remoto">Visor Remoto</string>
+    <string name="establecimiento_desconocido">Estabelecimento desconhecido</string>
+    <string name="de">de</string>
+    <string name="total_dieta_dp">Total dieta:</string>
+    <string name="syncro">Syncro</string>
+    <string name="mixer_guardado">Misturador Armazenado</string>
+    <string name="mixer_actualizado">Misturador Atualizado</string>
+    <string name="error_compartir_archivo">Erro ao compartilhar o arquivo: %s</string>
+    <string name="reporte_base_de_datos">Relatório do Banco de Dados</string>
+    <string name="se_adjunta_un_archivo_excel_con_los_datos_exportados">Um arquivo Excel com os dados exportados está em anexo.</string>
+    <string name="archivo_exportado">Arquivo exportado: %s</string>
+    <string name="error_al_exportar">Erro ao exportar: %s</string>
+    <string name="no_hay_dispositivos">Nenhum dispositivo</string>
+    <string name="permiso_denegado">Permissão negada</string>
+    <string name="usuario_invalido">Usuário ou senha inválidos</string>
+    <string name="conexion_ofline">Conexão offline %s</string>
+    <string name="se_requiere_internet">É necessária conexão com a internet para fazer login pela primeira vez</string>
+    <string name="conexion_online">Conexão online %s</string>
+    <string name="url_guardada">URL do servidor salva</string>
+    <string name="intruduzca_url_valida">Por favor, insira uma URL válida</string>
+    <string name="se_necesita_permiso_bluetooth">Permissões de Bluetooth são necessárias</string>
+    <string name="date_picker_cancelled">Seleção de data cancelada</string>
+    <string name="desconectado">Desconectado</string>
+    <string name="no_se_pudo_establecer_comunicacion_con">Não foi possível estabelecer comunicação com %s %s</string>
+    <string name="rfid">RFID</string>
+
+    <string name="validando_credenciales">Validando credenciais</string>
+
+    <string name="lbl_update_tablet_mixer">Atualizar Visor Remoto</string>
+    <string name="title_edit_tablet_mixer">Editar Visor Remoto</string>
+    <string name="title_add_tablet_mixer">Adicionar Visor Remoto</string>
+    <string name="err_msg_tablet_mixer_name">O nome do Visor Remoto é obrigatório</string>
+    <string name="title_delete_tablet_mixer">Excluir Visor Remoto</string>
+    <string name="msg_delete_tablet_mixer_dialog">Tem certeza de que deseja excluir o visor remoto %1$s?</string>
+    <string name="conectar_tablets_cercanas">Conectar tablets próximas</string>
+
+
+    <string name="title_activity_tablet_mixer_config">TabletMixerConfigActivity</string>
+    <string name="title_activity_add_update_tablet_mixer">AddUpdateTabletMixerActivity</string>
+    <string name="screen_tablet_mixer_detail">Detalhe do Visor Remoto</string>
+    <string name="screen_tablet_mixer_new">Novo Visor Remoto</string>
+    <string name="screen_tablet_mixer_config">Configuração do mixer</string>
+    <string name="mixer_remoto">Mixer Remoto</string>
+    <string name="declarar_mixer">Declarar Mixer</string>
+    <string name="conectando_la_tablet">Conectando com a Tablet</string>
+    <string name="iniciando_ronda">Iniciando rodada</string>
+    <string name="ver_ronda">Ver rodada</string>
+    <string name="free_round">Rodada livre</string>
+    <string name="sincronice_con_mixer">Sincronize as rodadas com o mixer</string>
+    <string name="en_ejecucion">Executando</string>
+    <string name="quiere_pasar_a_descarga">Deseja passar para descarga?</string>
+    <string name="quiere_cerrar_ronda">Deseja encerrar a rodada?</string>
+    <string name="agregar_establecimiento">Adicionar estabelecimento</string>
+    <string name="tv_no_tablet_mixer_list">Nenhum visor remoto carregado</string>
+    <string name="finalizar">Finalizar</string>
+    <string name="no_disponible">O mixer não pode realizar esta ação no momento.</string>
+    <string name="proximo_producto">Próximo produto</string>
+    <string name="descargar_en">Descarregar em</string>
+    <string name="cargar">Carregar</string>
+    <string name="guardado">Salvo</string>
+    <string name="actualizado">Atualizado</string>
+    <string name="dispositivo">Dispositivo</string>
+    <string name="no_se_pudo_conectar">Não foi possível conectar</string>
+    <string name="mantenga_el_boton_presionado">Mantenha o botão pressionado para fazer a tara</string>
+    <string name="no_se_pudo_iniciar_ronda">Não foi possível iniciar a rodada</string>
+    <string name="no_se_puede_ver_ronda">Não é possível ver a rodada</string>
+
+    <string name="seleccione_un_BLE">Selecione um dispositivo BLE</string>
+    <string name="ecienda_bluetooth">Ligue o Bluetooth</string>
+    <string name="seguro_pasar_descarga">Tem certeza de que deseja passar para descarga?</string>
+    <string name="vincular">Vincular</string>
+    <string name="no_hay_mixer_vinculado">Não há nenhum mixer vinculado no dispositivo</string>
+    <string name="seguro_quiere_finalizar_ronda">Tem certeza de que deseja finalizar a rodada?</string>
+    <string name="dispositivos">Dispositivos</string>
+    <string name="se_registra_un_peso_de">Foi registrado um peso de %skg no mixer.\nDeseja descontá-lo da mistura a preparar?</string>
+    <string name="spi_solicita_permiso_camara">O SPI Mixer solicita permissão para acessar a câmera. Você pode ativá-la acessando as configurações</string>
+    <string name="desea_cerrar_sesion">Deseja encerrar a sessão?</string>
+    <string name="desea_cerrar_aplicacion">Deseja fechar o aplicativo?</string>
+    <string name="elegir_mixer">Escolher misturador</string>
+    <string name="la_ronda_debe_tener_un_corral">A rodada deve ter pelo menos um curral</string>
+    <string name="la_dieta_debe_tener_un_producto">A dieta deve ter pelo menos um produto</string>
+    <string name="dispositivos_disponibles">Dispositivos disponíveis</string>
+
+    <string name="la_tablet_de_mixer">o tablet do mixer</string>
+    <string name="tablet_remota_menu">"    Tablet Remota"</string>
+
+</resources>

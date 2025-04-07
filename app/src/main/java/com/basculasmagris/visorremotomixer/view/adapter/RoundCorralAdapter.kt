@@ -5,18 +5,15 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.ItemLineRoundCorralBinding
 import com.basculasmagris.visorremotomixer.model.entities.RoundCorralDetail
 import com.basculasmagris.visorremotomixer.utils.Helper
-import com.basculasmagris.visorremotomixer.view.activities.AddUpdateRoundActivity
 import kotlin.math.roundToInt
 
 
@@ -144,7 +141,7 @@ class RoundCorralAdapter (
         holder.tvOrder.text = roundCorral.order.toString()
         holder.etWeightCorral.isEnabled = !usePercentage and !readOnly
         holder.tvCorralAnimalCount.text = roundCorral.animalQuantity.toString()
-        holder.tvCorralDescription.text = roundCorral.corralDescription.ifEmpty { activity.getString(R.string.no_description) }
+        holder.tvCorralDescription.text = roundCorral.corralDescription.ifEmpty { activity.getString(R.string.sin_descripcion) }
         holder.etAnimalQuantity.setText(roundCorral.animalQuantity.toString())
         if(roundCorral.animalQuantity!=0){
             val foodByAnimal = roundCorral.weight/roundCorral.animalQuantity
@@ -168,94 +165,6 @@ class RoundCorralAdapter (
             holder.etFoodByAnimal.visibility = View.VISIBLE
             holder.tiFoodByAnimal.visibility = View.VISIBLE
         }
-
-        if (setFocus && roundCorral.corralId == corralId && holder.etWeightCorral.isVisible) {
-            Log.i("DEBUG","RoundCorralAdapter position $position setFocus")
-            holder.etWeightCorral.requestFocus()
-            (activity as AddUpdateRoundActivity).scrollToSelectedItem(holder.adapterPosition)
-            activity.focusAndShowKeyboard(holder.etWeightCorral)
-            setFocus = false
-        }
-
-        holder.etAnimalQuantity.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                if(activity is AddUpdateRoundActivity && v!=null)
-                    when (event?.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            activity.scrollToSelectedItem(holder.adapterPosition)
-                            activity.focusAndShowKeyboard(v)
-                            v.onTouchEvent(event)
-                            return false
-                        }
-                        MotionEvent.ACTION_UP->{
-                            v.performClick()
-                            return true
-                        }
-                        else->{}
-                    }
-                return v?.onTouchEvent(event) ?: true
-            }
-        })
-
-        holder.etFoodByAnimal.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                if(activity is AddUpdateRoundActivity && v!=null)
-                    when (event?.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            activity.scrollToSelectedItem(holder.adapterPosition)
-                            activity.focusAndShowKeyboard(v)
-                            v.onTouchEvent(event)
-                            return false
-                        }
-                        MotionEvent.ACTION_UP->{
-                            v.performClick()
-                            return true
-                        }
-                        else->{}
-                    }
-                return v?.onTouchEvent(event) ?: true
-            }
-        })
-
-        holder.etWeightCorral.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                if(activity is AddUpdateRoundActivity && v!=null)
-                    when (event?.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            activity.scrollToSelectedItem(holder.adapterPosition)
-                            activity.focusAndShowKeyboard(v)
-                            v.onTouchEvent(event)
-                            return false
-                        }
-                        MotionEvent.ACTION_UP->{
-                            v.performClick()
-                            return true
-                        }
-                        else->{}
-                    }
-                return v?.onTouchEvent(event) ?: true
-            }
-        })
-
-        holder.etPercentage.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                if(activity is AddUpdateRoundActivity && v!=null)
-                    when (event?.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            activity.scrollToSelectedItem(holder.adapterPosition)
-                            activity.focusAndShowKeyboard(v)
-                            v.onTouchEvent(event)
-                            return false
-                        }
-                        MotionEvent.ACTION_UP->{
-                            v.performClick()
-                            return true
-                        }
-                        else->{}
-                    }
-                return v?.onTouchEvent(event) ?: true
-            }
-        })
 
         holder.etAnimalQuantity.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {

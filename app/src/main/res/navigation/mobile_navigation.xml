@@ -10,7 +10,7 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.basculasmagris.visorremotomixer.view.fragments.HomeFragment"
-        android:label="@string/menu_home"
+        android:label="@string/inicio"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_home_to_mixer"
@@ -98,12 +98,12 @@
     <activity
         android:id="@+id/addUpdateMixerActivity"
         android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateMixerActivity"
-        android:label="@string/screen_mixer_new"
+        android:label="@string/nuevo_mixer"
         tools:layout="@layout/activity_add_update_mixer" />
     <fragment
         android:id="@+id/nav_round"
         android:name="com.basculasmagris.visorremotomixer.view.fragments.RoundListFragment"
-        android:label="@string/round_list" >
+        android:label="@string/rondas" >
         <action
             android:id="@+id/action_round_list_fragment_to_remote_mixer_fragment"
             app:destination="@id/nav_mixer_remoto" />
@@ -112,7 +112,7 @@
     <fragment
         android:id="@+id/nav_sync"
         android:name="com.basculasmagris.visorremotomixer.view.fragments.SyncFragment"
-        android:label="@string/sync_title"
+        android:label="@string/sincronizacion"
         tools:layout="@layout/fragment_sync" >
     </fragment>
 
@@ -121,12 +121,6 @@
         android:name="com.basculasmagris.visorremotomixer.view.activities.SplashActivity"
         android:label="activity_splash"
         tools:layout="@layout/activity_splash" />
-    <!--
-    <activity
-        android:id="@+id/nav_login"
-        android:name="com.basculasmagris.visorremotomixer.view.activities.LoginActivity"
-        android:label="activity_login"
-        tools:layout="@layout/activity_login" />-->
     <activity
         android:id="@+id/mainActivity"
         android:name="com.basculasmagris.visorremotomixer.view.activities.MainActivity"
@@ -137,14 +131,6 @@
         android:name="com.basculasmagris.visorremotomixer.view.fragments.UserListFragment"
         android:label="Lista de usuarios"
         tools:layout="@layout/fragment_user_list" >
-        <action
-            android:id="@+id/action_userListFragment_to_addUpdateUserActivity"
-            app:destination="@id/addUpdateUserActivity" />
-    </fragment>
-    <activity
-        android:id="@+id/addUpdateUserActivity"
-        android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateUserActivity"
-        android:label="activity_add_update_user"
-        tools:layout="@layout/activity_add_update_user" />
+     </fragment>
 
 </navigation>

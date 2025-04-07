@@ -42,8 +42,8 @@ class TabletMixerAdapter (private  val fragment: Fragment) : RecyclerView.Adapte
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val tabletMixer = filteredTabletMixers[position]
         holder.tvTabletMixerTitle.text = tabletMixer.name
-        holder.etTabletMixerDescription.text = tabletMixer.description.ifEmpty { fragment.getString(R.string.lbl_no_description_short) }
-//        holder.tvWeight.text = "${weight}Kg"
+        holder.etTabletMixerDescription.text = tabletMixer.description.ifEmpty { fragment.getString(R.string.lbl_sin_descripcion_short) }
+//        holder.tvWeight.text = "${weight}kg"
 
         if(selectedTabletMixer != null && selectedTabletMixer?.id == tabletMixer.id){
             if(fragment is TabletMixerListFragment && selectedTabletMixer != null && selectedTabletMixer != previousTabletMixer){
@@ -187,9 +187,9 @@ class TabletMixerAdapter (private  val fragment: Fragment) : RecyclerView.Adapte
 
     private fun alertTabletMixerNull(msg: String) {
         val builder = androidx.appcompat.app.AlertDialog.Builder(fragment.requireActivity())
-        builder.setTitle("Alerta")
+        builder.setTitle(fragment.getString(R.string.warning))
         builder.setMessage(msg)
-        builder.setPositiveButton("Aceptar") { dialog, _ ->
+        builder.setPositiveButton(fragment.getString(R.string.aceptar)) { dialog, _ ->
             dialog.dismiss()
         }
         builder.show()

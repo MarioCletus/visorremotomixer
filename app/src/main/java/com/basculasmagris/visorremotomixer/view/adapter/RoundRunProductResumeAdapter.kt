@@ -37,17 +37,17 @@ class RoundRunProductResumeAdapter (
 
         holder.tvProductName.text = product.name
         holder.tvCurrentProductPercentage.text = "${percentage}%"
-        holder.tvCurrentProductWeightOf.text = "${product.finalWeight-product.initialWeight}Kg de ${targetProductWeight}Kg"
+        holder.tvCurrentProductWeightOf.text = "${product.finalWeight-product.initialWeight}kg de ${targetProductWeight}kg"
         holder.pbCurrentProduct.progress = percentage.toInt()
 
         if (difference == 0L){
-            holder.tvProductDifference.text = "${difference}Kg"
+            holder.tvProductDifference.text = "${difference}kg"
             holder.tvProductDifference.setTextColor(ContextCompat.getColor(fragment.requireActivity(), R.color.green_500_primary))
         } else if (difference > 0){
-            holder.tvProductDifference.text = "+${difference}Kg"
+            holder.tvProductDifference.text = "+${difference}kg"
             holder.tvProductDifference.setTextColor(ContextCompat.getColor(fragment.requireActivity(), R.color.red_500_primary))
         } else {
-            holder.tvProductDifference.text = "${difference}Kg"
+            holder.tvProductDifference.text = "${difference}kg"
             holder.tvProductDifference.setTextColor(ContextCompat.getColor(fragment.requireActivity(), R.color.red_500_primary))
         }
     }

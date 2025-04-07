@@ -61,14 +61,14 @@ object Constants {
         "Usuario",
         "Fecha",
         "Duración (')",
-        "Planificado ronda (Kg)",
-        "Real ronda (Kg)",
-        "Desvío ronda (Kg)",
+        "Planificado ronda (kg)",
+        "Real ronda (kg)",
+        "Desvío ronda (kg)",
         "Dieta",
         "Producto",
-        "Esperado (Kg)",
-        "Real (Kg)",
-        "Desvío producto (Kg)"
+        "Esperado (kg)",
+        "Real (kg)",
+        "Desvío producto (kg)"
     )
 
     val COLUMNS_DOWNLOAD = arrayOf(
@@ -76,14 +76,14 @@ object Constants {
         "Usuario",
         "Fecha",
         "Duración (')",
-        "Planificado ronda (Kg)",
-        "Real ronda (Kg)",
-        "Desvío ronda (Kg)",
+        "Planificado ronda (kg)",
+        "Real ronda (kg)",
+        "Desvío ronda (kg)",
         "Dieta",
         "Corral",
-        "Esperado (Kg)",
-        "Real (Kg)",
-        "Desvío corral (Kg)",
+        "Esperado (kg)",
+        "Real (kg)",
+        "Desvío corral (kg)",
     )
 
     val COLUMNS_LOAD_XLS =  arrayOf(
@@ -91,14 +91,14 @@ object Constants {
         "Usuario",
         "Fecha",
         "Duracion (')",
-        "Planificado ronda (Kg)",
-        "Real ronda (Kg)",
-        "Desvio ronda (Kg)",
+        "Planificado ronda (kg)",
+        "Real ronda (kg)",
+        "Desvio ronda (kg)",
         "Dieta",
         "Producto",
-        "Esperado (Kg)",
-        "Real (Kg)",
-        "Desvio producto (Kg)"
+        "Esperado (kg)",
+        "Real (kg)",
+        "Desvio producto (kg)"
     )
 
     val COLUMNS_DOWNLOAD_XLS = arrayOf(
@@ -106,14 +106,14 @@ object Constants {
         "Usuario",
         "Fecha",
         "Duracion (')",
-        "Planificado ronda (Kg)",
-        "Real ronda (Kg)",
-        "Desvio ronda (Kg)",
+        "Planificado ronda (kg)",
+        "Real ronda (kg)",
+        "Desvio ronda (kg)",
         "Dieta",
         "Corral",
-        "Esperado (Kg)",
-        "Real (Kg)",
-        "Desvio corral (Kg)",
+        "Esperado (kg)",
+        "Real (kg)",
+        "Desvio corral (kg)",
     )
     var FIELD_SEPARATOR = ";"
 

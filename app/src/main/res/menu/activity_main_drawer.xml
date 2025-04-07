@@ -9,19 +9,15 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home"
-            android:title="Inicio" />
+            android:title="@string/inicio" />
     </group>
     <group
         android:id="@+id/group_activity"
         android:checkableBehavior="single">
-<!--        <item-->
-<!--            android:id="@+id/nav_mixer_remoto"-->
-<!--            android:icon="@drawable/ic_tablet_48px"-->
-<!--            android:title="Mixer Remoto" />-->
         <item
             android:id="@+id/nav_round"
             android:icon="@drawable/ic_route_new"
-            android:title="@string/menu_round"/>
+            android:title="@string/rondas"/>
     </group>
 
     <group
@@ -42,11 +38,11 @@
         <item
             android:id="@+id/nav_sync"
             android:icon="@drawable/ic_sync_new"
-            android:title="@string/menu_sync" />
+            android:title="@string/sincronizar" />
         <item
             android:id="@+id/nav_user"
             android:icon="@drawable/ic_users_new"
-            android:title="@string/menu_user" />
+            android:title="@string/usuarios" />
     </group>
     <group
         android:id="@+id/group_logout"
@@ -54,7 +50,7 @@
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout_red"
-            android:title="@string/menu_logout" />
+            android:title="@string/cerrar_sesion" />
         <item
             android:id="@+id/nav_exit"
             android:icon="@android:drawable/ic_lock_power_off"

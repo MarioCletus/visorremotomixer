@@ -1,23 +1,24 @@
 package com.basculasmagris.visorremotomixer.view.fragments
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
 import com.basculasmagris.visorremotomixer.databinding.FragmentUserListBinding
 import com.basculasmagris.visorremotomixer.model.entities.User
 import com.basculasmagris.visorremotomixer.view.activities.MergedLocalData
 import com.basculasmagris.visorremotomixer.view.activities.UserData
 import com.basculasmagris.visorremotomixer.view.adapter.UserAdapter
-import com.basculasmagris.visorremotomixer.viewmodel.*
+import com.basculasmagris.visorremotomixer.viewmodel.UserRemoteViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.UserViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.UserViewModelFactory
 
 class UserListFragment : Fragment() {
 
@@ -103,30 +104,6 @@ class UserListFragment : Fragment() {
                 }
             }
         }
-
-    }
-
-    fun goToAddUpdateUser(){
-        findNavController().navigate(UserListFragmentDirections.actionUserListFragmentToAddUpdateUserActivity())
-    }
-
-    fun deleteUser(user: User){
-        val builder = AlertDialog.Builder(requireActivity())
-        builder.setTitle(resources.getString(R.string.title_delete_user))
-        builder.setMessage(resources.getString(R.string.msg_delete_user_dialog, user.name))
-        builder.setIcon(android.R.drawable.ic_dialog_alert)
-        builder.setPositiveButton(resources.getString(R.string.lbl_yes)){ dialogInterface, _ ->
-            mUserViewModel.delete(user)
-            dialogInterface.dismiss()
-        }
-
-        builder.setNegativeButton(resources.getString(R.string.lbl_no)){ dialogInterface, _ ->
-            dialogInterface.dismiss()
-        }
-
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
 
     }
 

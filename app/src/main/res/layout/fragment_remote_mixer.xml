@@ -91,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_weight="0.10"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_marginRight="5dp"
             android:visibility="visible"
             android:layout_marginTop="20dp"
@@ -202,7 +202,7 @@
             android:layout_marginTop="20dp"
             android:gravity="center|top"
             android:layout_gravity="center|top"
-            android:text="@string/picar"
+            android:text="@string/mezclar"
             android:textSize="60sp" />
 
         <!-- Círculo con contador regresivo -->
@@ -388,7 +388,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             android:layout_marginStart="25dp"
-                            android:text="10000Kg"
+                            android:text="10000kg"
                             android:textSize="32sp"
                             app:layout_constraintTop_toBottomOf="@id/ll_separator_weight"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -406,7 +406,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textColor="@color/color_deep_green"
-                android:text="@string/add_establishment"
+                android:text="@string/agregar_establecimiento"
                 android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -466,10 +466,9 @@
                     android:layout_height="@dimen/_20sdp"
                     android:layout_marginEnd="25dp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="15dp"
                     android:src="@drawable/ic_forward_circle"
                     android:backgroundTint="@color/white"
-                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
                     app:layout_constraintTop_toTopOf="@id/tv_round_custom_weight"
                     app:layout_constraintBottom_toBottomOf="@id/tv_round_custom_weight"
                     app:layout_constraintStart_toEndOf="@id/tv_round_custom_weight"/>

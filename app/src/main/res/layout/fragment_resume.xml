@@ -44,14 +44,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="24sp"
-            android:text="+2892Kg"
+            android:text="+2892kg"
             android:textColor="@color/color_medium_green"
             android:gravity="center"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_round_products_to_load"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginRight="@dimen/_5sdp"
             android:visibility="visible"/>
     </LinearLayout>
@@ -87,14 +87,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="24sp"
-            android:text="+2892Kg"
+            android:text="+2892kg"
             android:textColor="@color/color_medium_green"
             android:gravity="center"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_round_corrals_to_load"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginRight="@dimen/_5sdp"
             android:visibility="visible"/>
     </LinearLayout>

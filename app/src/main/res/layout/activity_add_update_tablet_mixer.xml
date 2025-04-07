@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@color/white"
         android:gravity="center"
-        app:title="@string/add_mixer"
+        app:title="@string/agregar_mixer"
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,7 +51,7 @@
                 android:id="@+id/ti_tablet_mixer_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/ph_tablet_mixer_name"
+                android:hint="@string/nombre"
                 android:maxLength="50"
                 android:textSize="14sp"
                 android:textColor="#595959"/>
@@ -78,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLength="250"
-                android:hint="@string/ph_tablet_mixer_description"
+                android:hint="@string/descripcion"
                 android:textSize="14sp"
                 android:textColor="#595959"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -117,7 +117,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/_ti_tablet_mixer_name"
@@ -213,7 +213,7 @@
             android:layout_marginBottom="@dimen/_20sdp"
             android:foreground="?attr/selectableItemBackground"
             android:gravity="center"
-            android:text="@string/save"
+            android:text="@string/guardar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/_ti_rfid"

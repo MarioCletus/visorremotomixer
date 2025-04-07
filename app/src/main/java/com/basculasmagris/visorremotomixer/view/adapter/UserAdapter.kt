@@ -1,19 +1,13 @@
 package com.basculasmagris.visorremotomixer.view.adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.ItemUserLayoutBinding
 import com.basculasmagris.visorremotomixer.model.entities.User
-import com.basculasmagris.visorremotomixer.utils.Constants
-import com.basculasmagris.visorremotomixer.view.activities.AddUpdateUserActivity
-import com.basculasmagris.visorremotomixer.view.fragments.UserListFragment
 
 class UserAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<UserAdapter.ViewHolder>(),
     Filterable {

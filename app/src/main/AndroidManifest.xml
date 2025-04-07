@@ -41,17 +41,7 @@
             android:windowSoftInputMode="adjustResize"
             android:windowFullscreen="true"
             android:theme="@style/Theme.Spimixer.NoActionBar" />
-        <activity
-            android:name=".view.activities.AddUpdateUserActivity"
-            android:exported="true"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Spimixer.NoActionBar"
-            android:windowFullscreen="true"
-            android:windowSoftInputMode="adjustResize">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+
         <activity
             android:name=".view.activities.LoginActivity"
             android:exported="false"
@@ -65,16 +55,7 @@
             android:enabled="true"
             android:exported="true"
             android:windowSoftInputMode="adjustNothing" />
-
-
-        <activity
-            android:name=".view.activities.AddUpdateRoundActivity"
-            android:exported="true"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Spimixer.NoActionBar"
-            android:windowFullscreen="true"
-            android:windowSoftInputMode="adjustNothing" />
-
+        
         <activity
             android:name=".view.activities.AddUpdateMixerActivity"
             android:exported="true"

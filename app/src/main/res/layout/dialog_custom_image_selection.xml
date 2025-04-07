@@ -11,7 +11,7 @@
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title_select_image_action"
+        android:text="@string/seleccione_opcion"
         android:textColor="@color/black"
         android:textSize="@dimen/_16sdp"
         android:textStyle="bold"

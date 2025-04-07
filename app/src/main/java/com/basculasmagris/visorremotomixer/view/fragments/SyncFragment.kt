@@ -144,7 +144,7 @@ class SyncFragment : Fragment() {
                 Constants.CMD_NTA ->{
                     Log.i("showCommand","CMD_NTA")
                     if(isAdded){
-                        (requireActivity() as MainActivity).alertDialog(getString(R.string.atencion),getString(
+                        (requireActivity() as MainActivity).alertDialog(getString(R.string.warning),getString(
                             R.string.no_disponible))
                     }
                 }

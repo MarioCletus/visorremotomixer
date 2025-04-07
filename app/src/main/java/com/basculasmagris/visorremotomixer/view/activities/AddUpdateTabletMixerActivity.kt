@@ -1,18 +1,17 @@
 package com.basculasmagris.visorremotomixer.view.activities
 
 import android.app.Activity
-import android.app.Dialog
-import android.bluetooth.BluetoothDevice
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
-import android.os.IBinder
 import android.text.TextUtils
 import android.util.Log
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.view.View.GONE
+import android.view.WindowManager
 import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -27,12 +26,12 @@ import com.basculasmagris.visorremotomixer.databinding.ActivityAddUpdateTabletMi
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
 import com.basculasmagris.visorremotomixer.utils.Constants
-import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModelFactory
 import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class AddUpdateTabletMixerActivity : AppCompatActivity() {
 
@@ -44,23 +43,6 @@ class AddUpdateTabletMixerActivity : AppCompatActivity() {
 
     private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
         TabletMixerViewModelFactory((application as SpiMixerVRApplication).tabletMixerRepository)
-    }
-
-    private var mProgressDialog: Dialog? = null
-
-    private fun showCustomProgressDialog(){
-        if(mProgressDialog != null && mProgressDialog!!.isShowing){
-            return
-        }
-        mProgressDialog = Dialog(this)
-        mProgressDialog?.let {
-            it.setContentView(R.layout.dialog_custom_progress)
-            it.show()
-        }
-    }
-
-    private fun hideCustomProgressDialog(){
-        mProgressDialog?.dismiss()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,8 +93,6 @@ class AddUpdateTabletMixerActivity : AppCompatActivity() {
             }
         }
 
-        //binding.btnAddTabletMixer.setOnClickListener(this)
-        //bindBluetoothService()
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         window.decorView.systemUiVisibility =
@@ -150,8 +130,8 @@ class AddUpdateTabletMixerActivity : AppCompatActivity() {
         val remoteViewerName = binding.tiTabletMixerName.text.toString().trim { it <= ' ' }
         val remoteViewerDescription = binding.tiTabletMixerDescription.text.toString().trim { it <= ' ' }
         var remoteId = 0L
-        var remoteViewerMac = binding.etMac.text.toString().trim { it <= ' ' }
-        var remoteViewerBtBox = binding.etBtBox.text.toString().trim { it <= ' ' }
+        val remoteViewerMac = binding.etMac.text.toString().trim { it <= ' ' }
+        val remoteViewerBtBox = binding.etBtBox.text.toString().trim { it <= ' ' }
 
         mTabletMixerDetails?.let {
             remoteId = it.remoteId
@@ -175,7 +155,7 @@ class AddUpdateTabletMixerActivity : AppCompatActivity() {
                 mTabletMixerDetails?.let {
                     if (it.id != 0L){
                         remoteViewerId = it.id
-                        updatedDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
+                        updatedDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.getDefault()).format(Date())
                         linked = it.linked == true
                     }
                 }
@@ -213,85 +193,7 @@ class AddUpdateTabletMixerActivity : AppCompatActivity() {
         //mService.LocalBinder().stopDiscovery()
     }
 
-    //Bluetooth
-    private fun bindBluetoothService() {
-        // Bind to LocalService
-        Log.i("BLUE", "Se inicia servicio")
-        Intent(
-            this,
-            BluetoothSDKService::class.java
-        ).also { intent ->
-            Log.i("BLUE", "intent Se inicia servicio")
-            this.bindService(
-                intent,
-                connection,
-                Context.BIND_AUTO_CREATE
-            )
-        }
-    }
 
-    private val connection = object : ServiceConnection {
-        override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            val binder = service as BluetoothSDKService.LocalBinder
-            mService = binder.getService()
-            mService.LocalBinder().startDiscovery(this@AddUpdateTabletMixerActivity)
-        }
-        override fun onServiceDisconnected(arg0: ComponentName) {
-            Log.i("BLUE", "[onServiceDisconnected] Se desconecta ")
-        }
-    }
-
-    private val mBluetoothListener: IBluetoothSDKListener = object : IBluetoothSDKListener {
-        override fun onDiscoveryStarted() {
-            Log.i("BLUE", "ACT onDiscoveryStarted")
-        }
-
-        override fun onDiscoveryStopped() {
-            Log.i("BLUE", "ACT onDiscoveryStopped")
-        }
-
-        override fun onDeviceDiscovered(device: BluetoothDevice?) {
-            Log.i("BLUE", "ACT onDeviceDiscovered")
-        }
-
-        override fun onDeviceConnected(device: BluetoothDevice?) {
-            // Do stuff when is connected
-            Log.i("${this.javaClass.name}", "ACT onDeviceConnected")
-        }
-
-        override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?){
-            Log.i("command", "AddUpdateTabletMixerActivity onCommandReceived ${message?.let {
-                String(
-                    it
-                )
-            }}")
-        }
-
-        override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
-            Log.i("message", "AddUpdateTabletMixerActivity onMessageReceived $message")
-        }
-
-        override fun onMessageSent(device: BluetoothDevice?,message: String?) {
-            Log.i("${this.javaClass.name}", "onMessageSent $message")
-        }
-
-        override fun onCommandSent(device: BluetoothDevice?,command: ByteArray?) {
-            Log.i("${this.javaClass.name}", "onCommandSent ${command?.let { String(it) }}")
-        }
-
-        override fun onError(message: String?) {
-            Log.i("${this.javaClass.name}", "ACT onError")
-        }
-
-        override fun onDeviceDisconnected() {
-            Log.i("${this.javaClass.name}", "ACT onDeviceDisconnected")
-        }
-
-        override fun onBondedDevices(device: List<BluetoothDevice>?) {
-            Log.i("${this.javaClass.name}", "ACT onBondedDevices")
-        }
-
-    }
 
     fun toggleKeyboard() {
         if(isKeyBoardShowing()){
@@ -317,7 +219,15 @@ class AddUpdateTabletMixerActivity : AppCompatActivity() {
     }
 
     fun isKeyBoardShowing(): Boolean {
-        val view: View = binding.root
-        return view.rootWindowInsets.isVisible(WindowInsetsCompat.Type.ime())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val view: View = binding.root
+            return view.rootWindowInsets.isVisible(WindowInsetsCompat.Type.ime())
+        }else{
+            val view: View = binding.root
+            val decorView = view.rootView
+            val rootViewHeight = decorView.height
+            val insets = decorView.rootWindowInsets
+            return rootViewHeight > insets.stableInsetBottom + insets.stableInsetTop
+        }
     }
 }

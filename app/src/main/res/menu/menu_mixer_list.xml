@@ -18,7 +18,7 @@
 <!--    <item-->
 <!--        android:id="@+id/action_add_mixer"-->
 <!--        android:icon="@drawable/ic_add"-->
-<!--        android:title="@string/add_mixer"-->
+<!--        android:title="@string/agregar_mixer"-->
 <!--        android:orderInCategory="101"-->
 <!--        app:showAsAction="always"-->
 <!--        />-->

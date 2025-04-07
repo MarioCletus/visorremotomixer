@@ -38,7 +38,7 @@
                 android:layout_height="@dimen/_8sdp"
                 android:src="@drawable/ic_cow"
                 android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginStart="@dimen/_5sdp"
                 app:tint="@color/gray_primary">
 
             </ImageView>
@@ -117,7 +117,7 @@
             android:inputType="number"
             android:maxLength="50"
             android:imeOptions="actionDone"
-            android:hint="@string/ph_weight" />
+            android:hint="@string/peso" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

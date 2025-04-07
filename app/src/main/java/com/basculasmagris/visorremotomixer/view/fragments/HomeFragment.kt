@@ -365,7 +365,7 @@ class HomeFragment : Fragment() {
                 Constants.CMD_NTA ->{
                     Log.i("showCommand","CMD_NTA")
                     if(isAdded){
-                        (requireActivity() as MainActivity).alertDialog(getString(R.string.atencion),getString(R.string.no_disponible))
+                        (requireActivity() as MainActivity).alertDialog(getString(R.string.warning),getString(R.string.no_disponible))
                     }
                 }
 
@@ -464,7 +464,7 @@ class HomeFragment : Fragment() {
             (requireActivity() as MainActivity).showCustomProgressDialog()
             (requireActivity() as MainActivity).connectDevice(deviceBluetooth)
         } else {
-            Toast.makeText(requireActivity(), "No se pudo conectar", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity(), getString(R.string.no_se_pudo_conectar), Toast.LENGTH_SHORT).show()
         }
     }
 

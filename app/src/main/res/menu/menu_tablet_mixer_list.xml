@@ -5,7 +5,7 @@
     <item
         android:id="@+id/menu_selected_remote_tablet"
         android:icon="@drawable/ic_tablet_disconnected_48px"
-        android:title="    Tablet Remota"
+        android:title="@string/tablet_remota_menu"
         app:showAsAction="always|withText"
         android:orderInCategory="101"
         />
@@ -14,15 +14,15 @@
         android:title="@string/search_title"
         android:icon="@drawable/ic_search"
         app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:orderInCategory="102"/>
 
 
     <item
         android:id="@+id/action_add_tablet_mixer"
         android:icon="@drawable/ic_add"
-        android:title="@string/add_mixer"
-        app:showAsAction="always"
+        android:title="@string/agregar_mixer"
+        app:showAsAction="ifRoom"
         android:orderInCategory="103"
         />
     <item

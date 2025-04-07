@@ -128,8 +128,8 @@ data class ProductDetail (
     var rest: Long
 ) : Parcelable
 
-//    private val columnsLoad = arrayOf("Ronda", "Planificado (Kg)", "Real (Kg)", "Dieta", "Producto", "Esperado (Kg)","Real (Kg)")
-//    private val columnsDownload = arrayOf("Ronda", "Planificado (Kg)", "Real (Kg)", "Dieta", "Corral", "Esperado (Kg)", "Real (Kg)")
+//    private val columnsLoad = arrayOf("Ronda", "Planificado (kg)", "Real (kg)", "Dieta", "Producto", "Esperado (kg)","Real (kg)")
+//    private val columnsDownload = arrayOf("Ronda", "Planificado (kg)", "Real (kg)", "Dieta", "Corral", "Esperado (kg)", "Real (kg)")
 @Parcelize
 data class LoadDownloadReport (
     val userId: Long,

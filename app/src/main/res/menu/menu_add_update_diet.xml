@@ -5,13 +5,13 @@
         android:id="@+id/action_hide_keyboard"
         android:icon="@drawable/ic_keyboard_48px"
         android:title =""
-        app:showAsAction="always|withText"
+        app:showAsAction="ifRoom|withText"
         />
 
     <item
         android:id="@+id/action_save_diet"
         android:icon="@drawable/ic_check"
-        android:title="@string/add_diet"
+        android:title="@string/agregar_dieta"
         android:orderInCategory="101"
         app:showAsAction="always"
         />

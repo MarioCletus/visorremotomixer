@@ -222,7 +222,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
 
     fun deleteTabletMixer(tabletMixer: TabletMixer){
         val builder = AlertDialog.Builder(requireActivity())
-        builder.setTitle(resources.getString(R.string.title_delete_mixer))
+        builder.setTitle(resources.getString(R.string.eliminar))
         builder.setMessage(resources.getString(R.string.msg_delete_mixer_dialog, tabletMixer.name))
         builder.setIcon(android.R.drawable.ic_dialog_alert)
         builder.setPositiveButton(resources.getString(R.string.lbl_yes)){ dialogInterface, _ ->
@@ -326,7 +326,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
                 Constants.CMD_NTA ->{
                     Log.i("showCommand","CMD_NTA")
                     if(isAdded){
-                        (requireActivity() as MainActivity).alertDialog(getString(R.string.atencion),getString(R.string.no_disponible))
+                        (requireActivity() as MainActivity).alertDialog(getString(R.string.warning),getString(R.string.no_disponible))
                     }
                 }
                 Constants.CMD_WEIGHT->{

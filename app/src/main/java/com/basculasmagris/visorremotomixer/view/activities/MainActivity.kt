@@ -165,27 +165,27 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_logout -> {
                     outPut = false
                     AlertDialog.Builder(this)
-                        .setMessage("¿Desea cerrar la sesión?")
-                        .setPositiveButton("Sí")
+                        .setMessage(getString(R.string.desea_cerrar_aplicacion))
+                        .setPositiveButton(getString(R.string.si))
                         { _, _ ->
                             Helper.logOut(this)
                             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
                             finish()
                         }
-                        .setNegativeButton("No") { _, _ ->
+                        .setNegativeButton(getString(R.string.no)) { _, _ ->
                         }
                         .show()
                     drawerLayout.close()
                 }
                 R.id.nav_exit ->{
                     AlertDialog.Builder(this)
-                        .setMessage("¿Desea cerrar la aplicación?")
-                        .setPositiveButton("Sí")
+                        .setMessage(getString(R.string.desea_cerrar_aplicacion))
+                        .setPositiveButton(getString(R.string.si))
                         { _, _ ->
                             Helper.logOut(this)
                             finish()
                         }
-                        .setNegativeButton("No") { _, _ ->
+                        .setNegativeButton(getString(R.string.no)) { _, _ ->
                         }
                         .show()
                     drawerLayout.close()
@@ -311,7 +311,7 @@ class MainActivity : AppCompatActivity() {
         // set message of alert dialog
         dialogBuilder.setMessage(message)
             .setCancelable(false)
-            .setPositiveButton("Aceptar") { dialog, _ ->
+            .setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
                 dialog.dismiss()
             }
         val alert = dialogBuilder.create()
@@ -331,8 +331,8 @@ class MainActivity : AppCompatActivity() {
                 return
             }
         }
-        val mTitle = title ?: "Alerta"
-        val mMessage = message ?: "No se pudo establecer la comunicación con el Mixer"
+        val mTitle = title ?: getString(R.string.warning)
+        val mMessage = message ?: getString(R.string.no_se_pudo_establecer_comunicacion_con,getString(R.string.mixer),"")
         val mLayoutId = layoutId ?: R.layout.dialog_custom_progress
 
         mProgressDialog = Dialog(this)
@@ -471,10 +471,10 @@ class MainActivity : AppCompatActivity() {
 
         countRecursive++
 
-        bluetoothDevice?.let { deviceBluetooth ->
-            Log.d("connection", "bluetoothDevice ${deviceBluetooth.name}")
+        bluetoothDevice.let { deviceBluetooth ->
+            Log.d("connection", "bluetoothDevice ${getBluetoothName(deviceBluetooth)}")
             if (mService?.LocalBinder()?.isConnected() == false) {
-                Log.d("connection", "connectKnowDeviceWithTransfer ${deviceBluetooth.name}")
+                Log.d("connection", "connectKnowDeviceWithTransfer ${getBluetoothName(bluetoothDevice)}")
                 mService?.LocalBinder()?.connectKnowDeviceWithTransfer(bluetoothDevice)
             }
         }
@@ -718,7 +718,7 @@ class MainActivity : AppCompatActivity() {
             productosStr[i] = producto.name + if(producto.description.isEmpty())"" else " - ${producto.description}"
         }
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Producto")
+        builder.setTitle(getString(R.string.productos))
         builder.setItems(productosStr) { dialog, which ->
             val productSelected = productsToSelect[which]
             val minProduct = MinProduct(
@@ -732,7 +732,7 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
             dialogProduct = null
         }
-        builder.setNegativeButton("Cancelar"){dialog,_->
+        builder.setNegativeButton(getString(R.string.cancelar)){dialog,_->
             dialog.dismiss()
             dialogProduct = null
         }
@@ -756,7 +756,7 @@ class MainActivity : AppCompatActivity() {
             establishments[i] = establishment
         }
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Establecimientos")
+        builder.setTitle(getString(R.string.establecimiento))
         builder.setItems(establishmentStr) { dialog, which ->
             val establishmentSelected = establishmentsToSelect[which]
             sendSelectEstablishmentToMixer(establishmentSelected)
@@ -784,7 +784,7 @@ class MainActivity : AppCompatActivity() {
             corralStr[i] = corral.name +if(corral.description.isEmpty()) "" else " - ${corral.description}"
         }
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Corrales")
+        builder.setTitle(getString(R.string.corrales))
         builder.setItems(corralStr) { dialog, which ->
             val corralSelected = corralsToSelect[which]
             sendSelectCorralToMixer(corralSelected)
@@ -814,8 +814,8 @@ class MainActivity : AppCompatActivity() {
 
     fun dlgTareToLoad(weight:Long) {
         val builder = CustomAlertDialogBuilder(this)
-        builder.setTitle(getString(R.string.atencion))
-        builder.setMessage("Se registra un peso de $weight en el mixer.\nDesea añadirlos a la mezcla y continuar?" )
+        builder.setTitle(getString(R.string.warning))
+        builder.setMessage(getString(R.string.se_registra_un_peso_de,weight.toString()) )
         builder.setNeutralButton(getString(R.string.cancelar)){ dialog, _->
             sendCancelToMixer()
             dialog.dismiss()
