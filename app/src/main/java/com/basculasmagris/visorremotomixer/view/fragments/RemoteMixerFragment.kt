@@ -1086,6 +1086,25 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             mBinding.tvCurrentProductWeightPending.setTextSize(TypedValue.COMPLEX_UNIT_SP, 62f)
             mBinding.tvCurrentProductWeightPending.text = "${getString(R.string.desconectado)}    ${sign}${weight}kg"
         }
+        Log.i("lcation","messageIn ${String(message)}")
+        if(message.size > 25 && String(message,25,1) == "#" && String(message,27,2).toIntOrNull() != null){
+            Log.i(TAG,"Ubicacion de corral")
+            val locationLarge = String(message,27,2).toIntOrNull()
+            locationLarge?.let {
+                val locationStr = String(message, 29, locationLarge)
+                mBinding.tvLocation.visibility = View.VISIBLE
+                mBinding.tvLocation.text = locationStr
+            }
+            val corralColor = String(message,26,1)
+            when (corralColor){
+                "0"-> mBinding.tvLocation.setBackgroundResource(R.drawable.border_location_none)
+                "1"-> mBinding.tvLocation.setBackgroundResource(R.drawable.border_location_ok)
+                "2"-> mBinding.tvLocation.setBackgroundResource(R.drawable.border_location_bad)
+                else -> mBinding.tvLocation.setBackgroundResource(R.drawable.border_location_none)
+            }
+        }else{
+            mBinding.tvLocation.visibility = View.INVISIBLE
+        }
         mBinding.tvRoundCustomWeight.text = "${sign}${weight}kg"
         mBinding.pbCurrentProduct.progress = progress
         dialogResto?.setMessage("$signRest${rest}kg")

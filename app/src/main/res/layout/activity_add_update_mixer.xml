@@ -140,7 +140,7 @@ tools:context=".view.activities.AddUpdateMixerActivity">
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:maxLength="18"
-                    android:hint="@string/ph_tara"
+                    android:hint="@string/tara"
                     android:textSize="14sp"
                     android:textColor="#595959"/>
             </com.google.android.material.textfield.TextInputLayout>

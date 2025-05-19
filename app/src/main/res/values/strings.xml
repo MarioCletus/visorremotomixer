@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mass70</string>
+    <string name="app_name">Mass70VR</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_desc">Navigation header</string>
@@ -10,13 +10,6 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="tv_no_additional_data">No hay información complementaria</string>
-
-
-
-
-
-
-    <!-- TITLES -->
 
     <!-- Usuario -->
     <string name="usuario">Usuario</string>
@@ -51,7 +44,6 @@
     <string name="msg_delete_mixer_dialog">¿Está seguro que quiere borrar el mixer %1$s?</string>
     <string name="tv_no_mixer_list">No hay mixers cargados</string>
     <string name="ph_mac">Mac address</string>
-    <string name="ph_tara">Tara</string>
     <string name="ph_bt_box">BT Box</string>
     <string name="ph_calibration">Calibración</string>
     <string name="screen_mixer_config">Configuración del mixer</string>
@@ -532,5 +524,7 @@
 
     <string name="la_tablet_de_mixer">la tablet de mixer</string>
     <string name="tablet_remota_menu">"    Tablet Remota"</string>
+    <string name="string_iniciar_picado">Iniciar picado</string>
+    <string name="corral_detectado">Corral detectado</string>
 
 </resources>

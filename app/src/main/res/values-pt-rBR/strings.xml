@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mass70</string>
+    <string name="app_name">Mass70VR</string>
     <string name="navigation_drawer_open">Abrir menu de navegação</string>
     <string name="navigation_drawer_close">Fechar menu de navegação</string>
     <string name="nav_header_desc">Cabeçalho de navegação</string>
@@ -46,7 +46,6 @@
     <string name="msg_delete_mixer_dialog">Tem certeza de que deseja excluir o misturador %1$s?</string>
     <string name="tv_no_mixer_list">Nenhum misturador cadastrado</string>
     <string name="ph_mac">Endereço MAC</string>
-    <string name="ph_tara">Tara</string>
     <string name="ph_bt_box">Caixa BT</string>
     <string name="ph_calibration">Calibração</string>
     <string name="screen_mixer_config">Configuração do misturador</string>
@@ -332,7 +331,7 @@
     <string name="show_archived_rounds">Mostrar rodadas arquivadas</string>
     <string name="hide_workorders">Ocultar ordens de serviço</string>
     <string name="mezcla">Mistura</string>
-    <string name="debe_conectar_un_mixer">Para começar,\nvocê deve conectar um mixer.</string>
+    <string name="debe_conectar_un_mixer">Para começar,\nvocê deve conectar um misturador.</string>
     <string name="no_discount">Não descontar</string>
     <string name="discount">Descontar</string>
     <string name="corrales_disponibles">Currais disponíveis.</string>
@@ -462,21 +461,21 @@
     <string name="title_activity_add_update_tablet_mixer">AddUpdateTabletMixerActivity</string>
     <string name="screen_tablet_mixer_detail">Detalhe do Visor Remoto</string>
     <string name="screen_tablet_mixer_new">Novo Visor Remoto</string>
-    <string name="screen_tablet_mixer_config">Configuração do mixer</string>
-    <string name="mixer_remoto">Mixer Remoto</string>
-    <string name="declarar_mixer">Declarar Mixer</string>
+    <string name="screen_tablet_mixer_config">Configuração do misturador</string>
+    <string name="mixer_remoto">Misturador Remoto</string>
+    <string name="declarar_mixer">Declarar Misturador</string>
     <string name="conectando_la_tablet">Conectando com a Tablet</string>
     <string name="iniciando_ronda">Iniciando rodada</string>
     <string name="ver_ronda">Ver rodada</string>
     <string name="free_round">Rodada livre</string>
-    <string name="sincronice_con_mixer">Sincronize as rodadas com o mixer</string>
+    <string name="sincronice_con_mixer">Sincronize as rodadas com o misturador</string>
     <string name="en_ejecucion">Executando</string>
     <string name="quiere_pasar_a_descarga">Deseja passar para descarga?</string>
     <string name="quiere_cerrar_ronda">Deseja encerrar a rodada?</string>
     <string name="agregar_establecimiento">Adicionar estabelecimento</string>
     <string name="tv_no_tablet_mixer_list">Nenhum visor remoto carregado</string>
     <string name="finalizar">Finalizar</string>
-    <string name="no_disponible">O mixer não pode realizar esta ação no momento.</string>
+    <string name="no_disponible">O misturador não pode realizar esta ação no momento.</string>
     <string name="proximo_producto">Próximo produto</string>
     <string name="descargar_en">Descarregar em</string>
     <string name="cargar">Carregar</string>
@@ -492,10 +491,10 @@
     <string name="ecienda_bluetooth">Ligue o Bluetooth</string>
     <string name="seguro_pasar_descarga">Tem certeza de que deseja passar para descarga?</string>
     <string name="vincular">Vincular</string>
-    <string name="no_hay_mixer_vinculado">Não há nenhum mixer vinculado no dispositivo</string>
+    <string name="no_hay_mixer_vinculado">Não há nenhum misturador vinculado no dispositivo</string>
     <string name="seguro_quiere_finalizar_ronda">Tem certeza de que deseja finalizar a rodada?</string>
     <string name="dispositivos">Dispositivos</string>
-    <string name="se_registra_un_peso_de">Foi registrado um peso de %skg no mixer.\nDeseja descontá-lo da mistura a preparar?</string>
+    <string name="se_registra_un_peso_de">Foi registrado um peso de %skg no misturador.\nDeseja descontá-lo da mistura a preparar?</string>
     <string name="spi_solicita_permiso_camara">O SPI Mixer solicita permissão para acessar a câmera. Você pode ativá-la acessando as configurações</string>
     <string name="desea_cerrar_sesion">Deseja encerrar a sessão?</string>
     <string name="desea_cerrar_aplicacion">Deseja fechar o aplicativo?</string>
@@ -504,7 +503,7 @@
     <string name="la_dieta_debe_tener_un_producto">A dieta deve ter pelo menos um produto</string>
     <string name="dispositivos_disponibles">Dispositivos disponíveis</string>
 
-    <string name="la_tablet_de_mixer">o tablet do mixer</string>
+    <string name="la_tablet_de_mixer">o tablet do misturador</string>
     <string name="tablet_remota_menu">"    Tablet Remota"</string>
 
 </resources>

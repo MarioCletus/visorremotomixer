@@ -276,7 +276,7 @@ class TabletMixerListFragment : BottomSheetDialogFragment() {
     private val mBluetoothListener: IBluetoothSDKListener = object : IBluetoothSDKListener {
         override fun onDiscoveryStarted() {
             Log.i("BLUE", "[MixerListFragment] onDiscoveryStarted")
-            customItemsDialog("Dispositivos disponibles", ArrayList(), Constants.DEVICE_REF)
+            customItemsDialog(getString(R.string.dispositivos_disponibles), ArrayList(), Constants.DEVICE_REF)
         }
 
         override fun onDiscoveryStopped() {

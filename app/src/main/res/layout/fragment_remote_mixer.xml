@@ -26,9 +26,9 @@
                 android:id="@+id/tv_title_product"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CARGAR"
+                android:text="@string/cargar"
                 android:textColor="@color/black"
-                android:textSize="36dp"
+                android:textSize="36sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="@id/pb_current_product" />
 
@@ -40,7 +40,7 @@
                 android:gravity="end"
                 android:text=""
                 android:textColor="@color/color_deep_green"
-                android:textSize="36dp"
+                android:textSize="36sp"
                 app:layout_constraintTop_toTopOf="@id/tv_title_product"
                 app:layout_constraintStart_toEndOf="@id/tv_title_product" />
 
@@ -72,17 +72,34 @@
                 app:layout_constraintBottom_toBottomOf="@id/pb_current_product"/>
 
             <TextView
+                android:id="@+id/tv_location"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/border_location_none"
+                android:textColor="@color/black"
+                android:text="@string/corral_detectado"
+                android:paddingStart="15dp"
+                android:textSize="20sp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf = "@id/pb_current_product"
+                />
+
+
+
+            <TextView
                 android:id="@+id/tv_rest"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="@id/pb_current_product"
-                app:layout_constraintTop_toBottomOf = "@id/pb_current_product"
                 android:layout_marginTop="5dp"
                 android:paddingStart="15dp"
                 android:text=""
                 android:background="@drawable/border_rest"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@id/pb_current_product"
+                app:layout_constraintTop_toBottomOf = "@id/pb_current_product" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -108,7 +125,7 @@
                 android:layout_height="45dp"
                 android:background="@drawable/btn_round_rounded_green"
                 android:gravity="center"
-                android:text="Tara"
+                android:text="@string/tara"
                 android:textSize="18sp"
                 app:backgroundTint="@null"
                 android:visibility="visible"
@@ -140,9 +157,9 @@
                 android:layout_height="45dp"
                 android:background="@drawable/btn_round_rounded_green"
                 android:gravity="center"
-                android:text="Pausar"
-                android:textOff="Pausar"
-                android:textOn="Continuar"
+                android:text="@string/pausar"
+                android:textOff="@string/pausar"
+                android:textOn="@string/continuar"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 app:backgroundTint="@null"
@@ -159,7 +176,7 @@
                 android:layout_height="45dp"
                 android:background="@drawable/btn_round_rounded_green"
                 android:gravity="center"
-                android:text="Salto"
+                android:text="@string/salto"
                 android:textSize="18sp"
                 app:backgroundTint="@null"
                 android:visibility="visible"
@@ -168,20 +185,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-<!--            <Button-->
-<!--                android:id="@+id/btn_rest"-->
-<!--                android:layout_width="150dp"-->
-<!--                android:layout_height="45dp"-->
-<!--                android:background="@drawable/btn_round_rounded_green"-->
-<!--                android:gravity="center"-->
-<!--                android:text="Resto"-->
-<!--                android:textSize="18sp"-->
-<!--                app:backgroundTint="@null"-->
-<!--                android:visibility="invisible"-->
-<!--                android:layout_marginBottom="20dp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"/>-->
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
@@ -225,7 +228,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/btn_round_rounded_green"
             app:backgroundTint="@null"
-            android:text="Iniciar Picado"
+            android:text="@string/string_iniciar_picado"
             android:textSize="20sp"
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="40dp" />
@@ -303,7 +306,7 @@
                             android:id="@+id/tv_round_custom_percentage_title"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Preparado al"
+                            android:text="@string/preparado_al"
                             android:textSize="18sp"
                             android:gravity="center"
                             android:textColor="@color/color_deep_green"
@@ -360,7 +363,7 @@
 
                         <TextView
                             android:id="@+id/tv_round_custom_weight_title"
-                            android:text="Total Mezcla"
+                            android:text="@string/total_mezcla"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textSize="18sp"
@@ -443,7 +446,7 @@
                     android:id="@+id/tv_round_target_weight_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TOTAL EN MIXER:"
+                    android:text="@string/total_en_mixer"
                     android:textColor="@color/color_medium_green"
                     android:textSize="27sp"
                     app:layout_constraintBottom_toBottomOf="parent"

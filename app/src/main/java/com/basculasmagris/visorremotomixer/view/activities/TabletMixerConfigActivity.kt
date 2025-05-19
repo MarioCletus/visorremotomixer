@@ -408,7 +408,7 @@ class TabletMixerConfigActivity : AppCompatActivity(){
     private val mBluetoothListener: IBluetoothSDKListener = object : IBluetoothSDKListener {
         override fun onDiscoveryStarted() {
             Log.i(TAG, "[TabletMixerListFragment] onDiscoveryStarted")
-            customItemsDialog("Dispositivos disponibles", ArrayList(), Constants.DEVICE_REF)        }
+            customItemsDialog(getString(R.string.dispositivos_disponibles), ArrayList(), Constants.DEVICE_REF)        }
 
         override fun onDiscoveryStopped() {
             Log.i(TAG, "[TabletMixerConfigActivity] onDiscoveryStopped")
