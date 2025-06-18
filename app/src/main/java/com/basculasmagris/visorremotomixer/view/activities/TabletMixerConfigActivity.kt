@@ -933,10 +933,10 @@ class TabletMixerConfigActivity : AppCompatActivity(){
                         Manifest.permission.BLUETOOTH_CONNECT
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    name = it.name
+                    name = it.name?:""
                 }
             }else{
-                name = it.name
+                name = it.name?:""
             }
         }
         return name

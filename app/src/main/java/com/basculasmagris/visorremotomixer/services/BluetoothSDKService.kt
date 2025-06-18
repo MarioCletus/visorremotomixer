@@ -448,21 +448,22 @@ class BluetoothSDKService : Service() {
 
     fun getBluetoothName(btDevice: BluetoothDevice?): String {
         var name = ""
-        btDevice?.let{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+        btDevice?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (ActivityCompat.checkSelfPermission(
                         applicationContext,
                         Manifest.permission.BLUETOOTH_CONNECT
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    name = it.name
+                    name = it.name ?: ""
                 }
-            }else{
-                name = it.name
+            } else {
+                name = it.name ?: ""
             }
         }
         return name
     }
+
 
     fun getBluetoothAddress(btDevice: BluetoothDevice?): String {
         var address = ""
