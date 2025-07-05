@@ -17,6 +17,14 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/bluetooth_remote_status"
+        android:icon="@drawable/ic_bluetooth_disconnected_24px"
+        android:title="@string/bluetooth"
+        app:showAsAction="ifRoom"
+        android:visible="true"
+        />
+
+    <item
         android:id="@+id/menu_selected_remote_tablet"
         android:icon="@drawable/ic_tablet_disconnected_48px"
         android:title="    Mixer"

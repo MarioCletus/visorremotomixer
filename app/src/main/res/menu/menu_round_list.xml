@@ -4,31 +4,41 @@
     <item android:id="@+id/bluetooth_balance"
         android:title=""
         android:icon="@drawable/ic_balance_disconnected_48px"
+        android:orderInCategory="100"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/bluetooth_remote_status"
+        android:icon="@drawable/ic_bluetooth_disconnected_24px"
+        android:title="@string/bluetooth"
+        app:showAsAction="always"
+        android:orderInCategory="102"
+        android:visible="true"
+        />
     <item
         android:id="@+id/menu_selected_remote_tablet"
         android:icon="@drawable/ic_tablet_disconnected_48px"
         android:title="    Mixer"
-        app:showAsAction="ifRoom|withText"
+        app:showAsAction="always|withText"
+        android:orderInCategory="103"
         />
     <item
         android:id="@+id/menu_refresh_data"
         android:icon="@drawable/cloud_sync_48px"
         android:title=""
-        app:showAsAction="ifRoom"
-        android:orderInCategory="101"
+        app:showAsAction="always"
+        android:orderInCategory="104"
         />
     <item android:id="@+id/search_round"
         android:title="@string/search_title"
         android:icon="@drawable/ic_search"
         app:actionViewClass="android.widget.SearchView"
-        android:orderInCategory="102"
+        android:orderInCategory="105"
         app:showAsAction="always" />
     <item
         android:id="@+id/step_immage"
         android:title="                                          "
         app:showAsAction="always"
-        android:orderInCategory="105"
+        android:orderInCategory="106"
         />
 </menu>

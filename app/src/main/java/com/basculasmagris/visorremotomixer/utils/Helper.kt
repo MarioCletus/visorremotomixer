@@ -1,6 +1,8 @@
 package com.basculasmagris.visorremotomixer.utils
 
 import android.app.AlertDialog
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -359,6 +361,20 @@ class Helper {
             }
             Log.i(TAG_DEBUG, "******************************")
         }
+
+        fun getBluetoothDeviceFromMac(macAddress: String): BluetoothDevice? {
+            val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+            if (bluetoothAdapter == null) {
+                return null
+            }
+
+            return try {
+                bluetoothAdapter.getRemoteDevice(macAddress)
+            } catch (e: IllegalArgumentException) {
+                null
+            }
+        }
+
     }
 
     fun setBluetoothService(service: BluetoothSDKService) {

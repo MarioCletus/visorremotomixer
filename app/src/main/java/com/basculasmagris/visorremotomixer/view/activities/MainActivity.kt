@@ -580,6 +580,27 @@ class MainActivity : AppCompatActivity() {
         preferences[longPreferencesKey("IDTABLET")]
     }
 
+
+
+    fun changeTabletMixer(tabletMixer: TabletMixer, bluetoothDevice: BluetoothDevice?){
+        reconnectDisable()
+        this.bluetoothDevice?.let {deviceBluetooth->
+            if(mService?.LocalBinder()?.isConnected() == true){
+                Log.d(TAG,"Disconnect bluetoothdevice $deviceBluetooth")
+                mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()//Reconexión por cambio de mixer
+                changeStatusDisconnected()
+            }
+        }
+        selectedTabletMixerInActivity = tabletMixer
+        this.bluetoothDevice = bluetoothDevice
+        Handler(Looper.getMainLooper()).postDelayed({
+            reconnectEnable()
+            Log.i(TAG,"changeMixer connectDevice")
+            connectDevice(bluetoothDevice)
+        }, Constants.CHANGE_MIXER_TIME)
+
+    }
+
     fun changeActionBarTitle(title: String) {
         supportActionBar?.let {
             it.title = title

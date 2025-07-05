@@ -1,6 +1,7 @@
 package com.basculasmagris.visorremotomixer.view.fragments
 
 import android.Manifest
+import android.app.Dialog
 import android.bluetooth.BluetoothDevice
 import android.content.pm.PackageManager
 import android.os.Build
@@ -20,19 +21,33 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.basculasmagris.visorremotomixer.R
+import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
+import com.basculasmagris.visorremotomixer.databinding.DialogCustomListBinding
 import com.basculasmagris.visorremotomixer.databinding.FragmentRoundListBinding
 import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
+import com.basculasmagris.visorremotomixer.utils.CustomAlertDialogBuilder
+import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
+import com.basculasmagris.visorremotomixer.view.activities.MergedLocalData
+import com.basculasmagris.visorremotomixer.view.activities.TabletMixerData
+import com.basculasmagris.visorremotomixer.view.adapter.CustomListItem
+import com.basculasmagris.visorremotomixer.view.adapter.CustomListItemAdapterFragment
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
+import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModelFactory
 import com.google.gson.Gson
 
 
@@ -54,6 +69,16 @@ class RoundListFragment : Fragment() {
     private var selectedTabletMixerInFragment: TabletMixer? = null
     private var tabletMixerBluetoothDevice : BluetoothDevice? = null
 
+
+    private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
+        TabletMixerViewModelFactory((requireActivity().application as SpiMixerVRApplication).tabletMixerRepository)
+    }
+    private var liveData: MediatorLiveData<MergedLocalData>? = null
+    private var mLocalTabletMixers: MutableList<TabletMixer>? = null
+    private val mLocalTabletMixersCustomList: java.util.ArrayList<CustomListItem> =
+        java.util.ArrayList<CustomListItem>()
+    private lateinit var mCustomListDialog: Dialog
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,6 +91,7 @@ class RoundListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.i(TAG,"onViewCreated")
+        (requireActivity() as MainActivity).getSavedTabletMixer()
         getLocalData()
 
         // Navigation Menu
@@ -91,6 +117,7 @@ class RoundListFragment : Fragment() {
                         return true
                     }
                 })
+                menu.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletMixerInFragment?.name
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
@@ -100,7 +127,8 @@ class RoundListFragment : Fragment() {
                         refreshData()
                         return true
                     }
-                    R.id.menu_selected_remote_tablet -> {
+
+                    R.id.bluetooth_remote_status -> {
                         val deviceBluetooth = (requireActivity() as MainActivity).knowDevices?.firstOrNull { bd->
                             bd.address == selectedTabletMixerInFragment?.mac
                         }
@@ -127,6 +155,17 @@ class RoundListFragment : Fragment() {
                         return true
                     }
 
+                    R.id.menu_selected_remote_tablet->{
+                        if(Helper.getCurrentUser(requireActivity()).codeRole == Constants.USER_NUTRICIONIST){
+                            return false
+                        }
+                        if (mLocalTabletMixersCustomList.size > 0){
+                            customItemsLDialog(getString(R.string.mixer), mLocalTabletMixersCustomList,Constants.MIXER_REF)
+                        } else {
+                            alertMixer(getString(R.string.no_hay_mixer_vinculado))
+                        }
+                        return true
+                    }
 
                     R.id.bluetooth_balance -> {
                         (requireActivity() as MainActivity).sendReconnectBalance()
@@ -157,12 +196,58 @@ class RoundListFragment : Fragment() {
     }
 
 
+    private fun fetchLocalData(): MediatorLiveData<MergedLocalData> {
+        val liveDataMerger = MediatorLiveData<MergedLocalData>()
+
+        liveDataMerger.addSource(mTabletMixerViewModel.allTabletMixerList) {
+            if (it != null) {
+                liveDataMerger.value = TabletMixerData(it)
+            }
+        }
+        return liveDataMerger
+    }
+
+
     private fun getLocalData(){
-        // Sync local data
         Log.i(TAG,"getLocalData")
         getLocalRound()
         refreshData()
+        Log.i(TAG, "getLocalData ${liveData?.value}")
+        liveData = fetchLocalData()
+        liveData?.observe(requireActivity(),  object : Observer<MergedLocalData> {
+            override fun onChanged(it: MergedLocalData?) {
+                Log.v(TAG, "it: ${it.toString()}")
+                when (it) {
+                    is TabletMixerData -> {
+                        mLocalTabletMixers = it.tabletMixers
+                        mLocalTabletMixers?.let {
+                            Log.i(TAG,"mLocalTabletMixers: "+ it.size + "  "+ it)
+                        }
+                        mLocalTabletMixers?.forEach {
+                            val alreadyExist = mLocalTabletMixersCustomList.firstOrNull { customItem ->
+                                customItem.id == it.id
+                            }
+
+                            if (alreadyExist == null){
+                                val customList = CustomListItem(it.id, it.remoteId, it.name)
+                                mLocalTabletMixersCustomList.add(customList)
+                            }
+                        }
+                    }
+                    else -> {}
+                }
+
+                if (mLocalTabletMixers != null) {
+                    Log.i(TAG,"liveData.removeObserver")
+//                    (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
+//                    dialog?.dismiss()
+                    liveData?.removeObserver(this)
+                    liveData = null
+                }
+            }
+        })
     }
+
 
 
     private fun getLocalRound(){
@@ -220,6 +305,8 @@ class RoundListFragment : Fragment() {
                 name = device?.name.toString()
                 address = device?.address.toString()
             }
+            if(isAdded)
+                (requireActivity() as MainActivity).sendRequestListOfRounds()
             Log.i(TAG, "onDeviceConnected $name $address")
         }
 
@@ -476,6 +563,7 @@ class RoundListFragment : Fragment() {
                 "setTabletMixer $tabletMixer  \nmService ${(requireActivity() as MainActivity).mService}"
             )
             (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
+            menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletMixerInFragment?.name
         }
     }
 
@@ -512,4 +600,85 @@ class RoundListFragment : Fragment() {
         fragmentRunning = false
         super.onPause()
     }
+
+
+
+
+
+    private fun alertMixer(msg: String) {
+        if(!isAdded){
+            return
+        }
+        val builder = CustomAlertDialogBuilder(requireActivity())
+        builder.setTitle(getString(R.string.warning))
+        builder.setMessage(msg)
+        builder.setPositiveButton(getString(R.string.vincular)) { dialog, _ ->
+            val navController = findNavController()
+            val currentDest = navController.currentDestination?.id
+            /*
+            // Opcional: solo navegar si no estamos ya en nav_mixer
+                        if (currentDest != R.id.nav_mixer) {
+                            val options = NavOptions.Builder()
+                                .setPopUpTo(R.id.nav_round, inclusive = true)
+                                .build()
+                            navController.navigate(R.id.nav_mixer, null, options)
+                        }
+            */
+
+            dialog.dismiss()
+        }
+        builder.setNegativeButton(getString(R.string.cerrar)) { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.show()
+    }
+
+
+    private fun customItemsLDialog(title: String, itemsList: List<CustomListItem>, selection: String){
+        if(!isAdded){
+            return
+        }
+        mCustomListDialog = Dialog(requireActivity(),R.style.CustomDialogTheme)
+        val binding: DialogCustomListBinding = DialogCustomListBinding.inflate(layoutInflater)
+        mCustomListDialog.setContentView(binding.root)
+        binding.tvTitle.text = title
+        binding.rvList.layoutManager = LinearLayoutManager(requireActivity())
+        val adapter = CustomListItemAdapterFragment(this, itemsList, selection)
+        binding.rvList.adapter = adapter
+        mCustomListDialog.show()
+    }
+
+    fun selectedListItem(item: CustomListItem, selection: String){
+        if(!isAdded){
+            return
+        }
+        when(selection){
+            Constants.MIXER_REF->{
+                (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()//Se seleccionó un nuevo mixer.
+                mCustomListDialog.dismiss()
+
+                val localTabletMixer = mLocalTabletMixers?.firstOrNull { tabletMixer ->
+                    tabletMixer.id == item.id
+                } ?: return
+
+                val changeTabletMixer = menu?.findItem(R.id.menu_selected_remote_tablet)
+                changeTabletMixer?.title = "   "+ localTabletMixer.name
+                localTabletMixer.let {
+                    Log.i(TAG, "1Se seleccionó mixer $localTabletMixer")
+                    (requireActivity() as MainActivity).saveTabletMixer(localTabletMixer)
+                }
+
+                Log.i(TAG, "Local mixer selected: ${localTabletMixer.name} | ${localTabletMixer.mac}")
+                val localKnowDevice = Helper.getBluetoothDeviceFromMac(localTabletMixer.mac)
+                Log.i(TAG, "localKnowDevice: ${(requireActivity() as MainActivity).getBluetoothName(localKnowDevice)} | ${localKnowDevice?.address}")
+
+                if (localKnowDevice != null ){
+                    selectedTabletMixerInFragment = localTabletMixer
+                    (requireActivity() as MainActivity).changeTabletMixer(localTabletMixer,localKnowDevice)
+                    menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletMixerInFragment?.name
+                }
+            }
+        }
+    }
+
 }

@@ -3,6 +3,7 @@ package com.basculasmagris.visorremotomixer.utils
 object Constants {
 
     const val RECONNECT_TIME: Long = 2000
+    const val CHANGE_MIXER_TIME: Long = 3000
     const val PRODUCT_TYPE = "PRODUCT_TYPE"
     const val ESTABLISHMENT_REF = "ESTABLISHMENT_REF"
     const val PRODUCT_REF = "PRODUCT_REF"
@@ -53,6 +54,15 @@ object Constants {
     const val STATUS_DOWNLOAD_COMPLETED = "DESCARGA COMPLETA"
     const val STATUS_CONFIG = "CONFIGURACION"
     const val STATUS_RESUME = "RESUMEN"
+
+    //Users levels
+    const val USER_ADMIN = 1
+    const val USER_OPERATOR = 2
+    const val USER_SUPERVISOR = 3
+    const val USER_SUPER_ADMIN = 4
+    const val USER_NUTRICIONIST = 5
+    const val USER_API = 6
+    const val USER_TECHNICIAN = 7
 
     const val KEY_PREFIX_DEVICE = "TB"
 
