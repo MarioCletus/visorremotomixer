@@ -436,6 +436,7 @@
     <string name="ajuste_de_descarga_en_base_resto">Ajuste de descarga en base / Resto</string>
     <string name="muestra_alerta">Muestra Alerta</string>
     <string name="usuario_dp">Usuario:</string>
+    <string name="_0Kg">0kg</string>
     <string name="_100kg">100kg</string>
     <string name="iniciar_mezclar">Mezclar</string>
     <string name="nombre_del_dispositivo">Nombre del dispositivo</string>
@@ -524,7 +525,15 @@
 
     <string name="la_tablet_de_mixer">la tablet de mixer</string>
     <string name="tablet_remota_menu">"    Tablet Remota"</string>
-    <string name="string_iniciar_picado">Iniciar picado</string>
+    <string name="string_iniciar_picado">Mezclar</string>
     <string name="corral_detectado">Corral detectado</string>
+    <string name="sin_dieta">Sin dieta</string>
+    <string name="iniciar_carga">Iniciar carga</string>
+    <string name="kg">kg</string>
+    <string name="cantidad_a_preparar">Cantidad a preparar</string>
+    <string name="configuraci_n_de_ronda_libre">Configuración de ronda libre</string>
+    <string name="en_carga">En carga</string>
+    <string name="en_descarga">En descarga</string>
+    <string name="resto_dp">"Resto: "</string>
 
 </resources>

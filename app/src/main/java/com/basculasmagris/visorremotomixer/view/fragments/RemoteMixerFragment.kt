@@ -131,6 +131,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             return@setOnLongClickListener false
         }
 
+        mBinding.ibAutoFreeCustomTara.setOnClickListener {
+            Log.i(TAG,"Send CMD_TARA")
+            (requireActivity() as MainActivity).sendTareToMixer()
+            contPressTara = 0
+        }
 
         mBinding.btnInitFreeRound.setOnClickListener{
             (requireActivity() as MainActivity).sendGoToFreeRound()
@@ -139,6 +144,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         mBinding.btnToLoad.setOnClickListener {
             (requireActivity() as MainActivity).sendIniToMixer()
         }
+
 
         mBinding.ibAutoCustomTara.setOnClickListener {
             (requireActivity() as MainActivity).sendTareToMixer()
@@ -210,10 +216,26 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             }
         }
 
-
         mBinding.btnStartTimer.setOnClickListener {
             val byteArray = "CMD${Constants.CMD_START_TIMER}".toByteArray()
             (requireActivity() as MainActivity).mService?.LocalBinder()?.write(byteArray)
+        }
+
+
+        mBinding.ibAutoFreeCustomTara.setOnClickListener {
+            (requireActivity() as MainActivity).sendTareToMixer()
+        }
+
+        mBinding.btnFreeCfgToLoad.setOnClickListener {
+            (requireActivity() as MainActivity).sendIniToMixer()
+        }
+
+        mBinding.btnFreeCfgReturn.setOnClickListener {
+            if ((bInCfg || bInLoad || bInDownload || bInRes)) {
+                Log.i(TAG,"Cancel round")
+                (requireActivity() as MainActivity).sendCancelToMixer()
+                (requireActivity() as MainActivity).onBackPressed()
+            }
         }
 
         loadRoundDetail()
@@ -583,7 +605,6 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                 Constants.CMD_ROUNDDATA->{
                     val convertZip = ConvertZip()
-                    Log.i(TAG,"message.lenght ${message.size}")
                     val byteArrayUtil = message.copyOfRange(9,message.size-1)
                     Log.i("showCommand","CMD_ROUNDDATA ${messageStr.length} byteArrayUtil ${byteArrayUtil.size} ")
                     try{
@@ -740,6 +761,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
+                    mBinding.clFreeCfg.visibility = View.GONE
                     mBinding.tvRest.text = "${getString(R.string.resto)}: ${rest}kg"
                     Log.v("cmd_weight","CMD_WEIGHT")
                     if(isAdded)
@@ -752,6 +774,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.flStepConfig.visibility = View.VISIBLE
                     mBinding.llLoadDownload.visibility = View.GONE
                     mBinding.flTimer.visibility = View.GONE
+                    mBinding.clFreeCfg.visibility = View.GONE
                     mBinding.tvRest.text = "${getString(R.string.resto)}: ${rest}kg"
                     count_resume = 0
                     count_weight = 0
@@ -803,6 +826,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
+                    mBinding.clFreeCfg.visibility = View.GONE
                     mBinding.tvRest.text = "${getString(R.string.resto)}: ${rest}kg"
                     count_weight = 0
                     if(count_resume++ > 5){
@@ -819,6 +843,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
+                    mBinding.clFreeCfg.visibility = View.GONE
                     mBinding.tvRest.text = "${getString(R.string.resto)}: ${rest}kg"
                     count_resume = 0
                     count_weight = 0
@@ -856,6 +881,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
+                    mBinding.clFreeCfg.visibility = View.GONE
                     mBinding.tvRest.text = "${getString(R.string.resto)}: ${rest}kg"
                     count_weight = 0
                     count_resume = 0
@@ -883,11 +909,44 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                 }
 
+
+                Constants.CMD_WEIGHT_CONFIG_FREE->{
+                    Log.v("cmd_weight","CMD_WEIGHT_CONFIG_FREE")
+                    mBinding.llLoadDownload.visibility = View.INVISIBLE
+                    mBinding.flStepConfig.visibility = View.INVISIBLE
+                    mBinding.flTimer.visibility = View.INVISIBLE
+                    mBinding.clFreeCfg.visibility = View.VISIBLE
+                    mBinding.tvRestCfgFree.text = "${getString(R.string.resto)}: ${rest}kg"
+                    count_weight = 0
+                    count_resume = 0
+                    try{
+                        if(!bInCfg){
+                            mBinding.btnJump.visibility = View.INVISIBLE
+                            mBinding.btnTara.visibility = View.INVISIBLE
+                            mBinding.btnInitFreeRound.visibility = View.INVISIBLE
+                            mBinding.btnPause.visibility = View.INVISIBLE
+                            countMsg = REFRESH_VIEW_TIME
+                        }
+                        if(countMsg++ > REFRESH_VIEW_TIME){
+                            refreshRound()
+                        }
+                        refreshWeight(message)
+                        bInCfg = true
+                        bInLoad = false
+                        bInDownload = false
+                        bInFree = true
+                    }catch (e : Exception){
+                        Log.i("showCommand","CMD_WEIGHT_CONFIG_FREE Exception $e")
+                    }
+
+                }
+
                 Constants.CMD_WEIGHT_LOAD_FREE->{
                     Log.v("cmd_weight","CMD_WEIGHT_LOAD_FREE")
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
+                    mBinding.clFreeCfg.visibility = View.GONE
                     mBinding.tvRest.text = "${getString(R.string.resto)}: ${rest}kg"
                     count_weight = 0
                     count_resume = 0
@@ -920,6 +979,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
+                    mBinding.clFreeCfg.visibility = View.GONE
                     mBinding.tvRest.text = "${getString(R.string.resto)}: ${rest}kg"
                     count_weight = 0
                     count_resume = 0
@@ -952,7 +1012,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.llLoadDownload.visibility = View.INVISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.VISIBLE
-                    mBinding.btnStartTimer.isEnabled = false
+                    mBinding.clFreeCfg.visibility = View.GONE
+                    mBinding.btnStartTimer.visibility = View.GONE
                     mBinding.tvTimerTitle.text = getString(R.string.mezclando)
                     mBinding.tvRest.text = "${getString(R.string.resto)}: ${rest}kg"
                     count_weight = 0
@@ -973,7 +1034,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     mBinding.llLoadDownload.visibility = View.INVISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.VISIBLE
-                    mBinding.btnStartTimer.isEnabled = true
+                    mBinding.clFreeCfg.visibility = View.GONE
+                    mBinding.btnStartTimer.visibility = View.VISIBLE
                     count_weight = 0
                     count_resume = 0
                     if(isAdded)
@@ -1106,6 +1168,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             mBinding.tvLocation.visibility = View.INVISIBLE
         }
         mBinding.tvRoundCustomWeight.text = "${sign}${weight}kg"
+        mBinding.tvFreeRoundCustomWeight.text = "${sign}${weight}kg"
         mBinding.pbCurrentProduct.progress = progress
         dialogResto?.setMessage("$signRest${rest}kg")
     }

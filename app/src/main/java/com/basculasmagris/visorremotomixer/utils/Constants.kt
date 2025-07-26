@@ -208,6 +208,7 @@ object Constants {
     val CMD_USER_LIST  = "USL"
     val CMD_WEIGHT  = "WEI"
     val CMD_WEIGHT_CONFIG  = "WCF"
+    val CMD_WEIGHT_CONFIG_FREE  = "WGF"
     val CMD_WEIGHT_DWNL  = "WED"
     val CMD_WEIGHT_DWNL_FREE  = "WFD"
     val CMD_WEIGHT_LOAD  = "WEL"

@@ -15,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -508,5 +509,243 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_free_cfg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:padding="16dp">
+
+        <!-- Título -->
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/configuraci_n_de_ronda_libre"
+            android:textSize="20sp"
+            android:textColor="@color/color_deep_green"
+            android:gravity="center"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:background="@color/color_deep_green"
+            app:layout_constraintBottom_toTopOf="@id/tv_diet_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="4dp" />
+
+        <!-- Sección Dieta -->
+        <TextView
+            android:id="@+id/tv_diet_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/dieta"
+            android:textSize="18sp"
+            android:textColor="@color/color_deep_green"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="24dp" />
+
+        <Spinner
+            android:id="@+id/sp_diet"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/style_spinner_mixers"
+            app:layout_constraintTop_toBottomOf="@id/tv_diet_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:background="@color/color_deep_green"
+            app:layout_constraintTop_toBottomOf="@id/sp_diet"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="4dp" />
+
+
+        <!-- Cantidad a preparar -->
+
+
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:background="@color/color_deep_green"
+            app:layout_constraintBottom_toTopOf="@id/tv_weight_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="4dp" />
+        <TextView
+            android:id="@+id/tv_weight_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/cantidad_a_preparar"
+            android:textSize="18sp"
+            android:textColor="@color/color_deep_green"
+            app:layout_constraintTop_toBottomOf="@id/sp_diet"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="40dp" />
+
+
+        <LinearLayout
+            android:id="@+id/layout_weight_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_weight_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+
+            <EditText
+                android:id="@+id/et_weight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="number"
+                android:text="@string/_0"
+                android:background="@android:color/transparent"
+                android:textSize="32sp"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/tvKg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/kg"
+                android:textSize="32sp"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:background="@color/color_deep_green"
+            app:layout_constraintTop_toBottomOf="@id/layout_weight_input"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="4dp" />
+
+        <!-- Divisiones -->
+        <TextView
+            android:id="@+id/tv_div_ext_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/divisiones_externas"
+            android:textColor="@color/color_medium_green"
+            android:textSize="18sp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/layout_weight_input"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Spinner
+            android:id="@+id/sp_balanza_div_ext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/tv_div_ext_title"
+            app:layout_constraintBottom_toBottomOf="@id/tv_div_ext_title" />
+
+        <!-- Peso actual y botón tara -->
+        <TextView
+            android:id="@+id/tv_free_round_target_weight_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total_en_mixer"
+            android:textAllCaps="true"
+            android:textColor="@color/color_medium_green"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/sp_balanza_div_ext"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/tv_free_round_custom_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_0Kg"
+            android:textSize="20sp"
+            android:textColor="@color/color_medium_green"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_free_round_target_weight_title"
+            app:layout_constraintStart_toEndOf="@id/tv_free_round_target_weight_title" />
+
+        <ImageButton
+            android:id="@+id/ib_auto_free_custom_tara"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_forward_circle"
+            android:backgroundTint="@color/white"
+            app:layout_constraintTop_toTopOf="@id/tv_free_round_target_weight_title"
+            app:layout_constraintBottom_toBottomOf="@id/tv_free_round_custom_weight"
+            app:layout_constraintStart_toEndOf="@id/tv_free_round_custom_weight"
+            android:layout_marginStart="16dp" />
+
+        <TextView
+            android:id="@+id/tv_rest_cfg_free"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/tv_free_round_target_weight_title"
+            app:layout_constraintBottom_toBottomOf="@id/tv_free_round_target_weight_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="10dp"
+            android:textSize="20sp"
+            android:textColor="@color/color_medium_green"
+            android:text="Resto: 0kg"
+            />
+
+        <!-- Botones -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_free_round_target_weight_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <Button
+                android:id="@+id/btn_free_cfg_return"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/btn_round_rounded_green"
+                android:text="@string/volver"
+                android:textSize="18sp"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/btn_free_cfg_to_load"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:background="@drawable/btn_round_rounded_green"
+                android:text="@string/iniciar_carga"
+                android:textSize="18sp"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </FrameLayout>

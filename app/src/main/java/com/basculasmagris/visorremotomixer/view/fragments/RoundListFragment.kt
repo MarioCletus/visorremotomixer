@@ -316,6 +316,7 @@ class RoundListFragment : Fragment() {
                 return
             }
             if(!fragmentRunning){
+                Log.i(TAG,"fragmentRunning == false")
                 return
             }
             val messageStr = String(message,0, message.size)
@@ -389,6 +390,21 @@ class RoundListFragment : Fragment() {
                     }
                     refreshWeight(message)
                 }
+                Constants.CMD_WEIGHT_CONFIG_FREE->{
+                    Log.i("CMD_WEIGHT","CMD_WEIGHT_CONFIG_FREE $message")
+                    if(countMsg++ > REFRESH_VIEW_TIME){
+                        refreshRound()
+                    }
+                    if(bGoToRound){
+                        bGoToRound = false
+                        BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), this)
+                        findNavController().navigate(RoundListFragmentDirections.actionRoundListFragmentToRemoteMixerFragment())
+                    }else{
+                        sincroRound(true)
+                    }
+                    refreshWeight(message)
+                }
+
                 Constants.CMD_WEIGHT_DWNL->{
                     Log.i("CMD_WEIGHT","CMD_WEIGHT_DWNL $message")
                     if(countMsg++ > REFRESH_VIEW_TIME){
@@ -527,7 +543,6 @@ class RoundListFragment : Fragment() {
             (requireActivity() as MainActivity).showCustomProgressDialog(getString(R.string.warning),getString(R.string.no_se_pudo_iniciar_ronda),R.layout.dialog_custom_progress_iniciar)
         }else{
             (requireActivity() as MainActivity).showCustomProgressDialog(getString(R.string.warning),getString(R.string.no_se_puede_ver_ronda),R.layout.dialog_custom_progress_ver)
-
         }
         Log.i("seguimiento","sendGoToRound ${id}")
         bGoToRound = true

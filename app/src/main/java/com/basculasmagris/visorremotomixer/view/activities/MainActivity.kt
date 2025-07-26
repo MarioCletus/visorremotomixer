@@ -526,8 +526,8 @@ class MainActivity : AppCompatActivity() {
         }
         bShowDeviceConnected = false
         if(binding.appBarMain.toolbarMain.menu.size>0){
-            val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.menu_selected_remote_tablet)
-            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_tablet_disconnected_48px)
+            binding.appBarMain.toolbarMain.menu.findItem(R.id.menu_selected_remote_tablet)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_tablet_disconnected_48px)
+            binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_remote_status)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_bluetooth_disconnected)
         }
     }
 
@@ -544,8 +544,8 @@ class MainActivity : AppCompatActivity() {
         countDevConect = 0
         bShowDeviceConnected = true
         if(binding.appBarMain.toolbarMain.menu.size>0){
-            val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.menu_selected_remote_tablet)
-            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_tablet_connected_48px)
+            binding.appBarMain.toolbarMain.menu.findItem(R.id.menu_selected_remote_tablet)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_tablet_connected_48px)
+            binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_remote_status)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_bluetooth_connected)
         }
     }
 
@@ -557,8 +557,7 @@ class MainActivity : AppCompatActivity() {
         bShowBalanceConnected = true
         Log.i(TAG,"showBalanceDisconnected")
         if(binding.appBarMain.toolbarMain.menu.size>0){
-            val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_balance)
-            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_balance_disconnected_48px)
+            binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_balance)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_balance_disconnected_48px)
         }
     }
 
@@ -571,8 +570,7 @@ class MainActivity : AppCompatActivity() {
         bShowBalanceConnected = false
         Log.i(TAG,"showBalanceConnected")
         if(binding.appBarMain.toolbarMain.menu.size>0){
-            val menuItem = binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_balance)
-            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_balance_connected_48px)
+            binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_balance)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_balance_connected_48px)
         }
     }
 
