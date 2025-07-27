@@ -216,4 +216,10 @@ object Constants {
     val CMD_WEIGHT_RESUME  = "WRE"
     val CMD_WEIGHT_TIMER  = "WTI"
     val CMD_START_TIMER  = "STI"
+    val CMD_DIETS = "CDS"
+    val CMD_REQ_CFG = "RFG"
+    val CMD_STR_LIST  = "CSL"
+    val CMD_VALUE  = "CMV"
+    val CMD_REQ_VALUE  = "CRV"
+
 }

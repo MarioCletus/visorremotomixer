@@ -1,5 +1,6 @@
 package com.basculasmagris.visorremotomixer.utils
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
@@ -9,15 +10,20 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.os.Build
 import android.text.format.DateUtils
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.inputmethod.InputMethod
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.model.entities.Mixer
@@ -374,6 +380,44 @@ class Helper {
                 null
             }
         }
+
+
+        fun hideSoftKeyboard(view: View,activity: Activity) {
+            view.let { _view ->
+                val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                imm?.hideSoftInputFromWindow(_view.windowToken, 0)
+            }
+        }
+
+        fun showKeyboard(activity: Activity) { // Or View.showKeyboard()
+            val inputMethodManager = activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.toggleSoftInput(
+                InputMethod.SHOW_FORCED,
+                InputMethodManager.HIDE_IMPLICIT_ONLY
+            )
+        }
+
+        fun toggleKeyboard(view: View,activity: Activity) {
+            if(isKeyBoardShowing(view)){
+                hideSoftKeyboard(view,activity)
+            }else{
+                showKeyboard(activity)
+            }
+        }
+        fun isKeyBoardShowing(rootView: View): Boolean {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                rootView.rootWindowInsets.isVisible(WindowInsetsCompat.Type.ime())
+            }else{
+                val screenHeight = rootView.height
+                val rect = Rect()
+                rootView.getWindowVisibleDisplayFrame(rect)
+                val visibleHeight = rect.height()
+                val heightDiff = screenHeight - visibleHeight
+                return heightDiff > screenHeight * 0.15 // Ajustá el 15% como umbral
+            }
+        }
+
+
 
     }
 

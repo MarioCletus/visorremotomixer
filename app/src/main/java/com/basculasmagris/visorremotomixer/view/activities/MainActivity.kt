@@ -855,6 +855,22 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    fun sendValueToMixer(type: String, value: String) {
+        val msg = "CMD${Constants.CMD_VALUE}$type$value"
+        mService?.LocalBinder()?.write(msg.toByteArray())
+    }
+
+
+    fun sendDietRequestToMixer() {
+        val msg = "CMD${Constants.CMD_DIETS}"
+        mService?.LocalBinder()?.write(msg.toByteArray())
+    }
+
+
+    fun sendRequestCfgToMixer() {
+        val msg = "CMD${Constants.CMD_REQ_CFG}"
+        mService?.LocalBinder()?.write(msg.toByteArray())
+    }
 
     fun sendRequestRoundRunDetail() {
         val msg = "CMD${Constants.CMD_ROUNDDETAIL}"

@@ -84,7 +84,7 @@
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Spimixer.NoActionBar"
             android:windowFullscreen="true"
-            android:windowSoftInputMode="adjustNothing">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />

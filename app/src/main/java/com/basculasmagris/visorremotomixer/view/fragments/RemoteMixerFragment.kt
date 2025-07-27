@@ -15,8 +15,11 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
@@ -41,6 +44,7 @@ import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
+import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.utils.MarginItemDecorationHorizontal
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunCorralAdapter
@@ -49,6 +53,7 @@ import com.basculasmagris.visorremotomixer.view.adapter.RoundRunProductAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
@@ -73,6 +78,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     var roundRunProductAdapter : RoundRunProductAdapter? = null
     private var currentCorralDetail : MinCorralDetail? = null
     var roundRunCorralAdapter : RoundRunCorralDownloadAdapter? = null
+    var strList: ArrayList<String> = ArrayList()
 
     private var bInFree: Boolean = true
     private var bInCfg: Boolean = false
@@ -98,6 +104,8 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     private var count_weight = 0
     private var contPressTara = 0
     private var weight:Long = 0
+
+    private var isSpinnerOpen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(TAG,"onCreate")
@@ -237,6 +245,47 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 (requireActivity() as MainActivity).onBackPressed()
             }
         }
+
+
+
+        mBinding.spDiet.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                isSpinnerOpen = true
+            }
+            false // importante: devolver false para que el evento se propague
+        }
+
+        mBinding.spDiet.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                (requireActivity() as MainActivity).sendValueToMixer("D",String.format("%06d",position))
+                isSpinnerOpen = false
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                isSpinnerOpen = false
+            }
+        })
+
+        val editText = mBinding.etWeight
+        val rootView = requireActivity().window.decorView.rootView
+        var wasKeyboardVisible = false
+
+
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val isKeyboardVisible = Helper.isKeyBoardShowing(rootView)
+
+            if (wasKeyboardVisible && !isKeyboardVisible && editText.hasFocus()) {
+                val valor = mBinding.etWeight.text.toString().toLongOrNull()
+                valor?.let {
+                    (requireActivity() as MainActivity).sendValueToMixer("W",String.format("%06d",it))
+                }
+                mBinding.tvTitle.requestFocus()
+            }
+
+            wasKeyboardVisible = isKeyboardVisible
+        }
+
+
 
         loadRoundDetail()
         mBinding.rvMixerProductsToLoad.addItemDecoration(MarginItemDecorationHorizontal(resources.getDimensionPixelSize(R.dimen.margin_recycler_horizontal)))
@@ -926,9 +975,16 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                             mBinding.btnInitFreeRound.visibility = View.INVISIBLE
                             mBinding.btnPause.visibility = View.INVISIBLE
                             countMsg = REFRESH_VIEW_TIME
+                            (requireActivity() as MainActivity).sendDietRequestToMixer()
                         }
                         if(countMsg++ > REFRESH_VIEW_TIME){
                             refreshRound()
+                            if(mBinding.spDiet.count <= 0){
+                                (requireActivity() as MainActivity).sendDietRequestToMixer()
+                            }
+                        }
+                        if(countDataMsg++ > REFRESH_DATA_TIME){
+                            (requireActivity() as MainActivity).sendRequestCfgToMixer()
                         }
                         refreshWeight(message)
                         bInCfg = true
@@ -1046,6 +1102,89 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     }catch (e : Exception){
                         Log.i("showCommand","CMD_WEIGHT_TIMER Exception $e")
                     }
+                }
+
+                Constants.CMD_STR_LIST->{
+                    Log.i(TAG,"CMD_STR_LIST $bInCfg $bInFree")
+                    if(bInCfg && bInFree){
+                        val convertZip = ConvertZip()
+                        val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
+                        val gson = Gson()
+                        val listType = object : TypeToken<ArrayList<String>>() {}.type
+                        val listOfDiets = gson.fromJson<ArrayList<String>>(json, listType)?:ArrayList()
+                        Log.i(TAG,"CMD_STR_LIST $listOfDiets")
+                        strList = listOfDiets
+                        setDietSpinner(strList)
+                    }
+                }
+
+                Constants.CMD_VALUE->{
+                    Log.i(TAG,"CMD_VALUE $bInCfg $bInFree $messageStr")
+                    try{
+                        if(bInCfg && bInFree && messageStr.length > 4){
+                            Log.i(TAG,"messageStr.substring(3,4) ${messageStr.substring(3,4)}")
+                            when(messageStr.substring(3,4)){
+                                "D"->{
+                                    if(isSpinnerOpen){
+                                        return
+                                    }
+                                    val strValue = messageStr.substring(4,10)
+                                    val value:Int? = strValue.toIntOrNull()
+                                    Log.i(TAG,"CMD_VALUE D strValue ${messageStr.substring(4,10)} value $value")
+                                    value?.let {
+                                        if(it < strList.size && mBinding.spDiet.selectedItemPosition != it){
+                                            mBinding.spDiet.setSelection(it)
+                                        }
+                                    }
+                                }
+                                "W"->{
+                                    val strValue = messageStr.substring(4,10)
+                                    val value = strValue.toLongOrNull()
+                                    val rootView = requireActivity().window.decorView.rootView
+                                    if(Helper.isKeyBoardShowing(rootView)){
+                                        return
+                                    }
+                                    value?.let{
+                                        mBinding.etWeight.setText("$value")
+                                        mBinding.etWeight.setSelection(mBinding.etWeight.text.length)
+                                    }
+                                }
+                                else->return
+                            }
+                        }
+                    }catch (e:Exception){
+                        Log.e(TAG,"CMD_VALUE exception $e")
+                    }
+                }
+
+                Constants.CMD_REQ_VALUE->{
+                    Log.i(TAG,"CMD_REQ_VALUE $messageStr")
+                    try{
+                        if(bInCfg && bInFree && messageStr.length > 4){
+                            when(messageStr.substring(3,4)){
+                                "D"->{
+                                    val position = mBinding.spDiet.selectedItemPosition
+                                    (requireActivity() as MainActivity).sendValueToMixer(
+                                        type = "D",
+                                        value = String.format("%06d",position)
+                                    )
+                                }
+                                "W"->{
+                                    val value = mBinding.etWeight.text.toString().toLongOrNull()
+                                    value?.let{
+                                        (requireActivity() as MainActivity).sendValueToMixer(
+                                            type = "W",
+                                            value = String.format("%06d",value)
+                                        )
+                                    }
+                                }
+                                else->return
+                            }
+                        }
+                    }catch (e:Exception){
+                        Log.e(TAG,"CMD_REQ_VALUE exception $e")
+                    }
+
                 }
 
                 Constants.CMD_MIXER ->{
@@ -1471,5 +1610,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         return bInFree
     }
 
+
+    private fun setDietSpinner(diets: ArrayList<String>) {
+        val dietArrayAdapter =  ArrayAdapter(mBinding.spDiet.context, R.layout.spinner_step, diets)
+        dietArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_mixer)
+        mBinding.spDiet.adapter = dietArrayAdapter
+    }
 
 }
