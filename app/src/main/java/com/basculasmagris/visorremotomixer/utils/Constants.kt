@@ -55,14 +55,17 @@ object Constants {
     const val STATUS_CONFIG = "CONFIGURACION"
     const val STATUS_RESUME = "RESUMEN"
 
-    //Users levels
-    const val USER_ADMIN = 1
-    const val USER_OPERATOR = 2
-    const val USER_SUPERVISOR = 3
-    const val USER_SUPER_ADMIN = 4
-    const val USER_NUTRICIONIST = 5
-    const val USER_API = 6
-    const val USER_TECHNICIAN = 7
+    //Users levels - Niveles de usuario
+    //NOTA: Un "AGENTE" en el sistema se refiere principalmente al USER_OPERATOR (Operario)
+    //que es el usuario que ejecuta las rondas de alimentación y opera los mixers en campo.
+    //Ver documentación completa en docs/QUE_ES_UN_AGENTE.md
+    const val USER_ADMIN = 1        // Administrador - gestión completa
+    const val USER_OPERATOR = 2     // Operario/AGENTE - usuario operativo principal
+    const val USER_SUPERVISOR = 3   // Supervisor - supervisión de operaciones
+    const val USER_SUPER_ADMIN = 4  // Super Admin - control total del sistema
+    const val USER_NUTRICIONIST = 5 // Nutricionista - gestión de dietas (no ejecuta rondas)
+    const val USER_API = 6          // API - usuario técnico para integraciones
+    const val USER_TECHNICIAN = 7   // Técnico - soporte y mantenimiento
 
     const val KEY_PREFIX_DEVICE = "TB"
 
