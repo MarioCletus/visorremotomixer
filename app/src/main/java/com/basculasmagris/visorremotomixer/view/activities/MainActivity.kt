@@ -84,11 +84,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private var mProgressDialog: Dialog? = null
+    // Definición de roles para mostrar en la UI del menú principal
+    // NOTA: El "Operario" es el AGENTE principal - usuario operativo que ejecuta rondas
+    // Ver documentación en docs/QUE_ES_UN_AGENTE.md
     private var roles: ArrayList<Pair<Int, String>> = arrayListOf(
-        Pair(1, "Administrador"),
-        Pair(2, "Operario"),
-        Pair(3, "Supervisor"),
-        Pair(4, "Super Admin")
+        Pair(1, "Administrador"),  // USER_ADMIN
+        Pair(2, "Operario"),       // USER_OPERATOR - AGENTE del sistema  
+        Pair(3, "Supervisor"),     // USER_SUPERVISOR
+        Pair(4, "Super Admin")     // USER_SUPER_ADMIN
     )
     // Bluetooth
     var mService: BluetoothSDKService? = null
