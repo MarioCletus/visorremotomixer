@@ -24,11 +24,7 @@ import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.Session
 
 sealed class MergedLocalData
-data class CorralData(val corrals: MutableList<Corral>): MergedLocalData()
 data class TabletMixerData(val tabletMixers: MutableList<TabletMixer>): MergedLocalData()
-data class DietData(val diets: MutableList<Diet>): MergedLocalData()
-data class RoundData(val rounds: MutableList<Round>): MergedLocalData()
-data class RoundCorralDetailData(val roundCorralDetail: MutableList<RoundCorralDetail>): MergedLocalData()
 data class UserData(val users: MutableList<User>): MergedLocalData()
 data class RoundLocalData(val roundsLocal: MutableList<RoundLocal>): MergedLocalData()
 
@@ -40,7 +36,6 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val sSplashBinding: ActivitySplashBinding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(sSplashBinding.root)
-        val sharedpreferences = getSharedPreferences(Constants.PREF_LOGIN, Context.MODE_PRIVATE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
             window.insetsController?.hide(WindowInsets.Type.statusBars())

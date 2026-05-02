@@ -8,66 +8,16 @@
     tools:context=".view.fragments.HomeFragment"
     >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/bg_buttons_main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_tablet_mixer_home_adapter"
+        android:layout_width="420dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="50dp"
         android:layout_marginTop="50dp"
-        android:padding="20dp"
-        android:background="@drawable/bg_btn_main"
-        app:backgroundTint="@null"
-        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="50dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Button
-            android:id="@+id/btn_rondas"
-            android:layout_width="340dp"
-            android:layout_height="340dp"
-            android:background="@drawable/btn_trabajo_main"
-            app:backgroundTint="@null"
-            android:drawableTop="@drawable/trabajo_icon"
-            android:paddingTop="60dp"
-            android:text="Rondas"
-            android:textSize="24sp"
-            app:layout_constraintLeft_toLeftOf="@id/btn_rondas"
-            app:layout_constraintTop_toTopOf="@id/bg_buttons_main" />
-
-
-        <Button
-            android:id="@+id/btn_mixer"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:layout_marginStart="20dp"
-            android:background="@drawable/btn_132"
-            android:drawableTop="@drawable/mixer_icon_resized_75"
-            android:drawableTint="@color/white"
-            android:enabled="true"
-            android:paddingTop="20dp"
-            android:text="@string/mixers"
-            android:textSize="12sp"
-            app:backgroundTint="@null"
-            app:layout_constraintStart_toEndOf="@id/btn_rondas"
-            app:layout_constraintTop_toTopOf="@id/btn_rondas" />
-
-        <Button
-            android:id="@+id/btn_sincro"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:background="@drawable/btn_ajustes_main"
-            android:drawableTop="@drawable/cloud_sync_56px"
-            app:backgroundTint="@null"
-            android:drawableTint="@color/white"
-            android:enabled="true"
-            android:layout_marginTop="20dp"
-            android:paddingTop="20dp"
-            android:text="@string/sincronizar"
-            android:textSize="12sp"
-            app:layout_constraintTop_toBottomOf="@id/btn_mixer"
-            app:layout_constraintStart_toStartOf="@id/btn_mixer" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
     <TextView
         android:id="@+id/tv_peso"
         android:layout_width="wrap_content"
@@ -79,5 +29,32 @@
         android:layout_marginBottom="20dp"
         android:visibility="gone"
         />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_sync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/rule_settings_24px"
+        android:backgroundTint="@color/green_500_dark"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:focusable="false"
+        android:clickable="true"/>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_admin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/dashboard_2_gear_24px"
+        android:backgroundTint="@color/green_500_dark"
+        android:layout_marginStart="@dimen/_26sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        app:layout_constraintStart_toEndOf="@id/btn_sync"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:focusable="false"
+        android:clickable="true"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

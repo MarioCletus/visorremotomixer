@@ -115,8 +115,8 @@ class ResumeFragment : Fragment() {
            (requireActivity() as MainActivity).sendEndToMixer()
            BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
         try{
-            findNavController().popBackStack(R.id.nav_home, false)
-            findNavController().navigate(ResumeFragmentDirections.actionResumeFragmentToHomeFragment())
+            findNavController().popBackStack(R.id.nav_admin, false)
+            findNavController().navigate(ResumeFragmentDirections.actionResumeFragmentToAdminFragment())
         }catch (e : Exception){
             Log.i(TAG,"Nav Exception $e")
         }

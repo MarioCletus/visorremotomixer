@@ -105,7 +105,6 @@
     <string name="no_products">No hay productos asignados a la dieta</string>
 
 
-
     <!-- Establecimiento -->
     <string name="establecimiento">Establecimiento</string>
     <string name="establecimientos">Establecimientos</string>
@@ -163,7 +162,6 @@
     <!--   ORDENAR -->
 
 
-
     <!-- Hasta acá -->
 
 
@@ -191,7 +189,6 @@
     <string name="lbl_empty">No informado</string>
 
 
-
     <string name="lb_weight_unit">kg/m3</string>
     <string name="lb_weight_unit_kg">kg</string>
     <string name="lb_percentage_symbol">%</string>
@@ -203,8 +200,6 @@
     <string name="please_wait">Por favor espere</string>
     <string name="conectando_la_balanza">Conectando con Balanza</string>
     <string name="conectando_la_antena">Conectando con Antena</string>
-
-
 
 
     <!-- SCREEN NAME -->
@@ -222,7 +217,6 @@
     <string name="percentage">Porcentaje</string>
     <string name="ph_round_proportion">Preparado al</string>
     <string name="ph_round_total_weight">Total</string>
-
 
 
     <string name="sin_descripcion">Sin descripción</string>
@@ -255,7 +249,6 @@
 
     <string name="aceptar">Aceptar</string>
     <string name="cancelar">Cancelar</string>
-
 
 
     <string name="sync_reports_title">Reportes</string>
@@ -294,7 +287,6 @@
     <string name="kg_por_animal">kg por animal</string>
     <string name="menu_exit">Salir</string>
     <string name="libre">Libre</string>
-
 
 
     <string name="warning">Advertencia</string>
@@ -359,7 +351,6 @@
     <string name="productos_disponibles">Productos disponibles.</string>
     <string name="no_hay_productos">No hay productos disponibles.</string>
     <string name="ph_diet_mixing_time">Tiempo de mezclado</string>
-
 
 
     <string name="nuevaUrl">Nueva URL</string>
@@ -444,7 +435,7 @@
     <string name="nombre_del_producto">Nombre del producto</string>
     <string name="descripcion_del_producto">Descripcion del producto</string>
     <string name="esp_blank_mixer">     Mixer</string>
-    <string name="blank_spaces" >            </string>
+    <string name="blank_spaces">            </string>
     <string name="visor_remoto">Visor Remoto</string>
     <string name="establecimiento_desconocido">Establecimiento desconocido</string>
     <string name="de">de</string>
@@ -540,5 +531,8 @@
     <string name="bluetooth_tablet">Bluetooth de tablet</string>
     <string name="primer_ingreso_debe_conectarse_con_un_mixer">Primer ingreso. Debe conectarse con una tablet de mixer</string>
     <string name="para_visualizar_la_lista_de_usuarios_se_debe_ingresar_con_conexi_n_a_internet_y_realizar_una_sincronizaci_n_desde_el_men_de_la_aplicaci_n">Para visualizar la lista de usuarios se debe ingresar con conexión a internet y realizar una sincronización desde el menú de la aplicación</string>
+    <string name="admininistracion">Administración</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

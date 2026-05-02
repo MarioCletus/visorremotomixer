@@ -57,7 +57,7 @@ import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.utils.CustomAlertDialogBuilder
 import com.basculasmagris.visorremotomixer.utils.Helper
-import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
+import com.basculasmagris.visorremotomixer.view.fragments.AdminFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RoundListFragment
 import com.basculasmagris.visorremotomixer.view.fragments.TabletMixerListFragment
@@ -153,8 +153,6 @@ class MainActivity : AppCompatActivity() {
         tvRoleDescription.text = roles.first { role -> role.first == currentUser.codeRole }.second  //currentUser.role.description.trim()
 
         navController = findNavController(R.id.nav_host_fragment_content_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home
@@ -195,10 +193,12 @@ class MainActivity : AppCompatActivity() {
                         .show()
                     drawerLayout.close()
                 }
+                R.id.nav_admin ->{
+                    navController.popBackStack(R.id.nav_admin, false)
+                }
                 R.id.nav_home ->{
                     navController.popBackStack(R.id.nav_home, false)
                 }
-
             }
             outPut
         }
@@ -409,8 +409,8 @@ class MainActivity : AppCompatActivity() {
         val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
         navHost?.childFragmentManager?.primaryNavigationFragment?.let { fragment ->
             when (fragment) {
-                is HomeFragment -> {
-                    Log.i(TAG, "setTabletMixer in HomeFragment $selectedTabletMixerInActivity")
+                is AdminFragment -> {
+                    Log.i(TAG, "setTabletMixer in AdminFragment $selectedTabletMixerInActivity")
                     fragment.setTabletMixer(tabletMixer)}
                 is RemoteMixerFragment -> {
                     Log.i(TAG, "setTabletMixer in RemoteMixerFragment $selectedTabletMixerInActivity")
@@ -429,14 +429,14 @@ class MainActivity : AppCompatActivity() {
 
     fun changeStatusConnected(){
         hideCustomProgressDialog()
-        Log.v("CONNECTION","Home connected")
+        Log.v("CONNECTION","Connected")
         showDeviceConnected()
         Helper.saveBluetoothState(true)
     }
 
     private var isActionRunning = false
     fun changeStatusDisconnected(){
-        Log.i("CONNECTION","Home disconnected")
+        Log.i("CONNECTION","Disconnected")
         Helper.saveBluetoothState(false)
         showDeviceDisconnected()
         if(!isActionRunning && bReconnect){
@@ -778,8 +778,8 @@ class MainActivity : AppCompatActivity() {
             val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
             navHost?.childFragmentManager?.primaryNavigationFragment?.let { fragment ->
                 when (fragment) {
-                    is HomeFragment -> {
-                        Log.i(TAG, "refreshRounds in HomeFragment")
+                    is AdminFragment -> {
+                        Log.i(TAG, "refreshRounds in AdminFragment")
                     }
                     is RemoteMixerFragment -> {
                         Log.i(TAG, "refreshRounds in RemoteMixerFragment")

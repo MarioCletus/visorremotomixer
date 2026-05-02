@@ -9,7 +9,7 @@ import com.basculasmagris.visorremotomixer.view.activities.TabletMixerConfigActi
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.ItemCustomListBinding
 import com.basculasmagris.visorremotomixer.view.activities.*
-import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
+import com.basculasmagris.visorremotomixer.view.fragments.AdminFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RoundListFragment
 import com.basculasmagris.visorremotomixer.view.fragments.TabletMixerListFragment
 
@@ -93,7 +93,7 @@ class CustomListItemAdapterFragment (
         holder.tvDescription.text = item.description.ifEmpty { fragment.requireActivity().getString(R.string.sin_descripcion) }
 
         holder.itemView.setOnClickListener{
-            if (fragment is HomeFragment){
+            if (fragment is AdminFragment){
                 fragment.selectedListItem(item, selection)
             }
             if (fragment is RoundListFragment){
