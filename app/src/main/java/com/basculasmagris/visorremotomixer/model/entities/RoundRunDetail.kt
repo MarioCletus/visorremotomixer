@@ -232,6 +232,7 @@ data class DownloadReportResumed (
 /***************************************************************
  * Para transmitir a remoto
  ***************************************************************/
+
 @Parcelize
 data class MinUserDetail (
     val username: String,
@@ -264,7 +265,7 @@ data class MinRoundDetail (
     val description: String,
     var diet: MinDietDetail,
     var corrals: ArrayList<MinCorralDetail>,
-    var establishment: MinEstablishmentDetail?,
+    var establishment: MinEstablishmentDetail,
     var id: Long
 ) : Parcelable
 
@@ -356,6 +357,7 @@ data class MinProduct (
     val remoteId: Long,
     val id: Long
 ) : Parcelable
+
 
 /********************************************
  * MinData

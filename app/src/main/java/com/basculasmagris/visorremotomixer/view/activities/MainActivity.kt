@@ -75,6 +75,11 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeParseException
 
 val Context.datastore by preferencesDataStore(name = "PREFERENCIAS")
 class MainActivity : AppCompatActivity() {
@@ -631,8 +636,10 @@ class MainActivity : AppCompatActivity() {
                     id = minUser.id
                 )
                 if(isUser == null){
+                    Log.i(TAG,"insert user $user")
                     mUserViewModel.insert(user)
                 }else{
+                    Log.i(TAG,"update user $user")
                     mUserViewModel.update(user)
                 }
             }
@@ -644,6 +651,28 @@ class MainActivity : AppCompatActivity() {
         }catch (e:Exception){
             Log.i(TAG,"bSyncroUsers Exception $e")
             return false
+        }
+    }
+
+    private fun parseDateToEpochMillis(dateStr: String?): Long? {
+        if (dateStr == null) return null
+        try {
+            // Intenta formatos absolutos/ISO primero
+            return try {
+                Instant.parse(dateStr).toEpochMilli()
+            } catch (e: DateTimeParseException) {
+                try {
+                    OffsetDateTime.parse(dateStr).toInstant().toEpochMilli()
+                } catch (e2: DateTimeParseException) {
+                    try {
+                        LocalDateTime.parse(dateStr).toInstant(ZoneOffset.UTC).toEpochMilli()
+                    } catch (e3: DateTimeParseException) {
+                        null
+                    }
+                }
+            }
+        } catch (t: Throwable) {
+            return null
         }
     }
 
@@ -659,7 +688,7 @@ class MainActivity : AppCompatActivity() {
                 return false
             }
             Log.i("MEP", "listaRecibida ${listaRecibida}")
-
+/*
             val uniqueRounds = mutableSetOf<Pair<String, String>>()
             listaRecibida.forEach {
                 val round = it.round ?: run {
@@ -675,7 +704,54 @@ class MainActivity : AppCompatActivity() {
 
             listOfMedRoundsRun = listaRecibida
             Log.i(TAG, "listOfMinRounds $listOfMedRoundsRun $gson")
+*/
 
+
+            // Map para mantener la "mejor" ronda por clave (name, description)
+            val dedup = LinkedHashMap<Pair<String, String>, MedRoundRunDetail>()
+
+            listaRecibida.forEach { item ->
+                val round = item.round
+                if (round == null) {
+                    Log.w(TAG, "Skipping item with null round: $item")
+                    return@forEach // seguir con el siguiente item (no abortar todo)
+                }
+
+                val key = round.name to round.description
+                val existing = dedup[key]
+
+                if (existing == null) {
+                    dedup[key] = item
+                } else {
+                    // Comparamos por startDate (más reciente = conservar). Si no se puede comparar, descartamos la nueva.
+                    val existingEpoch = parseDateToEpochMillis(existing.startDate)
+                    val newEpoch = parseDateToEpochMillis(item.startDate)
+
+                    if (existingEpoch != null && newEpoch != null) {
+                        if (newEpoch > existingEpoch) {
+                            Log.i(TAG, "Replacing older round for key $key (existing start=${existing.startDate}, new=${item.startDate})")
+                            dedup[key] = item
+                        } else {
+                            Log.i(TAG, "Keeping existing round for key $key (existing start=${existing.startDate}, new=${item.startDate})")
+                        }
+                    } else if (existingEpoch == null && newEpoch != null) {
+                        // Preferimos el que tenga fecha parseable
+                        Log.i(TAG, "Replacing round with unparsable date by parsable one for key $key (existing=${existing.startDate}, new=${item.startDate})")
+                        dedup[key] = item
+                    } else {
+                        // Si no podemos determinar cuál es más reciente (ninguno parsea), descartamos la nueva (comportamiento arbitrario)
+                        Log.i(TAG, "Could not determine date for either round; discarding new duplicate for key $key (existing=${existing.startDate}, new=${item.startDate})")
+                    }
+                }
+            }
+
+            val listaFiltrada = ArrayList(dedup.values)
+            if (listaFiltrada.isEmpty()) {
+                Log.i(TAG, "listaFiltrada = empty after dedup")
+                return false
+            }
+
+            listOfMedRoundsRun = listaFiltrada
             listOfMedRoundsRun.forEach { minRound ->
                 val isRound = mLocalRoundsLocal?.firstOrNull {
                     it.id == minRound.round.id || (it.remoteId == minRound.round.remoteId && it.remoteId > 0)|| (it.name == minRound.round.name && it.description == minRound.round.description)

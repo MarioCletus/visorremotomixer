@@ -54,6 +54,8 @@ import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
@@ -624,14 +626,18 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                                     mixerDetail.name,
                                     mixerDetail.description,
                                     mixerDetail.mac,
-                                    "",
-                                    0.0,
-                                    1F,
-                                    0L,
-                                    0,
-                                    "",
-                                    "",
-                                    true,
+                                    btBox = "",
+                                    tara = 0.0,
+                                    calibration = 1F,
+                                    remoteId = 0L,
+                                    updatedDate =  LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.APP_DB_FORMAT_DATE)),
+                                    archiveDate = null,
+                                    capacity = 0F,
+                                    created_date = LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.APP_DB_FORMAT_DATE)),
+                                    total_hours = 0.0,
+                                    rfid_mac = "",
+                                    internal_divisions = 1,
+                                    type = 0,
                                     mixerDetail.id
                                 )
                                 setMixer(mixer)

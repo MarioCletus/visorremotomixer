@@ -189,6 +189,7 @@ class SyncFragment : Fragment() {
     }
 
     private suspend fun syncData(){
+        Log.i(TAG,"syncData")
         (requireActivity() as MainActivity).sendRequestListOfUsers()
         (requireActivity() as MainActivity).deleteRoundsFromDB()
         delay(1000)

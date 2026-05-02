@@ -34,7 +34,7 @@
                 android:id="@+id/switch_role"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lista de usuarios" />
+                android:text="@string/lista_de_usuarios" />
 
             <LinearLayout
                 android:id="@+id/ll_login_data"
@@ -104,14 +104,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:text="Aún no hay usuarios creados" />
+                    android:text="@string/a_n_no_hay_usuarios_creados" />
                 <TextView
                     android:layout_margin="@dimen/_12sdp"
                     android:textAlignment="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="italic"
-                    android:text="Para visualizar la lista de usuarios se debe ingresar con conexión a internet y realizar una sincronización desde el menú de la aplicación" />
+                    android:text="@string/para_visualizar_la_lista_de_usuarios_se_debe_ingresar_con_conexi_n_a_internet_y_realizar_una_sincronizaci_n_desde_el_men_de_la_aplicaci_n" />
             </LinearLayout>
 
             <LinearLayout
@@ -127,7 +127,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:text="Primer ingreso. Debe conectarse con un mixer" />
+                    android:text="@string/primer_ingreso_debe_conectarse_con_un_mixer" />
                 <TextView
                     android:layout_margin="@dimen/_12sdp"
                     android:textAlignment="center"

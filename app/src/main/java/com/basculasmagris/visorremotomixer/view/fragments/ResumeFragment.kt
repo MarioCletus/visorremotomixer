@@ -28,7 +28,9 @@ import com.basculasmagris.visorremotomixer.view.adapter.RoundRunCorralResumeAdap
 import com.basculasmagris.visorremotomixer.view.adapter.RoundRunProductResumeAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.google.gson.Gson
-import com.kofigyan.stateprogressbar.StateProgressBar
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
 
 class ResumeFragment : Fragment() {
     private lateinit var mBinding: FragmentResumeBinding
@@ -65,8 +67,7 @@ class ResumeFragment : Fragment() {
             }
             mBinding.rvRoundProductsToLoad.adapter = roundRunProductAdapter
         }
-        mBinding.spRoundRunStep.setStateDescriptionData(stepsDescription)
-        mBinding.spRoundRunStep.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR)
+
         mBinding.rvRoundCorralsToLoad.layoutManager = GridLayoutManager(requireActivity(), 1)
         mBinding.rvRoundProductsToLoad.addItemDecoration(MarginItemDecoration(resources.getDimensionPixelSize(R.dimen.margin_recycler)))
         mBinding.rvRoundCorralsToLoad.addItemDecoration(MarginItemDecoration(resources.getDimensionPixelSize(R.dimen.margin_recycler)))
@@ -192,14 +193,18 @@ class ResumeFragment : Fragment() {
                                     mixerDetail.name,
                                     mixerDetail.description,
                                     mixerDetail.mac,
-                                    "",
-                                    0.0,
-                                    1F,
-                                    0L,
-                                    0,
-                                    "",
-                                    "",
-                                    true,
+                                    btBox = "",
+                                    tara = 0.0,
+                                    calibration = 1F,
+                                    remoteId = 0L,
+                                    updatedDate =  LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.APP_DB_FORMAT_DATE)),
+                                    archiveDate = null,
+                                    capacity = 0F,
+                                    created_date = LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.APP_DB_FORMAT_DATE)),
+                                    total_hours = 0.0,
+                                    rfid_mac = "",
+                                    internal_divisions = 1,
+                                    type = 0,
                                     mixerDetail.id
                                 )
                                 (requireActivity() as MainActivity).updateRoundDetail(roundRunDetail)

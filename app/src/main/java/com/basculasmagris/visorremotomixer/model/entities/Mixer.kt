@@ -15,10 +15,14 @@ data class Mixer(
     @ColumnInfo(name = "bt_box") var btBox: String,
     @ColumnInfo var tara: Double,
     @ColumnInfo var calibration: Float,
-    @ColumnInfo val rfid: Long,
     @ColumnInfo(name = "remote_id") var remoteId: Long,
     @ColumnInfo(name = "updated_date") var updatedDate: String,
-    @ColumnInfo(name = "archive_date") val archiveDate: String?,
-    @ColumnInfo var linked: Boolean?,
+    @ColumnInfo(name = "archive_date") var archiveDate: String?,
+    @ColumnInfo var capacity: Float,
+    @ColumnInfo var created_date: String,
+    @ColumnInfo var total_hours: Double,
+    @ColumnInfo var rfid_mac: String,
+    @ColumnInfo var internal_divisions: Int = 1,
+    @ColumnInfo var type: Int = 0,
     @PrimaryKey(autoGenerate = true) var id: Long = 0
 ) : Parcelable

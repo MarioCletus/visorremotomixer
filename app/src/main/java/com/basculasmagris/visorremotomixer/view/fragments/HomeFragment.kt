@@ -45,6 +45,9 @@ import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModelFactory
 import com.google.gson.Gson
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
 
 
 class HomeFragment : Fragment() {
@@ -303,24 +306,29 @@ class HomeFragment : Fragment() {
                     Log.i("showCommand","CMD_ROUNDDETAIL ${messageStr.length} byteArrayUtil ${byteArrayUtil.size} ")
                     try{
                         val jsonString : String = convertZip.decompressText(byteArrayUtil)
-                        Log.i("Json","jsonString * ${jsonString}")
+                        Log.i("Json","jsonString * $jsonString")
                         if(jsonString.isNotEmpty()){
                             val gson = Gson()
                             val roundRunDetail : MinRoundRunDetail = gson.fromJson(jsonString,  MinRoundRunDetail::class.java)
                             (requireActivity() as MainActivity).updateRoundDetail(roundRunDetail)
+
                             roundRunDetail.mixer?.let {mixerDetail->
                                 val mixer = Mixer(
                                     mixerDetail.name,
                                     mixerDetail.description,
                                     mixerDetail.mac,
-                                    "",
-                                    0.0,
-                                    1F,
-                                    0L,
-                                    0,
-                                    "",
-                                    "",
-                                    true,
+                                    btBox = "",
+                                    tara = 0.0,
+                                    calibration = 1F,
+                                    remoteId = 0L,
+                                    updatedDate =  LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.APP_DB_FORMAT_DATE)),
+                                    archiveDate = null,
+                                    capacity = 0F,
+                                    created_date = LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.APP_DB_FORMAT_DATE)),
+                                    total_hours = 0.0,
+                                    rfid_mac = "",
+                                    internal_divisions = 1,
+                                    type = 0,
                                     mixerDetail.id
                                 )
                             }

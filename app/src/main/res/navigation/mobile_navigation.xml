@@ -95,11 +95,6 @@
         android:label="@string/screen_tablet_mixer_new"
         tools:layout="@layout/activity_add_update_tablet_mixer" />
 
-    <activity
-        android:id="@+id/addUpdateMixerActivity"
-        android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateMixerActivity"
-        android:label="@string/nuevo_mixer"
-        tools:layout="@layout/activity_add_update_mixer" />
     <fragment
         android:id="@+id/nav_round"
         android:name="com.basculasmagris.visorremotomixer.view.fragments.RoundListFragment"

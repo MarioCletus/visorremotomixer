@@ -46,7 +46,7 @@
     <string name="ph_mac">Mac address</string>
     <string name="ph_bt_box">BT Box</string>
     <string name="ph_calibration">Calibración</string>
-    <string name="screen_mixer_config">Configuración del mixer</string>
+    <string name="screen_mixer_config">Configuración de la tablet</string>
     <string name="tara">Tara</string>
     <string name="peso">Peso</string>
     <string name="capacidad_m3">Capacidad m3</string>
@@ -56,8 +56,8 @@
     <string name="divisiones_externas_2_p">"Divisiones externas: "</string>
     <string name="peso_conocido">Peso conocido</string>
     <string name="caja_bluetooth_asoc">Caja bluetooth asociada</string>
-    <string name="tablets_vinculadas">Balanzas vinculadas</string>
-    <string name="buscar_tablets">Buscar Balanzas</string>
+    <string name="tablets_vinculadas">Tablets vinculadas</string>
+    <string name="buscar_tablets">Buscar Tablets</string>
     <string name="ingrese_macaddress">Ingrese Macaddress</string>
     <string name="calibrar">Calibrar</string>
     <string name="calibracion">Calibrando</string>
@@ -484,7 +484,7 @@
     <string name="screen_tablet_mixer_new">Nuevo Visor Remoto</string>
     <string name="screen_tablet_mixer_config">Configuración del mixer</string>
     <string name="mixer_remoto">Mixer Remoto</string>
-    <string name="declarar_mixer">Declarar Mixer</string>
+    <string name="declarar_mixer">Declarar Tablet</string>
     <string name="conectando_la_tablet">Conectando con Tablet</string>
     <string name="iniciando_ronda">Iniciando ronda</string>
     <string name="ver_ronda">Ver ronda</string>
@@ -535,5 +535,10 @@
     <string name="en_carga">En carga</string>
     <string name="en_descarga">En descarga</string>
     <string name="resto_dp">"Resto: "</string>
+    <string name="tablet_asociada">Tablet asociada</string>
+    <string name="tablet">Tablet</string>
+    <string name="bluetooth_tablet">Bluetooth de tablet</string>
+    <string name="primer_ingreso_debe_conectarse_con_un_mixer">Primer ingreso. Debe conectarse con una tablet de mixer</string>
+    <string name="para_visualizar_la_lista_de_usuarios_se_debe_ingresar_con_conexi_n_a_internet_y_realizar_una_sincronizaci_n_desde_el_men_de_la_aplicaci_n">Para visualizar la lista de usuarios se debe ingresar con conexión a internet y realizar una sincronización desde el menú de la aplicación</string>
 
 </resources>
