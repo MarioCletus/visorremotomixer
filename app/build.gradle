@@ -14,7 +14,7 @@ android {
         minSdk 26
         targetSdk 32
         versionCode 4
-        versionName "1.260502"
+        versionName "1.260520"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -110,6 +110,10 @@ dependencies {
 
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-rx3:<version>"
+
 //    implementation 'com.kofigyan.stateprogressbar:stateprogressbar:1.0.0'
 //    implementation 'com.evrencoskun.library:tableview:0.8.9.4'
+
+
 }

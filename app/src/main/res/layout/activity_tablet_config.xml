@@ -4,11 +4,11 @@
     style="?android:attr/textAppearanceLarge"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/view_activity_tablet_mixer_config"
-    tools:context=".view.activities.TabletMixerConfigActivity">
+    android:id="@+id/view_activity_tablet_config"
+    tools:context=".view.activities.TabletConfigActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_config_tablet_mixer"
+        android:id="@+id/toolbar_config_tablet"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@color/white"
         android:gravity="center"
-        app:title="@string/mixer"
+        app:title="@string/tablet"
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,7 +44,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_title_tablet_mixer"
+            android:id="@+id/tv_title_tablet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="20dp"
@@ -185,21 +185,18 @@
                 app:layout_constraintBottom_toBottomOf="@id/remoteViewerIcon"
                 app:layout_constraintStart_toEndOf="@id/remoteViewerIcon"/>
 
-            <EditText
-                android:id="@+id/et_tablet_mixer_name"
+            <TextView
+                android:id="@+id/tv_tablet_mixer_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="30dp"
                 android:layout_weight="1"
                 android:background="@null"
-                android:cursorVisible="true"
                 android:layout_marginBottom="3dp"
                 android:gravity="start"
                 android:paddingBottom="3dp"
                 android:text=""
-                android:inputType="text"
-                android:imeOptions="actionDone"
                 android:textColor="@color/color_acent_green"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="@id/titNombre"
@@ -244,8 +241,8 @@
                 app:layout_constraintStart_toEndOf="@id/iconCirc1"
                 app:layout_constraintTop_toTopOf="@id/lay_tablet_mixer_model" />
 
-            <EditText
-                android:id="@+id/et_tablet_mixer_description"
+            <TextView
+                android:id="@+id/tv_tablet_mixer_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
@@ -253,12 +250,9 @@
                 android:layout_marginBottom="3dp"
                 android:layout_weight="1"
                 android:background="@null"
-                android:cursorVisible="true"
                 android:gravity="start"
                 android:paddingBottom="3dp"
                 android:text=""
-                android:inputType="text"
-                android:imeOptions="actionDone"
                 android:textColor="@color/color_acent_green"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="@id/lay_tablet_mixer_model"
@@ -270,12 +264,12 @@
             android:id="@+id/layBTAsoc"
             android:layout_width="0dp"
             android:layout_height="70dp"
-            android:layout_marginTop="50dp"
             android:background="@drawable/border_sync"
             android:orientation="vertical"
+            android:layout_marginTop="30dp"
             app:layout_constraintEnd_toEndOf="@id/item_detail"
             app:layout_constraintStart_toStartOf="@id/item_detail"
-            app:layout_constraintTop_toBottomOf="@+id/lay_tablet_mixer_name">
+            app:layout_constraintTop_toBottomOf="@id/lay_tablet_mixer_model">
 
             <ImageView
                 android:id="@+id/iconCirc2"

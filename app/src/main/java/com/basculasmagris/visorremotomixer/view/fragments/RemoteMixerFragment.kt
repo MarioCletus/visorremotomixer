@@ -774,7 +774,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 Constants.CMD_USER_LIST->{
                     Log.i("showCommand","CMD_USER_LIST")
                     if(isAdded)
-                        bSyncroUsers = (requireActivity() as MainActivity).refreshUsers(message)
+                        bSyncroUsers = (requireActivity() as MainActivity).processUsers(message)
                 }
 
                 Constants.CMD_ROUNDS->{

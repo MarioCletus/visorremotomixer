@@ -321,6 +321,7 @@ data class MinUser (
     val password: String,
     val codeRole: Int,
     val remoteId: Long,
+    val codeClient: String,
     val id: Long
 ) : Parcelable
 

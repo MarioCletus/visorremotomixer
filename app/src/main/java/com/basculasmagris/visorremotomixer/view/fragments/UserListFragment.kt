@@ -113,15 +113,6 @@ class UserListFragment : Fragment() {
     }
 
     private fun cleanObservers(){
-        mUserViewModelRemote?.usersResponse?.value = null
-        mUserViewModelRemote?.usersLoadingError?.value = null
-        mUserViewModelRemote?.loadUser?.value = null
-        mUserViewModelRemote?.addUsersResponse?.value = null
-        mUserViewModelRemote?.addUserErrorResponse?.value = null
-        mUserViewModelRemote?.addUsersLoad?.value = null
-        mUserViewModelRemote?.updateUsersResponse?.value = null
-        mUserViewModelRemote?.updateUsersErrorResponse?.value = null
-        mUserViewModelRemote?.updateUsersLoad?.value = null
         mUserViewModelRemote = null
         mLocalUsers = null
     }

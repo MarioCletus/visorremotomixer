@@ -23,7 +23,7 @@
     <item
         android:id="@+id/action_save_mixer"
         android:icon="@drawable/ic_check"
-        android:title="@string/agregar_mixer"
+        android:title="@string/agregar_tablet"
         app:showAsAction="always"
         />
 

@@ -30,7 +30,15 @@ object Constants {
     const val EXTRA_TABLET_MIXER_MODE: String = "TabletMixerMode"
     const val FIRST_IN: String = "FirstIn"
 
-    const val BASE_URL: String = "http://sd-1810916-h00006.ferozo.net:3004/api/"
+    const val BASE_URL5: String = "https://api.spimixer.magris.ar:443/api/"
+    const val BASE_URL4: String = "https://api.dev.spimixer.magris.ar:443/api/"
+    const val BASE_URL3: String = "http://sd-3951082-h00004.ferozo.net:3004/api/"
+    const val BASE_URL2: String = "http://sd-3951082-h00003.ferozo.net:3003/api/"
+    const val BASE_URL1: String = "http://sd-3951082-h00001.ferozo.net:3001/api/"
+    const val BASE_URL0: String = "http://sd-3951082-h00002.ferozo.net:3002/api/"
+    var BASE_URL: String = "http://sd-3951082-h00004.ferozo.net:3004/api/"
+    const val BASE_URL_POR_DEFECTO: String = "http://sd-3951082-h00004.ferozo.net:3004/api/"
+
     const val API_PRODUCT_ENDPOINT: String = "products/"
     const val API_ESTABLISHMENT_ENDPOINT: String = "establishment/"
     const val API_CORRAL_ENDPOINT: String = "corral/"
@@ -40,6 +48,8 @@ object Constants {
     const val API_USER_ENDPOINT: String = "users/"
     const val API_REPORT_ENDPOINT: String = "report/"
     const val API_KEY: String = ""
+    const val API_TABLET_ENDPOINT: String = "tablet/"
+
 
     const val APP_DB_FORMAT_DATE = "yyyy-MM-dd HH:mm:ss"
     const val APP_XLS_FORMAT_DATE = "dd MMM yyyy HH:mm:ss"
@@ -221,5 +231,5 @@ object Constants {
     val CMD_STR_LIST  = "CSL"
     val CMD_VALUE  = "CMV"
     val CMD_REQ_VALUE  = "CRV"
-
+    val CMD_TABLET  = "TBL"
 }

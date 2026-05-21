@@ -48,25 +48,29 @@ import com.basculasmagris.visorremotomixer.model.entities.MinEstablishment
 import com.basculasmagris.visorremotomixer.model.entities.MinProduct
 import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.MinUser
+import com.basculasmagris.visorremotomixer.model.entities.RemoteTabletInfo
 import com.basculasmagris.visorremotomixer.model.entities.RoundLocal
 import com.basculasmagris.visorremotomixer.model.entities.RoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.model.entities.User
 import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
+import com.basculasmagris.visorremotomixer.utils.BluetoothUtils
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.utils.CustomAlertDialogBuilder
 import com.basculasmagris.visorremotomixer.utils.Helper
+import com.basculasmagris.visorremotomixer.utils.RemoteTabletSession
 import com.basculasmagris.visorremotomixer.view.fragments.AdminFragment
+import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RoundListFragment
-import com.basculasmagris.visorremotomixer.view.fragments.TabletMixerListFragment
+import com.basculasmagris.visorremotomixer.view.fragments.TabletListFragment
 import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.MixerViewModelFactory
 import com.basculasmagris.visorremotomixer.viewmodel.RoundLocalViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.RoundLocalViewModelFactory
-import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModelFactory
+import com.basculasmagris.visorremotomixer.viewmodel.TabletViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.UserViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.UserViewModelFactory
 import com.google.android.material.navigation.NavigationView
@@ -97,12 +101,14 @@ class MainActivity : AppCompatActivity() {
     )
     // Bluetooth
     var mService: BluetoothSDKService? = null
+    private var pendingTabletMixer: TabletMixer? = null
     private var bluetoothDevice: BluetoothDevice? = null
-    var selectedTabletMixerInActivity: TabletMixer? = null
+    var selectedTabletInActivity: TabletMixer? = null
+
 
     var minRoundRunDetail : MinRoundRunDetail? = null
     var listOfMedRoundsRun: ArrayList<MedRoundRunDetail> = ArrayList()
-    var listOfMinUsers: ArrayList<MinUser> = ArrayList()
+    private var listOfMinUsers: ArrayList<MinUser> = ArrayList()
     private var bReconnect: Boolean = true
     var knowDevices: List<BluetoothDevice>? = null
     private var dialogProduct: AlertDialog? = null
@@ -119,9 +125,11 @@ class MainActivity : AppCompatActivity() {
         MixerViewModelFactory((application as SpiMixerVRApplication).mixerRepository)
     }
 
-    private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
+    private val mTabletMixerViewModel: TabletViewModel by viewModels {
         TabletMixerViewModelFactory((application as SpiMixerVRApplication).tabletMixerRepository)
     }
+
+    private var mLocalTabletMixers: MutableList<TabletMixer>? = null
 
     private var mLocalUsers: List<User>? = null
     private var mLocalRoundsLocal: List<RoundLocal>? = null
@@ -229,20 +237,32 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        liveDataMerger.addSource(mTabletMixerViewModel.allTabletMixerList) {
+            if (it != null) {
+                liveDataMerger.value = TabletMixerData(it)
+            }
+        }
+
         return liveDataMerger
     }
+
     private fun getLocalData(){
         // Sync local data
         val liveData = fetchLocalData()
+        Log.i(TAG,"Obteniendo datos locales...")
         liveData.observe(this, object : Observer<MergedLocalData> {
             override fun onChanged(it: MergedLocalData?) {
                 when (it) {
-                    is UserData -> mLocalUsers = it.users
+                    is UserData -> {
+                        mLocalUsers = it.users
+                        Log.i(TAG,"Usuarios locales: $mLocalUsers ")
+                    }
                     is RoundLocalData -> mLocalRoundsLocal = it.roundsLocal
+                    is TabletMixerData -> mLocalTabletMixers = it.tabletMixers
                     else -> {}
                 }
 
-                if (mLocalUsers != null && mLocalRoundsLocal != null) {
+                if (mLocalUsers != null && mLocalRoundsLocal != null && mLocalTabletMixers != null) {
                     Log.i(TAG, "Rondas: ${mLocalRoundsLocal?.size}  Usuarios: ${mLocalUsers?.size}")
                     liveData.removeObserver(this)
                     liveData.value = null
@@ -301,14 +321,22 @@ class MainActivity : AppCompatActivity() {
             val binder = service as BluetoothSDKService.LocalBinder
             mService = binder.getService()
             Log.i(TAG, "[MAIN] ****** CONECTADO")
-//            mService?.LocalBinder()?.getBondedDevices()
             mService?.let {
                 Helper.getServiceInstance().setBluetoothService(it)
             }
+            onBluetoothServiceReady()
         }
         override fun onServiceDisconnected(arg0: ComponentName) {
             Log.i(TAG, "[MAIN] ****** DESCONECTADO")
         }
+    }
+    private fun onBluetoothServiceReady() {
+        val tabletMixer = pendingTabletMixer ?: return
+        val service = mService ?: return
+
+        Log.i(TAG, "Servicio listo para tablet: ${tabletMixer.name}")
+
+        service.LocalBinder().getBondedDevices()
     }
 
     fun alertDialog(title: String, message: String) : AlertDialog? {
@@ -328,7 +356,6 @@ class MainActivity : AppCompatActivity() {
         }
         return alert
     }
-
 
     fun showCustomProgressDialog(title: String? = null,message:String? = null,layoutId: Int? = null){
         mProgressDialog?.let {
@@ -365,7 +392,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun hideCustomProgressDialog(){
         mProgressDialog?.dismiss()
     }
@@ -384,9 +410,9 @@ class MainActivity : AppCompatActivity() {
 
     fun getSavedTabletMixer() {
         lifecycleScope.launch(Dispatchers.IO) {
-            Log.i(TAG, "getSavedTabletMixer")
             val flowLong = getSavedMixerTabletId()
             flowLong.collect { id ->
+                Log.i(TAG, "getSavedTabletMixer id $id")
                 id ?: return@collect
                 observeTabletMixerById(id)
             }
@@ -405,22 +431,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleTabletMixerUpdate(tabletMixer: TabletMixer) {
-        selectedTabletMixerInActivity = tabletMixer
+        selectedTabletInActivity = tabletMixer
+        pendingTabletMixer = tabletMixer
+        Log.i(TAG,"handleTabletMixerUpdate selectedTabletInActivity $selectedTabletInActivity")
         val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
         navHost?.childFragmentManager?.primaryNavigationFragment?.let { fragment ->
             when (fragment) {
+                is HomeFragment -> {
+                    Log.i(TAG, "setTabletMixer in HomeFragment $selectedTabletInActivity")
+                    fragment.setTabletMixer(tabletMixer)
+                    if (mService != null) {
+                        onBluetoothServiceReady()
+                    }
+                }
                 is AdminFragment -> {
-                    Log.i(TAG, "setTabletMixer in AdminFragment $selectedTabletMixerInActivity")
+                    Log.i(TAG, "setTabletMixer in AdminFragment $selectedTabletInActivity")
                     fragment.setTabletMixer(tabletMixer)}
                 is RemoteMixerFragment -> {
-                    Log.i(TAG, "setTabletMixer in RemoteMixerFragment $selectedTabletMixerInActivity")
+                    Log.i(TAG, "setTabletMixer in RemoteMixerFragment $selectedTabletInActivity")
                     fragment.setTabletMixer(tabletMixer)}
-                is TabletMixerListFragment -> {
-                    Log.i(TAG, "setTabletMixer in TabletMixerListFragment $selectedTabletMixerInActivity")
+                is TabletListFragment -> {
+                    Log.i(TAG, "setTabletMixer in TabletListFragment $selectedTabletInActivity")
                     fragment.setTabletMixer(tabletMixer)
                 }
                 is RoundListFragment -> {
-                    Log.i(TAG, "setTabletMixer in TabletMixerListFragment $selectedTabletMixerInActivity")
+                    Log.i(TAG, "setTabletMixer in TabletListFragment $selectedTabletInActivity")
                     fragment.setTabletMixer(tabletMixer)
                 }
             }
@@ -456,6 +491,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("connection", "Recursive connection $countRecursive  bluetoothDevice $bluetoothDevice" )
         if(bluetoothDevice != null) {
             this.bluetoothDevice = bluetoothDevice
+            RemoteTabletSession.setBluetoothDevice(bluetoothDevice)
         }
         else {
             return
@@ -477,9 +513,9 @@ class MainActivity : AppCompatActivity() {
         countRecursive++
 
         bluetoothDevice.let { deviceBluetooth ->
-            Log.d("connection", "bluetoothDevice ${getBluetoothName(deviceBluetooth)}")
+            Log.d("connection", "bluetoothDevice ${BluetoothUtils.getBluetoothName(this,deviceBluetooth)}")
             if (mService?.LocalBinder()?.isConnected() == false) {
-                Log.d("connection", "connectKnowDeviceWithTransfer ${getBluetoothName(bluetoothDevice)}")
+                Log.d("connection", "connectKnowDeviceWithTransfer ${BluetoothUtils.getBluetoothName(this,bluetoothDevice)}")
                 mService?.LocalBinder()?.connectKnowDeviceWithTransfer(bluetoothDevice)
             }
         }
@@ -504,25 +540,6 @@ class MainActivity : AppCompatActivity() {
             handlerRecconect.postDelayed(it, Constants.RECONNECT_TIME)
         }
     }
-/*
-    fun connectDevice(bluetoothDevice: BluetoothDevice?){
-        this.bluetoothDevice = bluetoothDevice
-        if(mService?.isConnected() == true){
-            changeStatusConnected()
-            return
-        }
-        bluetoothDevice?.let {deviceBluetooth->
-            if(mService?.LocalBinder()?.isConnected() == false){
-                Log.i(TAG,"connectDevice connectKnowDeviceWithTransfer $deviceBluetooth")
-                mService?.LocalBinder()?.connectKnowDeviceWithTransfer(deviceBluetooth)
-            }
-        }
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            Log.i(TAG,"Re connectDevice ${this.bluetoothDevice?.name}")
-            connectDevice(this.bluetoothDevice)
-        }, 2000)
-    }*/
 
     private var bShowDeviceConnected = false
     private fun showDeviceDisconnected() {
@@ -560,7 +577,6 @@ class MainActivity : AppCompatActivity() {
             return
         }
         bShowBalanceConnected = true
-        Log.i(TAG,"showBalanceDisconnected")
         if(binding.appBarMain.toolbarMain.menu.size>0){
             binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_balance)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_balance_disconnected_48px)
         }
@@ -573,7 +589,6 @@ class MainActivity : AppCompatActivity() {
         }
         countBalConect = 0
         bShowBalanceConnected = false
-        Log.i(TAG,"showBalanceConnected")
         if(binding.appBarMain.toolbarMain.menu.size>0){
             binding.appBarMain.toolbarMain.menu.findItem(R.id.bluetooth_balance)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_balance_connected_48px)
         }
@@ -583,25 +598,36 @@ class MainActivity : AppCompatActivity() {
         preferences[longPreferencesKey("IDTABLET")]
     }
 
-
-
-    fun changeTabletMixer(tabletMixer: TabletMixer, bluetoothDevice: BluetoothDevice?){
+    fun changeTabletMixer(
+        tabletMixer: TabletMixer,
+        bluetoothDevice: BluetoothDevice?
+    ) {
         reconnectDisable()
-        this.bluetoothDevice?.let {deviceBluetooth->
-            if(mService?.LocalBinder()?.isConnected() == true){
-                Log.d(TAG,"Disconnect bluetoothdevice $deviceBluetooth")
-                mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()//Reconexión por cambio de mixer
+
+        this.bluetoothDevice?.let { deviceBluetooth ->
+            if (mService?.LocalBinder()?.isConnected() == true) {
+                Log.d(TAG, "Disconnect bluetoothdevice $deviceBluetooth")
+                mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
                 changeStatusDisconnected()
             }
         }
-        selectedTabletMixerInActivity = tabletMixer
+
+        selectedTabletInActivity = tabletMixer
+        RemoteTabletSession.setTablet(tabletMixer)
+        Log.i(TAG,"changeTabletMixer in MainActivity $selectedTabletInActivity")
         this.bluetoothDevice = bluetoothDevice
+        RemoteTabletSession.setBluetoothDevice(bluetoothDevice)
+
+        RemoteTabletSession.setConnection(
+            tabletMixer = tabletMixer,
+            device = bluetoothDevice
+        )
+
         Handler(Looper.getMainLooper()).postDelayed({
             reconnectEnable()
-            Log.i(TAG,"changeMixer connectDevice")
+            Log.i(TAG, "changeMixer connectDevice")
             connectDevice(bluetoothDevice)
         }, Constants.CHANGE_MIXER_TIME)
-
     }
 
     fun changeActionBarTitle(title: String) {
@@ -610,8 +636,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    fun refreshUsers(message: ByteArray):Boolean {
+    fun processUsers(message: ByteArray):Boolean {
         try{
             val convertZip = ConvertZip()
             val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
@@ -632,7 +657,7 @@ class MainActivity : AppCompatActivity() {
                     updatedDate = "",
                     archiveDate = null,
                     codeRole = minUser.codeRole,
-                    codeClient = "",
+                    codeClient = minUser.codeClient,
                     id = minUser.id
                 )
                 if(isUser == null){
@@ -676,6 +701,53 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun processTabletInfo(message: ByteArray): Boolean{
+        try {
+            val messageStr = String(message)
+            Log.i(TAG,"processTabletInfo message: $messageStr")
+            val length = String(message, 3, 4).toInt()
+            val json = String(message, 7, length)
+
+            val tabletInfo = Gson().fromJson(
+                json,
+                RemoteTabletInfo::class.java
+            )
+
+            Log.i(TAG, "Tablet: ${tabletInfo.tabletName}")
+            Log.i(TAG, "Mixer: ${tabletInfo.mixerName}")
+            Log.i(TAG, "Serial: ${tabletInfo.serialNumber}")
+            Log.i(TAG,"mLocalTabletMixers: $mLocalTabletMixers")
+            val existTablet = mLocalTabletMixers?.firstOrNull{
+                it.serial == tabletInfo.serialNumber
+            }
+            if(existTablet != null){
+                val tabletBt = bluetoothDevice
+                existTablet.name = tabletInfo.tabletName
+                existTablet.mixerName = tabletInfo.mixerName
+                if(tabletBt != null) {
+                    existTablet.mac = BluetoothUtils.getAddress(this,tabletBt)
+                    existTablet.btName = BluetoothUtils.getBluetoothName(this,tabletBt)
+                }
+                existTablet.updatedDate = Helper.getCurrentDateTime()
+                mTabletMixerViewModel.update(existTablet)
+            }else{
+                val newTabletMixer = TabletMixer(
+                    name = tabletInfo.tabletName,
+                    mixerName = tabletInfo.mixerName,
+                    mac = "",
+                    serial = tabletInfo.serialNumber,
+                    btName = "",
+                    updatedDate = Helper.getCurrentDateTime(),
+                )
+                mTabletMixerViewModel.insert(newTabletMixer)
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error procesando TabletInfo", e)
+            return false
+        }
+        return true
+    }
+
     fun refreshRounds(message: ByteArray): Boolean {
         try {
             val convertZip = ConvertZip()
@@ -688,23 +760,6 @@ class MainActivity : AppCompatActivity() {
                 return false
             }
             Log.i("MEP", "listaRecibida ${listaRecibida}")
-/*
-            val uniqueRounds = mutableSetOf<Pair<String, String>>()
-            listaRecibida.forEach {
-                val round = it.round ?: run {
-                    Log.i(TAG, "listaRecibida.round = null")
-                    return false
-                }
-                val roundKey = round.name to round.description
-                if (!uniqueRounds.add(roundKey)) {
-                    Log.i(TAG, "Duplicate round found: ${round.name} - ${round.description}")
-                    return false
-                }
-            }
-
-            listOfMedRoundsRun = listaRecibida
-            Log.i(TAG, "listOfMinRounds $listOfMedRoundsRun $gson")
-*/
 
 
             // Map para mantener la "mejor" ronda por clave (name, description)
@@ -765,7 +820,7 @@ class MainActivity : AppCompatActivity() {
                     progress = minRound.progress,
                     status = minRound.status,
                     tabletMixerId = minRound.round.id,
-                    tabletMixerMac = selectedTabletMixerInActivity?.mac ?: "",
+                    tabletMixerMac = selectedTabletInActivity?.mac ?: "",
                     id = isRound?.id ?: 0L
                 )
                 if (isRound == null) {
@@ -784,8 +839,8 @@ class MainActivity : AppCompatActivity() {
                     is RemoteMixerFragment -> {
                         Log.i(TAG, "refreshRounds in RemoteMixerFragment")
                     }
-                    is TabletMixerListFragment -> {
-                        Log.i(TAG, "refreshRounds in TabletMixerListFragment")
+                    is TabletListFragment -> {
+                        Log.i(TAG, "refreshRounds in TabletListFragment")
                     }
                     is RoundListFragment -> {
                         Log.i(TAG, "refreshRounds in RoundListFragment")
@@ -1082,6 +1137,13 @@ class MainActivity : AppCompatActivity() {
         val byteArray = "CMD${Constants.CMD_ROUNDS}000000".toByteArray()
         mService?.LocalBinder()?.write(byteArray)
     }
+
+    fun sendRequestTablet() {
+        Log.i("send_cmd","sendRequestTablet")
+        val byteArray = "CMD${Constants.CMD_TABLET}000000".toByteArray()
+        mService?.LocalBinder()?.write(byteArray)
+    }
+
     fun dlgProduct(message: ByteArray) {
         try {
             val convertZip = ConvertZip()
@@ -1200,67 +1262,15 @@ class MainActivity : AppCompatActivity() {
         return name
     }
 
-    fun getAddress(btDevice: BluetoothDevice?): String {
-        var address = ""
-        btDevice?.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-                if (ActivityCompat.checkSelfPermission(
-                        this@MainActivity,
-                        Manifest.permission.BLUETOOTH_CONNECT
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    address = it.address
-                }
-            }else{
-                address = it.address
-            }
-        }
-        return address
-    }
-
-    fun getBluetoothName(btDevice: BluetoothDevice?): String {
-        var name = ""
-        btDevice?.let{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-                if (ActivityCompat.checkSelfPermission(
-                        this@MainActivity,
-                        Manifest.permission.BLUETOOTH_CONNECT
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    name = it.name?:""
-                }
-            }else{
-                name = it.name?:""
-            }
-        }
-        return name
-    }
-
-    fun getBluetoothAddress(btDevice: BluetoothDevice?): String {
-        var address = ""
-        btDevice?.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-                if (ActivityCompat.checkSelfPermission(
-                        this@MainActivity,
-                        Manifest.permission.BLUETOOTH_CONNECT
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    address = it.address
-                }
-            }else{
-                address = it.address
-            }
-        }
-        return address
-    }
-
-
     fun selectTabletMixer(tabletMixer: TabletMixer) {
-        selectedTabletMixerInActivity = tabletMixer
+        selectedTabletInActivity = tabletMixer
+        RemoteTabletSession.setTablet(selectedTabletInActivity)
+        Log.i(TAG,"selectTabletMixer $selectedTabletInActivity")
     }
 
     fun selectBluetooth(deviceBluetooth: BluetoothDevice?) {
         this.bluetoothDevice = deviceBluetooth
+        RemoteTabletSession.setBluetoothDevice(bluetoothDevice)
     }
 
     fun reconnectDisable() {
@@ -1283,19 +1293,15 @@ class MainActivity : AppCompatActivity() {
 
         dialogTare?.dismiss()
         dialogTare = null
-
-
     }
 
     fun beaconReceibed() {
         changeStatusConnected()
     }
 
-
     fun weightReceibed() {
         onWeightReceived()
     }
-
 
     private fun setupRunnable() {
         timeoutRunnable = Runnable {

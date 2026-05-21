@@ -137,7 +137,7 @@ class SplashActivity : AppCompatActivity() {
             Session.accessToken =
                 sharedpreferences.getString(Constants.PREF_LOGIN_KEY_ACCESS_TOKEN, "").toString()
             if (isLogged){
-                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
                 finish()
             } else {
                 startActivity(Intent(this@SplashActivity, LoginActivity::class.java))

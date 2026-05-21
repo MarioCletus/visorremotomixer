@@ -22,36 +22,36 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
-import com.basculasmagris.visorremotomixer.databinding.ActivityAddUpdateTabletMixerBinding
+import com.basculasmagris.visorremotomixer.databinding.ActivityAddUpdateTabletBinding
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.services.BluetoothSDKService
 import com.basculasmagris.visorremotomixer.utils.Constants
-import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModelFactory
+import com.basculasmagris.visorremotomixer.viewmodel.TabletViewModel
 import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class AddUpdateTabletMixerActivity : AppCompatActivity() {
+class AddUpdateTabletActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityAddUpdateTabletMixerBinding
-    private var mTabletMixerDetails: TabletMixer? = null
-    private var mNewTabletMixerDetails: TabletMixer? = null
+    private lateinit var binding: ActivityAddUpdateTabletBinding
+    private var mTabletDetails: TabletMixer? = null
+    private var mNewTabletDetails: TabletMixer? = null
     // Bluetooth
     private lateinit var mService: BluetoothSDKService
 
-    private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
+    private val mTabletViewModel: TabletViewModel by viewModels {
         TabletMixerViewModelFactory((application as SpiMixerVRApplication).tabletMixerRepository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAddUpdateTabletMixerBinding.inflate(layoutInflater)
+        binding = ActivityAddUpdateTabletBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.btnAddTabletMixer.visibility = GONE
+        binding.btnAddTablet.visibility = GONE
         if (intent.hasExtra(Constants.EXTRA_MIXER_DETAILS)){
-            mTabletMixerDetails = intent.getParcelableExtra(Constants.EXTRA_MIXER_DETAILS)
+            mTabletDetails = intent.getParcelableExtra(Constants.EXTRA_MIXER_DETAILS)
         }
 
         setupActionBar()
@@ -82,12 +82,12 @@ class AddUpdateTabletMixerActivity : AppCompatActivity() {
             }
         }, this, Lifecycle.State.RESUMED)
 
-        mTabletMixerDetails?.let {
+        mTabletDetails?.let {
             if (it.id != 0L){
-                binding.tiTabletMixerName.setText(it.name)
-                binding.tiTabletMixerDescription.setText(it.description)
-                binding.btnAddTabletMixer.text = resources.getString(R.string.lbl_update_tablet_mixer)
-                binding.etBtBox.setText(it.btBox)
+                binding.tiTabletName.setText(it.name)
+                binding.tiTabletMixerName.setText(it.mixerName)
+                binding.btnAddTablet.text = resources.getString(R.string.lbl_update_tablet_mixer)
+                binding.etBtBox.setText(it.btName)
                 binding.etMac.setText(it.mac)
 
             }
@@ -101,10 +101,10 @@ class AddUpdateTabletMixerActivity : AppCompatActivity() {
     }
 
     private fun setupActionBar(){
-        setSupportActionBar(binding.toolbarAddUpdateTabletMixer)
+        setSupportActionBar(binding.toolbarAddUpdateTablet)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        if (mTabletMixerDetails != null && mTabletMixerDetails!!.id != 0L){
+        if (mTabletDetails != null && mTabletDetails!!.id != 0L){
             supportActionBar?.let {
                 it.title = resources.getString(R.string.title_edit_tablet_mixer)
             }
@@ -114,7 +114,7 @@ class AddUpdateTabletMixerActivity : AppCompatActivity() {
             }
         }
 
-        binding.toolbarAddUpdateTabletMixer.setNavigationOnClickListener {
+        binding.toolbarAddUpdateTablet.setNavigationOnClickListener {
             hideSoftKeyboard()
             onBackPressed()
         }
@@ -127,20 +127,15 @@ class AddUpdateTabletMixerActivity : AppCompatActivity() {
 
     fun saveMremoteViewer(){
 
-        val remoteViewerName = binding.tiTabletMixerName.text.toString().trim { it <= ' ' }
-        val remoteViewerDescription = binding.tiTabletMixerDescription.text.toString().trim { it <= ' ' }
-        var remoteId = 0L
-        val remoteViewerMac = binding.etMac.text.toString().trim { it <= ' ' }
-        val remoteViewerBtBox = binding.etBtBox.text.toString().trim { it <= ' ' }
-
-        mTabletMixerDetails?.let {
-            remoteId = it.remoteId
-        }
+        val remoteTabletName = binding.tiTabletName.text.toString().trim { it <= ' ' }
+        val remoteTabletMixerNAme = binding.tiTabletMixerName.text.toString().trim { it <= ' ' }
+        val remoteTabletMac = binding.etMac.text.toString().trim { it <= ' ' }
+        val remoteTabletBtName = binding.etBtBox.text.toString().trim { it <= ' ' }
 
         when {
-            TextUtils.isEmpty(remoteViewerName) -> {
+            TextUtils.isEmpty(remoteTabletName) -> {
                 Toast.makeText(
-                    this@AddUpdateTabletMixerActivity,
+                    this@AddUpdateTabletActivity,
                     resources.getString(R.string.err_msg_tablet_mixer_name),
                     Toast.LENGTH_SHORT
                 ).show()
@@ -148,37 +143,33 @@ class AddUpdateTabletMixerActivity : AppCompatActivity() {
 
             else -> {
 
-                var remoteViewerId = 0L
+                var remoteTabletId = 0L
                 var updatedDate = ""
-                var linked = false
 
-                mTabletMixerDetails?.let {
+                mTabletDetails?.let {
                     if (it.id != 0L){
-                        remoteViewerId = it.id
+                        remoteTabletId = it.id
                         updatedDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.getDefault()).format(Date())
-                        linked = it.linked == true
                     }
                 }
 
                 val tabletMixer = TabletMixer(
-                    remoteViewerName,
-                    remoteViewerDescription,
-                    remoteViewerMac,
-                    remoteViewerBtBox,
-                    remoteId,
-                    updatedDate,
-                    "",
-                    linked,
-                    remoteViewerId
+                    name = remoteTabletName,
+                    mixerName = remoteTabletMixerNAme,
+                    mac = remoteTabletMac,
+                    serial = "",//TODO Serial
+                    btName = remoteTabletBtName,
+                    updatedDate = updatedDate,
+                    id = remoteTabletId
                 )
 
-                mNewTabletMixerDetails = tabletMixer
+                mNewTabletDetails = tabletMixer
 
                 runBlocking {
-                    if (remoteViewerId == 0L){
-                        mTabletMixerViewModel.insertSync(tabletMixer)
+                    if (remoteTabletId == 0L){
+                        mTabletViewModel.insertSync(tabletMixer)
                     } else {
-                        mTabletMixerViewModel.updateSync(tabletMixer)
+                        mTabletViewModel.updateSync(tabletMixer)
                     }
                     Log.i("SYNC", "Se actualiza remoteViewer con fecha ${tabletMixer.updatedDate}")
                     finish()

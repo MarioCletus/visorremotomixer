@@ -51,11 +51,13 @@ import java.math.RoundingMode
 import java.security.MessageDigest
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.Locale
 import kotlin.math.roundToLong
 
@@ -294,8 +296,7 @@ class Helper {
             return false
         }
         fun getCurrentUser(context: Context) : UserRemote {
-            var sharedpreferences: SharedPreferences? = null
-            sharedpreferences = context.getSharedPreferences(Constants.PREF_LOGIN, Context.MODE_PRIVATE);
+            val sharedpreferences = context.getSharedPreferences(Constants.PREF_LOGIN, Context.MODE_PRIVATE);
 
             val username = sharedpreferences.getString(PREF_LOGIN_KEY_USERNAME, "").toString()
             val name = sharedpreferences.getString(PREF_LOGIN_KEY_NAME, "").toString()
@@ -417,8 +418,9 @@ class Helper {
             }
         }
 
-
-
+        fun getCurrentDateTime(): String {
+            return SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.getDefault()).format(Date())
+        }
     }
 
     fun setBluetoothService(service: BluetoothSDKService) {

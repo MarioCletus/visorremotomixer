@@ -26,7 +26,7 @@
         android:theme="@style/Theme.Spimixer"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".view.activities.TabletMixerConfigActivity"
+            android:name=".view.activities.TabletConfigActivity"
             android:exported="false"
             android:label="@string/title_activity_tablet_mixer_config"
             android:screenOrientation="landscape"
@@ -34,7 +34,7 @@
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.Spimixer.NoActionBar" />
         <activity
-            android:name=".view.activities.AddUpdateTabletMixerActivity"
+            android:name=".view.activities.AddUpdateTabletActivity"
             android:exported="false"
             android:screenOrientation="landscape"
             android:label="@string/title_activity_add_update_tablet_mixer"
@@ -47,8 +47,8 @@
             android:exported="false"
             android:label="@string/title_activity_login"
             android:screenOrientation="landscape"
-            android:windowFullscreen="true"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
+
 
         <service
             android:name=".services.BluetoothSDKService"

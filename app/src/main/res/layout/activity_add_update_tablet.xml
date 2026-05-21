@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activities.AddUpdateTabletMixerActivity">
+    tools:context=".view.activities.AddUpdateTabletActivity">
 
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_add_update_tablet_mixer"
+        android:id="@+id/toolbar_add_update_tablet"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
@@ -17,28 +17,28 @@
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@color/white"
         android:gravity="center"
-        app:title="@string/agregar_mixer"
+        app:title="@string/agregar_tablet"
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_create_tablet_mixer"
+        android:id="@+id/cl_create_tablet"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintVertical_chainStyle="spread_inside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_add_update_tablet_mixer"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_add_update_tablet"
         android:padding="10dp">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/_ti_tablet_mixer_name"
+            android:id="@+id/_ti_tablet_name"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/_ti_tablet_mixer_description"
+            app:layout_constraintEnd_toStartOf="@id/_ti_tablet_description"
             android:paddingLeft="@dimen/_5sdp"
             android:paddingTop="@dimen/_5sdp"
             android:paddingRight="@dimen/_5sdp"
@@ -48,7 +48,7 @@
             app:boxCornerRadiusTopStart="7dp">
 
             <EditText
-                android:id="@+id/ti_tablet_mixer_name"
+                android:id="@+id/ti_tablet_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/nombre"
@@ -58,11 +58,11 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/_ti_tablet_mixer_description"
+            android:id="@+id/_ti_tablet_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/_ti_tablet_mixer_name"
+            app:layout_constraintStart_toEndOf="@id/_ti_tablet_name"
             app:layout_constraintEnd_toEndOf="parent"
             android:paddingLeft="@dimen/_5sdp"
             android:paddingTop="@dimen/_5sdp"
@@ -74,11 +74,11 @@
             app:boxCornerRadiusTopStart="7dp">
 
             <EditText
-                android:id="@+id/ti_tablet_mixer_description"
+                android:id="@+id/ti_tablet_mixer_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLength="250"
-                android:hint="@string/descripcion"
+                android:hint="@string/nombre_mixer"
                 android:textSize="14sp"
                 android:textColor="#595959"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/_ti_rfid"
-            app:layout_constraintTop_toBottomOf="@id/_ti_tablet_mixer_name"
+            app:layout_constraintTop_toBottomOf="@id/_ti_tablet_name"
             android:paddingLeft="@dimen/_5sdp"
             android:paddingTop="@dimen/_5sdp"
             android:paddingRight="@dimen/_5sdp"
@@ -120,7 +120,7 @@
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/_ti_tablet_mixer_name"
+            app:layout_constraintTop_toBottomOf="@id/_ti_tablet_name"
             app:layout_constraintStart_toEndOf="@id/ti_bt_box"
 
             android:paddingTop="@dimen/_5sdp"
@@ -203,7 +203,7 @@
 
 
         <Button
-            android:id="@+id/btn_add_tablet_mixer"
+            android:id="@+id/btn_add_tablet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

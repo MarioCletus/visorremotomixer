@@ -18,7 +18,7 @@
         android:orderInCategory="101"
         />
 
-    <item android:id="@+id/search_tablet_mixer"
+    <item android:id="@+id/search_tablet"
         android:title="@string/search_title"
         android:icon="@drawable/ic_search"
         app:actionViewClass="android.widget.SearchView"
@@ -27,9 +27,9 @@
 
 
     <item
-        android:id="@+id/action_add_tablet_mixer"
+        android:id="@+id/action_add_tablet"
         android:icon="@drawable/ic_add"
-        android:title="@string/agregar_mixer"
+        android:title="@string/agregar_tablet"
         app:showAsAction="ifRoom"
         android:orderInCategory="103"
         />

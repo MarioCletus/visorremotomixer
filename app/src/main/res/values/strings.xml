@@ -34,19 +34,19 @@
     <string name="mixers">Mixers</string>
     <string name="actualizar_mixer">Actualizar Mixer</string>
     <string name="editar_mixer">Editar Mixer</string>
-    <string name="agregar_mixer">Agregar Mixer</string>
-    <string name="err_msg_mixer_name">El nombre del Mixer es obligatorio</string>
+    <string name="agregar_tablet">Agregar Tablet</string>
+    <string name="err_msg_tablet_name">El nombre de la Tablet es obligatorio</string>
     <string name="borrar_mixer">Borrar Mixer</string>
-    <string name="configurar_mixer">Configurar Mixer</string>
-    <string name="detalle_de_mixer">Detalle del mixer</string>
-    <string name="nuevo_mixer">Nuevo mixer</string>
-    <string name="mixer_libre">Mixer Libre</string>
-    <string name="msg_delete_mixer_dialog">¿Está seguro que quiere borrar el mixer %1$s?</string>
-    <string name="tv_no_mixer_list">No hay mixers cargados</string>
+    <string name="configurar_tablet">Configurar Tablet</string>
+    <string name="detalle_de_tablet">Detalle de la Tablet</string>
+    <string name="nueva_tablet">Nueva tablet</string>
+    <string name="tablet_libre">Tablet Libre</string>
+    <string name="msg_delete_tablet_dialog">¿Está seguro que quiere borrar la tablet %1$s?</string>
+    <string name="tv_no_tablet_list">No hay tablets cargadas</string>
     <string name="ph_mac">Mac address</string>
     <string name="ph_bt_box">BT Box</string>
     <string name="ph_calibration">Calibración</string>
-    <string name="screen_mixer_config">Configuración de la tablet</string>
+    <string name="screen_tablet_config">Configuración de la tablet</string>
     <string name="tara">Tara</string>
     <string name="peso">Peso</string>
     <string name="capacidad_m3">Capacidad m3</string>
@@ -159,7 +159,13 @@
     <string name="msg_delete_round_dialog">¿Está seguro que quiere borrar la ronda %1$s?</string>
     <string name="msg_hide_round_dialog">¿Está seguro que quiere ocultar la ronda %1$s?</string>
 
-    <!--   ORDENAR -->
+    <!--   Roles -->
+    <string name="role_admin">Administrador</string>
+    <string name="role_operator">Operario</string>
+    <string name="role_supervisor">Supervisor</string>
+    <string name="role_superadmin">Super Administrador</string>
+    <string name="role_nutritionist">Nutricionista</string>
+    <string name="role_api">API</string>
 
 
     <!-- Hasta acá -->
@@ -208,8 +214,8 @@
     <string name="sincronizacion">Sincronización</string>
     <string name="pending_sync">Sincronización pendiente</string>
     <string name="additional_info">Información adicional</string>
-    <string name="lbl_sin_descripcion">No se ha cargado una descripción</string>
-    <string name="lbl_sin_descripcion_short">Sin descripción</string>
+    <string name="lbl_sin_nombre_de_mixer">No se ha cargado un nombre de mixer</string>
+    <string name="lbl_sin_nombre_de_mixer_short">Sin nombre de mixer</string>
 
 
     <string name="switch_percentage">Usar porcentaje</string>
@@ -473,7 +479,7 @@
 
     <string name="screen_tablet_mixer_detail">Detalle del  Visor Remoto</string>
     <string name="screen_tablet_mixer_new">Nuevo Visor Remoto</string>
-    <string name="screen_tablet_mixer_config">Configuración del mixer</string>
+    <string name="tablet_config">Configuración de tablet</string>
     <string name="mixer_remoto">Mixer Remoto</string>
     <string name="declarar_mixer">Declarar Tablet</string>
     <string name="conectando_la_tablet">Conectando con Tablet</string>
@@ -485,7 +491,6 @@
     <string name="quiere_pasar_a_descarga">¿Quiere pasar a descarga?</string>
     <string name="quiere_cerrar_ronda">¿Quiere cerrar la ronda?</string>
     <string name="agregar_establecimiento">Agregar establecimiento</string>
-    <string name="tv_no_tablet_mixer_list">No hay visores remotos cargados</string>
     <string name="finalizar">Finalizar</string>
     <string name="no_disponible">El mixer no puede realizar esta acción en este momento.</string>
     <string name="proximo_producto">Próximo producto</string>
@@ -515,7 +520,7 @@
     <string name="dispositivos_disponibles">Dispositivos disponibles</string>
 
     <string name="la_tablet_de_mixer">la tablet de mixer</string>
-    <string name="tablet_remota_menu">"    Tablet Remota"</string>
+    <string name="tablet_remota_menu">"    Tablet"</string>
     <string name="string_iniciar_picado">Mezclar</string>
     <string name="corral_detectado">Corral detectado</string>
     <string name="sin_dieta">Sin dieta</string>
@@ -534,5 +539,9 @@
     <string name="admininistracion">Administración</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="error_descargando_datos_servidor">Error descargando datos del servidor</string>
+    <string name="tablets">Tablets</string>
+    <string name="nombre_mixer">Nombre del mixer</string>
+    <string name="seleccione_el_bluetooth_de_latablet">Seleccione el Bluetooth de la tablet %1$s</string>
 
 </resources>

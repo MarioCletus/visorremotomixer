@@ -36,12 +36,6 @@ class TabletMixerRepository (private  val tabletMixerDao: TabletMixerDao) {
     }
 
 
-
-    @WorkerThread
-    suspend fun setUpdatedRemoteId(id: Long, remoteId: Long){
-        tabletMixerDao.setUpdatedRemoteId(id, remoteId)
-    }
-
     @WorkerThread
     suspend fun deleteTabletMixerData(tabletMixer: TabletMixer){
         tabletMixerDao.deleteTabletMixer(tabletMixer)

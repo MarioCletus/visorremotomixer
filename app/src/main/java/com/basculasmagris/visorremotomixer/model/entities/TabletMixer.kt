@@ -10,12 +10,10 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "tablet_mixer")
 data class TabletMixer(
     @ColumnInfo var name: String,
-    @ColumnInfo val description: String,
+    @ColumnInfo var mixerName: String,
     @ColumnInfo var mac: String,
-    @ColumnInfo(name = "bt_box") var btBox: String,
-    @ColumnInfo(name = "remote_id") var remoteId: Long,
+    @ColumnInfo(name = "serial") var serial: String,
+    @ColumnInfo(name = "bt_name") var btName: String,
     @ColumnInfo(name = "updated_date") var updatedDate: String,
-    @ColumnInfo(name = "archive_date") val archiveDate: String?,
-    @ColumnInfo var linked: Boolean?,
     @PrimaryKey(autoGenerate = true) var id: Long = 0
 ) : Parcelable

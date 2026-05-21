@@ -19,7 +19,6 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MediatorLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basculasmagris.visorremotomixer.R
@@ -31,20 +30,19 @@ import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.utils.Helper
+import com.basculasmagris.visorremotomixer.utils.RemoteTabletSession
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
-import com.basculasmagris.visorremotomixer.view.activities.MergedLocalData
-import com.basculasmagris.visorremotomixer.view.activities.TabletMixerData
 import com.basculasmagris.visorremotomixer.view.adapter.TabletMixerHomeAdapter
 import com.basculasmagris.visorremotomixer.view.interfaces.IBluetoothSDKListener
-import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModelFactory
+import com.basculasmagris.visorremotomixer.viewmodel.TabletViewModel
 import com.google.gson.Gson
 
 class HomeFragment : Fragment() {
 
     private lateinit var mBinding: FragmentHomeBinding
-    private val TAG = "DEBAdm"
-    private var selectedTabletMixerInFragment: TabletMixer? = null
+    private val TAG = "DEBHome"
+    private var selectedTabletInFragment: TabletMixer? = null
     private var tabletMixerBluetoothDevice : BluetoothDevice? = null
     private var menu: Menu? = null
     private var bInFree: Boolean = true
@@ -54,11 +52,10 @@ class HomeFragment : Fragment() {
     private var bInDownload : Boolean = false
 
 
-    private val mTabletMixerViewModel: TabletMixerViewModel by viewModels {
+    private val mTabletMixerViewModel: TabletViewModel by viewModels {
         TabletMixerViewModelFactory((requireActivity().application as SpiMixerVRApplication).tabletMixerRepository)
     }
     private var tabletMixerHomeAdapter: TabletMixerHomeAdapter? = null
-    private var liveData: MediatorLiveData<MergedLocalData>? = null
     private var mLocalTabletMixers: MutableList<TabletMixer>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +69,6 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
 
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
@@ -91,17 +87,17 @@ class HomeFragment : Fragment() {
 
                 }
                 menu.findItem(R.id.cancel_round).isVisible = false
-                menu.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletMixerInFragment?.name
-
+                menu.findItem(R.id.menu_selected_remote_tablet)?.title = RemoteTabletSession.tabletName
             }
+
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
                     R.id.bluetooth_remote_status -> {
                         val deviceBluetooth = (requireActivity() as MainActivity).knowDevices?.firstOrNull { bd->
-                            bd.address == selectedTabletMixerInFragment?.mac
+                            bd.address == selectedTabletInFragment?.mac
                         }
-                        Log.v(TAG,"Force connection ${deviceBluetooth?.name} $selectedTabletMixerInFragment")
+                        Log.v(TAG,"Force connection ${deviceBluetooth?.name} $selectedTabletInFragment")
                         deviceBluetooth?.let {
                             val name = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
                                 if (ActivityCompat.checkSelfPermission(
@@ -124,7 +120,6 @@ class HomeFragment : Fragment() {
                         return true
                     }
 
-
                     R.id.bluetooth_balance -> {
                         (requireActivity() as MainActivity).sendReconnectBalance()
                         (requireActivity() as MainActivity).showCustomProgressDialog()
@@ -137,12 +132,14 @@ class HomeFragment : Fragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
-
-
         mBinding = FragmentHomeBinding.inflate(inflater, container, false)
 
         mBinding.btnAdmin.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeToAdmin())
+        }
+
+        mBinding.btnToTablet.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionHomeToMixer())
         }
 
         mBinding.btnSync.setOnClickListener {
@@ -154,15 +151,21 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+        observeTabletMixers()
         (requireActivity() as MainActivity).getSavedTabletMixer()
-        getLocalData()
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
         mBinding.rvTabletMixerHomeAdapter.adapter = null
+    }
+
+    private fun observeTabletMixers() {
+        mTabletMixerViewModel.allTabletMixerList.observe(viewLifecycleOwner) { tabletMixers ->
+            mLocalTabletMixers = tabletMixers
+            tabletMixerHomeAdapter?.updateList(tabletMixers)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -179,37 +182,13 @@ class HomeFragment : Fragment() {
     private fun onTabletMixerPressed(tabletMixer: TabletMixer) {
         Log.i(TAG, "TabletMixer presionado: ${tabletMixer.id} - ${tabletMixer.name}")
         setTabletMixer(tabletMixer)
-        findNavController().navigate(HomeFragmentDirections.actionHomeToRound())
-    }
-
-    private fun getLocalData() {
-        liveData = fetchLocalData()
-
-        liveData?.observe(viewLifecycleOwner) { data ->
-            when (data) {
-                is TabletMixerData -> {
-                    mLocalTabletMixers = data.tabletMixers
-                    tabletMixerHomeAdapter?.updateList(data.tabletMixers)
-
-                    liveData?.removeObservers(viewLifecycleOwner)
-                    liveData = null
-                }
-
-                else -> {}
-            }
+        if(tabletMixer.btName.isNullOrEmpty()){
+            Toast.makeText(
+                requireContext(),getString(R.string.seleccione_el_bluetooth_de_latablet,tabletMixer.name), Toast.LENGTH_SHORT).show()
+            findNavController().navigate(HomeFragmentDirections.actionHomeToTabletConfig(tabletMixer))
+        }else {
+            findNavController().navigate(HomeFragmentDirections.actionHomeToRound())
         }
-    }
-
-    private fun fetchLocalData(): MediatorLiveData<MergedLocalData> {
-        val liveDataMerger = MediatorLiveData<MergedLocalData>()
-
-        liveDataMerger.addSource(mTabletMixerViewModel.allTabletMixerList) {
-            if (it != null) {
-                liveDataMerger.value = TabletMixerData(it)
-            }
-        }
-
-        return liveDataMerger
     }
 
 
@@ -447,7 +426,7 @@ class HomeFragment : Fragment() {
         override fun onBondedDevices(device: List<BluetoothDevice>?) {
             Log.i(TAG, "[Home]onBondedDevices ${device?.size} \n$device")
             (requireActivity() as MainActivity).knowDevices = device
-            selectedTabletMixerInFragment?.let {
+            selectedTabletInFragment?.let {
                 selectTablet(it)
             }
         }
@@ -517,17 +496,22 @@ class HomeFragment : Fragment() {
 
 
     fun setTabletMixer(tabletMixerIn: TabletMixer) {
-        tabletMixerIn.let { tabletMixer ->
-            menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + tabletMixer.name
-            selectedTabletMixerInFragment = tabletMixer
-            Log.i(
-                TAG,
-                "setTabletMixer $tabletMixer  \nmService ${(requireActivity() as MainActivity).mService}"
-            )
-            (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
-            menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletMixerInFragment?.name
-        }
+        selectedTabletInFragment = tabletMixerIn
+        menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  ${tabletMixerIn.name}"
+        Log.i(TAG, "setTabletMixer $tabletMixerIn mService ${(requireActivity() as MainActivity).mService}")
     }
+//    fun setTabletMixer(tabletMixerIn: TabletMixer) {
+//        tabletMixerIn.let { tabletMixer ->
+//            menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + tabletMixer.name
+//            selectedTabletInFragment = tabletMixer
+//            Log.i(
+//                TAG,
+//                "setTabletMixer $tabletMixer  \nmService ${(requireActivity() as MainActivity).mService}"
+//            )
+//            (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
+//            menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletInFragment?.name
+//        }
+//    }
 
     override fun onResume() {
         Log.i(TAG,"onResume")

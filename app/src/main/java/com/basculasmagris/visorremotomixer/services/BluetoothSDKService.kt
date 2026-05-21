@@ -14,7 +14,7 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.basculasmagris.visorremotomixer.view.activities.TabletMixerConfigActivity
+import com.basculasmagris.visorremotomixer.view.activities.TabletConfigActivity
 import com.basculasmagris.visorremotomixer.utils.BluetoothUtils
 import java.io.IOException
 import java.io.InputStream
@@ -222,13 +222,13 @@ class BluetoothSDKService : Service() {
                     socketConcetWithPermission(socket)
                     connectedThread = ConnectedThread(socket)
                     Log.i("BLUEFAT", "conexión exitosa")
-                    if(activity is TabletMixerConfigActivity){
+                    if(activity is TabletConfigActivity){
                         activity.bluetoothConnectionSuccess()
                     }
 
                 } catch (e: IOException) {
                     Log.i("BLUEFAT", e.message.toString())
-                    if(activity is TabletMixerConfigActivity){
+                    if(activity is TabletConfigActivity){
                         activity.bluetoothConnectionError()
                     }
 

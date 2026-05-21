@@ -36,19 +36,19 @@
     <string name="mixers">Misturadores</string>
     <string name="actualizar_mixer">Atualizar Misturador</string>
     <string name="editar_mixer">Editar Misturador</string>
-    <string name="agregar_mixer">Adicionar Misturador</string>
-    <string name="err_msg_mixer_name">O nome do Misturador é obrigatório</string>
+    <string name="agregar_tablet">Adicionar Misturador</string>
+    <string name="err_msg_tablet_name">O nome do Misturador é obrigatório</string>
     <string name="borrar_mixer">Excluir Misturador</string>
-    <string name="configurar_mixer">Configurar Misturador</string>
-    <string name="detalle_de_mixer">Detalhe do Misturador</string>
-    <string name="nuevo_mixer">Novo Misturador</string>
-    <string name="mixer_libre">Misturador Livre</string>
-    <string name="msg_delete_mixer_dialog">Tem certeza de que deseja excluir o misturador %1$s?</string>
-    <string name="tv_no_mixer_list">Nenhum misturador cadastrado</string>
+    <string name="configurar_tablet">Configurar Misturador</string>
+    <string name="detalle_de_tablet">Detalhe do Misturador</string>
+    <string name="nueva_tablet">Novo Misturador</string>
+    <string name="tablet_libre">Misturador Livre</string>
+    <string name="msg_delete_tablet_dialog">Tem certeza de que deseja excluir o misturador %1$s?</string>
+    <string name="tv_no_tablet_list">Nenhum misturador cadastrado</string>
     <string name="ph_mac">Endereço MAC</string>
     <string name="ph_bt_box">Caixa BT</string>
     <string name="ph_calibration">Calibração</string>
-    <string name="screen_mixer_config">Configuração do misturador</string>
+    <string name="screen_tablet_config">Configuração do misturador</string>
     <string name="tara">Tara</string>
     <string name="peso">Peso</string>
     <string name="capacidad_m3">Capacidade m³</string>
@@ -260,8 +260,8 @@
     <string name="action_sign_in">Entrar</string>
 
     <string name="additional_info">Informação adicional</string>
-    <string name="lbl_sin_descripcion">Nenhuma descrição foi carregada</string>
-    <string name="lbl_sin_descripcion_short">Sem descrição</string>
+    <string name="lbl_sin_nombre_de_mixer">Nenhuma descrição foi carregada</string>
+    <string name="lbl_sin_nombre_de_mixer_short">Sem descrição</string>
 
     <string name="switch_percentage">Usar porcentagem</string>
     <string name="animal_count">Qtd. de animais</string>
@@ -461,7 +461,7 @@
     <string name="title_activity_add_update_tablet_mixer">AddUpdateTabletMixerActivity</string>
     <string name="screen_tablet_mixer_detail">Detalhe do Visor Remoto</string>
     <string name="screen_tablet_mixer_new">Novo Visor Remoto</string>
-    <string name="screen_tablet_mixer_config">Configuração do misturador</string>
+    <string name="tablet_config">Configuração do misturador</string>
     <string name="mixer_remoto">Misturador Remoto</string>
     <string name="declarar_mixer">Declarar Misturador</string>
     <string name="conectando_la_tablet">Conectando com a Tablet</string>
@@ -473,7 +473,6 @@
     <string name="quiere_pasar_a_descarga">Deseja passar para descarga?</string>
     <string name="quiere_cerrar_ronda">Deseja encerrar a rodada?</string>
     <string name="agregar_establecimiento">Adicionar estabelecimento</string>
-    <string name="tv_no_tablet_mixer_list">Nenhum visor remoto carregado</string>
     <string name="finalizar">Finalizar</string>
     <string name="no_disponible">O misturador não pode realizar esta ação no momento.</string>
     <string name="proximo_producto">Próximo produto</string>

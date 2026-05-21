@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.basculasmagris.visorremotomixer.view.activities.TabletMixerConfigActivity
+import com.basculasmagris.visorremotomixer.view.activities.TabletConfigActivity
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.ItemCustomListBinding
 import com.basculasmagris.visorremotomixer.view.activities.*
 import com.basculasmagris.visorremotomixer.view.fragments.AdminFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RoundListFragment
-import com.basculasmagris.visorremotomixer.view.fragments.TabletMixerListFragment
+import com.basculasmagris.visorremotomixer.view.fragments.TabletListFragment
 
 
 class CustomListItemAdapter (
@@ -46,7 +46,7 @@ class CustomListItemAdapter (
             if (activity is LoginActivity){
                 activity.selectedListItem(item, selection)
             }
-            if (activity is TabletMixerConfigActivity){
+            if (activity is TabletConfigActivity){
                 activity.selectedListItem(item, selection)
             }
 

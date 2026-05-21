@@ -2,95 +2,43 @@ package com.basculasmagris.visorremotomixer.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.basculasmagris.visorremotomixer.model.entities.Mixer
 import com.basculasmagris.visorremotomixer.model.entities.MixerRemote
 import com.basculasmagris.visorremotomixer.model.network.MixerApiService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.rx3.await
+import kotlinx.coroutines.withContext
 
 class MixerRemoteViewModel : ViewModel() {
 
     private val mixerApiService = MixerApiService()
-    private val compositeDisposable = CompositeDisposable()
 
     // Get
     val loadMixer = MutableLiveData<Boolean>()
     val mixersResponse = MutableLiveData<MutableList<MixerRemote>?>()
     val mixersLoadingError = MutableLiveData<Boolean>()
 
-    //Post
-    val addMixersLoad = MutableLiveData<Boolean>()
-    val addMixersResponse = MutableLiveData<MixerRemote?>()
-    val addMixerErrorResponse = MutableLiveData<Boolean>()
+    suspend fun getMixersFromAPI_SUSPEND(): MutableList<MixerRemote> =
+        withContext(Dispatchers.Main) {
 
-    //Put
-    val updateMixersLoad = MutableLiveData<Boolean>()
-    val updateMixersResponse = MutableLiveData<MixerRemote?>()
-    val updateMixersErrorResponse = MutableLiveData<Boolean>()
+            loadMixer.value = true
+            mixersLoadingError.value = false
 
-    fun getMixersFromAPI() {
-        loadMixer.value = true
-        compositeDisposable.add(
-            mixerApiService.getMixers()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<MutableList<MixerRemote>>() {
-                    override fun onSuccess(value: MutableList<MixerRemote>?) {
-                        loadMixer.value = false
-                        mixersResponse.value = value
-                        mixersLoadingError.value = false
-                    }
+            try {
+                val value = mixerApiService.getMixers()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .await()
 
-                    override fun onError(e: Throwable?) {
-                        loadMixer.value = false
-                        mixersLoadingError.value = true
-                        e!!.printStackTrace()
-                    }
-                }))
-    }
-
-    fun addMixerFromAPI(mixer: Mixer){
-        addMixersLoad.value = true
-        compositeDisposable.add(
-            mixerApiService.addMixer(mixer)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<MixerRemote>() {
-                    override fun onSuccess(value: MixerRemote?) {
-                        addMixersResponse.value = value
-                        addMixerErrorResponse.value = false
-                        addMixersLoad.value = false
-                    }
-
-                    override fun onError(e: Throwable?) {
-                        addMixersLoad.value = false
-                        addMixerErrorResponse.value = true
-                        e!!.printStackTrace()
-                    }
-                }))
-    }
-
-    fun updateMixerFromAPI(mixer: Mixer){
-        updateMixersLoad.value = true
-        compositeDisposable.add(
-            mixerApiService.updateMixers(mixer)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<MixerRemote>() {
-                    override fun onSuccess(value: MixerRemote?) {
-                        updateMixersResponse.value = value
-                        updateMixersErrorResponse.value = false
-                        updateMixersLoad.value = false
-                    }
-
-                    override fun onError(e: Throwable?) {
-                        updateMixersLoad.value = false
-                        updateMixersErrorResponse.value = true
-                        e!!.printStackTrace()
-                    }
-                }))
-    }
+                mixersResponse.value = value   // opcional para LiveData/UI
+                loadMixer.value = false
+                value
+            } catch (t: Throwable) {
+                loadMixer.value = false
+                mixersLoadingError.value = true
+                throw t
+            }
+        }
 
 }

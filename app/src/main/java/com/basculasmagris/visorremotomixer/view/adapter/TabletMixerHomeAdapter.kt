@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 
-
 class TabletMixerHomeAdapter(
     private var tabletMixers: List<TabletMixer>,
     private val onItemPressed: (TabletMixer) -> Unit
@@ -30,7 +29,7 @@ class TabletMixerHomeAdapter(
         val tabletMixer = tabletMixers[position]
 
         holder.tvTablet.text = tabletMixer.name
-        holder.tvMixer.text = "Mixer"
+        holder.tvMixer.text = tabletMixer.mixerName
 
         holder.itemView.setOnClickListener {
             onItemPressed(tabletMixer)
@@ -48,8 +47,5 @@ class TabletMixerHomeAdapter(
 
     private var selectedId: Long? = null
 
-    fun setSelected(id: Long) {
-        selectedId = id
-        notifyDataSetChanged()
-    }
+
 }

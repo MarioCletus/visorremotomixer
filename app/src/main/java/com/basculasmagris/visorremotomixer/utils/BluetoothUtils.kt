@@ -1,5 +1,12 @@
 package com.basculasmagris.visorremotomixer.utils
 
+import android.Manifest
+import android.bluetooth.BluetoothDevice
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.core.app.ActivityCompat
+
 class BluetoothUtils {
     companion object {
         val ACTION_DISCOVERY_STARTED = "ACTION_DISCOVERY_STARTED"
@@ -17,5 +24,48 @@ class BluetoothUtils {
         val EXTRA_COMMAND = "EXTRA_COMMAND"
         val ACTION_COMMAND_RECEIVED = "ACTION_COMMAND_RECEIVED"
         val ACTION_COMMAND_SENT = "ACTION_COMMAND_SENT"
+
+
+        fun getAddress(
+            context: Context,
+            btDevice: BluetoothDevice?
+        ): String {
+
+            btDevice ?: return ""
+
+            if (
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return ""
+            }
+
+            return btDevice.address
+        }
+
+        fun getBluetoothName(
+            context: Context,
+            btDevice: BluetoothDevice?
+        ): String {
+
+            btDevice ?: return ""
+
+            if (
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return ""
+            }
+
+            return btDevice.name ?: ""
+        }
     }
+
+
 }

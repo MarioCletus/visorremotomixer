@@ -1,6 +1,5 @@
 package com.basculasmagris.visorremotomixer.model.network
 
-import com.basculasmagris.visorremotomixer.model.entities.RoundRemote
 import com.basculasmagris.visorremotomixer.model.entities.User
 import com.basculasmagris.visorremotomixer.model.entities.UserRemote
 import com.basculasmagris.visorremotomixer.utils.Constants
@@ -14,7 +13,7 @@ internal interface UserAPI {
     @POST("${Constants.API_USER_ENDPOINT}/auth")
     fun login(@Body user: HashMap<String,String>) : Single<UserRemote>
 
-    @GET("${Constants.API_USER_ENDPOINT}")
+    @GET("${Constants.API_USER_ENDPOINT}/allusers")
     fun getUsers() : Single<MutableList<UserRemote>>
 
     @POST(Constants.API_USER_ENDPOINT)

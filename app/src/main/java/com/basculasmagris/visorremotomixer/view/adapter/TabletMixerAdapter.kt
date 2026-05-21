@@ -10,10 +10,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.basculasmagris.visorremotomixer.R
-import com.basculasmagris.visorremotomixer.databinding.ItemTabletMixerLayoutBinding
+import com.basculasmagris.visorremotomixer.databinding.ItemTabletLayoutBinding
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
-import com.basculasmagris.visorremotomixer.view.fragments.TabletMixerListFragment
+import com.basculasmagris.visorremotomixer.view.fragments.TabletListFragment
 
 class TabletMixerAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<TabletMixerAdapter.ViewHolder>(),
     Filterable {
@@ -21,34 +21,34 @@ class TabletMixerAdapter (private  val fragment: Fragment) : RecyclerView.Adapte
     private var tabletMixers: MutableList<TabletMixer>  = ArrayList()
     private var filteredTabletMixers: MutableList<TabletMixer>  = ArrayList()
     private var weight : Long = 0L
-    var selectedTabletMixer : TabletMixer? = null
-    private var previousTabletMixer : TabletMixer? = null
-    class ViewHolder (view: ItemTabletMixerLayoutBinding) : RecyclerView.ViewHolder(view.root) {
-        val tvTabletMixerTitle = view.tvTableMixerTitle
-        val btnEditTabletMixer = view.btnEditTabletMixer
-        val btnDeleteTabletMixer = view.btnDeleteTabletMixer
-        val etTabletMixerDescription = view.etTabletMixerDescription
+    var selectedTablet : TabletMixer? = null
+    private var previousTablet : TabletMixer? = null
+    class ViewHolder (view: ItemTabletLayoutBinding) : RecyclerView.ViewHolder(view.root) {
+        val tvTabletTitle = view.tvTableTitle
+        val btnEditTablet = view.btnEditTablet
+        val btnDeleteTablet = view.btnDeleteTablet
+        val etTabletMixerName = view.etTabletMixerName
         val btnSelect = view.btnSelect
         val mixerCard = view.tabletMixerCard
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding: ItemTabletMixerLayoutBinding = ItemTabletMixerLayoutBinding.inflate(
+        val binding: ItemTabletLayoutBinding = ItemTabletLayoutBinding.inflate(
             LayoutInflater.from(fragment.context), parent, false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val tabletMixer = filteredTabletMixers[position]
-        holder.tvTabletMixerTitle.text = tabletMixer.name
-        holder.etTabletMixerDescription.text = tabletMixer.description.ifEmpty { fragment.getString(R.string.lbl_sin_descripcion_short) }
+        holder.tvTabletTitle.text = tabletMixer.name
+        holder.etTabletMixerName.text = tabletMixer.mixerName.ifEmpty { fragment.getString(R.string.lbl_sin_nombre_de_mixer_short) }
 //        holder.tvWeight.text = "${weight}kg"
 
-        if(selectedTabletMixer != null && selectedTabletMixer?.id == tabletMixer.id){
-            if(fragment is TabletMixerListFragment && selectedTabletMixer != null && selectedTabletMixer != previousTabletMixer){
+        if(selectedTablet != null && selectedTablet?.id == tabletMixer.id){
+            if(fragment is TabletListFragment && selectedTablet != null && selectedTablet != previousTablet){
                 fragment.menu?.findItem(R.id.menu_selected_mixer)?.title = "   " + tabletMixer.name
-                previousTabletMixer = selectedTabletMixer
+                previousTablet = selectedTablet
                 Log.v("VER","fragment.myMenu?.findItem(R.id.menu_selected_mixer)?.title ${tabletMixer.name}")
             }
             holder.mixerCard.strokeWidth = 4
@@ -74,8 +74,8 @@ class TabletMixerAdapter (private  val fragment: Fragment) : RecyclerView.Adapte
 
 
         holder.itemView.setOnClickListener {
-            if (fragment is TabletMixerListFragment) {
-                fragment.goToConfigMixer(tabletMixer,true)
+            if (fragment is TabletListFragment) {
+                fragment.goToConfigMixer(tabletMixer)
             }
         }
 
@@ -89,11 +89,11 @@ class TabletMixerAdapter (private  val fragment: Fragment) : RecyclerView.Adapte
             popup.menuInflater.inflate(R.menu.menu_adapter_mixer, popup.menu)
             popup.setOnMenuItemClickListener {menuItem ->
                 if (menuItem.itemId  == R.id.action_select_mixer){
-                    if(fragment is TabletMixerListFragment){
+                    if(fragment is TabletListFragment){
                         (fragment.requireActivity() as MainActivity).saveTabletMixer(tabletMixer)
-                        fragment.selectedTabletMixerInFragment = tabletMixer
-                        selectedTabletMixer = tabletMixer
-                        previousTabletMixer = null
+                        fragment.selectedTabletInFragment = tabletMixer
+                        selectedTablet = tabletMixer
+                        previousTablet = null
                         notifyDataSetChanged()
                     }
                 }
@@ -103,14 +103,14 @@ class TabletMixerAdapter (private  val fragment: Fragment) : RecyclerView.Adapte
             popup.show()
         }
 
-        holder.btnEditTabletMixer.setOnClickListener{
-            if ( fragment is TabletMixerListFragment){
+        holder.btnEditTablet.setOnClickListener{
+            if ( fragment is TabletListFragment){
                 fragment.goToConfigMixer(tabletMixer,false)
             }
         }
 
-        holder.btnDeleteTabletMixer.setOnClickListener{
-            if (fragment is TabletMixerListFragment) {
+        holder.btnDeleteTablet.setOnClickListener{
+            if (fragment is TabletListFragment) {
                 fragment.deleteTabletMixer(tabletMixer)
             }
         }
@@ -119,10 +119,10 @@ class TabletMixerAdapter (private  val fragment: Fragment) : RecyclerView.Adapte
     }
 
     private fun selectTabletMixer(mixer: TabletMixer) {
-        if(fragment is TabletMixerListFragment){
+        if(fragment is TabletListFragment){
             fragment.selectTabletMixer(mixer)
-            selectedTabletMixer = mixer
-            previousTabletMixer = null
+            selectedTablet = mixer
+            previousTablet = null
             notifyDataSetChanged()
         }
 
@@ -138,13 +138,13 @@ class TabletMixerAdapter (private  val fragment: Fragment) : RecyclerView.Adapte
         notifyDataSetChanged()
     }
 
-    fun statusConnexion(tabletMixer: TabletMixer, connected: Boolean){
+    fun statusConnexion(tabletMixer: TabletMixer, connected: Boolean){//TODO revisar linked status
         val index = tabletMixers.indexOf(tabletMixer)
         val indexFiltered = filteredTabletMixers.indexOf(tabletMixer)
 
         if (indexFiltered != -1 && index != -1){
-            tabletMixers[index].linked = connected
-            filteredTabletMixers[indexFiltered].linked = connected
+//            tabletMixers[index].linked = connected
+//            filteredTabletMixers[indexFiltered].linked = connected
             notifyDataSetChanged()
         }
     }
@@ -158,7 +158,7 @@ class TabletMixerAdapter (private  val fragment: Fragment) : RecyclerView.Adapte
                     tabletMixers
                         .filter {
                             (it.name.lowercase().contains(charString.lowercase())) or
-                                    (it.description.lowercase().contains(charString.lowercase()))
+                                    (it.mixerName.lowercase().contains(charString.lowercase()))
 
                         }
                         .forEach { filteredList.add(it) }

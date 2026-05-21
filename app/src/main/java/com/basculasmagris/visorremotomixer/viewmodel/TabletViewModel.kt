@@ -1,9 +1,9 @@
 package com.basculasmagris.visorremotomixer.viewmodel
 
 import androidx.lifecycle.*
+import com.basculasmagris.visorremotomixer.model.database.TabletMixerRepository
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixerRemote
-import com.basculasmagris.visorremotomixer.model.database.TabletMixerRepository
 import com.basculasmagris.visorremotomixer.model.network.TabletMixerApiService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.launch
 
-class TabletMixerViewModel (private val repository: TabletMixerRepository) : ViewModel() {
+class TabletViewModel (private val repository: TabletMixerRepository) : ViewModel() {
 
     // Remote
     private val tabletMixerApiService = TabletMixerApiService()
@@ -69,14 +69,6 @@ class TabletMixerViewModel (private val repository: TabletMixerRepository) : Vie
         repository.setUpdatedDate(id, date)
     }
 
-    fun setUpdatedMacAddress(id: Long, mac: String) = viewModelScope.launch {
-        repository.setUpdatedMacAddress(id, mac)
-    }
-
-    fun setUpdatedRemoteId(id: Long, remoteId: Long) = viewModelScope.launch {
-        repository.setUpdatedRemoteId(id, remoteId)
-    }
-
     fun delete(tabletMixer: TabletMixer) = viewModelScope.launch {
         repository.deleteTabletMixerData(tabletMixer)
     }
@@ -84,9 +76,9 @@ class TabletMixerViewModel (private val repository: TabletMixerRepository) : Vie
 
 class TabletMixerViewModelFactory(private val repository: TabletMixerRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(TabletMixerViewModel::class.java)){
+        if (modelClass.isAssignableFrom(TabletViewModel::class.java)){
             @Suppress("UNCHECKED_CAST")
-            return TabletMixerViewModel(repository) as T
+            return TabletViewModel(repository) as T
         }
 
         throw IllegalAccessException("Unknown ViewModel Class")

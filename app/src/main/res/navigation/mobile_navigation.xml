@@ -13,6 +13,9 @@
         android:label="@string/inicio"
         tools:layout="@layout/fragment_home" >
         <action
+            android:id="@+id/action_home_to_tablet_config"
+            app:destination="@id/nav_tablet_config_activity" />
+        <action
             android:id="@+id/action_home_to_mixer"
             app:destination="@id/nav_tablet_mixer" />
         <action
@@ -24,6 +27,9 @@
         <action
             android:id="@+id/action_home_to_sync"
             app:destination="@id/nav_sync" />
+        <action
+            android:id="@+id/action_home_to_sync_mixer"
+            app:destination="@id/nav_sync_mixer" />
         <action
             android:id="@+id/action_home_to_free_round"
             app:destination="@id/nav_mixer_remoto" />
@@ -43,6 +49,9 @@
         <action
             android:id="@+id/action_admin_to_sync"
             app:destination="@id/nav_sync" />
+        <action
+            android:id="@+id/action_admin_to_sync_mixer"
+            app:destination="@id/nav_sync_mixer" />
         <action
             android:id="@+id/action_admin_to_home"
             app:destination="@id/nav_home" />
@@ -96,9 +105,9 @@
     <!-- tablet mixer list -->
     <fragment
         android:id="@+id/nav_tablet_mixer"
-        android:name="com.basculasmagris.visorremotomixer.view.fragments.TabletMixerListFragment"
-        android:label="@string/mixer"
-        tools:layout="@layout/fragment_tablet_mixer_list" >
+        android:name="com.basculasmagris.visorremotomixer.view.fragments.TabletListFragment"
+        android:label="@string/tablet"
+        tools:layout="@layout/fragment_tablet_list" >
         <action
             android:id="@+id/action_tablet_mixerListFragment_to_addUpdateTabletMixerActivity"
             app:destination="@id/addUpdateRemoteViewActivity" />
@@ -109,16 +118,27 @@
 
 
     <activity
+        android:id="@+id/nav_tablet_config_activity"
+        android:name="com.basculasmagris.visorremotomixer.view.activities.TabletConfigActivity"
+        android:label="@string/configurar_tablet"
+        tools:layout="@layout/activity_tablet_config">
+        <argument
+            android:name="tabletMixer"
+            app:argType="com.basculasmagris.visorremotomixer.model.entities.TabletMixer"
+            />
+    </activity>
+
+    <activity
         android:id="@+id/addUpdateTabletMixerActivity"
-        android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateTabletMixerActivity"
+        android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateTabletActivity"
         android:label="@string/screen_tablet_mixer_new"
-        tools:layout="@layout/activity_add_update_tablet_mixer" />
+        tools:layout="@layout/activity_add_update_tablet" />
 
     <activity
         android:id="@+id/addUpdateRemoteViewActivity"
-        android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateTabletMixerActivity"
+        android:name="com.basculasmagris.visorremotomixer.view.activities.AddUpdateTabletActivity"
         android:label="@string/screen_tablet_mixer_new"
-        tools:layout="@layout/activity_add_update_tablet_mixer" />
+        tools:layout="@layout/activity_add_update_tablet" />
 
     <fragment
         android:id="@+id/nav_round"
@@ -132,6 +152,13 @@
     <fragment
         android:id="@+id/nav_sync"
         android:name="com.basculasmagris.visorremotomixer.view.fragments.SyncFragment"
+        android:label="@string/sincronizacion"
+        tools:layout="@layout/fragment_sync" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_sync_mixer"
+        android:name="com.basculasmagris.visorremotomixer.view.fragments.SyncMixerFragment"
         android:label="@string/sincronizacion"
         tools:layout="@layout/fragment_sync" >
     </fragment>

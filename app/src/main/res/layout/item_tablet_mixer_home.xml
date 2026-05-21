@@ -16,7 +16,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Tablet"
+        android:text="@string/tablet"
         android:textColor="@android:color/white"
         android:textSize="22sp"
         android:textStyle="bold"
@@ -27,7 +27,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Mixer"
+        android:text="@string/mixer"
         android:textColor="@color/color_acent_green"
         android:textSize="18sp"
         android:gravity="center" />
