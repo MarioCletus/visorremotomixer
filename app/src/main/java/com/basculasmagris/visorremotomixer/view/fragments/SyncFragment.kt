@@ -16,16 +16,20 @@ import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
 import com.basculasmagris.visorremotomixer.databinding.FragmentSyncBinding
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.model.entities.TabletRemote
+import com.basculasmagris.visorremotomixer.model.entities.User
 import com.basculasmagris.visorremotomixer.model.entities.UserRemote
 import com.basculasmagris.visorremotomixer.model.network.ApiError
 import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.view.activities.MainActivity
 import com.basculasmagris.visorremotomixer.view.activities.MergedLocalData
 import com.basculasmagris.visorremotomixer.view.activities.TabletMixerData
+import com.basculasmagris.visorremotomixer.view.activities.UserData
 import com.basculasmagris.visorremotomixer.viewmodel.TabletMixerViewModelFactory
 import com.basculasmagris.visorremotomixer.viewmodel.TabletRemoteViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.TabletViewModel
 import com.basculasmagris.visorremotomixer.viewmodel.UserRemoteViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.UserViewModel
+import com.basculasmagris.visorremotomixer.viewmodel.UserViewModelFactory
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -42,9 +46,14 @@ class SyncFragment : Fragment() {
         TabletMixerViewModelFactory((requireActivity().application as SpiMixerVRApplication).tabletMixerRepository)
     }
 
+    private val mUserViewModel: UserViewModel by viewModels {
+        UserViewModelFactory((requireActivity().application as SpiMixerVRApplication).userRepository)
+    }
+
     private var liveData: MediatorLiveData<MergedLocalData>? = null
     private var mLocalTabletMixers: MutableList<TabletMixer>? = null
-    
+    private var mLocalUsers: MutableList<User>? = null
+
     private var mUserViewModelRemote: UserRemoteViewModel? = null
     private var mRemoteUsers: MutableList<UserRemote>? = null
 
@@ -78,17 +87,20 @@ class SyncFragment : Fragment() {
     }
 
     private fun getLocalData() {
+        if (liveData != null) return
+
         liveData = fetchLocalData()
 
         liveData?.observe(viewLifecycleOwner) { data ->
             when (data) {
-                is TabletMixerData -> {
-                    mLocalTabletMixers = data.tabletMixers
-                    liveData?.removeObservers(viewLifecycleOwner)
-                    liveData = null
-                }
-
+                is TabletMixerData -> mLocalTabletMixers = data.tabletMixers
+                is UserData -> mLocalUsers = data.users
                 else -> {}
+            }
+
+            if (mLocalTabletMixers != null && mLocalUsers != null) {
+                liveData?.removeObservers(viewLifecycleOwner)
+                liveData = null
             }
         }
     }
@@ -99,6 +111,12 @@ class SyncFragment : Fragment() {
         liveDataMerger.addSource(mTabletMixerViewModel.allTabletMixerList) {
             if (it != null) {
                 liveDataMerger.value = TabletMixerData(it)
+            }
+        }
+
+        liveDataMerger.addSource(mUserViewModel.allUserList) {
+            if (it != null) {
+                liveDataMerger.value = UserData(it)
             }
         }
 
@@ -141,9 +159,10 @@ class SyncFragment : Fragment() {
         }
     }
 
-
     private suspend fun runSync_SUSPEND() = kotlinx.coroutines.coroutineScope {
         Log.v(TAG, "runSync_SUSPEND")
+
+        refreshLocalDataBeforeSync()
 
         val mainActivity = (activity as? MainActivity) ?: return@coroutineScope
 
@@ -169,7 +188,7 @@ class SyncFragment : Fragment() {
         Log.i(TAG,"users: $mRemoteUsers ")
         Log.i(TAG,"tablets: $mRemoteTablets ")
         
-        mRemoteTablets?.forEach {tabletRemote ->
+        mRemoteTablets?.forEachIndexed() {index,tabletRemote ->
             val tabletMixer = mLocalTabletMixers?.firstOrNull{
                 it.serial == tabletRemote.serial
             }
@@ -183,8 +202,11 @@ class SyncFragment : Fragment() {
                     updatedDate = Helper.getCurrentDateTime(),
                     id = tabletMixer.id
                 )
-                Log.i(TAG,"Tablet editada $tabletToUpdate" )
                 mTabletMixerViewModel.update(tabletToUpdate)
+
+                mLocalTabletMixers = mLocalTabletMixers?.map {
+                    if (it.id == tabletToUpdate.id) tabletToUpdate else it
+                }?.toMutableList()
             }else{
                 val tabletToInsert = TabletMixer(
                     name = tabletRemote.name,
@@ -195,9 +217,57 @@ class SyncFragment : Fragment() {
                     updatedDate = Helper.getCurrentDateTime()
                 )
                 mTabletMixerViewModel.insert(tabletToInsert)
-                Log.i(TAG,"Tablet insertada $tabletToInsert" )
+                mLocalTabletMixers?.add(tabletToInsert)
             }
+            updateTabletsProgress(index + 1, mRemoteTablets?.size ?: 0)
         }
+
+        Log.i(TAG,"mLocalUsers: $mLocalUsers")
+        mRemoteUsers?.forEachIndexed() {index, userRemote ->
+
+            val userLocal = mLocalUsers?.firstOrNull { userLocal ->
+                userLocal.remoteId == userRemote.id ||
+                        userLocal.username == userRemote.username
+            }
+
+            if (userLocal != null) {
+                val userToUpdate = User(
+                    username = userRemote.username,
+                    name = userRemote.name,
+                    lastname = userRemote.lastname,
+                    mail = userRemote.mail,
+                    password = userRemote.password,
+                    remoteId = userRemote.id,
+                    updatedDate = Helper.getCurrentDateTime(),
+                    archiveDate = userLocal.archiveDate,
+                    codeRole = userRemote.codeRole,
+                    codeClient = userRemote.codeClient,
+                    id = userLocal.id
+                )
+                mUserViewModel.update(userToUpdate)
+                mLocalUsers = mLocalUsers?.map {
+                    if (it.id == userToUpdate.id) userToUpdate else it
+                }?.toMutableList()
+            } else {
+                val userToInsert = User(
+                    username = userRemote.username,
+                    name = userRemote.name,
+                    lastname = userRemote.lastname,
+                    mail = userRemote.mail,
+                    password = userRemote.password,
+                    remoteId = userRemote.id,
+                    updatedDate = Helper.getCurrentDateTime(),
+                    archiveDate = null,
+                    codeRole = userRemote.codeRole,
+                    codeClient = userRemote.codeClient
+                )
+                mUserViewModel.insertSync(userToInsert)
+                mLocalUsers?.add(userToInsert)
+            }
+            updateUsersProgress(index + 1, mRemoteUsers?.size ?: 0)
+        }
+
+        Log.i(TAG,"usuarios actualizados")
     }
 
 
@@ -221,18 +291,47 @@ class SyncFragment : Fragment() {
 
 
     private fun initSyncUiAfterRemoteLoaded() {
-
-        // Users
-        val totalUsers = (mRemoteUsers?.size ?: 0)
+        val totalUsers = mRemoteUsers?.size ?: 0
         mBinding.pbUsers.progress = 0
-        mBinding.tvUsersPercentage.text =
-            Helper.getNumberWithDecimals(0.0, 2) + "% (0 / $totalUsers)"
+        mBinding.tvUsersPercentage.text = "0% (0 / $totalUsers)"
 
-        // Users
-        val totalTablets = (mRemoteUsers?.size ?: 0)
-        mBinding.pbUsers.progress = 0
-        mBinding.tvUsersPercentage.text =
-            Helper.getNumberWithDecimals(0.0, 2) + "% (0 / $totalTablets)"
+        val totalTablets = mRemoteTablets?.size ?: 0
+        mBinding.pbTablet.progress = 0
+        mBinding.tvTabletPercentage.text = "0% (0 / $totalTablets)"
     }
 
+    private fun updateUsersProgress(current: Int, total: Int) {
+        val progress = if (total == 0) 100 else (current * 100) / total
+        mBinding.pbUsers.progress = progress
+        mBinding.tvUsersPercentage.text = "$progress% ($current / $total)"
+    }
+
+    private fun updateTabletsProgress(current: Int, total: Int) {
+        val progress = if (total == 0) 100 else (current * 100) / total
+        mBinding.pbTablet.progress = progress
+        mBinding.tvTabletPercentage.text = "$progress% ($current / $total)"
+    }
+
+    private suspend fun refreshLocalDataBeforeSync() {
+        kotlinx.coroutines.suspendCancellableCoroutine<Unit> { cont ->
+
+            val localLiveData = fetchLocalData()
+
+            localLiveData.observe(viewLifecycleOwner) { data ->
+                when (data) {
+                    is TabletMixerData -> mLocalTabletMixers = data.tabletMixers
+                    is UserData -> mLocalUsers = data.users
+                    else -> {}
+                }
+
+                if (mLocalTabletMixers != null && mLocalUsers != null) {
+                    localLiveData.removeObservers(viewLifecycleOwner)
+
+                    if (cont.isActive) {
+                        cont.resume(Unit) {}
+                    }
+                }
+            }
+        }
+    }
 }

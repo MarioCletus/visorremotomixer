@@ -19,5 +19,5 @@ data class User (
     @ColumnInfo(name = "archive_date") val archiveDate: String?,
     @ColumnInfo(name = "code_role") val codeRole: Int,
     @ColumnInfo(name = "code_client") val codeClient: String,
-    @PrimaryKey var id: Long = 0
+    @PrimaryKey(autoGenerate = true) var id: Long = 0
 ) : Parcelable

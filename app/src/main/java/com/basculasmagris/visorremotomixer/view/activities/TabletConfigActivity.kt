@@ -938,26 +938,39 @@ class TabletConfigActivity : AppCompatActivity(){
             val listType = object : TypeToken<ArrayList<MinUser>>() {}.type
             listOfMinUsers = gson.fromJson<ArrayList<MinUser>>(json, listType)?:ArrayList()
             listOfMinUsers.forEach{ minUser ->
-                val isUser = mLocalUsers?.firstOrNull{
-                    it.id == minUser.id
+                val localUser = mLocalUsers?.firstOrNull{
+                    it.username == minUser.username
                 }
-                val user = User(
-                    username = minUser.username,
-                    name = minUser.name,
-                    lastname = minUser.lastname,
-                    mail = "",
-                    password = minUser.password,
-                    remoteId = minUser.remoteId,
-                    updatedDate = "",
-                    archiveDate = null,
-                    codeRole = minUser.codeRole,
-                    codeClient = minUser.codeClient,
-                    id = minUser.id
-                )
-                Log.i(TAG,"user $user")
-                if(isUser == null){
+                if(localUser == null){
+                    val user = User(
+                        username = minUser.username,
+                        name = minUser.name,
+                        lastname = minUser.lastname,
+                        mail = "",
+                        password = minUser.password,
+                        remoteId = minUser.remoteId,
+                        updatedDate = "",
+                        archiveDate = null,
+                        codeRole = minUser.codeRole,
+                        codeClient = minUser.codeClient
+                    )
+                    Log.i(TAG,"user $user")
                     mUserViewModel.insert(user)
                 }else{
+                    val user = User(
+                        username = minUser.username,
+                        name = minUser.name,
+                        lastname = minUser.lastname,
+                        mail = "",
+                        password = minUser.password,
+                        remoteId = minUser.remoteId,
+                        updatedDate = "",
+                        archiveDate = null,
+                        codeRole = minUser.codeRole,
+                        codeClient = minUser.codeClient,
+                        id = localUser.id
+                    )
+                    Log.i(TAG,"user $user")
                     mUserViewModel.update(user)
                 }
             }
