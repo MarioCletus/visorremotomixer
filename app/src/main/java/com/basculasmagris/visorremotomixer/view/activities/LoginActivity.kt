@@ -89,10 +89,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         val urlSuggestions = arrayListOf(
-            Constants.BASE_URL4,
-            Constants.BASE_URL5,
             Constants.BASE_URL0,
-            Constants.BASE_URL3,
             Constants.BASE_URL1,
             Constants.BASE_URL2
         )
