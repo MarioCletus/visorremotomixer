@@ -16,6 +16,8 @@ import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.basculasmagris.visorremotomixer.view.activities.TabletConfigActivity
 import com.basculasmagris.visorremotomixer.utils.BluetoothUtils
+import java.io.DataInputStream
+import java.io.DataOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -50,7 +52,7 @@ class BluetoothSDKService : Service() {
     }
 
     fun isConnected(): Boolean {
-        return binder?.isConnected() ?: false
+        return connectThreadWithTransfer?.isConnected() ?: false
     }
 
 
@@ -122,7 +124,7 @@ class BluetoothSDKService : Service() {
 
         fun disconnectKnowDevice() {
             Log.i("BLUE", "***Se desconecta el servicio")
-            connectThreadWithTransfer?.cancel()
+            connectThread?.cancel()
         }
 
         fun disconnectKnowDeviceWithTransfer() {
@@ -219,7 +221,7 @@ class BluetoothSDKService : Service() {
                 // until it succeeds or throws an exception.
                 try
                 {
-                    socketConcetWithPermission(socket)
+                    socketConnectWithPermission(socket)
                     connectedThread = ConnectedThread(socket)
                     Log.i("BLUEFAT", "conexión exitosa")
                     if(activity is TabletConfigActivity){
@@ -264,7 +266,7 @@ class BluetoothSDKService : Service() {
                     Log.i("BLUE", "**** uniqueID: ${MY_UUID} | socket: ${socket.toString()}")
                     // Connect to the remote device through the socket. This call blocks
                     // until it succeeds or throws an exception.
-                    socketConcetWithPermission(socket)
+                    socketConnectWithPermission(socket)
 
                     // The connection attempt succeeded. Perform work associated with
                     // the connection in a separate thread.
@@ -307,54 +309,63 @@ class BluetoothSDKService : Service() {
     private inner class ConnectedThread(private val mmSocket: BluetoothSocket) : Thread() {
         private val mmInStream: InputStream = mmSocket.inputStream
         private val mmOutStream: OutputStream = mmSocket.outputStream
-        private val mmBuffer: ByteArray = ByteArray(4096) // mmBuffer store for the stream
+        private val dis = DataInputStream(mmInStream)
+        private val dos = DataOutputStream(mmOutStream)
         private var isConnected : Boolean = false
 
         override fun run() {
-            Log.i("BLUE", "BEGIN ConnectedThread ${mmSocket}");
-            var numBytes: Int // bytes returned from read()
-            // Keep listening to the InputStream until an exception occurs.
-            pushBroadcastMessage(BluetoothUtils.ACTION_DEVICE_CONNECTED,arrayListOf(mmSocket.remoteDevice),null)
+            Log.i("BLUE", "BEGIN ConnectedThread $mmSocket")
+            pushBroadcastMessage(BluetoothUtils.ACTION_DEVICE_CONNECTED, arrayListOf(mmSocket.remoteDevice), null)
             isConnected = true
             while (true) {
-                // Read from the InputStream.
-                numBytes = try {
-                    mmInStream.read(mmBuffer)
+                val length: Int = try {
+                    dis.readInt()
                 } catch (e: IOException) {
-                    Log.i("BLUE", "Errno Bytes: ${e.message}")
+                    Log.i("BLUE", "Errno reading length: ${e.message}")
                     isConnected = false
-                    pushBroadcastMessage(BluetoothUtils.ACTION_CONNECTION_ERROR,null,"Input stream was disconnected")
+                    pushBroadcastMessage(BluetoothUtils.ACTION_CONNECTION_ERROR, null, "Input stream was disconnected")
                     break
                 }
-                if(numBytes<3 ){
-                    if(numBytes == 1 && mmBuffer[0] == "*".toByteArray()[0]){
-                        Log.i("PING","Ping: ${String(mmBuffer,0,numBytes)}")
-                        pushBroadcastMessage(BluetoothUtils.ACTION_MESSAGE_RECEIVED, arrayListOf(mmSocket.remoteDevice), "*")
-                    }
-                    continue
+                if (length <= 0) continue
+                val bytes = ByteArray(length)
+                try {
+                    dis.readFully(bytes)
+                } catch (e: IOException) {
+                    Log.i("BLUE", "Errno reading payload: ${e.message}")
+                    isConnected = false
+                    pushBroadcastMessage(BluetoothUtils.ACTION_CONNECTION_ERROR, null, "Input stream was disconnected")
+                    break
                 }
                 isConnected = true
-                val arrayCommand : ByteArray = mmBuffer.copyOfRange(3,numBytes)
-                if(numBytes >3 && mmBuffer.copyOfRange(0,3).contentEquals("CMD".toByteArray())){
-                    Log.i("DEBBTS","CMD "+ numBytes)
+                // PING
+                if (length == 1 && bytes[0] == '*'.code.toByte()) {
+                    Log.i("PING", "Ping received")
+                    pushBroadcastMessage(BluetoothUtils.ACTION_MESSAGE_RECEIVED, arrayListOf(mmSocket.remoteDevice), "*")
+                    continue
+                }
+                // Comando o mensaje
+                if (length > 3 && bytes.copyOfRange(0, 3).contentEquals("CMD".toByteArray())) {
+                    Log.i("DEBBTS", "CMD $length")
+                    val arrayCommand = bytes.copyOfRange(3, length)
                     pushBroadcastCommand(BluetoothUtils.ACTION_COMMAND_RECEIVED, arrayListOf(mmSocket.remoteDevice), arrayCommand)
-                }else{
-                    // Send to broadcast the message
-                    val message = String(mmBuffer, 0, numBytes)
+                } else {
+                    val message = String(bytes, 0, length)
                     pushBroadcastMessage(BluetoothUtils.ACTION_MESSAGE_RECEIVED, arrayListOf(mmSocket.remoteDevice), message)
                 }
             }
         }
 
-        fun write(msg: String) : Int{
+        fun write(msg: String): Int {
             return write(msg.toByteArray())
         }
 
         // Call this from the main activity to send data to the remote device.
-        fun write(bytes: ByteArray) : Int{
+        @Synchronized
+        fun write(bytes: ByteArray): Int {
             return try {
-                mmOutStream.write(bytes)
-                // Send to broadcast the message
+                dos.writeInt(bytes.size)
+                dos.write(bytes)
+                dos.flush()
                 pushBroadcastMessage(BluetoothUtils.ACTION_MESSAGE_SENT, arrayListOf(mmSocket.remoteDevice), null)
                 bytes.size
             } catch (e: IOException) {
@@ -365,9 +376,8 @@ class BluetoothSDKService : Service() {
 
         // Call this method from the main activity to shut down the connection.
         fun cancel() {
-            Log.i("BLUE", "CANCEL ConnectedThread");
+            Log.i("BLUE", "CANCEL ConnectedThread")
             try {
-
                 if (mmSocket.isConnected) {
                     mmSocket.close()
                 }
@@ -517,7 +527,7 @@ class BluetoothSDKService : Service() {
 
 
 
-    private fun socketConcetWithPermission(socket: BluetoothSocket) {
+    private fun socketConnectWithPermission(socket: BluetoothSocket) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
             if (ActivityCompat.checkSelfPermission(
                     applicationContext,

@@ -490,7 +490,7 @@
     <string name="ecienda_bluetooth">Ligue o Bluetooth</string>
     <string name="seguro_pasar_descarga">Tem certeza de que deseja passar para descarga?</string>
     <string name="vincular">Vincular</string>
-    <string name="no_hay_mixer_vinculado">Não há nenhum misturador vinculado no dispositivo</string>
+    <string name="no_hay_tablet_vinculada">Não há nenhum misturador vinculado no dispositivo</string>
     <string name="seguro_quiere_finalizar_ronda">Tem certeza de que deseja finalizar a rodada?</string>
     <string name="dispositivos">Dispositivos</string>
     <string name="se_registra_un_peso_de">Foi registrado um peso de %skg no misturador.\nDeseja descontá-lo da mistura a preparar?</string>

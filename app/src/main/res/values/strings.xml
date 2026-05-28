@@ -507,7 +507,7 @@
     <string name="ecienda_bluetooth">Encienda el bluetooth</string>
     <string name="seguro_pasar_descarga">¿Seguro quiere pasar a descarga?</string>
     <string name="vincular">Vincular</string>
-    <string name="no_hay_mixer_vinculado">No hay ningún mixer vinculado en el dispositvo</string>
+    <string name="no_hay_tablet_vinculada">No hay ninguna tablet vinculada</string>
     <string name="seguro_quiere_finalizar_ronda">¿Seguro quiere finalizar la ronda?</string>
     <string name="dispositivos">Dispositivos</string>
     <string name="se_registra_un_peso_de">Se registra un peso de %skg en el mixer.\\n¿Desea descontarlos de la mezcla  a preparar?</string>
@@ -543,5 +543,6 @@
     <string name="tablets">Tablets</string>
     <string name="nombre_mixer">Nombre del mixer</string>
     <string name="seleccione_el_bluetooth_de_latablet">Seleccione el Bluetooth de la tablet %1$s</string>
+    <string name="fin_carga_retorno_a_home">Fin de la carga. Se retorna al inicio</string>
 
 </resources>

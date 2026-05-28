@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
 import com.basculasmagris.visorremotomixer.databinding.FragmentSyncBinding
@@ -83,6 +84,11 @@ class SyncFragment : Fragment() {
         mBinding.btnSync.setOnClickListener {
             runSync()
         }
+
+        mBinding.btnBack.setOnClickListener {
+            if (isAdded) findNavController().popBackStack(R.id.nav_home, false)
+        }
+
         getLocalData()
     }
 

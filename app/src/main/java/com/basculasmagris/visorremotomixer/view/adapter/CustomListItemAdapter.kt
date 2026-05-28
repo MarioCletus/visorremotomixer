@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.basculasmagris.visorremotomixer.view.activities.TabletConfigActivity
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.ItemCustomListBinding
-import com.basculasmagris.visorremotomixer.view.activities.*
+import com.basculasmagris.visorremotomixer.view.activities.LoginActivity
+import com.basculasmagris.visorremotomixer.view.activities.TabletConfigActivity
 import com.basculasmagris.visorremotomixer.view.fragments.AdminFragment
+import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RoundListFragment
-import com.basculasmagris.visorremotomixer.view.fragments.TabletListFragment
 
 
 class CustomListItemAdapter (
@@ -97,6 +97,9 @@ class CustomListItemAdapterFragment (
                 fragment.selectedListItem(item, selection)
             }
             if (fragment is RoundListFragment){
+                fragment.selectedListItem(item, selection)
+            }
+            if (fragment is HomeFragment){
                 fragment.selectedListItem(item, selection)
             }
         }

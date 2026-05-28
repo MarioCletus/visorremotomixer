@@ -14,7 +14,7 @@
     <item android:id="@+id/bluetooth_balance"
         android:title=""
         android:icon="@drawable/ic_balance_disconnected_48px"
-        app:showAsAction="always" />
+        app:showAsAction="always|withText" />
 
     <item
         android:id="@+id/bluetooth_remote_status"

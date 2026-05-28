@@ -5,7 +5,7 @@
         android:title=""
         android:icon="@drawable/ic_balance_disconnected_48px"
         android:orderInCategory="100"
-        app:showAsAction="always" />
+        app:showAsAction="always|withText" />
 
     <item
         android:id="@+id/bluetooth_remote_status"
@@ -18,7 +18,7 @@
     <item
         android:id="@+id/menu_selected_remote_tablet"
         android:icon="@drawable/ic_tablet_disconnected_48px"
-        android:title="    Mixer"
+        android:title="    Tablet"
         app:showAsAction="always|withText"
         android:orderInCategory="103"
         />

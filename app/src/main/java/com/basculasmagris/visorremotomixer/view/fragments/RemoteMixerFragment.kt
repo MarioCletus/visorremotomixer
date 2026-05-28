@@ -42,6 +42,7 @@ import com.basculasmagris.visorremotomixer.model.entities.Mixer
 import com.basculasmagris.visorremotomixer.model.entities.MixerDetail
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
+import com.basculasmagris.visorremotomixer.utils.BluetoothUtils
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.utils.Helper
@@ -90,6 +91,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
     private var bSyncroUsers = false
     private var bSyncroRounds = false
+    private var bDownloadDisabledAlertShowing = false
 
     private var selectedMixerInFragment: Mixer? = null
     private var selectedTabletMixerInFragment: TabletMixer? = null
@@ -218,17 +220,17 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             if(isChecked){
                 v.setBackgroundResource(R.drawable.btn_round_to_run_red)
                 val msg = "CMD${Constants.CMD_PAUSE_ON}"
-                activity?.mService?.LocalBinder()?.write(msg.toByteArray())
+                activity?.mBinder?.write(msg.toByteArray())
             }else{
                 val msg = "CMD${Constants.CMD_PAUSE_OFF}"
-                activity?.mService?.LocalBinder()?.write(msg.toByteArray())
+                activity?.mBinder?.write(msg.toByteArray())
                 v.setBackgroundResource(R.drawable.btn_round_rounded_green)
             }
         }
 
         mBinding.btnStartTimer.setOnClickListener {
             val byteArray = "CMD${Constants.CMD_START_TIMER}".toByteArray()
-            (requireActivity() as MainActivity).mService?.LocalBinder()?.write(byteArray)
+            (requireActivity() as MainActivity).mBinder?.write(byteArray)
         }
 
 
@@ -411,22 +413,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                             bd.address == selectedTabletMixerInFragment?.mac
                         }
                         deviceBluetooth?.let {
-                            val name = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-                                if (ActivityCompat.checkSelfPermission(
-                                        requireActivity() as MainActivity,
-                                        Manifest.permission.BLUETOOTH_CONNECT
-                                    ) == PackageManager.PERMISSION_GRANTED
-                                ) {
-                                    if (it.name == null) "" else it.name
-                                }else{
-                                    ""
-                                }
-                            }else{
-                                if (it.name == null) "" else it.name
-                            }
+                            val name = BluetoothUtils.getBluetoothName(requireActivity(),it)
                             Log.v(TAG,"Force connection $name")
-                            (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
-                            (requireActivity() as MainActivity).mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                            (requireActivity() as MainActivity).mBinder?.disconnectKnowDeviceWithTransfer()
+                            (requireActivity() as MainActivity).mBinder?.connectKnowDeviceWithTransfer(it)
                             (requireActivity() as MainActivity).showCustomProgressDialog()
                         }
                         return true
@@ -593,6 +583,11 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
 
+            val mainActivity = activity as? MainActivity
+            if (mainActivity == null || !isAdded) {
+                Log.w(TAG, "Activity no disponible, se ignora mensaje Bluetooth")
+                return
+            }
 
             if(message == null || message.size<9){
                 Log.i(TAG,"command not enough large (${message?.size})")
@@ -644,12 +639,13 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                             }
                             (requireActivity() as MainActivity).minRoundRunDetail?.let { minRoundRunDetail->
                                 val title = if(bInFree)
-                                    "${getString(R.string.mixer)}: ${mixerDetail?.name} - ${minRoundRunDetail.round.name}"
+                                    minRoundRunDetail.round.name
                                 else
-                                    "${getString(R.string.mixer)}: ${mixerDetail?.name} - ${minRoundRunDetail.round.name} : ${minRoundRunDetail.round.diet.name}"
+                                    "${minRoundRunDetail.round.name} : ${minRoundRunDetail.round.diet.name}"
 
                                 activity?.changeActionBarTitle(title)
                             }
+                            menu?.findItem(R.id.bluetooth_balance)?.title = "  ${mixerDetail?.name}"
                         }
                     }catch (e: NumberFormatException){
                         Log.i("showCommand","CMD_ROUNDDETAIL NumberFormatException $e")
@@ -933,6 +929,20 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                 Constants.CMD_WEIGHT_DWNL->{
                     Log.v("cmd_weight","CMD_WEIGHT_DWNL")
+                    if (!mainActivity.isVrDownloadEnabled()) {
+                        if (!bDownloadDisabledAlertShowing) {
+                            bDownloadDisabledAlertShowing = true
+                            Log.i(TAG, "CMD_WEIGHT_DWNL — VR download disabled, showing dialog")
+                            mainActivity.alertDialog(
+                                getString(R.string.warning),
+                                getString(R.string.fin_carga_retorno_a_home)
+                            ) {
+                                bDownloadDisabledAlertShowing = false
+                                if (isAdded) findNavController().popBackStack(R.id.nav_home, false)
+                            }
+                        }
+                        return
+                    }
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
@@ -1038,6 +1048,20 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                 Constants.CMD_WEIGHT_DWNL_FREE->{
                     Log.v("cmd_weight","CMD_WEIGHT_DWNL_FREE")
+                    if (!mainActivity.isVrDownloadEnabled()) {
+                        if (!bDownloadDisabledAlertShowing) {
+                            bDownloadDisabledAlertShowing = true
+                            Log.i(TAG, "CMD_WEIGHT_DWNL_FREE — VR download disabled, showing dialog")
+                            mainActivity.alertDialog(
+                                getString(R.string.warning),
+                                getString(R.string.fin_carga_retorno_a_home)
+                            ) {
+                                bDownloadDisabledAlertShowing = false
+                                if (isAdded) findNavController().popBackStack(R.id.nav_home, false)
+                            }
+                        }
+                        return
+                    }
                     mBinding.llLoadDownload.visibility = View.VISIBLE
                     mBinding.flStepConfig.visibility = View.INVISIBLE
                     mBinding.flTimer.visibility = View.INVISIBLE
@@ -1081,7 +1105,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_weight = 0
                     count_resume = 0
                     if(isAdded)
-                        (requireActivity() as MainActivity).weightReceibed()
+                        (requireActivity() as MainActivity).weightReceived()
                     try{
                         val time = String(message,3,3).toLong()
                         mBinding.tvTimer.text = "$time"
@@ -1101,7 +1125,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                     count_weight = 0
                     count_resume = 0
                     if(isAdded)
-                        (requireActivity() as MainActivity).weightReceibed()
+                        (requireActivity() as MainActivity).weightReceived()
                     try{
                         val time = String(message,3,3).toLong()
                         mBinding.tvTimer.text = "$time"
@@ -1201,15 +1225,27 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         val gson = Gson()
                         mixerDetail = gson.fromJson(json,  MixerDetail::class.java)
                         Log.i(TAG,"mixer receibe $mixerDetail")
-                        val title = "Mixer: ${mixerDetail?.name}"
-                        activity?.changeActionBarTitle(title)
-
+                        menu?.findItem(R.id.bluetooth_balance)?.title = "  ${mixerDetail?.name}"
                     }catch (e: NumberFormatException){
                         Log.i(TAG,"bSyncroMixer NumberFormatException $e")
                         return
                     }catch (e:Exception){
                         Log.i(TAG,"bSyncroMixer Exception $e")
                         return
+                    }
+                }
+
+                Constants.CMD_CFG -> {
+                    Log.i("showCommand", "CMD_CFG")
+                    try {
+                        val json = String(message, 3, message.size - 3)
+                        val gson = Gson()
+                        val settingsMap = gson.fromJson(json, Map::class.java)
+                        val enableVrDownload = settingsMap["enableVrDownload"] as? Boolean ?: false
+                        (requireActivity() as MainActivity).saveVrSettings(enableVrDownload)
+                        Log.i(TAG, "CMD_CFG applied — enableVrDownload=$enableVrDownload")
+                    } catch (e: Exception) {
+                        Log.e(TAG, "CMD_CFG exception: $e")
                     }
                 }
 
@@ -1230,7 +1266,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             Log.i("message","RMF message $message")
             if(isAdded)
-                (requireActivity() as MainActivity).beaconReceibed()
+                (requireActivity() as MainActivity).beaconReceived()
         }
 
         override fun onMessageSent(device: BluetoothDevice?,message: String?) {
@@ -1276,7 +1312,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             bConnected = false
         }
         if(bConnected)
-           (requireActivity() as MainActivity).weightReceibed()
+           (requireActivity() as MainActivity).weightReceived()
         val progress = String(message,12,3).toInt()
         val signRest = String(message,15,1)
         rest = String(message,16,8).toIntOrNull()?:0
@@ -1435,7 +1471,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 )
             }
             Log.i(TAG,"setMixer $mixer  \nmService ${(requireActivity() as MainActivity).mService}")
-            (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
+            (requireActivity() as MainActivity).mBinder?.getBondedDevices()
         }
     }
 
@@ -1565,12 +1601,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
     fun sendNextProduct(){
         val msg = "CMD${Constants.CMD_NXTPRODUCT}"
-        activity?.mService?.LocalBinder()?.write(msg.toByteArray())
+        activity?.mBinder?.write(msg.toByteArray())
     }
 
     fun sendNextCorral(){
         val msg = "CMD${Constants.CMD_NXTCORRAL}"
-        activity?.mService?.LocalBinder()?.write(msg.toByteArray())
+        activity?.mBinder?.write(msg.toByteArray())
     }
 
     fun setTabletMixer(tabletMixerIn: TabletMixer) {
@@ -1581,7 +1617,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                 TAG,
                 "setTabletMixer $tabletMixer  \nmService ${(requireActivity() as MainActivity).mService}"
             )
-            (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
+            (requireActivity() as MainActivity).mBinder?.getBondedDevices()
         }
     }
 

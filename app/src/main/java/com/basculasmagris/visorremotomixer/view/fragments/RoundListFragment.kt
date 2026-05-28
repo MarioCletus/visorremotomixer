@@ -33,6 +33,7 @@ import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
 import com.basculasmagris.visorremotomixer.databinding.DialogCustomListBinding
 import com.basculasmagris.visorremotomixer.databinding.FragmentRoundListBinding
 import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunDetail
+import com.basculasmagris.visorremotomixer.model.entities.MixerDetail
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
 import com.basculasmagris.visorremotomixer.utils.BluetoothUtils
@@ -57,6 +58,7 @@ class RoundListFragment : Fragment() {
 
     private lateinit var mBinding: FragmentRoundListBinding
     private val TAG = "DEBRLF"
+    private val TAG1 = "SOS"
 
     private var bBlockButton = false
 
@@ -68,9 +70,8 @@ class RoundListFragment : Fragment() {
     private var countMsg: Int = REFRESH_VIEW_TIME
 
     private var menu:Menu? = null
-    private var selectedTabletMixerInFragment: TabletMixer? = null
-    private var tabletMixerBluetoothDevice : BluetoothDevice? = null
-
+    private var selectedTabletInFragment: TabletMixer? = null
+    private var bMixerInit = false
 
     private val mTabletMixerViewModel: TabletViewModel by viewModels {
         TabletMixerViewModelFactory((requireActivity().application as SpiMixerVRApplication).tabletMixerRepository)
@@ -132,27 +133,18 @@ class RoundListFragment : Fragment() {
                     }
 
                     R.id.bluetooth_remote_status -> {
+                        if(!isAdded){
+                            return false
+                        }
                         val deviceBluetooth = (requireActivity() as MainActivity).knowDevices?.firstOrNull { bd->
-                            bd.address == selectedTabletMixerInFragment?.mac
+                            bd.address == selectedTabletInFragment?.mac
                         }
                         Log.v(TAG,"Force connection $deviceBluetooth")
                         deviceBluetooth?.let {
-                            val name = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-                                if (ActivityCompat.checkSelfPermission(
-                                        requireActivity() as MainActivity,
-                                        Manifest.permission.BLUETOOTH_CONNECT
-                                    ) == PackageManager.PERMISSION_GRANTED
-                                ) {
-                                    if (it.name == null) "" else it.name
-                                }else{
-                                    ""
-                                }
-                            }else{
-                                if (it.name == null) "" else it.name
-                            }
+                            val name = BluetoothUtils.getBluetoothName(requireActivity(), it)
                             Log.v(TAG,"Force connection $name")
-                            (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
-                            (requireActivity() as MainActivity).mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                            (requireActivity() as MainActivity).mBinder?.disconnectKnowDeviceWithTransfer()
+                            (requireActivity() as MainActivity).mBinder?.connectKnowDeviceWithTransfer(it)
                             (requireActivity() as MainActivity).showCustomProgressDialog()
                         }
                         return true
@@ -163,9 +155,9 @@ class RoundListFragment : Fragment() {
                             return false
                         }
                         if (mLocalTabletMixersCustomList.size > 0){
-                            customItemsLDialog(getString(R.string.mixer), mLocalTabletMixersCustomList,Constants.MIXER_REF)
+                            customItemsLDialog(getString(R.string.tablet), mLocalTabletMixersCustomList,Constants.MIXER_REF)
                         } else {
-                            alertMixer(getString(R.string.no_hay_mixer_vinculado))
+                            alertMixer(getString(R.string.no_hay_tablet_vinculada))
                         }
                         return true
                     }
@@ -180,6 +172,10 @@ class RoundListFragment : Fragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
+
+        mBinding.btnBack.setOnClickListener {
+            if (isAdded) findNavController().popBackStack(R.id.nav_home, false)
+        }
 
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
     }
@@ -242,7 +238,7 @@ class RoundListFragment : Fragment() {
 
                 if (mLocalTabletMixers != null) {
                     Log.i(TAG,"liveData.removeObserver")
-//                    (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
+//                    (requireActivity() as MainActivity).mBinder?.getBondedDevices()
 //                    dialog?.dismiss()
                     liveData?.removeObserver(this)
                     liveData = null
@@ -258,17 +254,13 @@ class RoundListFragment : Fragment() {
         val roundAdapter =  RoundRunAdapter(this@RoundListFragment)
         mBinding.rvRoundsList.adapter = roundAdapter
         val mLocalRounds = (requireActivity() as MainActivity).listOfMedRoundsRun
-        Log.i(TAG,"mLocalRounds $mLocalRounds")
         mLocalRounds.let{
             if (it.isEmpty()){
                 mBinding.rvRoundsList.visibility = View.GONE
                 mBinding.tvNoData.visibility = View.VISIBLE
             } else {
-                Log.i(TAG, "Se actualiza UI Roundas: ${it.size} ")
                 mBinding.rvRoundsList.visibility = View.VISIBLE
                 mBinding.tvNoData.visibility = View.GONE
-                Log.i(TAG,"roundList $it")
-                Log.i("MEP","roundAdapter.roundList(it) $it")
                 roundAdapter.roundList(it)
             }
         }
@@ -293,29 +285,23 @@ class RoundListFragment : Fragment() {
         }
 
         override fun onDeviceConnected(device: BluetoothDevice?) {
-            var name = ""
-            var address = ""
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-                if (ActivityCompat.checkSelfPermission(
-                        requireActivity() as MainActivity,
-                        Manifest.permission.BLUETOOTH_CONNECT
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    name = device?.name.toString()
-                    address = device?.address.toString()
-                }
-            }else{
-                name = device?.name.toString()
-                address = device?.address.toString()
-            }
-            if(isAdded)
+            if(isAdded) {
                 (requireActivity() as MainActivity).sendRequestListOfRounds()
-            Log.i(TAG, "onDeviceConnected $name $address")
+                val name = BluetoothUtils.getBluetoothName(requireActivity(), device)
+                val address = BluetoothUtils.getAddress(requireActivity(), device)
+                Log.i(TAG, "onDeviceConnected $name $address")
+                Log.i(TAG1, "onDeviceConnected $name $address")
+            }
         }
 
         override fun onCommandReceived(device: BluetoothDevice?, message: ByteArray?) {
             if(message == null || message.size<9){
                 Log.i(TAG,"command not enough large (${message?.size})")
+                return
+            }
+            val mainActivity = activity as? MainActivity
+            if (mainActivity == null || !isAdded) {
+                Log.w(TAG, "Activity no disponible, se ignora mensaje Bluetooth")
                 return
             }
             if(!fragmentRunning){
@@ -340,7 +326,11 @@ class RoundListFragment : Fragment() {
                             val roundRunDetail : MinRoundRunDetail = gson.fromJson(jsonString,  MinRoundRunDetail::class.java)
                             (requireActivity() as MainActivity).updateRoundDetail(roundRunDetail)
                             (mBinding.rvRoundsList.adapter as RoundRunAdapter).notifyDataSetChanged()
+                            roundRunDetail.mixer?.let {mixerDetail->
+                                val mixerName = if(mixerDetail.name.isNotEmpty()) "Mixer: ${mixerDetail.name}" else ""
+                                menu?.findItem(R.id.bluetooth_balance)?.title = mixerName
                             }
+                        }
                     }catch (e: NumberFormatException){
                         Log.i("showCommand","CMD_ROUNDDETAIL NumberFormatException $e")
                     }catch (e:Exception){
@@ -379,6 +369,7 @@ class RoundListFragment : Fragment() {
                     }
                     refreshWeight(message)
                 }
+
                 Constants.CMD_WEIGHT_LOAD_FREE->{
                     Log.i("CMD_WEIGHT","CMD_WEIGHT_LOAD_FREE $message")
                     if(countMsg++ > REFRESH_VIEW_TIME){
@@ -393,6 +384,7 @@ class RoundListFragment : Fragment() {
                     }
                     refreshWeight(message)
                 }
+
                 Constants.CMD_WEIGHT_CONFIG_FREE->{
                     Log.i("CMD_WEIGHT","CMD_WEIGHT_CONFIG_FREE $message")
                     if(countMsg++ > REFRESH_VIEW_TIME){
@@ -412,6 +404,9 @@ class RoundListFragment : Fragment() {
                     Log.i("CMD_WEIGHT","CMD_WEIGHT_DWNL $message")
                     if(countMsg++ > REFRESH_VIEW_TIME){
                         refreshRound()
+                    }
+                    if (!mainActivity.isVrDownloadEnabled()) {
+                        return
                     }
                     if(bGoToRound){
                         bGoToRound = false
@@ -470,13 +465,38 @@ class RoundListFragment : Fragment() {
                     }
                 }
 
+                Constants.CMD_MIXER ->{
+                    Log.i("showCommand","CMD_MIXER")
+                    try{
+                        val convertZip = ConvertZip()
+                        val json = convertZip.decompressText(message.copyOfRange(7,message.size-1))
+                        val gson = Gson()
+                        val mixerDetail = gson.fromJson(json,  MixerDetail::class.java)
+                        Log.i(TAG,"mixer receibe $mixerDetail")
+                        val mixerName = if(mixerDetail?.name?.isNotEmpty() == true) "  ${mixerDetail.name}" else ""
+                        menu?.findItem(R.id.bluetooth_balance)?.title = mixerName
+                        bMixerInit = true
+                    }catch (e: NumberFormatException){
+                        Log.i(TAG,"bSyncroMixer NumberFormatException $e")
+                        return
+                    }catch (e:Exception){
+                        Log.i(TAG,"bSyncroMixer Exception $e")
+                        return
+                    }
+                }
+
                 else->{
                 }
             }
         }
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
-            (requireActivity() as MainActivity).beaconReceibed()
+            if(!isAdded)
+                return
+            (requireActivity() as MainActivity).beaconReceived()
+            if(!bMixerInit){
+                (requireActivity() as MainActivity).requestMixer()
+            }
         }
 
         override fun onMessageSent(device: BluetoothDevice?, message: String?) {
@@ -493,14 +513,17 @@ class RoundListFragment : Fragment() {
 
         override fun onDeviceDisconnected() {
             Log.i(TAG,"onDeviceDisconnected")
-            if(isAdded)
+            if(isAdded){
+                bMixerInit = false
                 (requireActivity() as MainActivity).changeStatusDisconnected()
+                Log.i(TAG1,"onDeviceDisconnected")
+            }
         }
 
         override fun onBondedDevices(device: List<BluetoothDevice>?) {
             Log.i(TAG, "[RoundListFragment]onBondedDevices ${device?.size} \n$device")
             (requireActivity() as MainActivity).knowDevices = device
-            selectedTabletMixerInFragment?.let {
+            selectedTabletInFragment?.let {
                 selectTablet(it)
             }
         }
@@ -527,7 +550,7 @@ class RoundListFragment : Fragment() {
             bConnected = false
         }
         if(bConnected && isAdded)
-            (requireActivity() as MainActivity).weightReceibed()
+            (requireActivity() as MainActivity).weightReceived()
     }
 
     private fun refreshRound() {
@@ -554,6 +577,7 @@ class RoundListFragment : Fragment() {
 
     override fun onResume() {
         fragmentRunning = true
+        bMixerInit = false
         super.onResume()
     }
 
@@ -564,7 +588,7 @@ class RoundListFragment : Fragment() {
         }
 
         if (deviceBluetooth != null){
-            Log.i(TAG,"Try to connect with ${deviceBluetooth}")
+            Log.i(TAG,"Try to connect with ${BluetoothUtils.getBluetoothName(requireContext(),deviceBluetooth)}  ${deviceBluetooth.address}")
             (requireActivity() as MainActivity).showCustomProgressDialog()
             (requireActivity() as MainActivity).connectDevice(deviceBluetooth)
         } else {
@@ -575,13 +599,18 @@ class RoundListFragment : Fragment() {
     fun setTabletMixer(tabletMixerIn: TabletMixer) {
         tabletMixerIn.let { tabletMixer ->
             menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + tabletMixer.name
-            selectedTabletMixerInFragment = tabletMixer
+            selectedTabletInFragment = tabletMixer
             Log.i(
                 TAG,
                 "setTabletMixer $tabletMixer  \nmService ${(requireActivity() as MainActivity).mService}"
             )
-            (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
-            menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletMixerInFragment?.name
+            // Solo pedir bonded devices si no estamos ya conectados al dispositivo correcto.
+            // Evita ciclos innecesarios getBondedDevices → onBondedDevices → selectTablet → connectDevice.
+            val activity = requireActivity() as MainActivity
+            if (activity.mBinder?.isConnected() != true) {
+                activity.mBinder?.getBondedDevices()
+            }
+            menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletInFragment?.name
         }
     }
 
@@ -606,10 +635,10 @@ class RoundListFragment : Fragment() {
                     address = it.address
                 }
                 Log.i(TAG,"Se seleccionó $name : $address")
-                if(tabletMixerBluetoothDevice != it){
+                // Conectar solo si no está ya conectado al dispositivo correcto
+                if (activity.mBinder?.isConnected() != true) {
                     connectTable(tabletMixer)
                 }
-                tabletMixerBluetoothDevice = it
             }
         }
     }
@@ -672,8 +701,11 @@ class RoundListFragment : Fragment() {
         }
         when(selection){
             Constants.MIXER_REF->{
-                (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()//Se seleccionó un nuevo mixer.
+                (requireActivity() as MainActivity).mBinder?.disconnectKnowDeviceWithTransfer()//Se seleccionó una nueva tablet.
                 mCustomListDialog.dismiss()
+                menu?.findItem(R.id.menu_selected_remote_tablet)?.title = ""
+                menu?.findItem(R.id.bluetooth_balance)?.title = ""
+                bMixerInit = false
 
                 val localTabletMixer = mLocalTabletMixers?.firstOrNull { tabletMixer ->
                     tabletMixer.id == item.id
@@ -682,7 +714,7 @@ class RoundListFragment : Fragment() {
                 val changeTabletMixer = menu?.findItem(R.id.menu_selected_remote_tablet)
                 changeTabletMixer?.title = "   "+ localTabletMixer.name
                 localTabletMixer.let {
-                    Log.i(TAG, "1Se seleccionó mixer $localTabletMixer")
+                    Log.i(TAG, "Se seleccionó tablet $localTabletMixer")
                     (requireActivity() as MainActivity).saveTabletMixer(localTabletMixer)
                 }
 
@@ -691,9 +723,9 @@ class RoundListFragment : Fragment() {
                 Log.i(TAG, "localKnowDevice: ${BluetoothUtils.getBluetoothName(requireContext(),localKnowDevice)} | ${localKnowDevice?.address}")
 
                 if (localKnowDevice != null ){
-                    selectedTabletMixerInFragment = localTabletMixer
+                    selectedTabletInFragment = localTabletMixer
                     (requireActivity() as MainActivity).changeTabletMixer(localTabletMixer,localKnowDevice)
-                    menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletMixerInFragment?.name
+                    menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletInFragment?.name
                 }
             }
         }

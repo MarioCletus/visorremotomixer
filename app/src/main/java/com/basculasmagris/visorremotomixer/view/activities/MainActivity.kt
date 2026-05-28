@@ -88,6 +88,7 @@ import java.time.format.DateTimeParseException
 val Context.datastore by preferencesDataStore(name = "PREFERENCIAS")
 class MainActivity : AppCompatActivity() {
 
+    private val TAG1: String = "SOS"
     private val TAG : String =  "DEBMain"
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
@@ -101,8 +102,13 @@ class MainActivity : AppCompatActivity() {
     )
     // Bluetooth
     var mService: BluetoothSDKService? = null
+    var mBinder: BluetoothSDKService.LocalBinder? = null
     private var pendingTabletMixer: TabletMixer? = null
-    private var bluetoothDevice: BluetoothDevice? = null
+    // Derivado de la MAC de la tablet seleccionada — fuente única de verdad
+    private val bluetoothDevice: BluetoothDevice?
+        get() = selectedTabletInActivity?.mac
+            ?.takeIf { it.isNotEmpty() }
+            ?.let { Helper.getBluetoothDeviceFromMac(it) }
     var selectedTabletInActivity: TabletMixer? = null
 
 
@@ -216,7 +222,7 @@ class MainActivity : AppCompatActivity() {
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
         mMixerViewModel.allMixerList.observe(this){
-//            mService?.LocalBinder()?.getBondedDevices()
+//            mBinder?.getBondedDevices()
         }
 
         refreshLogo()
@@ -255,7 +261,7 @@ class MainActivity : AppCompatActivity() {
                 when (it) {
                     is UserData -> {
                         mLocalUsers = it.users
-                        Log.i(TAG,"Usuarios locales: $mLocalUsers ")
+//                        Log.i(TAG,"Usuarios locales: $mLocalUsers ")
                     }
                     is RoundLocalData -> mLocalRoundsLocal = it.roundsLocal
                     is TabletMixerData -> mLocalTabletMixers = it.tabletMixers
@@ -318,8 +324,8 @@ class MainActivity : AppCompatActivity() {
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            val binder = service as BluetoothSDKService.LocalBinder
-            mService = binder.getService()
+            mBinder = service as BluetoothSDKService.LocalBinder
+            mService = mBinder!!.getService()
             Log.i(TAG, "[MAIN] ****** CONECTADO")
             mService?.let {
                 Helper.getServiceInstance().setBluetoothService(it)
@@ -328,24 +334,23 @@ class MainActivity : AppCompatActivity() {
         }
         override fun onServiceDisconnected(arg0: ComponentName) {
             Log.i(TAG, "[MAIN] ****** DESCONECTADO")
+            mBinder = null
         }
     }
     private fun onBluetoothServiceReady() {
         val tabletMixer = pendingTabletMixer ?: return
-        val service = mService ?: return
-
         Log.i(TAG, "Servicio listo para tablet: ${tabletMixer.name}")
-
-        service.LocalBinder().getBondedDevices()
+        mBinder?.getBondedDevices()
     }
 
-    fun alertDialog(title: String, message: String) : AlertDialog? {
+    fun alertDialog(title: String, message: String, onAccept: (() -> Unit)? = null) : AlertDialog? {
         val dialogBuilder = AlertDialog.Builder(this)
         // set message of alert dialog
         dialogBuilder.setMessage(message)
             .setCancelable(false)
             .setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
                 dialog.dismiss()
+                onAccept?.invoke()
             }
         val alert = dialogBuilder.create()
         alert.setTitle(title)
@@ -396,14 +401,20 @@ class MainActivity : AppCompatActivity() {
         mProgressDialog?.dismiss()
     }
 
-    fun saveTabletMixer(tabletMixer: TabletMixer){
-        lifecycleScope.launch(Dispatchers.IO){
-            saveTabletMixer(tabletMixer.id)
+    fun saveTabletMixer(tabletMixer: TabletMixer) {
+        RemoteTabletSession.setTablet(tabletMixer)
+        lifecycleScope.launch(Dispatchers.IO) {
+            saveTabletMixerSuspend(tabletMixer.id)
         }
     }
 
-    private suspend fun saveTabletMixer(idTablet: Long){
-        datastore.edit { preferences->
+    suspend fun saveTabletMixerAndWait(tabletMixer: TabletMixer) {
+        RemoteTabletSession.setTablet(tabletMixer)
+        saveTabletMixerSuspend(tabletMixer.id)
+    }
+
+    private suspend fun saveTabletMixerSuspend(idTablet: Long) {
+        datastore.edit { preferences ->
             preferences[longPreferencesKey("IDTABLET")] = idTablet
         }
     }
@@ -472,11 +483,13 @@ class MainActivity : AppCompatActivity() {
     private var isActionRunning = false
     fun changeStatusDisconnected(){
         Log.i("CONNECTION","Disconnected")
+        connectedDeviceMac = null   // ya no estamos conectados a ningún dispositivo
         Helper.saveBluetoothState(false)
         showDeviceDisconnected()
         if(!isActionRunning && bReconnect){
             isActionRunning = true
             Handler(Looper.getMainLooper()).postDelayed({
+                Log.i(TAG1,"changeStatusDisconnected Reconexion automatica  ${BluetoothUtils.getBluetoothName(this,bluetoothDevice)}")
                 connectDevice(bluetoothDevice)
                 isActionRunning = false
             }, 1500)
@@ -487,38 +500,59 @@ class MainActivity : AppCompatActivity() {
     private val handlerRecconect = Handler(Looper.getMainLooper()) // El Handler se define a nivel de clase
     private var reconnectRunnable: Runnable? = null // Guardamos la referencia al Runnable
 
-    fun connectDevice(bluetoothDevice: BluetoothDevice?) {
-        Log.d("connection", "Recursive connection $countRecursive  bluetoothDevice $bluetoothDevice" )
-        if(bluetoothDevice != null) {
-            this.bluetoothDevice = bluetoothDevice
-            RemoteTabletSession.setBluetoothDevice(bluetoothDevice)
-        }
-        else {
-            return
-        }
+    fun connectDevice(bluetoothDevice: BluetoothDevice? = null) {
+        // Usar el device pasado como argumento; si es null, caer al computed (tab seleccionada)
+        Log.i(TAG1,"connectDevice  ${BluetoothUtils.getBluetoothName(this,bluetoothDevice)}")
+        val target = bluetoothDevice ?: this.bluetoothDevice ?: return
+        RemoteTabletSession.setBluetoothDevice(target)
+
         // Verificamos si ya hay un Handler en proceso
         if (isReconnecting) {
-            Log.d("connection", "Reconnection already in progress")
+            Log.d(TAG1, "Reconnection already in progress ${BluetoothUtils.getBluetoothName(this,bluetoothDevice)}, skipping new attempt")
             return
         }
 
         if (mService?.isConnected() == true) {
-            Log.d("connection", "activity.mService?.isConnected() == true")
-            changeStatusConnected()
-            countRecursive = 0
-            isReconnecting = false // Se completó la conexión
+            Log.d(TAG1, "activity.mService?.isConnected() == true, connectedDeviceMac=$connectedDeviceMac, target=${target.address}")
+            if (connectedDeviceMac == null || connectedDeviceMac == target.address) {
+                Log.d(TAG1, "Ya conectado al dispositivo correcto o sin info de conectado, no se requiere acción return")
+                // Conectado al dispositivo correcto (o no tenemos info del conectado → asumir correcto)
+                connectedDeviceMac = target.address
+                changeStatusConnected()
+                countRecursive = 0
+                isReconnecting = false
+                return
+            }
+            // Conectado a un dispositivo diferente al solicitado — desconectar y reintentar
+            Log.w(TAG1, "Conectado a $connectedDeviceMac pero se requiere ${target.address} — desconectando")
+            mBinder?.disconnectKnowDeviceWithTransfer()
+            connectedDeviceMac = null
+            reconnectRunnable?.let { handlerRecconect.removeCallbacks(it) }
+            isReconnecting = true
+            reconnectRunnable = Runnable {
+                isReconnecting = false
+                if (!bReconnect) {
+                    Log.d(TAG1, "Reconnect disable (wrong device retry)")
+                    return@Runnable
+                }
+                Log.i(TAG1, "Reintentando conectar al dispositivo correcto")
+                connectDevice(this@MainActivity.bluetoothDevice)
+            }
+            handlerRecconect.postDelayed(reconnectRunnable!!, 2000L)
             return
         }
 
         countRecursive++
 
-        bluetoothDevice.let { deviceBluetooth ->
-            Log.d("connection", "bluetoothDevice ${BluetoothUtils.getBluetoothName(this,deviceBluetooth)}")
-            if (mService?.LocalBinder()?.isConnected() == false) {
-                Log.d("connection", "connectKnowDeviceWithTransfer ${BluetoothUtils.getBluetoothName(this,bluetoothDevice)}")
-                mService?.LocalBinder()?.connectKnowDeviceWithTransfer(bluetoothDevice)
-            }
+        Log.d(TAG1, "bluetoothDevice ${BluetoothUtils.getBluetoothName(this, target)}")
+        if (mBinder?.isConnected() == false) {
+            Log.d(TAG1, "connectKnowDeviceWithTransfer ${BluetoothUtils.getBluetoothName(this, target)}")
+            connectedDeviceMac = target.address   // trackear el dispositivo al que nos conectamos
+            mBinder?.connectKnowDeviceWithTransfer(target)
         }
+
+        // Cancelamos el Runnable anterior antes de crear uno nuevo
+        reconnectRunnable?.let { handlerRecconect.removeCallbacks(it) }
 
         // Marcamos que hay un Handler en proceso
         isReconnecting = true
@@ -527,19 +561,25 @@ class MainActivity : AppCompatActivity() {
         reconnectRunnable = Runnable {
             isReconnecting = false // Permitir nueva reconexión después del delay
             if (!bReconnect) {
-                Log.d("connection", "Reconnect disable")
+                Log.d(TAG1, "Reconnect disable")
                 return@Runnable
             }
-            Log.i("connection","Re connect Runnable")
-            connectDevice(bluetoothDevice)
+            Log.i(TAG1,"Re connect Runnable")
+            // Usar this.bluetoothDevice (el campo actual) en vez del parámetro capturado,
+            // para que si el usuario cambió de tablet entre ciclos, se reconecte al correcto.
+            connectDevice(this@MainActivity.bluetoothDevice)
         }
 
         // Posteamos el Runnable
         reconnectRunnable?.let {
-            Log.i("connection","reconnectRunnable lanza el postDelayed")
+            Log.i(TAG1,"reconnectRunnable lanza el postDelayed")
             handlerRecconect.postDelayed(it, Constants.RECONNECT_TIME)
         }
     }
+
+    // MAC del dispositivo al que se inició (o confirmó) la conexión BT actual.
+    // Se setea cuando llamamos connectKnowDeviceWithTransfer() y se limpia al desconectar.
+    private var connectedDeviceMac: String? = null
 
     private var bShowDeviceConnected = false
     private fun showDeviceDisconnected() {
@@ -605,9 +645,10 @@ class MainActivity : AppCompatActivity() {
         reconnectDisable()
 
         this.bluetoothDevice?.let { deviceBluetooth ->
-            if (mService?.LocalBinder()?.isConnected() == true) {
+            if (mBinder?.isConnected() == true) {
                 Log.d(TAG, "Disconnect bluetoothdevice $deviceBluetooth")
-                mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
+                mBinder?.disconnectKnowDeviceWithTransfer()
+                connectedDeviceMac = null
                 changeStatusDisconnected()
             }
         }
@@ -615,7 +656,7 @@ class MainActivity : AppCompatActivity() {
         selectedTabletInActivity = tabletMixer
         RemoteTabletSession.setTablet(tabletMixer)
         Log.i(TAG,"changeTabletMixer in MainActivity $selectedTabletInActivity")
-        this.bluetoothDevice = bluetoothDevice
+        // bluetoothDevice es ahora computed desde selectedTabletInActivity.mac — no hace falta cachear
         RemoteTabletSession.setBluetoothDevice(bluetoothDevice)
 
         RemoteTabletSession.setConnection(
@@ -847,16 +888,16 @@ class MainActivity : AppCompatActivity() {
             navHost?.childFragmentManager?.primaryNavigationFragment?.let { fragment ->
                 when (fragment) {
                     is AdminFragment -> {
-                        Log.i(TAG, "refreshRounds in AdminFragment")
+//                        Log.i(TAG, "refreshRounds in AdminFragment")
                     }
                     is RemoteMixerFragment -> {
-                        Log.i(TAG, "refreshRounds in RemoteMixerFragment")
+//                        Log.i(TAG, "refreshRounds in RemoteMixerFragment")
                     }
                     is TabletListFragment -> {
-                        Log.i(TAG, "refreshRounds in TabletListFragment")
+//                        Log.i(TAG, "refreshRounds in TabletListFragment")
                     }
                     is RoundListFragment -> {
-                        Log.i(TAG, "refreshRounds in RoundListFragment")
+//                        Log.i(TAG, "refreshRounds in RoundListFragment")
                     }
                     else -> {}
                 }
@@ -1001,160 +1042,171 @@ class MainActivity : AppCompatActivity() {
 
     fun sendValueToMixer(type: String, value: String) {
         val msg = "CMD${Constants.CMD_VALUE}$type$value"
-        mService?.LocalBinder()?.write(msg.toByteArray())
+        mBinder?.write(msg.toByteArray())
     }
 
 
     fun sendDietRequestToMixer() {
         val msg = "CMD${Constants.CMD_DIETS}"
-        mService?.LocalBinder()?.write(msg.toByteArray())
+        mBinder?.write(msg.toByteArray())
     }
 
 
     fun sendRequestCfgToMixer() {
         val msg = "CMD${Constants.CMD_REQ_CFG}"
-        mService?.LocalBinder()?.write(msg.toByteArray())
+        mBinder?.write(msg.toByteArray())
+    }
+
+    fun saveVrSettings(enableVrDownload: Boolean) {
+        val prefs = getSharedPreferences(Constants.PREF_VR_SETTINGS, Context.MODE_PRIVATE)
+        prefs.edit().putBoolean(Constants.ENABLE_VR_DOWNLOAD, enableVrDownload).apply()
+        Log.i("VR_SETTINGS", "saveVrSettings enableVrDownload=$enableVrDownload")
+    }
+
+    fun isVrDownloadEnabled(): Boolean {
+        val prefs = getSharedPreferences(Constants.PREF_VR_SETTINGS, Context.MODE_PRIVATE)
+        return prefs.getBoolean(Constants.ENABLE_VR_DOWNLOAD, false)
     }
 
     fun sendRequestRoundRunDetail() {
         val msg = "CMD${Constants.CMD_ROUNDDETAIL}"
         Log.i("send_cmd","Send requestRoundRunDetail $msg")
-        mService?.LocalBinder()?.write(msg.toByteArray())
+        mBinder?.write(msg.toByteArray())
     }
 
 
     fun sendReconnectBalance() {
         val msg = "CMD${Constants.CMD_RECONNECT_SCALE}"
         Log.i("send_cmd","Send reconnect balance $msg")
-        mService?.LocalBinder()?.write(msg.toByteArray())
+        mBinder?.write(msg.toByteArray())
     }
 
     fun sendRequestDataRoundRunDetail() {
         val msg = "CMD${Constants.CMD_ROUNDDATA}"
         Log.i("send_cmd","Send requestRoundRunData $msg")
-        mService?.LocalBinder()?.write(msg.toByteArray())
+        mBinder?.write(msg.toByteArray())
     }
     fun requestMixer() {
         val msg = "CMD${Constants.CMD_MIXER}"
         Log.i("send_cmd","Send requestMixer $msg")
-        mService?.LocalBinder()?.write(msg.toByteArray())
+        mBinder?.write(msg.toByteArray())
     }
 
     fun sendTareToMixer() {
         Log.i("send_cmd","Send Tare")
         val msg = "CMD${Constants.CMD_TARA}"
-        mService?.LocalBinder()?.write(msg.toByteArray())
+        mBinder?.write(msg.toByteArray())
     }
 
 
     fun sendRestToMixer() {
         Log.i("send_cmd","Send rest")
         val byteArray = "CMD${Constants.CMD_DLG_REST}${String.format("%06d",0)}".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun sendIniToMixer() {
         Log.i("send_cmd","Send iniToMixer")
         val byteArray = "CMD${Constants.CMD_INI}${String.format("%06d",0)}".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun sendEndToMixer() {
         Log.i("send_cmd","Send end")
         val byteArray = "CMD${Constants.CMD_END}${String.format("%06d",0)}".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun sendCancelToMixer() {
         Log.i("send_cmd","Send cancel")
         val byteArray = "CMD${Constants.CMD_CANCEL}${String.format("%06d",0)}".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun sendCloseDlgToMixer() {
         Log.i("send_cmd","Send closeDlg")
         val byteArray = "CMD${Constants.CMD_CLOSE_DLG}${String.format("%06d",0)}".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     private fun sendSelectCorralToMixer(minCorral: MinCorral) {
         Log.i("send_cmd","Send selectCorral $minCorral")
         val byteArray = "CMD${Constants.CMD_SELECT_CORRAL}${String.format("%06d",minCorral.id)}".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     private fun sendSelectProductToMixer(minProduct: MinProduct) {
         Log.i("send_cmd","sendSelectProductToMixer $minProduct")
         Log.i(TAG,"sendSelectProductToMixer $minProduct")
         val byteArray = "CMD${Constants.CMD_SELECT_PRODUCT}${String.format("%06d",minProduct.id)}".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     private fun sendSelectEstablishmentToMixer(minEstablishment: MinEstablishment) {
         Log.i("send_cmd","sendSelectEstablishment $minEstablishment")
         val byteArray = "CMD${Constants.CMD_SELECT_ESTAB}${String.format("%06d",minEstablishment.id)}".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun sendRequestListOfProducts() {
         Log.i("send_cmd","sendRequeslListOfProducts")
         val byteArray = "CMD${Constants.CMD_REQ_PRODUCT}000000".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun sendGoToRound(id:Long) {
         Log.i("send_cmd","sendGoToRound $id")
         Log.i("seguimiento","sendGoToRound $id")
         val byteArray = "CMD${Constants.CMD_GO_TO_ROUND}${String.format("%06d",id)}".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun sendBeacon() {
         Log.i("send_cmd","sendBeacon")
         val byteArray = "CMD${Constants.CMD_BEACON}${String.format("%06d",0)}".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun sendGoToFreeRound() {
         Log.i("send_cmd","sendGoToFreeRound")
         val byteArray = "CMD${Constants.CMD_GO_TO_FREE_ROUND}000000".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun sendGoToResume(id:Long) {
         Log.i("send_cmd","sendGoToResume")
         val byteArray = "CMD${Constants.CMD_GO_TO_RESUME}${String.format("%06d",id)}".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun sendGoToDownload() {
         Log.i("send_cmd","sendGoToDownload")
         val byteArray = "CMD${Constants.CMD_GO_TO_DOWNLOAD}${String.format("%06d",0)}".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
     
     fun sendRequestListOfCorrals() {
         Log.i("send_cmd","sendRequestListOfCorrals")
         val byteArray = "CMD${Constants.CMD_REQ_CORRAL}000000".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun sendRequestListOfUsers() {
         Log.i("send_cmd","sendRequestListOfUsers")
         val byteArray = "CMD${Constants.CMD_USER_LIST}000000".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun sendRequestListOfRounds() {
         Log.i("send_cmd","sendRequestListOfRounds")
         val byteArray = "CMD${Constants.CMD_ROUNDS}000000".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun sendRequestTablet() {
         Log.i("send_cmd","sendRequestTablet")
         val byteArray = "CMD${Constants.CMD_TABLET}000000".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun dlgProduct(message: ByteArray) {
@@ -1282,8 +1334,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun selectBluetooth(deviceBluetooth: BluetoothDevice?) {
-        this.bluetoothDevice = deviceBluetooth
-        RemoteTabletSession.setBluetoothDevice(bluetoothDevice)
+        // bluetoothDevice es ahora computed desde selectedTabletInActivity.mac — no-op
     }
 
     fun reconnectDisable() {
@@ -1308,11 +1359,11 @@ class MainActivity : AppCompatActivity() {
         dialogTare = null
     }
 
-    fun beaconReceibed() {
+    fun beaconReceived() {
         changeStatusConnected()
     }
 
-    fun weightReceibed() {
+    fun weightReceived() {
         onWeightReceived()
     }
 

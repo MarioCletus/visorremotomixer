@@ -56,7 +56,6 @@ class AdminFragment : Fragment() {
     private lateinit var mBinding: FragmentAdminBinding
     private val TAG = "DEBAdm"
     private var selectedTabletMixerInFragment: TabletMixer? = null
-    private var tabletMixerBluetoothDevice : BluetoothDevice? = null
     private var menu:Menu? = null
     private var bInFree: Boolean = true
     private var bInCfg: Boolean = false
@@ -131,8 +130,8 @@ class AdminFragment : Fragment() {
                                 if (it.name == null) "" else it.name
                             }
                             Log.v(TAG,"Force connection $name")
-                            (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
-                            (requireActivity() as MainActivity).mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                            (requireActivity() as MainActivity).mBinder?.disconnectKnowDeviceWithTransfer()
+                            (requireActivity() as MainActivity).mBinder?.connectKnowDeviceWithTransfer(it)
                             (requireActivity() as MainActivity).showCustomProgressDialog()
                         }
                         return true
@@ -145,7 +144,7 @@ class AdminFragment : Fragment() {
                         if (mLocalTabletMixersCustomList.size > 0){
                             customItemsLDialog(getString(R.string.mixer), mLocalTabletMixersCustomList,Constants.MIXER_REF)
                         } else {
-                            alertMixer(getString(R.string.no_hay_mixer_vinculado))
+                            alertMixer(getString(R.string.no_hay_tablet_vinculada))
                         }
                         return true
                     }
@@ -237,7 +236,7 @@ class AdminFragment : Fragment() {
 
                 if (mLocalTabletMixers != null) {
                     Log.i(TAG,"liveData.removeObserver")
-//                    (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
+//                    (requireActivity() as MainActivity).mBinder?.getBondedDevices()
 //                    dialog?.dismiss()
                     liveData?.removeObserver(this)
                     liveData = null
@@ -449,14 +448,14 @@ class AdminFragment : Fragment() {
                     Log.v("cmd_weight","Admin CMD_WEIGHT_TIMER")
                     Log.i("showCommand","Admin CMD_WEIGHT_TIMER ${String(message)}")
                     if(isAdded)
-                        (requireActivity() as MainActivity).weightReceibed()
+                        (requireActivity() as MainActivity).weightReceived()
                 }
 
                 Constants.CMD_START_TIMER->{
                     Log.v("cmd_weight","Admin CMD_START_TIMER ${String(message)}")
                     Log.i("showCommand","Admin CMD_START_TIMER ${String(message)}")
                     if(isAdded)
-                        (requireActivity() as MainActivity).weightReceibed()
+                        (requireActivity() as MainActivity).weightReceived()
                 }
 
                 Constants.CMD_MIXER ->{
@@ -478,7 +477,7 @@ class AdminFragment : Fragment() {
 
         override fun onMessageReceived(device: BluetoothDevice?, message: String?) {
             Log.i("message","HF message $message")
-            (requireActivity() as MainActivity).beaconReceibed()
+            (requireActivity() as MainActivity).beaconReceived()
         }
 
         override fun onMessageSent(device: BluetoothDevice?, message: String?) {
@@ -521,7 +520,7 @@ class AdminFragment : Fragment() {
             bConnected = false
         }
         if(bConnected && isAdded)
-            (requireActivity() as MainActivity).weightReceibed()
+            (requireActivity() as MainActivity).weightReceived()
     }
 
     fun selectTablet(tabletMixer :TabletMixer){
@@ -545,10 +544,9 @@ class AdminFragment : Fragment() {
                     address = it.address
                 }
                 Log.i(TAG,"Se seleccionó $name : $address")
-                if(tabletMixerBluetoothDevice != it){
+                if ((requireActivity() as MainActivity).mBinder?.isConnected() != true) {
                     connectTable(tabletMixer)
                 }
-                tabletMixerBluetoothDevice = it
             }
         }
     }
@@ -578,7 +576,7 @@ class AdminFragment : Fragment() {
                 TAG,
                 "setTabletMixer $tabletMixer  \nmService ${(requireActivity() as MainActivity).mService}"
             )
-            (requireActivity() as MainActivity).mService?.LocalBinder()?.getBondedDevices()
+            (requireActivity() as MainActivity).mBinder?.getBondedDevices()
             menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletMixerInFragment?.name
         }
     }
@@ -647,7 +645,7 @@ class AdminFragment : Fragment() {
         }
         when(selection){
             Constants.MIXER_REF->{
-                (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()//Se seleccionó un nuevo mixer.
+                (requireActivity() as MainActivity).mBinder?.disconnectKnowDeviceWithTransfer()//Se seleccionó un nuevo mixer.
                 mCustomListDialog.dismiss()
 
                 val localTabletMixer = mLocalTabletMixers?.firstOrNull { tabletMixer ->

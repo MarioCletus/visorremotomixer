@@ -109,6 +109,7 @@ class TabletConfigActivity : AppCompatActivity(){
 
     // Bluetooth
     var mService: BluetoothSDKService? = null
+    private var mBinder: BluetoothSDKService.LocalBinder? = null
     private val mTabletMixerViewModel: TabletViewModel by viewModels {
         TabletMixerViewModelFactory((this.application as SpiMixerVRApplication).tabletMixerRepository)
     }
@@ -204,9 +205,9 @@ class TabletConfigActivity : AppCompatActivity(){
                         return true
                     }
                     R.id.menu_selected_remote_tablet -> {
-                        Log.i(TAG,"try to connect " )
+                        Log.i(TAG,"try to connect ${BluetoothUtils.getBluetoothName(this@TabletConfigActivity,selectedBluetoothDevice)}  ${BluetoothUtils.getAddress(this@TabletConfigActivity,selectedBluetoothDevice)} ${mBinder}" )
                         selectedBluetoothDevice?.let {
-                            mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                            mBinder?.connectKnowDeviceWithTransfer(it)
                             showCustomProgressDialog()
                         }
                         return true
@@ -250,12 +251,11 @@ class TabletConfigActivity : AppCompatActivity(){
         mService = Helper.getServiceInstance().getBluetoothService()
         selectedBluetoothDevice?.let{
             Log.i(TAG, "*********** onServiceConnected [TabletConfigActivity] CONECTADO ${BluetoothUtils.getBluetoothName(this,it)} ${it.address} | $mService" )
-            mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+            mBinder?.connectKnowDeviceWithTransfer(it)
         }
 
-        if(mService == null){
-            bindBluetoothService()
-        }
+        bindBluetoothService()
+
         Log.i("BLUE", "Se inicia la búsqueda de dispositivos asociados")
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(this, mBluetoothListener)
 
@@ -302,7 +302,7 @@ class TabletConfigActivity : AppCompatActivity(){
     override fun onResume() {
         super.onResume()
         checkBTStatus()
-        mService?.LocalBinder()?.getBondedDevices()
+        mBinder?.getBondedDevices()
     }
 
     private fun checkBTStatus() {
@@ -334,10 +334,10 @@ class TabletConfigActivity : AppCompatActivity(){
         dialog = Helper.setProgressDialog(this, "Buscando tabletMixer...")
         dialog?.show()
         Log.i(TAG,"buscando..")
-        mService?.LocalBinder()?.startDiscovery(this)
+        mBinder?.startDiscovery(this)
         Timer().schedule(10000){
             dialog?.cancel()
-            mService?.LocalBinder()?.stopDiscovery()
+            mBinder?.stopDiscovery()
         }
     }
 
@@ -371,18 +371,19 @@ class TabletConfigActivity : AppCompatActivity(){
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            val binder = service as BluetoothSDKService.LocalBinder
-            mService = binder.getService()
+            mBinder = service as BluetoothSDKService.LocalBinder
+            mService = mBinder!!.getService()
             mBound = true
             Log.i(TAG, "*********** onServiceConnected [TabletConfigActivity] CONECTADO " )
             selectedBluetoothDevice?.let{
                 Log.i(TAG, "*********** onServiceConnected [TabletConfigActivity] CONECTADO ${it.toString()} ${it.address} | $mService" )
-                mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                mBinder?.connectKnowDeviceWithTransfer(it)
             }
         }
         override fun onServiceDisconnected(arg0: ComponentName) {
             Log.i("BLUE", "*********** [TabletConfigActivity]  DESCONECTADO")
             mBound = false
+            mBinder = null
         }
     }
 
@@ -528,7 +529,7 @@ class TabletConfigActivity : AppCompatActivity(){
                 selectedBluetoothDevice = getSelectedTabletMixerBluetoothDevice()
                 selectedBluetoothDevice?.let{
                     Log.d(TAG,"selectedBluetoothDevice: " + it.toString())
-                    mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                    mBinder?.connectKnowDeviceWithTransfer(it)
                     firstIn = false
                 }
             }
@@ -612,8 +613,8 @@ class TabletConfigActivity : AppCompatActivity(){
         Log.i(TAG,"Se seleccionó: " + selectedBluetoothDevice + "   " + BluetoothUtils.getAddress(this,device))
 
         selectedBluetoothDevice?.let{
-            mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
-            mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+            mBinder?.disconnectKnowDeviceWithTransfer()
+            mBinder?.connectKnowDeviceWithTransfer(it)
             showCustomProgressDialog()
         }
     }
@@ -680,7 +681,7 @@ class TabletConfigActivity : AppCompatActivity(){
 
         bluetoothDevice?.let {deviceBluetooth->
             Log.i(TAG,"connectDevice connectKnowDeviceWithTransfer $deviceBluetooth")
-            mService?.LocalBinder()?.connectKnowDeviceWithTransfer(deviceBluetooth)
+            mBinder?.connectKnowDeviceWithTransfer(deviceBluetooth)
 
         }
 
@@ -1050,17 +1051,17 @@ class TabletConfigActivity : AppCompatActivity(){
 
     fun requestListOfUsers() {
         val byteArray = "CMD${Constants.CMD_USER_LIST}000000".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun requestListOfRounds() {
         val byteArray = "CMD${Constants.CMD_ROUNDS}000000".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun requestListOfMixers() {
         val byteArray = "CMD${Constants.CMD_MIXERS}000000".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     private suspend fun syncData(){
@@ -1071,13 +1072,13 @@ class TabletConfigActivity : AppCompatActivity(){
 
     fun sendBeacon() {
         val byteArray = "CMD${Constants.CMD_BEACON}${String.format("%06d",0)}".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun sendRequestTablet() {
         Log.i("send_cmd","sendRequestTablet")
         val byteArray = "CMD${Constants.CMD_TABLET}000000".toByteArray()
-        mService?.LocalBinder()?.write(byteArray)
+        mBinder?.write(byteArray)
     }
 
     fun processTabletInfo(message: ByteArray): Boolean{

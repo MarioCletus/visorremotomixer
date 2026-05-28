@@ -17,6 +17,7 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.findNavController
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.databinding.FragmentSyncBinding
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
@@ -93,8 +94,8 @@ class SyncMixerFragment : Fragment() {
                                 if (it.name == null) "" else it.name
                             }
                             Log.v(TAG,"Force connection $name")
-                            (requireActivity() as MainActivity).mService?.LocalBinder()?.disconnectKnowDeviceWithTransfer()
-                            (requireActivity() as MainActivity).mService?.LocalBinder()?.connectKnowDeviceWithTransfer(it)
+                            (requireActivity() as MainActivity).mBinder?.disconnectKnowDeviceWithTransfer()
+                            (requireActivity() as MainActivity).mBinder?.connectKnowDeviceWithTransfer(it)
                             (requireActivity() as MainActivity).showCustomProgressDialog()
                         }
                         return true
@@ -127,7 +128,10 @@ class SyncMixerFragment : Fragment() {
             GlobalScope.launch (Dispatchers.Main) {
                 syncData()
             }
+        }
 
+        mBinding.btnBack.setOnClickListener {
+            if (isAdded) findNavController().popBackStack(R.id.nav_home, false)
         }
         if(isAdded){
             (requireActivity() as MainActivity).clearbShowDevice()

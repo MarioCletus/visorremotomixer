@@ -285,4 +285,17 @@
 
 
 
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_home"
+        android:backgroundTint="@color/green_500_dark"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:focusable="false"
+        android:clickable="true"/>
+
 </FrameLayout>
