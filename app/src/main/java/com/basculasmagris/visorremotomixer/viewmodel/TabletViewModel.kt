@@ -72,6 +72,10 @@ class TabletViewModel (private val repository: TabletMixerRepository) : ViewMode
     fun delete(tabletMixer: TabletMixer) = viewModelScope.launch {
         repository.deleteTabletMixerData(tabletMixer)
     }
+
+    fun updateAll(tablets: List<TabletMixer>) = viewModelScope.launch {
+        repository.updateAllTabletMixers(tablets)
+    }
 }
 
 class TabletMixerViewModelFactory(private val repository: TabletMixerRepository) : ViewModelProvider.Factory {

@@ -15,5 +15,7 @@ data class TabletMixer(
     @ColumnInfo(name = "serial") var serial: String,
     @ColumnInfo(name = "bt_name") var btName: String,
     @ColumnInfo(name = "updated_date") var updatedDate: String,
+    /** Posición en la lista de Home. 0 = sin ordenar explícitamente (fallback a name). */
+    @ColumnInfo(name = "sort_order") var sortOrder: Int = 0,
     @PrimaryKey(autoGenerate = true) var id: Long = 0
 ) : Parcelable

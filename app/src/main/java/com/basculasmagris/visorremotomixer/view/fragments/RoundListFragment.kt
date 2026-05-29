@@ -72,6 +72,7 @@ class RoundListFragment : Fragment() {
     private var menu:Menu? = null
     private var selectedTabletInFragment: TabletMixer? = null
     private var bMixerInit = false
+    private var roundAdapter: RoundRunAdapter? = null
 
     private val mTabletMixerViewModel: TabletViewModel by viewModels {
         TabletMixerViewModelFactory((requireActivity().application as SpiMixerVRApplication).tabletMixerRepository)
@@ -250,21 +251,27 @@ class RoundListFragment : Fragment() {
 
 
     private fun getLocalRound(){
-        mBinding.rvRoundsList.layoutManager = GridLayoutManager(requireActivity(), 3)
-        val roundAdapter =  RoundRunAdapter(this@RoundListFragment)
-        mBinding.rvRoundsList.adapter = roundAdapter
-        val mLocalRounds = (requireActivity() as MainActivity).listOfMedRoundsRun
-        mLocalRounds.let{
-            if (it.isEmpty()){
-                mBinding.rvRoundsList.visibility = View.GONE
-                mBinding.tvNoData.visibility = View.VISIBLE
-            } else {
-                mBinding.rvRoundsList.visibility = View.VISIBLE
-                mBinding.tvNoData.visibility = View.GONE
-                roundAdapter.roundList(it)
-            }
+        // Crear el adapter una sola vez. Las llamadas siguientes solo actualizan datos
+        // sin reasignar el adapter, lo que preserva la posición de scroll.
+        if (roundAdapter == null) {
+            mBinding.rvRoundsList.layoutManager = GridLayoutManager(requireActivity(), 3)
+            roundAdapter = RoundRunAdapter(this@RoundListFragment)
+            mBinding.rvRoundsList.adapter = roundAdapter
         }
+        updateRoundListData()
+    }
 
+    private fun updateRoundListData() {
+        val adapter = roundAdapter ?: return
+        val rounds = (activity as? MainActivity)?.listOfMedRoundsRun ?: return
+        if (rounds.isEmpty()) {
+            mBinding.rvRoundsList.visibility = View.GONE
+            mBinding.tvNoData.visibility = View.VISIBLE
+        } else {
+            mBinding.rvRoundsList.visibility = View.VISIBLE
+            mBinding.tvNoData.visibility = View.GONE
+            adapter.roundList(rounds)
+        }
     }
 
     private val mBluetoothListener: IBluetoothSDKListener = object : IBluetoothSDKListener {
@@ -325,7 +332,7 @@ class RoundListFragment : Fragment() {
                             val gson = Gson()
                             val roundRunDetail : MinRoundRunDetail = gson.fromJson(jsonString,  MinRoundRunDetail::class.java)
                             (requireActivity() as MainActivity).updateRoundDetail(roundRunDetail)
-                            (mBinding.rvRoundsList.adapter as RoundRunAdapter).notifyDataSetChanged()
+                            updateRoundListData()
                             roundRunDetail.mixer?.let {mixerDetail->
                                 val mixerName = if(mixerDetail.name.isNotEmpty()) "Mixer: ${mixerDetail.name}" else ""
                                 menu?.findItem(R.id.bluetooth_balance)?.title = mixerName
@@ -561,6 +568,7 @@ class RoundListFragment : Fragment() {
 
     override fun onDestroyView() {
         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
+        roundAdapter = null
         super.onDestroyView()
     }
 

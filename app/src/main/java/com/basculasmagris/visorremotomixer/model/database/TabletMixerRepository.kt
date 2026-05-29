@@ -40,4 +40,9 @@ class TabletMixerRepository (private  val tabletMixerDao: TabletMixerDao) {
     suspend fun deleteTabletMixerData(tabletMixer: TabletMixer){
         tabletMixerDao.deleteTabletMixer(tabletMixer)
     }
+
+    @WorkerThread
+    suspend fun updateAllTabletMixers(tablets: List<TabletMixer>) {
+        tabletMixerDao.updateAllTabletMixers(tablets)
+    }
 }

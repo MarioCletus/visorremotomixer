@@ -9,11 +9,14 @@ interface TabletMixerDao {
     @Insert
     suspend fun insertTabletMixer(tabletMixer: TabletMixer) : Long
 
-    @Query("SELECT * FROM TABLET_MIXER  ORDER BY name")
+    @Query("SELECT * FROM TABLET_MIXER ORDER BY sort_order ASC, name ASC")
     fun getAllTabletMixerList(): Flow<MutableList<TabletMixer>>
 
-    @Query("SELECT * FROM TABLET_MIXER ORDER BY name")
+    @Query("SELECT * FROM TABLET_MIXER ORDER BY sort_order ASC, name ASC")
     fun getActiveTabletMixerList(): Flow<List<TabletMixer>>
+
+    @Update
+    suspend fun updateAllTabletMixers(tablets: List<TabletMixer>)
 
     @Query("SELECT * FROM TABLET_MIXER ORDER BY name LIKE :name")
     fun getFilteredTabletMixerList(name: String): Flow<List<TabletMixer>>

@@ -9,7 +9,7 @@ import retrofit2.http.PUT
 
 internal interface TabletAPI {
 
-    @POST("${Constants.API_TABLET_ENDPOINT}/tablet_get_list_for_vr")
+    @POST("${Constants.API_TABLET_ENDPOINT}/tablet_get_list_vr")
     fun getTablets(@Body tablet: HashMap<String,String>) : Single<MutableList<TabletRemote>>
 
     @POST("${Constants.API_TABLET_ENDPOINT}/requestSerialValidation")

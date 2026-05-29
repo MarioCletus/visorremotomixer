@@ -280,6 +280,7 @@
     <string name="title_activity_add_update_tablet_mixer">AddUpdateTabletMixerActivity</string>
     <string name="caja_bluetooth_asociada">Caja Bluetooth asociada</string>
     <string name="eliminar">Eliminar</string>
+    <string name="drag_to_reorder">Arrastrar para reordenar</string>
     <string name="carga">Carga</string>
     <string name="volver">Volver</string>
     <string name="salto">Salto</string>

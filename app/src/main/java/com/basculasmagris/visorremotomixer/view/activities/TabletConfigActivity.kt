@@ -996,8 +996,10 @@ class TabletConfigActivity : AppCompatActivity(){
             Log.i(TAG,"listOfMinRounds $listOfMedRoundsRun")
 
             listOfMedRoundsRun.forEach{ minRound ->
+                // La clave correcta es tabletMixerId (= ID de la ronda en el HOST),
+                // no it.id (que es la PK local de Room, distinto espacio de IDs).
                 val isRound = mLocalRoundsLocal?.firstOrNull{
-                    it.id == minRound.round.id
+                    it.tabletMixerId == minRound.round.id
                 }
                 val roundLocal = RoundLocal(
                     name = minRound.round.name,
@@ -1102,8 +1104,10 @@ class TabletConfigActivity : AppCompatActivity(){
             }
             if(existTablet != null){
                 val tabletBt = RemoteTabletSession.bluetoothDevice
-                existTablet.name = tabletInfo.tabletName
-                existTablet.mixerName = tabletInfo.mixerName
+                // Solo sobreescribir si el HOST envió valores no vacíos — evita borrar
+                // datos guardados cuando el HOST tiene versión vieja o no tiene nombre configurado.
+                if (tabletInfo.tabletName.isNotEmpty()) existTablet.name = tabletInfo.tabletName
+                if (tabletInfo.mixerName.isNotEmpty()) existTablet.mixerName = tabletInfo.mixerName
                 Log.i(TAG,"tabletBt = $tabletBt")
                 if(tabletBt != null) {
                     existTablet.mac = RemoteTabletSession.getBluetoothAddress(this)
@@ -1113,7 +1117,10 @@ class TabletConfigActivity : AppCompatActivity(){
                 mTabletMixerViewModel.update(existTablet)
                 Log.i(TAG,"updateTabletMixer: $existTablet")
                 RemoteTabletSession.setTablet(existTablet)
-            }else{
+            }else if (tabletInfo.serialNumber.isNotEmpty()) {
+                // Solo crear un registro nuevo si el serial es válido, para evitar
+                // crear tablets fantasma cuando mLocalTabletMixers no cargó todavía
+                // o el HOST envió una respuesta con datos vacíos.
                 val newTabletMixer = TabletMixer(
                     name = tabletInfo.tabletName,
                     mixerName = tabletInfo.mixerName,
@@ -1125,12 +1132,15 @@ class TabletConfigActivity : AppCompatActivity(){
                 Log.i(TAG,"newTabletMixer: $newTabletMixer")
                 mTabletMixerViewModel.insert(newTabletMixer)
                 RemoteTabletSession.setTablet(newTabletMixer)
+            } else {
+                Log.w(TAG,"processTabletInfo: serial vacío, se ignora para no crear registro fantasma")
             }
 
             mBinding.layTabletMixerName.visibility = View.VISIBLE
             mBinding.layTabletMixerModel.visibility = View.VISIBLE
-            mBinding.tvTabletMixerName.text = tabletInfo.tabletName
-            mBinding.tvTabletMixerDescription.text = tabletInfo.mixerName
+            // Solo actualizar el display si el HOST envió valores no vacíos
+            if (tabletInfo.tabletName.isNotEmpty()) mBinding.tvTabletMixerName.text = tabletInfo.tabletName
+            if (tabletInfo.mixerName.isNotEmpty()) mBinding.tvTabletMixerDescription.text = tabletInfo.mixerName
 
         } catch (e: Exception) {
             Log.e(TAG, "Error procesando TabletInfo", e)

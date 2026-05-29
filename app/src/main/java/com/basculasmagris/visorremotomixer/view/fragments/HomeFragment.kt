@@ -24,7 +24,9 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.basculasmagris.visorremotomixer.R
 import com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication
 import com.basculasmagris.visorremotomixer.databinding.DialogCustomListBinding
@@ -203,14 +205,68 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        tabletMixerHomeAdapter = TabletMixerHomeAdapter(emptyList()) { tabletMixer ->
-            onTabletMixerPressed(tabletMixer)
-        }
+        tabletMixerHomeAdapter = TabletMixerHomeAdapter(
+            initialList    = emptyList(),
+            onItemPressed  = { onTabletMixerPressed(it) },
+            onDeletePressed = { showDeleteConfirmation(it) },
+            onOrderChanged = { reordered ->
+                mTabletMixerViewModel.updateAll(reordered)
+            }
+        )
 
         mBinding.rvTabletMixerHomeAdapter.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = tabletMixerHomeAdapter
         }
+
+        // ItemTouchHelper para arrastrar y reordenar
+        val dragCallback = object : ItemTouchHelper.Callback() {
+            override fun getMovementFlags(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ) = makeMovementFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0)
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                tabletMixerHomeAdapter?.onItemMoved(
+                    viewHolder.adapterPosition,
+                    target.adapterPosition
+                )
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
+
+            override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+                super.clearView(recyclerView, viewHolder)
+                tabletMixerHomeAdapter?.onDragEnded()
+            }
+
+            // El drag se inicia sólo desde el handle, no desde long-press
+            override fun isLongPressDragEnabled() = false
+        }
+
+        val touchHelper = ItemTouchHelper(dragCallback)
+        touchHelper.attachToRecyclerView(mBinding.rvTabletMixerHomeAdapter)
+        tabletMixerHomeAdapter?.attachTouchHelper(touchHelper)
+    }
+
+    private fun showDeleteConfirmation(tabletMixer: TabletMixer) {
+        if (!isAdded) return
+        val builder = CustomAlertDialogBuilder(requireActivity())
+        builder.setTitle(getString(R.string.eliminar))
+        builder.setMessage(getString(R.string.msg_delete_tablet_dialog, tabletMixer.name))
+        builder.setPositiveButton(getString(R.string.lbl_yes)) { dialog, _ ->
+            mTabletMixerViewModel.delete(tabletMixer)
+            dialog.dismiss()
+        }
+        builder.setNegativeButton(getString(R.string.lbl_no)) { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.show()
     }
 
     private fun onTabletMixerPressed(tabletMixer: TabletMixer) {

@@ -22,7 +22,7 @@ import com.basculasmagris.visorremotomixer.model.entities.*
         RoundRun::class,
         RoundLocal::class,
         TabletMixer::class],
-    version = 13)
+    version = 14)
 
 abstract class SpiMixerRoomDatabase: RoomDatabase() {
 
