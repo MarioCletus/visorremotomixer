@@ -200,7 +200,7 @@ class SyncFragment : Fragment() {
             }
             if(tabletMixer != null){
                 val tabletToUpdate = TabletMixer(
-                    name = tabletRemote.name,
+                    name = tabletRemote.name?:tabletMixer.name,
                     mixerName = tabletMixer.mixerName,
                     mac = tabletMixer.mac,
                     serial = tabletRemote.serial?:tabletMixer.serial,
@@ -215,7 +215,7 @@ class SyncFragment : Fragment() {
                 }?.toMutableList()
             }else{
                 val tabletToInsert = TabletMixer(
-                    name = tabletRemote.name,
+                    name = tabletRemote.name?:"",
                     mixerName = "",
                     mac = "",
                     serial = tabletRemote.serial?:"",

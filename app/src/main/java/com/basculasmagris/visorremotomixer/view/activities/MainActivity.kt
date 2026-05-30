@@ -77,6 +77,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -639,36 +640,48 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun changeTabletMixer(
-        tabletMixer: TabletMixer,
-        bluetoothDevice: BluetoothDevice?
+        tabletMixer: TabletMixer
     ) {
         reconnectDisable()
+        mBinder?.disconnectKnowDeviceWithTransfer()
+        connectedDeviceMac = null
+        changeStatusDisconnected()
 
-        this.bluetoothDevice?.let { deviceBluetooth ->
-            if (mBinder?.isConnected() == true) {
-                Log.d(TAG, "Disconnect bluetoothdevice $deviceBluetooth")
-                mBinder?.disconnectKnowDeviceWithTransfer()
-                connectedDeviceMac = null
-                changeStatusDisconnected()
-            }
-        }
-
+        val bluetoothDevice1 = Helper.getBluetoothDeviceFromMac(tabletMixer.mac)
         selectedTabletInActivity = tabletMixer
-        RemoteTabletSession.setTablet(tabletMixer)
-        Log.i(TAG,"changeTabletMixer in MainActivity $selectedTabletInActivity")
-        // bluetoothDevice es ahora computed desde selectedTabletInActivity.mac — no hace falta cachear
-        RemoteTabletSession.setBluetoothDevice(bluetoothDevice)
+        Log.i(TAG,"changeTabletMixer in MainActivity ${tabletMixer.name} - ${tabletMixer.btName} - bluetoothDevice ${BluetoothUtils.getBluetoothName(this, bluetoothDevice1)}")
 
         RemoteTabletSession.setConnection(
             tabletMixer = tabletMixer,
-            device = bluetoothDevice
+            device = bluetoothDevice1
         )
 
         Handler(Looper.getMainLooper()).postDelayed({
-            reconnectEnable()
             Log.i(TAG, "changeMixer connectDevice")
-            connectDevice(bluetoothDevice)
+            connectDevice(bluetoothDevice1)
+            reconnectEnable()
         }, Constants.CHANGE_MIXER_TIME)
+    }
+
+    suspend fun changeTablet_SUSPEND(tabletMixer: TabletMixer) {
+        reconnectDisable()
+        mBinder?.disconnectKnowDeviceWithTransfer()
+        connectedDeviceMac = null
+        changeStatusDisconnected()
+
+        val bluetoothDevice1 = Helper.getBluetoothDeviceFromMac(tabletMixer.mac)
+        selectedTabletInActivity = tabletMixer
+
+        RemoteTabletSession.setConnection(
+            tabletMixer = tabletMixer,
+            device = bluetoothDevice1
+        )
+
+        delay(200)
+
+        Log.i(TAG, "changeMixer connectDevice")
+        connectDevice(bluetoothDevice1)
+        reconnectEnable()
     }
 
     fun changeActionBarTitle(title: String) {
@@ -978,7 +991,6 @@ class MainActivity : AppCompatActivity() {
         return alertDialog
     }
 
-
     private fun selectCorralDialog(corralsToSelect : ArrayList<MinCorral>): AlertDialog?{
         if(corralsToSelect.isEmpty()){
             return null
@@ -1015,7 +1027,6 @@ class MainActivity : AppCompatActivity() {
         return alertDialog
     }
 
-
     fun dlgTareToLoad(weight:Long) {
         val builder = CustomAlertDialogBuilder(this)
         builder.setTitle(getString(R.string.warning))
@@ -1035,22 +1046,17 @@ class MainActivity : AppCompatActivity() {
         builder.setCancelable(false)
         dialogTare = builder.create()
         dialogTare?.show()
-
-
     }
-
 
     fun sendValueToMixer(type: String, value: String) {
         val msg = "CMD${Constants.CMD_VALUE}$type$value"
         mBinder?.write(msg.toByteArray())
     }
 
-
     fun sendDietRequestToMixer() {
         val msg = "CMD${Constants.CMD_DIETS}"
         mBinder?.write(msg.toByteArray())
     }
-
 
     fun sendRequestCfgToMixer() {
         val msg = "CMD${Constants.CMD_REQ_CFG}"
@@ -1074,7 +1080,6 @@ class MainActivity : AppCompatActivity() {
         mBinder?.write(msg.toByteArray())
     }
 
-
     fun sendReconnectBalance() {
         val msg = "CMD${Constants.CMD_RECONNECT_SCALE}"
         Log.i("send_cmd","Send reconnect balance $msg")
@@ -1086,6 +1091,7 @@ class MainActivity : AppCompatActivity() {
         Log.i("send_cmd","Send requestRoundRunData $msg")
         mBinder?.write(msg.toByteArray())
     }
+
     fun requestMixer() {
         val msg = "CMD${Constants.CMD_MIXER}"
         Log.i("send_cmd","Send requestMixer $msg")
@@ -1097,7 +1103,6 @@ class MainActivity : AppCompatActivity() {
         val msg = "CMD${Constants.CMD_TARA}"
         mBinder?.write(msg.toByteArray())
     }
-
 
     fun sendRestToMixer() {
         Log.i("send_cmd","Send rest")
@@ -1391,7 +1396,6 @@ class MainActivity : AppCompatActivity() {
     fun updateRoundDetail(roundRunDetail: MinRoundRunDetail) {
         minRoundRunDetail = roundRunDetail
     }
-
 
 }
 

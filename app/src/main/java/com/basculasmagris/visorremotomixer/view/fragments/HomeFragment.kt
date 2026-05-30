@@ -24,6 +24,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -184,12 +185,27 @@ class HomeFragment : Fragment() {
         return mBinding.root
     }
 
+    /** Altura del RecyclerView en px. Se captura después del primer layout pass. */
+    private var rvHeightPx: Int = 0
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         observeTabletMixers()
         (requireActivity() as MainActivity).getSavedTabletMixer()
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
+
+        // Capturar la altura del RV tras el primer layout para usarla en el cálculo
+        mBinding.rvTabletMixerHomeAdapter.viewTreeObserver
+            .addOnGlobalLayoutListener(object : android.view.ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    mBinding.rvTabletMixerHomeAdapter.viewTreeObserver
+                        .removeOnGlobalLayoutListener(this)
+                    rvHeightPx = mBinding.rvTabletMixerHomeAdapter.measuredHeight
+                    // Re-aplicar el layout con la altura ya conocida
+                    mLocalTabletMixers?.size?.let { updateGridLayout(it) }
+                }
+            })
     }
 
     override fun onDestroyView() {
@@ -201,30 +217,63 @@ class HomeFragment : Fragment() {
         mTabletMixerViewModel.allTabletMixerList.observe(viewLifecycleOwner) { tabletMixers ->
             mLocalTabletMixers = tabletMixers
             tabletMixerHomeAdapter?.updateList(tabletMixers)
+            updateGridLayout(tabletMixers.size)
         }
+    }
+
+    /**
+     * Ajusta columnas y altura de los items según la cantidad de tablets:
+     *  - ≤4 → 1 columna, altura = 75% del RV repartido entre los items (mínimo 90dp)
+     *  - >4 → 2 columnas, altura compacta (~90dp)
+     */
+    private fun updateGridLayout(count: Int) {
+        val rv = mBinding.rvTabletMixerHomeAdapter
+        val density = resources.displayMetrics.density
+
+        val columns = if (count <= 4) 1 else 2
+
+        // Calcular altura del item
+        val compactPx = (90 * density).toInt()
+        val itemHeightPx = if (count <= 4 && rvHeightPx > 0 && count > 0) {
+            maxOf(compactPx, (rvHeightPx * 0.75 / count).toInt())
+        } else {
+            compactPx
+        }
+
+        // Actualizar span count sin recrear el LayoutManager si ya existe
+        val current = rv.layoutManager as? GridLayoutManager
+        if (current == null || current.spanCount != columns) {
+            rv.layoutManager = GridLayoutManager(requireContext(), columns)
+        }
+
+        tabletMixerHomeAdapter?.setItemHeight(itemHeightPx)
+        tabletMixerHomeAdapter?.notifyDataSetChanged()
     }
 
     private fun setupRecyclerView() {
         tabletMixerHomeAdapter = TabletMixerHomeAdapter(
             initialList    = emptyList(),
             onItemPressed  = { onTabletMixerPressed(it) },
-            onDeletePressed = { showDeleteConfirmation(it) },
             onOrderChanged = { reordered ->
                 mTabletMixerViewModel.updateAll(reordered)
             }
         )
 
         mBinding.rvTabletMixerHomeAdapter.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            // 2 columnas para mostrar hasta 8 tablets cómodamente
+            layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = tabletMixerHomeAdapter
         }
 
-        // ItemTouchHelper para arrastrar y reordenar
         val dragCallback = object : ItemTouchHelper.Callback() {
             override fun getMovementFlags(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder
-            ) = makeMovementFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0)
+            ) = makeMovementFlags(
+                ItemTouchHelper.UP or ItemTouchHelper.DOWN or
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,  // drag en grid
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT   // swipe para eliminar
+            )
 
             override fun onMove(
                 recyclerView: RecyclerView,
@@ -238,20 +287,25 @@ class HomeFragment : Fragment() {
                 return true
             }
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                // Restaurar visualmente primero para que el item vuelva a su lugar
+                // mientras el diálogo está abierto.
+                tabletMixerHomeAdapter?.notifyItemChanged(position)
+                val tablet = tabletMixerHomeAdapter?.getItemAt(position) ?: return
+                showDeleteConfirmation(tablet)
+            }
 
             override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
                 super.clearView(recyclerView, viewHolder)
                 tabletMixerHomeAdapter?.onDragEnded()
             }
 
-            // El drag se inicia sólo desde el handle, no desde long-press
-            override fun isLongPressDragEnabled() = false
+            // Long-press inicia el drag
+            override fun isLongPressDragEnabled() = true
         }
 
-        val touchHelper = ItemTouchHelper(dragCallback)
-        touchHelper.attachToRecyclerView(mBinding.rvTabletMixerHomeAdapter)
-        tabletMixerHomeAdapter?.attachTouchHelper(touchHelper)
+        ItemTouchHelper(dragCallback).attachToRecyclerView(mBinding.rvTabletMixerHomeAdapter)
     }
 
     private fun showDeleteConfirmation(tabletMixer: TabletMixer) {
@@ -270,12 +324,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun onTabletMixerPressed(tabletMixer: TabletMixer) {
-        Log.i(TAG, "TabletMixer presionado: ${tabletMixer.id} - ${tabletMixer.name}")
-        Log.i(TAG1, "TabletMixer presionado: ${tabletMixer.id} - ${tabletMixer.name}")
+        Log.i(TAG, "TabletMixer presionado: ${tabletMixer.id} - ${tabletMixer.name} - ${tabletMixer.btName}")
+        Log.i(TAG1, "TabletMixer presionado: ${tabletMixer.id} - ${tabletMixer.name} - ${tabletMixer.btName}")
 
 
         viewLifecycleOwner.lifecycleScope.launch {
-            (requireActivity() as MainActivity).changeTabletMixer(tabletMixer,Helper.getBluetoothDeviceFromMac(tabletMixer.mac))
+            (requireActivity() as MainActivity).changeTablet_SUSPEND(tabletMixer)
             (requireActivity() as MainActivity).saveTabletMixerAndWait(tabletMixer)
 
             if (tabletMixer.btName.isNullOrEmpty()) {
@@ -748,19 +802,15 @@ class HomeFragment : Fragment() {
                 val changeTabletMixer = menu?.findItem(R.id.menu_selected_remote_tablet)
                 changeTabletMixer?.title = "   "+ localTabletMixer.name
                 localTabletMixer.let {
-                    Log.i(TAG, "1Se seleccionó mixer $localTabletMixer")
+                    Log.i(TAG, "1Se seleccionó tablet $localTabletMixer")
                     (requireActivity() as MainActivity).saveTabletMixer(localTabletMixer)
                 }
 
-                Log.i(TAG, "Local mixer selected: ${localTabletMixer.name} | ${localTabletMixer.mac}")
-                val localKnowDevice = Helper.getBluetoothDeviceFromMac(localTabletMixer.mac)
-                Log.i(TAG, "localKnowDevice: ${BluetoothUtils.getBluetoothName(requireContext(),localKnowDevice)} | ${localKnowDevice?.address}")
+                Log.i(TAG, "Local tablet selected: ${localTabletMixer.name} | ${localTabletMixer.mac}")
 
-                if (localKnowDevice != null ){
-                    selectedTabletInFragment = localTabletMixer
-                    (requireActivity() as MainActivity).changeTabletMixer(localTabletMixer,localKnowDevice)
-                    menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletInFragment?.name
-                }
+                selectedTabletInFragment = localTabletMixer
+                (requireActivity() as MainActivity).changeTabletMixer(localTabletMixer)
+                menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletInFragment?.name
             }
         }
     }

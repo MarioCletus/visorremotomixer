@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class TabletRemote (
     val id: Long,
-    val name: String,
+    val name: String?,
     val serial: String?,
     val subscriptionActive: Boolean,
     val codeClient: String,

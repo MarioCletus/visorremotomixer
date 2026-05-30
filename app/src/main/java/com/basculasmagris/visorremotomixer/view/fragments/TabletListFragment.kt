@@ -221,10 +221,7 @@ class TabletListFragment : BottomSheetDialogFragment() {
     }
 
     fun goToRemoteMixerFragment(tabletMixer: TabletMixer){
-        val deviceBluetooth = bluetoothDevices.firstOrNull { bd ->
-            bd.address == tabletMixer.mac
-        }
-        (activity as MainActivity).changeTabletMixer(tabletMixer, deviceBluetooth)
+        (activity as MainActivity).changeTabletMixer(tabletMixer)
         cleanObservers()
         findNavController().navigate(TabletListFragmentDirections.actionTabletMixerListFragmentToRemoteMixerFragment())
     }

@@ -1,53 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="8dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp"
     android:background="@drawable/bg_item_adapter_ripple"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:padding="16dp">
-
-    <!-- Drag handle -->
-    <ImageView
-        android:id="@+id/ivDragHandle"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/ic_drag_handle"
-        android:contentDescription="@string/drag_to_reorder"
-        android:padding="4dp" />
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/tvTablet"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:text="@string/tablet"
         android:textColor="@android:color/white"
-        android:textSize="22sp"
+        android:textSize="18sp"
         android:textStyle="bold"
-        android:gravity="center" />
+        android:gravity="center"
+        android:maxLines="2"
+        android:ellipsize="end" />
 
     <TextView
         android:id="@+id/tvMixer"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:text="@string/mixer"
         android:textColor="@color/color_acent_green"
-        android:textSize="18sp"
-        android:gravity="center" />
-
-    <!-- Delete button -->
-    <ImageView
-        android:id="@+id/ivDelete"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/ic_delete_tablet"
-        android:contentDescription="@string/eliminar"
-        android:padding="4dp" />
+        android:textSize="14sp"
+        android:gravity="center"
+        android:maxLines="1"
+        android:ellipsize="end" />
 
 </LinearLayout>

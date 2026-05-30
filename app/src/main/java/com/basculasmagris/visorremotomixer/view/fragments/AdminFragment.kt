@@ -33,7 +33,6 @@ import com.basculasmagris.visorremotomixer.model.entities.MinRoundRunDetail
 import com.basculasmagris.visorremotomixer.model.entities.Mixer
 import com.basculasmagris.visorremotomixer.model.entities.TabletMixer
 import com.basculasmagris.visorremotomixer.utils.BluetoothSDKListenerHelper
-import com.basculasmagris.visorremotomixer.utils.BluetoothUtils
 import com.basculasmagris.visorremotomixer.utils.Constants
 import com.basculasmagris.visorremotomixer.utils.ConvertZip
 import com.basculasmagris.visorremotomixer.utils.CustomAlertDialogBuilder
@@ -55,7 +54,7 @@ class AdminFragment : Fragment() {
 
     private lateinit var mBinding: FragmentAdminBinding
     private val TAG = "DEBAdm"
-    private var selectedTabletMixerInFragment: TabletMixer? = null
+    private var selectedTabletInFragment: TabletMixer? = null
     private var menu:Menu? = null
     private var bInFree: Boolean = true
     private var bInCfg: Boolean = false
@@ -104,7 +103,7 @@ class AdminFragment : Fragment() {
 
                 }
                 menu.findItem(R.id.cancel_round).isVisible = false
-                menu.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletMixerInFragment?.name
+                menu.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletInFragment?.name
 
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -112,9 +111,9 @@ class AdminFragment : Fragment() {
                 return when (menuItem.itemId) {
                     R.id.bluetooth_remote_status -> {
                         val deviceBluetooth = (requireActivity() as MainActivity).knowDevices?.firstOrNull { bd->
-                            bd.address == selectedTabletMixerInFragment?.mac
+                            bd.address == selectedTabletInFragment?.mac
                         }
-                        Log.v(TAG,"Force connection ${deviceBluetooth?.name} $selectedTabletMixerInFragment")
+                        Log.v(TAG,"Force connection ${deviceBluetooth?.name} $selectedTabletInFragment")
                         deviceBluetooth?.let {
                             val name = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
                                 if (ActivityCompat.checkSelfPermission(
@@ -500,7 +499,7 @@ class AdminFragment : Fragment() {
         override fun onBondedDevices(device: List<BluetoothDevice>?) {
             Log.i(TAG, "[Admin]onBondedDevices ${device?.size} \n$device")
             (requireActivity() as MainActivity).knowDevices = device
-            selectedTabletMixerInFragment?.let {
+            selectedTabletInFragment?.let {
                 selectTablet(it)
             }
         }
@@ -571,13 +570,13 @@ class AdminFragment : Fragment() {
     fun setTabletMixer(tabletMixerIn: TabletMixer) {
         tabletMixerIn.let { tabletMixer ->
             menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + tabletMixer.name
-            selectedTabletMixerInFragment = tabletMixer
+            selectedTabletInFragment = tabletMixer
             Log.i(
                 TAG,
                 "setTabletMixer $tabletMixer  \nmService ${(requireActivity() as MainActivity).mService}"
             )
             (requireActivity() as MainActivity).mBinder?.getBondedDevices()
-            menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletMixerInFragment?.name
+            menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletInFragment?.name
         }
     }
 
@@ -655,19 +654,14 @@ class AdminFragment : Fragment() {
                 val changeTabletMixer = menu?.findItem(R.id.menu_selected_remote_tablet)
                 changeTabletMixer?.title = "   "+ localTabletMixer.name
                 localTabletMixer.let {
-                    Log.i(TAG, "1Se seleccionó mixer $localTabletMixer")
+                    Log.i(TAG, "1Se seleccionó tablet $localTabletMixer")
                     (requireActivity() as MainActivity).saveTabletMixer(localTabletMixer)
                 }
 
-                Log.i(TAG, "Local mixer selected: ${localTabletMixer.name} | ${localTabletMixer.mac}")
-                val localKnowDevice = Helper.getBluetoothDeviceFromMac(localTabletMixer.mac)
-                Log.i(TAG, "localKnowDevice: ${BluetoothUtils.getBluetoothName(requireContext(),localKnowDevice)} | ${localKnowDevice?.address}")
-
-                if (localKnowDevice != null ){
-                    selectedTabletMixerInFragment = localTabletMixer
-                    (requireActivity() as MainActivity).changeTabletMixer(localTabletMixer,localKnowDevice)
-                    menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletMixerInFragment?.name
-                }
+                Log.i(TAG, "Local tablet selected: ${localTabletMixer.name} | ${localTabletMixer.mac}")
+                selectedTabletInFragment = localTabletMixer
+                (requireActivity() as MainActivity).changeTabletMixer(localTabletMixer)
+                menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletInFragment?.name
             }
         }
     }

@@ -78,8 +78,8 @@ class RoundListFragment : Fragment() {
         TabletMixerViewModelFactory((requireActivity().application as SpiMixerVRApplication).tabletMixerRepository)
     }
     private var liveData: MediatorLiveData<MergedLocalData>? = null
-    private var mLocalTabletMixers: MutableList<TabletMixer>? = null
-    private val mLocalTabletMixersCustomList: java.util.ArrayList<CustomListItem> =
+    private var mLocalTablet: MutableList<TabletMixer>? = null
+    private val mLocalTabletCustomList: java.util.ArrayList<CustomListItem> =
         java.util.ArrayList<CustomListItem>()
     private lateinit var mCustomListDialog: Dialog
 
@@ -155,8 +155,8 @@ class RoundListFragment : Fragment() {
                         if(Helper.getCurrentUser(requireActivity()).codeRole == Constants.USER_NUTRICIONIST){
                             return false
                         }
-                        if (mLocalTabletMixersCustomList.size > 0){
-                            customItemsLDialog(getString(R.string.tablet), mLocalTabletMixersCustomList,Constants.MIXER_REF)
+                        if (mLocalTabletCustomList.size > 0){
+                            customItemsLDialog(getString(R.string.tablet), mLocalTabletCustomList,Constants.MIXER_REF)
                         } else {
                             alertMixer(getString(R.string.no_hay_tablet_vinculada))
                         }
@@ -219,25 +219,25 @@ class RoundListFragment : Fragment() {
                 Log.v(TAG, "it: ${it.toString()}")
                 when (it) {
                     is TabletMixerData -> {
-                        mLocalTabletMixers = it.tabletMixers
-                        mLocalTabletMixers?.let {
+                        mLocalTablet = it.tabletMixers
+                        mLocalTablet?.let {
                             Log.i(TAG,"mLocalTabletMixers: "+ it.size + "  "+ it)
                         }
-                        mLocalTabletMixers?.forEach {
-                            val alreadyExist = mLocalTabletMixersCustomList.firstOrNull { customItem ->
+                        mLocalTablet?.forEach {
+                            val alreadyExist = mLocalTabletCustomList.firstOrNull { customItem ->
                                 customItem.id == it.id
                             }
 
                             if (alreadyExist == null){
                                 val customList = CustomListItem(it.id,0, it.name)
-                                mLocalTabletMixersCustomList.add(customList)
+                                mLocalTabletCustomList.add(customList)
                             }
                         }
                     }
                     else -> {}
                 }
 
-                if (mLocalTabletMixers != null) {
+                if (mLocalTablet != null) {
                     Log.i(TAG,"liveData.removeObserver")
 //                    (requireActivity() as MainActivity).mBinder?.getBondedDevices()
 //                    dialog?.dismiss()
@@ -715,7 +715,7 @@ class RoundListFragment : Fragment() {
                 menu?.findItem(R.id.bluetooth_balance)?.title = ""
                 bMixerInit = false
 
-                val localTabletMixer = mLocalTabletMixers?.firstOrNull { tabletMixer ->
+                val localTabletMixer = mLocalTablet?.firstOrNull { tabletMixer ->
                     tabletMixer.id == item.id
                 } ?: return
 
@@ -726,15 +726,11 @@ class RoundListFragment : Fragment() {
                     (requireActivity() as MainActivity).saveTabletMixer(localTabletMixer)
                 }
 
-                Log.i(TAG, "Local mixer selected: ${localTabletMixer.name} | ${localTabletMixer.mac}")
-                val localKnowDevice = Helper.getBluetoothDeviceFromMac(localTabletMixer.mac)
-                Log.i(TAG, "localKnowDevice: ${BluetoothUtils.getBluetoothName(requireContext(),localKnowDevice)} | ${localKnowDevice?.address}")
+                Log.i(TAG, "Local tablet selected: ${localTabletMixer.name} | ${localTabletMixer.mac}")
 
-                if (localKnowDevice != null ){
-                    selectedTabletInFragment = localTabletMixer
-                    (requireActivity() as MainActivity).changeTabletMixer(localTabletMixer,localKnowDevice)
-                    menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletInFragment?.name
-                }
+                selectedTabletInFragment = localTabletMixer
+                (requireActivity() as MainActivity).changeTabletMixer(localTabletMixer)
+                menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletInFragment?.name
             }
         }
     }
