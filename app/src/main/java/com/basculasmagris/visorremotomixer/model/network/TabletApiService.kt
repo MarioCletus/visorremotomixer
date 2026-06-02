@@ -48,5 +48,16 @@ class TabletApiService : BaseService() {
         return api.isRegistered(tablet)
     }
 
+    /**
+     * Envía al servidor los nombres BT de las tablets principales conocidas por el VR.
+     * [tablets] es lista de mapas con "serial" y "bluetoothName".
+     */
+    fun updateTabletBtNames(codeClient: String, tablets: List<Map<String, String>>): Single<Boolean> {
+        val body = HashMap<String, Any>()
+        body["code_client"] = codeClient
+        body["tablets"] = tablets
+        return api.updateTabletBtNames(body)
+    }
+
 
 }

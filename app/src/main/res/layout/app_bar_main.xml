@@ -25,6 +25,9 @@
                 android:gravity="center"
                 app:title="Agregar ronda"
                 app:titleTextColor="@color/white"
+                app:subtitleTextColor="@color/white"
+                app:theme="@style/Theme.Spimixer.AppBarOverlay"
+                app:popupTheme="@style/Theme.Spimixer.PopupOverlay"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>

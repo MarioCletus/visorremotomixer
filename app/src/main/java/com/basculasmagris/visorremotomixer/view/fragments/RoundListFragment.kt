@@ -472,6 +472,11 @@ class RoundListFragment : Fragment() {
                     }
                 }
 
+                Constants.CMD_VTL ->{
+                    Log.i("showCommand","CMD_VTL: recibida lista de tablets VR")
+                    if (isAdded) mainActivity.processVrTabletList(message)
+                }
+
                 Constants.CMD_MIXER ->{
                     Log.i("showCommand","CMD_MIXER")
                     try{
@@ -622,9 +627,21 @@ class RoundListFragment : Fragment() {
         }
     }
 
-    fun selectTablet(tabletMixer :TabletMixer){
+    fun selectTablet(tabletMixer: TabletMixer){
         val activity = requireActivity() as MainActivity
-        Log.i(TAG,"tabletMixerInFragment ${tabletMixer.name} ${tabletMixer.mac}")
+        Log.i(TAG,"tabletMixerInFragment ${tabletMixer.name} mac='${tabletMixer.mac}' btName='${tabletMixer.btName}'")
+
+        if (tabletMixer.mac.isEmpty()) {
+            val resolvedDevice = activity.resolveBluetoothDevice(tabletMixer)
+            if (resolvedDevice != null) {
+                Log.i(TAG, "selectTablet RLF: MAC resuelta por btName='${tabletMixer.btName}' → ${resolvedDevice.address}")
+                if (activity.mBinder?.isConnected() != true) {
+                    connectTable(tabletMixer.copy(mac = resolvedDevice.address))
+                }
+            }
+            return
+        }
+
         activity.knowDevices?.forEach{
             Log.i(TAG,"bluetoothKnowed ${it.name} ${it.address}")
             if(tabletMixer.mac.equals(it.address)){
@@ -632,8 +649,7 @@ class RoundListFragment : Fragment() {
                 var address = ""
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
                     if (ActivityCompat.checkSelfPermission(
-                            activity,
-                            Manifest.permission.BLUETOOTH_CONNECT
+                            activity, Manifest.permission.BLUETOOTH_CONNECT
                         ) == PackageManager.PERMISSION_GRANTED) {
                         name = it.name
                         address = it.address
@@ -643,7 +659,6 @@ class RoundListFragment : Fragment() {
                     address = it.address
                 }
                 Log.i(TAG,"Se seleccionó $name : $address")
-                // Conectar solo si no está ya conectado al dispositivo correcto
                 if (activity.mBinder?.isConnected() != true) {
                     connectTable(tabletMixer)
                 }

@@ -73,7 +73,12 @@ class BluetoothSDKService : Service() {
         public fun startDiscovery(context: Context) {
             val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
             filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
-            registerReceiver(discoveryBroadcastReceiver, filter)
+            // Android 13+ requiere flag explícito para broadcasts del sistema
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(discoveryBroadcastReceiver, filter, RECEIVER_EXPORTED)
+            } else {
+                registerReceiver(discoveryBroadcastReceiver, filter)
+            }
             startDiscovery(bluetoothAdapter)
             pushBroadcastMessage(BluetoothUtils.ACTION_DISCOVERY_STARTED, null, null)
         }
@@ -495,17 +500,19 @@ class BluetoothSDKService : Service() {
 
     fun startDiscovery(btAdapter: BluetoothAdapter){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-            if (ActivityCompat.checkSelfPermission(
-                    applicationContext,
-                    Manifest.permission.BLUETOOTH_CONNECT
-                ) == PackageManager.PERMISSION_GRANTED) {
-                Log.e(TAG,"startDiscovery: Permission Granted")
-                btAdapter.startDiscovery()
-            }else{
-                Log.e(TAG,"startDiscovery: Permission Denied")
+            // Android 12+: discovery requiere BLUETOOTH_SCAN (no BLUETOOTH_CONNECT)
+            val hasScan = ActivityCompat.checkSelfPermission(
+                applicationContext, Manifest.permission.BLUETOOTH_SCAN
+            ) == PackageManager.PERMISSION_GRANTED
+            if (hasScan) {
+                val started = btAdapter.startDiscovery()
+                Log.i(TAG, "startDiscovery: started=$started (API ${Build.VERSION.SDK_INT})")
+            } else {
+                Log.e(TAG, "startDiscovery: BLUETOOTH_SCAN permission denied")
             }
-        }else{
-            btAdapter.startDiscovery()
+        } else {
+            val started = btAdapter.startDiscovery()
+            Log.i(TAG, "startDiscovery: started=$started (API ${Build.VERSION.SDK_INT})")
         }
     }
 

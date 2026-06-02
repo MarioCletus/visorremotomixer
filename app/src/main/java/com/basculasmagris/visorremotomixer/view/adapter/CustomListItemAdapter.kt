@@ -12,6 +12,7 @@ import com.basculasmagris.visorremotomixer.view.activities.TabletConfigActivity
 import com.basculasmagris.visorremotomixer.view.fragments.AdminFragment
 import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RoundListFragment
+import com.basculasmagris.visorremotomixer.view.fragments.SyncFragment
 
 
 class CustomListItemAdapter (
@@ -66,8 +67,15 @@ class CustomListItemAdapter (
 
 class CustomListItemAdapterFragment (
     private val fragment: Fragment,
-    private val listItems: List<CustomListItem>,
+    initialItems: List<CustomListItem>,
     private val selection: String) : RecyclerView.Adapter<CustomListItemAdapterFragment.ViewHolder>() {
+
+    private val listItems: MutableList<CustomListItem> = initialItems.toMutableList()
+
+    fun updateList(item: CustomListItem) {
+        listItems.add(item)
+        notifyItemInserted(listItems.size - 1)
+    }
 
     class ViewHolder(view: ItemCustomListBinding): RecyclerView.ViewHolder(view.root){
         val tvTxt = view.tvText
@@ -100,6 +108,9 @@ class CustomListItemAdapterFragment (
                 fragment.selectedListItem(item, selection)
             }
             if (fragment is HomeFragment){
+                fragment.selectedListItem(item, selection)
+            }
+            if (fragment is SyncFragment){
                 fragment.selectedListItem(item, selection)
             }
         }

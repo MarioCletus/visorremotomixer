@@ -327,18 +327,21 @@ class TabletConfigActivity : AppCompatActivity(){
         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(applicationContext, mBluetoothListener)
     }
 
-    private fun linkDevice(tabletMixer: TabletMixer){
+    private fun linkDevice(tabletMixer: TabletMixer?){
         if(isSearching)
             return
-        selectedTabletMixer = tabletMixer
-        dialog = Helper.setProgressDialog(this, "Buscando tabletMixer...")
+        isSearching = true
+        selectedTabletMixer = tabletMixer   // null si se llega sin tablet seleccionada — es aceptable
+        dialog = Helper.setProgressDialog(this, "Buscando tablets...")
         dialog?.show()
-        Log.i(TAG,"buscando..")
+        Log.i(TAG,"buscando.. tabletMixer=$tabletMixer mBinder=$mBinder")
         mBinder?.startDiscovery(this)
-        Timer().schedule(10000){
+        // Timeout en el main thread para no crashear con Dialog en background thread
+        Handler(Looper.getMainLooper()).postDelayed({
+            isSearching = false
             dialog?.cancel()
             mBinder?.stopDiscovery()
-        }
+        }, 15_000)
     }
 
     private fun getSelectedTabletMixerBluetoothDevice() : BluetoothDevice? {
@@ -548,9 +551,9 @@ class TabletConfigActivity : AppCompatActivity(){
                     equiposVinculados()
                 }
                 1 -> {
-                    tabletMixerReceibed?.let {
-                        linkDevice(it)
-                    }
+                    // Iniciar discovery aunque no haya tabletMixerReceibed:
+                    // no hace falta un tablet específico para buscar dispositivos BT cercanos.
+                    linkDevice(tabletMixerReceibed)
                 }
             }
         }

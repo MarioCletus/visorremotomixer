@@ -2,7 +2,9 @@ package com.basculasmagris.visorremotomixer.utils
 
 object Constants {
 
-    const val RECONNECT_TIME: Long = 2000
+    // BT SPP socket.connect() puede tardar hasta ~10s en fallar.
+    // Con 2s se saturaba el stack iniciando múltiples threads concurrentes.
+    const val RECONNECT_TIME: Long = 12_000
     const val CHANGE_MIXER_TIME: Long = 3000
     const val PRODUCT_TYPE = "PRODUCT_TYPE"
     const val ESTABLISHMENT_REF = "ESTABLISHMENT_REF"
@@ -230,6 +232,8 @@ object Constants {
     const val CMD_VALUE  = "CMV"
     const val CMD_REQ_VALUE  = "CRV"
     const val CMD_TABLET  = "TBL"
+    /** Solicita/responde la lista completa de tablets VR registradas en el cliente. */
+    const val CMD_VTL = "VTL"
 
     //SharedPreferences keys (configuración recibida del HOST)
     const val PREF_VR_SETTINGS: String = "PREF_VR_SETTINGS"

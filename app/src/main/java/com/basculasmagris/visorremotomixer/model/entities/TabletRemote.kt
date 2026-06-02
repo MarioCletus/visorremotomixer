@@ -5,11 +5,12 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TabletRemote (
-    val id: Long,
-    val name: String?,
-    val serial: String?,
-    val subscriptionActive: Boolean,
-    val codeClient: String,
-    val appVersion: String?,
-    val bluetoothName: String?
+    val id: Long = 0,
+    val name: String? = null,
+    val serial: String? = null,
+    val subscriptionActive: Int = 0,
+    val codeClient: String? = null,
+    val appVersion: String? = null,
+    val bluetoothName: String? = null,
+    val updatedDate: String? = null
 ): Parcelable

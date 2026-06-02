@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -78,6 +79,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -154,7 +156,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
         setSupportActionBar(binding.appBarMain.toolbarMain)
-
+        binding.appBarMain.toolbarMain.setTitleTextColor(Color.WHITE)
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: CancellableNavigationView = binding.navView
         val currentUser = Helper.getCurrentUser(this)
@@ -398,7 +400,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun hideCustomProgressDialog(){
+    fun hideCustomProgressDialog(){
         mProgressDialog?.dismiss()
     }
 
@@ -500,6 +502,9 @@ class MainActivity : AppCompatActivity() {
     private var isReconnecting = false // Variable para evitar múltiples Handlers
     private val handlerRecconect = Handler(Looper.getMainLooper()) // El Handler se define a nivel de clase
     private var reconnectRunnable: Runnable? = null // Guardamos la referencia al Runnable
+    // Handler separado para el retardo de cambio de tablet (CHANGE_MIXER_TIME)
+    private val handlerChangeTablet = Handler(Looper.getMainLooper())
+    private var changeTabletRunnable: Runnable? = null
 
     fun connectDevice(bluetoothDevice: BluetoothDevice? = null) {
         // Usar el device pasado como argumento; si es null, caer al computed (tab seleccionada)
@@ -539,7 +544,7 @@ class MainActivity : AppCompatActivity() {
                 Log.i(TAG1, "Reintentando conectar al dispositivo correcto")
                 connectDevice(this@MainActivity.bluetoothDevice)
             }
-            handlerRecconect.postDelayed(reconnectRunnable!!, 2000L)
+            handlerRecconect.postDelayed(reconnectRunnable!!, Constants.RECONNECT_TIME)
             return
         }
 
@@ -547,8 +552,12 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(TAG1, "bluetoothDevice ${BluetoothUtils.getBluetoothName(this, target)}")
         if (mBinder?.isConnected() == false) {
+            // Cancelar cualquier intento de conexión anterior antes de iniciar uno nuevo.
+            // Sin esto, socket.connect() (tarda hasta ~10s en fallar) acumula threads
+            // y satura el stack BT cuando el reconnect loop dispara cada 2s.
+            mBinder?.disconnectKnowDeviceWithTransfer()
             Log.d(TAG1, "connectKnowDeviceWithTransfer ${BluetoothUtils.getBluetoothName(this, target)}")
-            connectedDeviceMac = target.address   // trackear el dispositivo al que nos conectamos
+            connectedDeviceMac = target.address
             mBinder?.connectKnowDeviceWithTransfer(target)
         }
 
@@ -639,6 +648,39 @@ class MainActivity : AppCompatActivity() {
         preferences[longPreferencesKey("IDTABLET")]
     }
 
+    /**
+     * Resuelve el BluetoothDevice para una TabletMixer.
+     * Busca por MAC primero. Si no hay MAC pero hay btName, busca por nombre entre
+     * los dispositivos emparejados. Cuando lo encuentra por btName, persiste el MAC
+     * en la DB para que futuras conexiones no necesiten esta búsqueda.
+     */
+    fun resolveBluetoothDevice(tabletMixer: TabletMixer): BluetoothDevice? {
+        // 1. Camino normal: MAC disponible
+        if (tabletMixer.mac.isNotEmpty()) {
+            val device = Helper.getBluetoothDeviceFromMac(tabletMixer.mac)
+            if (device != null) return device
+        }
+        // 2. MAC vacía pero btName disponible → buscar por nombre entre dispositivos emparejados
+        val btName = tabletMixer.btName
+        if (!btName.isNullOrEmpty() && !knowDevices.isNullOrEmpty()) {
+            val device = knowDevices!!.firstOrNull { bonded ->
+                BluetoothUtils.getBluetoothName(this, bonded).equals(btName, ignoreCase = true)
+            }
+            if (device != null) {
+                Log.i(TAG, "resolveBluetoothDevice: MAC resuelta desde btName='$btName' → ${device.address} para '${tabletMixer.name}'")
+                // Persistir el MAC para que la próxima vez no sea necesaria esta búsqueda
+                val resolved = tabletMixer.copy(mac = device.address)
+                mTabletMixerViewModel.update(resolved)
+                if (selectedTabletInActivity?.id == tabletMixer.id) {
+                    selectedTabletInActivity = resolved
+                }
+                return device
+            }
+            Log.w(TAG, "resolveBluetoothDevice: btName='$btName' no coincide con ningún dispositivo emparejado")
+        }
+        return null
+    }
+
     fun changeTabletMixer(
         tabletMixer: TabletMixer
     ) {
@@ -647,20 +689,31 @@ class MainActivity : AppCompatActivity() {
         connectedDeviceMac = null
         changeStatusDisconnected()
 
-        val bluetoothDevice1 = Helper.getBluetoothDeviceFromMac(tabletMixer.mac)
+        val bluetoothDevice1 = resolveBluetoothDevice(tabletMixer)
+        // selectedTabletInActivity se setea ANTES del postDelayed para que cuando el
+        // Runnable dispare, bluetoothDevice (computed) ya apunte al nuevo tablet.
         selectedTabletInActivity = tabletMixer
-        Log.i(TAG,"changeTabletMixer in MainActivity ${tabletMixer.name} - ${tabletMixer.btName} - bluetoothDevice ${BluetoothUtils.getBluetoothName(this, bluetoothDevice1)}")
+        Log.i(TAG,"changeTabletMixer: ${tabletMixer.name} mac='${tabletMixer.mac}' btName='${tabletMixer.btName}' device=$bluetoothDevice1")
 
         RemoteTabletSession.setConnection(
             tabletMixer = tabletMixer,
             device = bluetoothDevice1
         )
 
-        Handler(Looper.getMainLooper()).postDelayed({
+        // Cancelar cualquier cambio de tablet anterior pendiente para evitar que
+        // un Handler viejo conecte a la tablet anterior si el usuario cambia rápido.
+        changeTabletRunnable?.let { handlerChangeTablet.removeCallbacks(it) }
+
+        changeTabletRunnable = Runnable {
             Log.i(TAG, "changeMixer connectDevice")
-            connectDevice(bluetoothDevice1)
+            // Usar connectDevice() sin argumento → lee this.bluetoothDevice (computed
+            // desde selectedTabletInActivity) para asegurarse de conectar al tablet
+            // ACTUAL aunque el usuario haya vuelto a cambiar durante el delay.
+            connectDevice()
             reconnectEnable()
-        }, Constants.CHANGE_MIXER_TIME)
+            changeTabletRunnable = null
+        }
+        handlerChangeTablet.postDelayed(changeTabletRunnable!!, Constants.CHANGE_MIXER_TIME)
     }
 
     suspend fun changeTablet_SUSPEND(tabletMixer: TabletMixer) {
@@ -669,8 +722,13 @@ class MainActivity : AppCompatActivity() {
         connectedDeviceMac = null
         changeStatusDisconnected()
 
-        val bluetoothDevice1 = Helper.getBluetoothDeviceFromMac(tabletMixer.mac)
+        val bluetoothDevice1 = resolveBluetoothDevice(tabletMixer)
         selectedTabletInActivity = tabletMixer
+
+        Log.i(TAG, "changeTablet_SUSPEND: tablet=${tabletMixer.name} mac='${tabletMixer.mac}' btName='${tabletMixer.btName}' resolved=$bluetoothDevice1")
+        if (bluetoothDevice1 == null) {
+            Log.w(TAG, "changeTablet_SUSPEND: ⚠️ No se pudo resolver el device para '${tabletMixer.name}' (mac='${tabletMixer.mac}', btName='${tabletMixer.btName}')")
+        }
 
         RemoteTabletSession.setConnection(
             tabletMixer = tabletMixer,
@@ -787,26 +845,36 @@ class MainActivity : AppCompatActivity() {
             val existTablet = mLocalTabletMixers?.firstOrNull{
                 it.serial == tabletInfo.serialNumber
             }
+            // Usamos RemoteTabletSession (seteado en onDeviceConnected) para obtener
+            // el dispositivo BT actualmente conectado, independientemente del tablet seleccionado.
+            val tabletBt = RemoteTabletSession.bluetoothDevice ?: bluetoothDevice
+            val connectedMac    = tabletBt?.let { BluetoothUtils.getAddress(this, it) } ?: ""
+            val connectedBtName = tabletBt?.let { BluetoothUtils.getBluetoothName(this, it) } ?: ""
+
             if(existTablet != null){
-                val tabletBt = bluetoothDevice
-                existTablet.name = tabletInfo.tabletName
-                existTablet.mixerName = tabletInfo.mixerName
-                if(tabletBt != null) {
-                    existTablet.mac = BluetoothUtils.getAddress(this,tabletBt)
-                    existTablet.btName = BluetoothUtils.getBluetoothName(this,tabletBt)
+                // Solo sobreescribir si el HOST envió valores no vacíos
+                if (tabletInfo.tabletName.isNotEmpty()) existTablet.name = tabletInfo.tabletName
+                if (tabletInfo.mixerName.isNotEmpty()) existTablet.mixerName = tabletInfo.mixerName
+                if (connectedMac.isNotEmpty()) {
+                    existTablet.mac    = connectedMac
+                    existTablet.btName = connectedBtName
                 }
                 existTablet.updatedDate = Helper.getCurrentDateTime()
                 mTabletMixerViewModel.update(existTablet)
-            }else{
+                Log.i(TAG, "processTabletInfo: actualizado ${existTablet.name} mac=$connectedMac")
+            } else if (tabletInfo.serialNumber.isNotEmpty()) {
                 val newTabletMixer = TabletMixer(
-                    name = tabletInfo.tabletName,
-                    mixerName = tabletInfo.mixerName,
-                    mac = "",
-                    serial = tabletInfo.serialNumber,
-                    btName = "",
+                    name        = tabletInfo.tabletName,
+                    mixerName   = tabletInfo.mixerName,
+                    mac         = connectedMac,
+                    serial      = tabletInfo.serialNumber,
+                    btName      = connectedBtName,
                     updatedDate = Helper.getCurrentDateTime(),
                 )
                 mTabletMixerViewModel.insert(newTabletMixer)
+                Log.i(TAG, "processTabletInfo: insertada nueva ${newTabletMixer.name} mac=$connectedMac")
+            } else {
+                Log.w(TAG, "processTabletInfo: serial vacío, se ignora")
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error procesando TabletInfo", e)
@@ -1212,6 +1280,67 @@ class MainActivity : AppCompatActivity() {
         Log.i("send_cmd","sendRequestTablet")
         val byteArray = "CMD${Constants.CMD_TABLET}000000".toByteArray()
         mBinder?.write(byteArray)
+    }
+
+    /** Solicita a la tablet principal la lista completa de tablets VR del cliente. */
+    fun sendRequestVrTabletList() {
+        Log.i("send_cmd","sendRequestVrTabletList CMD_VTL")
+        val byteArray = "CMD${Constants.CMD_VTL}000000".toByteArray()
+        mBinder?.write(byteArray)
+    }
+
+    /**
+     * Procesa la respuesta CMD_VTL de la tablet principal.
+     * El payload es: 4 chars de longitud + JSON array de tablets.
+     * Inserta o actualiza cada tablet en la DB local del VR.
+     */
+    fun processVrTabletList(message: ByteArray): Boolean {
+        return try {
+            val length = String(message, 3, 4).toInt()
+            val json   = String(message, 7, length)
+            Log.i("VTL", "processVrTabletList: $json")
+
+            val listType = object : TypeToken<ArrayList<com.basculasmagris.visorremotomixer.model.entities.TabletRemote>>() {}.type
+            val remoteTablets: ArrayList<com.basculasmagris.visorremotomixer.model.entities.TabletRemote> =
+                Gson().fromJson(json, listType) ?: arrayListOf()
+
+            Log.i("VTL","remoteTablets ${remoteTablets.map{it.name + " - " +it.serial} }")
+            remoteTablets.forEach { remote ->
+                // Buscar si ya existe por serial
+                // No podemos hacer suspend aquí, así que lanzamos en IO
+                kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+                    val repo = (application as com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication)
+                        .tabletMixerRepository
+                    val allTablets = repo.allTabletMixerList.first()
+                    val existing = allTablets.firstOrNull { it.serial == (remote.serial ?: "") }
+                    if (existing != null) {
+                        val updated = existing.copy(
+                            name      = if (remote.name.isNullOrEmpty()) existing.name else remote.name,
+                            btName    = if (remote.bluetoothName.isNullOrEmpty()) existing.btName else remote.bluetoothName,
+                            updatedDate = Helper.getCurrentDateTime()
+                        )
+                        Log.i("VTL","updateTabletMixerData ${updated.id} - ${updated.name} - ${updated.serial}")
+                        repo.updateTabletMixerData(updated)
+                    } else if (!remote.serial.isNullOrEmpty()) {
+                        val tabletToInsert =TabletMixer(
+                            name        = remote.name ?: "",
+                            mixerName   = "",
+                            mac         = "",
+                            serial      = remote.serial,
+                            btName      = remote.bluetoothName ?: "",
+                            updatedDate = Helper.getCurrentDateTime()
+                        )
+                        repo.insertTabletMixerData(tabletToInsert)
+                        Log.i("VTL","InsertTablet ${tabletToInsert.id} - ${tabletToInsert.name} - ${tabletToInsert.serial}")
+
+                    }
+                }
+            }
+            true
+        } catch (e: Exception) {
+            Log.e("VTL", "processVrTabletList error: $e")
+            false
+        }
     }
 
     fun dlgProduct(message: ByteArray) {

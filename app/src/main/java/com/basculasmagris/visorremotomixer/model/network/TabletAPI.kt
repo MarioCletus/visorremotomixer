@@ -21,4 +21,13 @@ internal interface TabletAPI {
     @POST("${Constants.API_TABLET_ENDPOINT}/isRegistered")
     fun isRegistered(@Body tablet: HashMap<String,String>) : Single<Boolean>
 
+    /**
+     * El VR envía los nombres BT de las tablets principales que conoce.
+     * El servidor persiste esos nombres para que futuras instalaciones puedan
+     * recuperarlos sin tener que volver a emparejar.
+     * body: { code_client, tablets: [{serial, bluetoothName}] }
+     */
+    @PUT("${Constants.API_TABLET_ENDPOINT}/tablet_bt_names")
+    fun updateTabletBtNames(@Body body: HashMap<String, Any>) : Single<Boolean>
+
 }

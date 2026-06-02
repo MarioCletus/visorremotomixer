@@ -185,27 +185,12 @@ class HomeFragment : Fragment() {
         return mBinding.root
     }
 
-    /** Altura del RecyclerView en px. Se captura después del primer layout pass. */
-    private var rvHeightPx: Int = 0
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         observeTabletMixers()
         (requireActivity() as MainActivity).getSavedTabletMixer()
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
-
-        // Capturar la altura del RV tras el primer layout para usarla en el cálculo
-        mBinding.rvTabletMixerHomeAdapter.viewTreeObserver
-            .addOnGlobalLayoutListener(object : android.view.ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    mBinding.rvTabletMixerHomeAdapter.viewTreeObserver
-                        .removeOnGlobalLayoutListener(this)
-                    rvHeightPx = mBinding.rvTabletMixerHomeAdapter.measuredHeight
-                    // Re-aplicar el layout con la altura ya conocida
-                    mLocalTabletMixers?.size?.let { updateGridLayout(it) }
-                }
-            })
     }
 
     override fun onDestroyView() {
@@ -222,25 +207,19 @@ class HomeFragment : Fragment() {
     }
 
     /**
-     * Ajusta columnas y altura de los items según la cantidad de tablets:
-     *  - ≤4 → 1 columna, altura = 75% del RV repartido entre los items (mínimo 90dp)
-     *  - >4 → 2 columnas, altura compacta (~90dp)
+     * Ajusta columnas según la cantidad de tablets:
+     *  - ≤4 → 1 columna, altura fija grande
+     *  - >4 → 2 columnas, altura fija compacta
+     * Siempre altura fija — sin cálculos proporcionales al RV.
      */
     private fun updateGridLayout(count: Int) {
-        val rv = mBinding.rvTabletMixerHomeAdapter
+        val rv      = mBinding.rvTabletMixerHomeAdapter
         val density = resources.displayMetrics.density
 
-        val columns = if (count <= 4) 1 else 2
+        val columns      = if (count <= 4) 1 else 2
+        val itemHeightDp = 90 //if (count <= 3) 120 else 90
+        val itemHeightPx = (itemHeightDp * density).toInt()
 
-        // Calcular altura del item
-        val compactPx = (90 * density).toInt()
-        val itemHeightPx = if (count <= 4 && rvHeightPx > 0 && count > 0) {
-            maxOf(compactPx, (rvHeightPx * 0.75 / count).toInt())
-        } else {
-            compactPx
-        }
-
-        // Actualizar span count sin recrear el LayoutManager si ya existe
         val current = rv.layoutManager as? GridLayoutManager
         if (current == null || current.spanCount != columns) {
             rv.layoutManager = GridLayoutManager(requireContext(), columns)
@@ -332,7 +311,13 @@ class HomeFragment : Fragment() {
             (requireActivity() as MainActivity).changeTablet_SUSPEND(tabletMixer)
             (requireActivity() as MainActivity).saveTabletMixerAndWait(tabletMixer)
 
+            // Limpiar la lista de rondas al cambiar de tablet para que
+            // RoundListFragment no muestre rondas de una sesión anterior.
+            // Se poblarán de nuevo al conectar y recibir CMD_ROUNDS.
+            (requireActivity() as MainActivity).listOfMedRoundsRun.clear()
+
             if (tabletMixer.btName.isNullOrEmpty()) {
+                Log.w(TAG, "⚠️ '${tabletMixer.name}' no tiene btName/mac — navegando a TabletConfigActivity para asignarlo")
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.seleccione_el_bluetooth_de_latablet, tabletMixer.name),
@@ -343,6 +328,7 @@ class HomeFragment : Fragment() {
                     HomeFragmentDirections.actionHomeToTabletConfig(tabletMixer)
                 )
             } else {
+                Log.i(TAG, "TabletMixer '${tabletMixer.name}' mac='${tabletMixer.mac}' btName='${tabletMixer.btName}' → navegando a RoundList")
                 findNavController().navigate(
                     HomeFragmentDirections.actionHomeToRound()
                 )
@@ -672,9 +658,25 @@ class HomeFragment : Fragment() {
             (requireActivity() as MainActivity).weightReceived()
     }
 
-    fun selectTablet(tabletMixer :TabletMixer){
+    fun selectTablet(tabletMixer: TabletMixer){
         val activity = requireActivity() as MainActivity
-        Log.i(TAG,"tabletMixerInFragment ${tabletMixer.name} ${tabletMixer.mac}")
+        Log.i(TAG,"selectTablet: '${tabletMixer.name}' mac='${tabletMixer.mac}' btName='${tabletMixer.btName}' knowDevices=${activity.knowDevices?.size ?: 0}")
+
+        if (tabletMixer.mac.isEmpty()) {
+            // Sin MAC: intentar resolverla por btName
+            val resolvedDevice = activity.resolveBluetoothDevice(tabletMixer)
+            if (resolvedDevice != null) {
+                Log.i(TAG, "selectTablet: MAC resuelta por btName='${tabletMixer.btName}' → ${resolvedDevice.address}")
+                if (activity.mBinder?.isConnected() != true) {
+                    activity.showCustomProgressDialog()
+                    activity.connectDevice(resolvedDevice)
+                }
+            } else {
+                Log.w(TAG,"selectTablet: ⚠️ '${tabletMixer.name}' no tiene MAC ni btName coincidente — no se puede conectar automáticamente")
+            }
+            return
+        }
+
         activity.knowDevices?.forEach{
             Log.i(TAG,"bluetoothKnowed ${it.name} ${it.address}")
             if(tabletMixer.mac.equals(it.address)){
@@ -682,8 +684,7 @@ class HomeFragment : Fragment() {
                 var address = ""
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
                     if (ActivityCompat.checkSelfPermission(
-                            activity,
-                            Manifest.permission.BLUETOOTH_CONNECT
+                            activity, Manifest.permission.BLUETOOTH_CONNECT
                         ) == PackageManager.PERMISSION_GRANTED) {
                         name = it.name
                         address = it.address
@@ -693,8 +694,7 @@ class HomeFragment : Fragment() {
                     address = it.address
                 }
                 Log.i(TAG,"Se seleccionó $name : $address")
-                // Conectar solo si no está ya conectado (evita reconexiones innecesarias)
-                if ((requireActivity() as MainActivity).mBinder?.isConnected() != true) {
+                if (activity.mBinder?.isConnected() != true) {
                     connectTable(tabletMixer)
                 }
             }

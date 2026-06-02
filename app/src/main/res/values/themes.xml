@@ -21,7 +21,11 @@
         <item name="colorControlNormal">@color/white</item>
     </style>
 
-    <style name="Theme.Spimixer.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Spimixer.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!-- Fuerza el texto de los ítems del menú (títulos de iconos) a blanco -->
+        <item name="android:actionMenuTextColor">@color/white</item>
+        <item name="actionMenuTextColor">@color/white</item>
+    </style>
 
     <style name="Theme.Spimixer.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
