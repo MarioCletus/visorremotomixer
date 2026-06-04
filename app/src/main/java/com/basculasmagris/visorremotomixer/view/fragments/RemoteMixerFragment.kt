@@ -212,6 +212,17 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             return@setOnLongClickListener false
         }
 
+        // btn_finish: visible en ronda libre (Load → ir a descarga, Download → finalizar)
+        mBinding.btnFinish.setOnClickListener {
+            val mainActivity = activity as? MainActivity ?: return@setOnClickListener
+            if (bInFree) {
+                if (bInLoad)
+                    alertFinalDialog(getString(R.string.quiere_pasar_a_descarga), getString(R.string.descarga))
+                else if (bInDownload)
+                    alertFinalDialog(getString(R.string.quiere_cerrar_ronda), getString(R.string.finalizar))
+            }
+        }
+
         mBinding.btnPause.setOnCheckedChangeListener { v, isChecked ->
             Log.i(TAG,"setOnCheckedChangeListener $isChecked")
             if(!bInCfg && !bInLoad && !bInDownload && !bInRes){
@@ -305,7 +316,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             mBinding.btnTara.visibility = View.GONE
             mBinding.btnPause.visibility = View.GONE
         }else{
-            mBinding.btnInitFreeRound.visibility = View.INVISIBLE
+            mBinding.btnInitFreeRound.visibility = View.GONE
         }
 
     }
@@ -902,9 +913,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         if(!bInLoad){
                             mBinding.btnJump.visibility = View.VISIBLE
                             mBinding.btnTara.visibility = View.VISIBLE
-                            mBinding.btnInitFreeRound.visibility = View.INVISIBLE
+                            mBinding.btnInitFreeRound.visibility = View.GONE
                             mBinding.btnPause.visibility = View.VISIBLE
                             mBinding.btnJump.text = getString(R.string.salto)
+                            mBinding.btnFinish.visibility = View.GONE   // ronda normal: sin botón finalizar
                             refreshRound()
                         }
                         if(countMsg++ > REFRESH_VIEW_TIME){
@@ -954,9 +966,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         if(!bInDownload){
                             mBinding.btnJump.visibility = View.VISIBLE
                             mBinding.btnTara.visibility = View.VISIBLE
-                            mBinding.btnInitFreeRound.visibility = View.INVISIBLE
+                            mBinding.btnInitFreeRound.visibility = View.GONE
                             mBinding.btnPause.visibility = View.VISIBLE
                             mBinding.btnJump.text = getString(R.string.salto)
+                            mBinding.btnFinish.visibility = View.GONE   // ronda normal: sin botón finalizar
                             countMsg = REFRESH_VIEW_TIME
                         }
                         mBinding.tvTitleProduct.text = getString(R.string.descargar_en)
@@ -988,7 +1001,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         if(!bInCfg){
                             mBinding.btnJump.visibility = View.INVISIBLE
                             mBinding.btnTara.visibility = View.INVISIBLE
-                            mBinding.btnInitFreeRound.visibility = View.INVISIBLE
+                            mBinding.btnInitFreeRound.visibility = View.GONE
                             mBinding.btnPause.visibility = View.INVISIBLE
                             countMsg = REFRESH_VIEW_TIME
                             (requireActivity() as MainActivity).sendDietRequestToMixer()
@@ -1026,9 +1039,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         if(!bInLoad){
                             mBinding.btnJump.visibility = View.VISIBLE
                             mBinding.btnTara.visibility = View.VISIBLE
-                            mBinding.btnInitFreeRound.visibility = View.INVISIBLE
+                            mBinding.btnInitFreeRound.visibility = View.GONE
                             mBinding.btnPause.visibility = View.VISIBLE
                             mBinding.btnJump.text = getString(R.string.salto)
+                            // Ronda libre Load: mostrar "→ Descarga"
+                            mBinding.btnFinish.visibility = View.VISIBLE
+                            mBinding.btnFinish.text = getString(R.string.ir_a_descarga)
                             countMsg = REFRESH_VIEW_TIME
                         }
                         if(countMsg++ > REFRESH_VIEW_TIME){
@@ -1073,9 +1089,12 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         if(!bInDownload){
                             mBinding.btnJump.visibility = View.VISIBLE
                             mBinding.btnTara.visibility = View.VISIBLE
-                            mBinding.btnInitFreeRound.visibility = View.INVISIBLE
+                            mBinding.btnInitFreeRound.visibility = View.GONE
                             mBinding.btnPause.visibility = View.VISIBLE
-                            mBinding.btnJump.text = getString(R.string.salto_fin)
+                            mBinding.btnJump.text = getString(R.string.salto)  // "Fin" cubierto por btn_finish
+                            // Ronda libre Download: mostrar "Finalizar"
+                            mBinding.btnFinish.visibility = View.VISIBLE
+                            mBinding.btnFinish.text = getString(R.string.finalizar)
                             countMsg = REFRESH_VIEW_TIME
                         }
                         mBinding.tvTitleProduct.text = getString(R.string.descargar_en)

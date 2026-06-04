@@ -403,21 +403,34 @@ class SyncFragment : Fragment() {
             when (command) {
                 Constants.CMD_USER_LIST -> {
                     bSyncroUsers = mainActivity.processUsers(message)
-                    if (bSyncroUsers) { mBinding.pbUsers.progress = 100; mBinding.tvUsersPercentage.text = "100%" }
+                    if (bSyncroUsers) {
+                        val count = countJsonArray(message)
+                        mBinding.pbUsers.progress = 100
+                        mBinding.tvUsersPercentage.text = if (count > 0) "100% ($count)" else "100%"
+                    }
                     bSyncroUsers = false
                 }
                 Constants.CMD_TABLET -> {
                     bSyncroTablets = mainActivity.processTabletInfo(message)
-                    if (bSyncroTablets) { mBinding.pbTablet.progress = 100; mBinding.tvTabletPercentage.text = "100%" }
+                    if (bSyncroTablets) {
+                        mBinding.pbTablet.progress = 50   // 50% — CMD_VTL completa al 100%
+                        mBinding.tvTabletPercentage.text = "50%"
+                    }
                     bSyncroTablets = false
                 }
                 Constants.CMD_VTL -> {
+                    val count = countJsonArray(message)
                     mainActivity.processVrTabletList(message)
-                    mBinding.pbTablet.progress = 100; mBinding.tvTabletPercentage.text = "100%"
+                    mBinding.pbTablet.progress = 100
+                    mBinding.tvTabletPercentage.text = if (count > 0) "100% ($count)" else "100%"
                 }
                 Constants.CMD_ROUNDS -> {
                     bSyncroRounds = mainActivity.refreshRounds(message)
-                    if (bSyncroRounds) { mBinding.pbRounds.progress = 100; mBinding.tvRoundsPercentage.text = "100%" }
+                    if (bSyncroRounds) {
+                        val count = countJsonArray(message)
+                        mBinding.pbRounds.progress = 100
+                        mBinding.tvRoundsPercentage.text = if (count > 0) "100% ($count)" else "100%"
+                    }
                     bSyncroRounds = false
                 }
                 Constants.CMD_NTA -> {
@@ -478,24 +491,34 @@ class SyncFragment : Fragment() {
         initSyncUiAfterRemoteLoaded()
 
         mRemoteTablets?.forEachIndexed { index, tabletRemote ->
-            val local = mLocalTabletMixers?.firstOrNull { it.serial == tabletRemote.serial }
+            val serial = tabletRemote.serial ?: ""
+            if (serial.isEmpty()) return@forEachIndexed   // ignorar tablets sin serial
+
+            // Buscar en la lista en memoria (incluye tablets recién insertadas en esta misma sync)
+            val local = mLocalTabletMixers?.firstOrNull { it.serial == serial }
             if (local != null) {
                 val updated = TabletMixer(
                     name = tabletRemote.name ?: local.name, mixerName = local.mixerName,
-                    mac = local.mac, serial = tabletRemote.serial ?: local.serial,
+                    mac = local.mac, serial = serial,
                     btName = tabletRemote.bluetoothName ?: local.btName,
                     updatedDate = Helper.getCurrentDateTime(), id = local.id
                 )
-                mTabletMixerViewModel.update(updated)
+                // updateSync (suspend): espera el commit antes de continuar,
+                // evitando duplicados si se vuelve a sincronizar sin salir del fragment
+                mTabletMixerViewModel.updateSync(updated)
                 mLocalTabletMixers = mLocalTabletMixers?.map { if (it.id == updated.id) updated else it }?.toMutableList()
             } else {
                 val toInsert = TabletMixer(
                     name = tabletRemote.name ?: "", mixerName = "", mac = "",
-                    serial = tabletRemote.serial ?: "", btName = tabletRemote.bluetoothName ?: "",
+                    serial = serial, btName = tabletRemote.bluetoothName ?: "",
                     updatedDate = Helper.getCurrentDateTime()
                 )
-                mTabletMixerViewModel.insert(toInsert)
-                mLocalTabletMixers?.add(toInsert)
+                // insertSync (suspend): espera el commit de Room antes de continuar.
+                // Crítico: si se usa insert() (async), refreshLocalDataBeforeSync() en el
+                // siguiente sync puede leer el DB antes de que los inserts commiteen,
+                // no encontrar estas tablets, y volver a insertarlas (duplicado).
+                val newId = mTabletMixerViewModel.insertSync(toInsert)
+                mLocalTabletMixers?.add(toInsert.copy(id = newId))
             }
             updateTabletsProgress(index + 1, mRemoteTablets?.size ?: 0)
         }
@@ -555,6 +578,18 @@ class SyncFragment : Fragment() {
                 Log.w(TAG, "sendKnownBtNamesToServer: error (no crítico) $error")
             })
     }
+
+    /**
+     * Extrae el número de elementos de un array JSON comprimido en el formato BT.
+     * El payload empieza en byte 7 (3 cmd + 4 length) y va hasta size-1.
+     * Devuelve 0 si no se puede parsear.
+     */
+    private fun countJsonArray(message: ByteArray): Int = try {
+        val convertZip = com.basculasmagris.visorremotomixer.utils.ConvertZip()
+        val json = convertZip.decompressText(message.copyOfRange(7, message.size - 1))
+        val list = com.google.gson.Gson().fromJson<com.google.gson.JsonArray>(json, com.google.gson.JsonArray::class.java)
+        list?.size() ?: 0
+    } catch (_: Exception) { 0 }
 
     fun parseApiError(t: Throwable): ApiError? = try {
         if (t is HttpException) {

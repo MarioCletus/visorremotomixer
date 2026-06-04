@@ -499,6 +499,8 @@
     <string name="quiere_cerrar_ronda">¿Quiere cerrar la ronda?</string>
     <string name="agregar_establecimiento">Agregar establecimiento</string>
     <string name="finalizar">Finalizar</string>
+    <string name="ir_a_descarga">→ Descarga</string>
+    <string name="mantener_presionado_para_seleccionar">Mantener presionado para seleccionar</string>
     <string name="no_disponible">El mixer no puede realizar esta acción en este momento.</string>
     <string name="proximo_producto">Próximo producto</string>
     <string name="descargar_en">Descargar en</string>

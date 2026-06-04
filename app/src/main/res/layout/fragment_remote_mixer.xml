@@ -116,77 +116,90 @@
             android:layout_gravity="center_vertical"
             />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- LinearLayout con pesos iguales → 4 botones perfectamente equidistantes.
+             btn_init_free_round y btn_pause comparten la misma posición (se alternan con GONE/VISIBLE).
+             btn_finish visible solo en ronda libre; gone en ronda normal. -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
 
             <Button
                 android:id="@+id/btn_tara"
-                android:layout_width="150dp"
-                android:layout_height="45dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="3dp"
                 android:background="@drawable/btn_round_rounded_green"
                 android:gravity="center"
                 android:text="@string/tara"
-                android:textSize="18sp"
-                app:backgroundTint="@null"
-                android:visibility="visible"
-                android:layout_marginBottom="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:textSize="16sp"
+                app:backgroundTint="@null" />
 
+            <!-- btn_init_free_round y btn_pause se solapan en la misma posición.
+                 gone/visible se gestiona desde código. -->
             <Button
                 android:id="@+id/btn_init_free_round"
-                android:layout_width="150dp"
-                android:layout_height="45dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
                 android:background="@drawable/btn_round_rounded_green"
                 android:gravity="center"
                 android:text="@string/free_round"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 app:backgroundTint="@null"
-                android:visibility="invisible"
-                android:layout_marginBottom="20dp"
-                app:layout_constraintStart_toEndOf="@id/btn_tara"
-                app:layout_constraintEnd_toStartOf="@id/btn_jump"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                android:visibility="gone" />
 
             <ToggleButton
                 android:id="@+id/btn_pause"
-                android:layout_width="150dp"
-                android:layout_height="45dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
                 android:background="@drawable/btn_round_rounded_green"
                 android:gravity="center"
                 android:text="@string/pausar"
                 android:textOff="@string/pausar"
                 android:textOn="@string/continuar"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:backgroundTint="@null"
-                android:layout_marginBottom="20dp"
-                app:layout_constraintStart_toEndOf="@id/btn_tara"
-                app:layout_constraintEnd_toStartOf="@id/btn_jump"
-                app:layout_constraintTop_toTopOf="parent"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                android:visibility="visible" />
 
             <Button
                 android:id="@+id/btn_jump"
-                android:layout_width="150dp"
-                android:layout_height="45dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
                 android:background="@drawable/btn_round_rounded_green"
                 android:gravity="center"
                 android:text="@string/salto"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:backgroundTint="@null"
-                android:visibility="visible"
-                android:layout_marginBottom="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                android:visibility="visible" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- btn_finish: "→ Descarga" en Load, "Finalizar" en Download; gone en ronda normal -->
+            <Button
+                android:id="@+id/btn_finish"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="3dp"
+                android:background="@drawable/btn_round_rounded_green"
+                android:gravity="center"
+                android:text="@string/finalizar"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:backgroundTint="@color/color_medium_green" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

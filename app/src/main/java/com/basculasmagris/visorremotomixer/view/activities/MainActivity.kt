@@ -119,6 +119,16 @@ class MainActivity : AppCompatActivity() {
     var listOfMedRoundsRun: ArrayList<MedRoundRunDetail> = ArrayList()
     private var listOfMinUsers: ArrayList<MinUser> = ArrayList()
     private var bReconnect: Boolean = true
+
+    /**
+     * Scope secuencial (single-threaded IO) compartido por processTabletInfo y processVrTabletList.
+     * Al usar el mismo scope, las dos funciones nunca corren en paralelo → sin race conditions
+     * que causen tablets duplicadas.
+     */
+    private val tabletSyncScope = kotlinx.coroutines.CoroutineScope(
+        kotlinx.coroutines.Dispatchers.IO +
+        kotlinx.coroutines.SupervisorJob()
+    )
     var knowDevices: List<BluetoothDevice>? = null
     private var dialogProduct: AlertDialog? = null
     private var dialogEstablishment: AlertDialog? = null
@@ -833,48 +843,45 @@ class MainActivity : AppCompatActivity() {
             val length = String(message, 3, 4).toInt()
             val json = String(message, 7, length)
 
-            val tabletInfo = Gson().fromJson(
-                json,
-                RemoteTabletInfo::class.java
-            )
+            val tabletInfo = Gson().fromJson(json, RemoteTabletInfo::class.java)
+            Log.i(TAG, "Tablet: ${tabletInfo.tabletName} | Mixer: ${tabletInfo.mixerName} | Serial: ${tabletInfo.serialNumber}")
 
-            Log.i(TAG, "Tablet: ${tabletInfo.tabletName}")
-            Log.i(TAG, "Mixer: ${tabletInfo.mixerName}")
-            Log.i(TAG, "Serial: ${tabletInfo.serialNumber}")
-            Log.i(TAG,"mLocalTabletMixers: $mLocalTabletMixers")
-            val existTablet = mLocalTabletMixers?.firstOrNull{
-                it.serial == tabletInfo.serialNumber
+            if (tabletInfo.serialNumber.isEmpty()) {
+                Log.w(TAG, "processTabletInfo: serial vacío, se ignora")
+                return true
             }
-            // Usamos RemoteTabletSession (seteado en onDeviceConnected) para obtener
-            // el dispositivo BT actualmente conectado, independientemente del tablet seleccionado.
-            val tabletBt = RemoteTabletSession.bluetoothDevice ?: bluetoothDevice
+
+            val tabletBt        = RemoteTabletSession.bluetoothDevice ?: bluetoothDevice
             val connectedMac    = tabletBt?.let { BluetoothUtils.getAddress(this, it) } ?: ""
             val connectedBtName = tabletBt?.let { BluetoothUtils.getBluetoothName(this, it) } ?: ""
 
-            if(existTablet != null){
-                // Solo sobreescribir si el HOST envió valores no vacíos
-                if (tabletInfo.tabletName.isNotEmpty()) existTablet.name = tabletInfo.tabletName
-                if (tabletInfo.mixerName.isNotEmpty()) existTablet.mixerName = tabletInfo.mixerName
-                if (connectedMac.isNotEmpty()) {
-                    existTablet.mac    = connectedMac
-                    existTablet.btName = connectedBtName
+            // Usamos la coroutine secuencial compartida con processVrTabletList para
+            // evitar race conditions: ambas funciones comparten tabletSyncScope y
+            // la ejecución queda serializada.
+            tabletSyncScope.launch {
+                val repo = (application as com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication)
+                    .tabletMixerRepository
+                // Query directa al DB — evita depender del cache mLocalTabletMixers
+                // que puede ser stale si acaban de insertarse tablets.
+                val allTablets = repo.allTabletMixerList.first()
+                val existing   = allTablets.firstOrNull { it.serial == tabletInfo.serialNumber }
+
+                if (existing != null) {
+                    if (tabletInfo.tabletName.isNotEmpty()) existing.name = tabletInfo.tabletName
+                    if (tabletInfo.mixerName.isNotEmpty())  existing.mixerName = tabletInfo.mixerName
+                    if (connectedMac.isNotEmpty()) { existing.mac = connectedMac; existing.btName = connectedBtName }
+                    existing.updatedDate = Helper.getCurrentDateTime()
+                    repo.updateTabletMixerData(existing)
+                    Log.i(TAG, "processTabletInfo: actualizado ${existing.name} mac=$connectedMac")
+                } else {
+                    val newTablet = TabletMixer(
+                        name = tabletInfo.tabletName, mixerName = tabletInfo.mixerName,
+                        mac = connectedMac, serial = tabletInfo.serialNumber,
+                        btName = connectedBtName, updatedDate = Helper.getCurrentDateTime()
+                    )
+                    repo.insertTabletMixerData(newTablet)
+                    Log.i(TAG, "processTabletInfo: insertada ${newTablet.name} mac=$connectedMac")
                 }
-                existTablet.updatedDate = Helper.getCurrentDateTime()
-                mTabletMixerViewModel.update(existTablet)
-                Log.i(TAG, "processTabletInfo: actualizado ${existTablet.name} mac=$connectedMac")
-            } else if (tabletInfo.serialNumber.isNotEmpty()) {
-                val newTabletMixer = TabletMixer(
-                    name        = tabletInfo.tabletName,
-                    mixerName   = tabletInfo.mixerName,
-                    mac         = connectedMac,
-                    serial      = tabletInfo.serialNumber,
-                    btName      = connectedBtName,
-                    updatedDate = Helper.getCurrentDateTime(),
-                )
-                mTabletMixerViewModel.insert(newTabletMixer)
-                Log.i(TAG, "processTabletInfo: insertada nueva ${newTabletMixer.name} mac=$connectedMac")
-            } else {
-                Log.w(TAG, "processTabletInfo: serial vacío, se ignora")
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error procesando TabletInfo", e)
@@ -994,40 +1001,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun selectProductDialog(productsToSelect : ArrayList<MinProduct>): AlertDialog? {
-        if(productsToSelect.isEmpty()){
-            return null
-        }
-        val productosStr = arrayOfNulls<String>(productsToSelect.size)
-        for ((i, producto) in productsToSelect.withIndex()) {
-            productosStr[i] = producto.name + if(producto.description.isEmpty())"" else " - ${producto.description}"
-        }
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.productos))
-        builder.setItems(productosStr) { dialog, which ->
-            val productSelected = productsToSelect[which]
-            val minProduct = MinProduct(
-                name = productSelected.name,
-                description = productSelected.description,
-                remoteId = productSelected.remoteId,
-                id = productSelected.id
-            )
-            Log.i(TAG,"producto seleccionado $minProduct")
-            sendSelectProductToMixer(minProduct)
-            dialog.dismiss()
-            dialogProduct = null
-        }
-        builder.setNegativeButton(getString(R.string.cancelar)){dialog,_->
-            dialog.dismiss()
-            dialogProduct = null
-        }
-        val alertDialog = builder.create()
-        alertDialog.show()
-        alertDialog.setOnShowListener {dialogInterface->
-            dialogInterface as androidx.appcompat.app.AlertDialog
-            dialogInterface.window?.decorView?.setBackgroundResource(R.drawable.custom_dialog_background)
-        }
-        return alertDialog
+    private fun selectProductDialog(productsToSelect: ArrayList<MinProduct>): AlertDialog? {
+        if (productsToSelect.isEmpty()) return null
+        showFreeRoundSelectorDialog(
+            title        = getString(R.string.productos),
+            items        = productsToSelect,
+            nameProvider = { it.name },
+            descProvider = { it.description },
+            onSelected   = { product ->
+                Log.i(TAG, "producto seleccionado $product")
+                sendSelectProductToMixer(product)
+                dialogProduct = null
+            },
+            onCancel = { dialogProduct = null }
+        )
+        return null
     }
 
     private fun selectEstablishmentDialog(establishmentsToSelect: ArrayList<MinEstablishment>): AlertDialog? {
@@ -1059,40 +1047,62 @@ class MainActivity : AppCompatActivity() {
         return alertDialog
     }
 
-    private fun selectCorralDialog(corralsToSelect : ArrayList<MinCorral>): AlertDialog?{
-        if(corralsToSelect.isEmpty()){
-            return null
-        }
-        val corralStr = arrayOfNulls<String>(corralsToSelect.size)
-        for ((i, corral) in corralsToSelect.withIndex()) {
-            corralStr[i] = corral.name +if(corral.description.isEmpty()) "" else " - ${corral.description}"
-        }
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.corrales))
-        builder.setItems(corralStr) { dialog, which ->
-            val corralSelected = corralsToSelect[which]
-            sendSelectCorralToMixer(corralSelected)
-            dialog.dismiss()
-            dialogCorral = null
-            //**********************************************************************
-        }
-        builder.setPositiveButton(getString(R.string.finalizar)){dialog,_->
-            sendEndToMixer()
-            dialog.dismiss()
-            dialogCorral = null
-        }
-        builder.setNegativeButton(getString(R.string.cancelar)){dialog,_->
-            dialog.dismiss()
-            dialogCorral = null
-        }
-        val alertDialog = builder.create()
-        alertDialog.show()
-        alertDialog.setOnShowListener {dialogInterface->
-            dialogInterface as androidx.appcompat.app.AlertDialog
-            dialogInterface.window?.decorView?.setBackgroundResource(R.drawable.custom_dialog_background)
+    private fun selectCorralDialog(corralsToSelect: ArrayList<MinCorral>): AlertDialog? {
+        if (corralsToSelect.isEmpty()) return null
+        showFreeRoundSelectorDialog(
+            title        = getString(R.string.corrales),
+            items        = corralsToSelect,
+            nameProvider = { it.name },
+            descProvider = { it.description },
+            onSelected   = { corral ->
+                sendSelectCorralToMixer(corral)
+                dialogCorral = null
+            },
+            onCancel = { dialogCorral = null }
+        )
+        return null
+    }
+
+    /** Muestra el diálogo de selección custom (cards en grid 2 col, doble tap para confirmar). */
+    private fun <T> showFreeRoundSelectorDialog(
+        title: String,
+        items: List<T>,
+        nameProvider: (T) -> String,
+        descProvider: (T) -> String = { "" },
+        onSelected: (T) -> Unit,
+        onCancel: () -> Unit = {}
+    ) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_free_round_selector, null)
+        val tvTitle   = dialogView.findViewById<android.widget.TextView>(R.id.tv_selector_title)
+        val rv        = dialogView.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_selector)
+        val btnCancel = dialogView.findViewById<android.widget.Button>(R.id.btn_selector_cancel)
+
+        tvTitle.text = title
+        rv.layoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 2)
+
+        val dialog = android.app.Dialog(this, R.style.CustomDialogTheme)
+        dialog.setContentView(dialogView)
+        dialog.window?.let { w ->
+            w.setLayout(
+                (resources.displayMetrics.widthPixels * 0.92).toInt(),
+                (resources.displayMetrics.heightPixels * 0.88).toInt()
+            )
+            w.decorView.setBackgroundResource(R.drawable.custom_dialog_background)
         }
 
-        return alertDialog
+        rv.adapter = com.basculasmagris.visorremotomixer.view.adapter.FreeRoundSelectorAdapter(
+            items        = items,
+            nameProvider = nameProvider,
+            descProvider = descProvider,
+            onDoubleClick = { selected ->
+                onSelected(selected)
+                dialog.dismiss()
+            }
+        )
+
+        btnCancel.setOnClickListener { onCancel(); dialog.dismiss() }
+        dialog.setOnCancelListener { onCancel() }
+        dialog.show()
     }
 
     fun dlgTareToLoad(weight:Long) {
@@ -1304,35 +1314,43 @@ class MainActivity : AppCompatActivity() {
             val remoteTablets: ArrayList<com.basculasmagris.visorremotomixer.model.entities.TabletRemote> =
                 Gson().fromJson(json, listType) ?: arrayListOf()
 
-            Log.i("VTL","remoteTablets ${remoteTablets.map{it.name + " - " +it.serial} }")
-            remoteTablets.forEach { remote ->
-                // Buscar si ya existe por serial
-                // No podemos hacer suspend aquí, así que lanzamos en IO
-                kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-                    val repo = (application as com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication)
-                        .tabletMixerRepository
-                    val allTablets = repo.allTabletMixerList.first()
-                    val existing = allTablets.firstOrNull { it.serial == (remote.serial ?: "") }
+            Log.i("VTL", "remoteTablets ${remoteTablets.map { it.name + " - " + it.serial }}")
+
+            // UNA sola coroutine secuencial en tabletSyncScope (compartido con processTabletInfo).
+            // Garantiza que si processTabletInfo ya corrió antes, sus inserts estén commitados
+            // cuando llegamos acá → sin duplicados.
+            tabletSyncScope.launch {
+                val repo = (application as com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication)
+                    .tabletMixerRepository
+
+                // Leer el DB UNA SOLA VEZ al inicio y mantener snapshot en memoria.
+                // Los inserts se reflejan en el snapshot para que tablets posteriores
+                // en la misma lista no las reinserten.
+                val snapshot = repo.allTabletMixerList.first().toMutableList()
+
+                remoteTablets.forEach { remote ->
+                    if (remote.serial.isNullOrEmpty()) return@forEach
+
+                    val existing = snapshot.firstOrNull { it.serial == remote.serial }
                     if (existing != null) {
                         val updated = existing.copy(
-                            name      = if (remote.name.isNullOrEmpty()) existing.name else remote.name,
-                            btName    = if (remote.bluetoothName.isNullOrEmpty()) existing.btName else remote.bluetoothName,
+                            name        = if (remote.name.isNullOrEmpty()) existing.name else remote.name,
+                            btName      = if (remote.bluetoothName.isNullOrEmpty()) existing.btName else remote.bluetoothName,
                             updatedDate = Helper.getCurrentDateTime()
                         )
-                        Log.i("VTL","updateTabletMixerData ${updated.id} - ${updated.name} - ${updated.serial}")
                         repo.updateTabletMixerData(updated)
-                    } else if (!remote.serial.isNullOrEmpty()) {
-                        val tabletToInsert =TabletMixer(
-                            name        = remote.name ?: "",
-                            mixerName   = "",
-                            mac         = "",
-                            serial      = remote.serial,
-                            btName      = remote.bluetoothName ?: "",
+                        val idx = snapshot.indexOfFirst { it.id == updated.id }
+                        if (idx >= 0) snapshot[idx] = updated
+                        Log.i("VTL", "update ${updated.name} serial=${updated.serial}")
+                    } else {
+                        val toInsert = TabletMixer(
+                            name = remote.name ?: "", mixerName = "", mac = "",
+                            serial = remote.serial, btName = remote.bluetoothName ?: "",
                             updatedDate = Helper.getCurrentDateTime()
                         )
-                        repo.insertTabletMixerData(tabletToInsert)
-                        Log.i("VTL","InsertTablet ${tabletToInsert.id} - ${tabletToInsert.name} - ${tabletToInsert.serial}")
-
+                        val newId = repo.insertTabletMixerData(toInsert)
+                        snapshot.add(toInsert.copy(id = newId))   // actualizar snapshot
+                        Log.i("VTL", "insert ${toInsert.name} serial=${toInsert.serial} id=$newId")
                     }
                 }
             }
