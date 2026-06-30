@@ -22,7 +22,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -800,7 +799,7 @@ class TabletConfigActivity : AppCompatActivity(){
     fun Activity.showKeyboard() {
         val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.toggleSoftInput(
-            InputMethod.SHOW_FORCED,
+            InputMethodManager.SHOW_FORCED,
             InputMethodManager.HIDE_IMPLICIT_ONLY
         )
     }
@@ -918,7 +917,7 @@ class TabletConfigActivity : AppCompatActivity(){
         // Sync local data
         val liveData = fetchLocalData()
         liveData.observe(this, object : Observer<MergedLocalData> {
-            override fun onChanged(it: MergedLocalData?) {
+            override fun onChanged(it: MergedLocalData) {
                 when (it) {
                     is UserData -> mLocalUsers = it.users
                     is RoundLocalData -> mLocalRoundsLocal = it.roundsLocal
@@ -1111,6 +1110,7 @@ class TabletConfigActivity : AppCompatActivity(){
                 // datos guardados cuando el HOST tiene versión vieja o no tiene nombre configurado.
                 if (tabletInfo.tabletName.isNotEmpty()) existTablet.name = tabletInfo.tabletName
                 if (tabletInfo.mixerName.isNotEmpty()) existTablet.mixerName = tabletInfo.mixerName
+                existTablet.enableVrDownload = tabletInfo.enableVrDownload
                 Log.i(TAG,"tabletBt = $tabletBt")
                 if(tabletBt != null) {
                     existTablet.mac = RemoteTabletSession.getBluetoothAddress(this)

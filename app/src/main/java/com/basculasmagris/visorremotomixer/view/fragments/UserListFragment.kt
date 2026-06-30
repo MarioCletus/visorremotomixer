@@ -44,7 +44,7 @@ class UserListFragment : Fragment() {
         // Sync local data
         val liveData = fetchLocalData()
         liveData.observe(viewLifecycleOwner, object : Observer<MergedLocalData> {
-            override fun onChanged(it: MergedLocalData?) {
+            override fun onChanged(it: MergedLocalData) {
                 when (it) {
                     is UserData -> mLocalUsers = it.users //.filter { user -> user.codeRole != 1 }
                     else -> {}

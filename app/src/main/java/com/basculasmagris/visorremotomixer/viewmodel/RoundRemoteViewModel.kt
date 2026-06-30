@@ -40,16 +40,16 @@ class RoundRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<MutableList<RoundRemote>>() {
-                    override fun onSuccess(value: MutableList<RoundRemote>?) {
+                    override fun onSuccess(value: MutableList<RoundRemote>) {
                         roundsResponse.value = value
                         roundsLoadingError.value = false
                         loadRound.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         loadRound.value = false
                         roundsLoadingError.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }
@@ -61,16 +61,16 @@ class RoundRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<RoundRemote>() {
-                    override fun onSuccess(value: RoundRemote?) {
+                    override fun onSuccess(value: RoundRemote) {
                         addRoundsResponse.value = value
                         addRoundErrorResponse.value = false
                         addRoundsLoad.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         addRoundsLoad.value = false
                         addRoundErrorResponse.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }
@@ -84,16 +84,16 @@ class RoundRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<RoundRemote>() {
-                    override fun onSuccess(value: RoundRemote?) {
+                    override fun onSuccess(value: RoundRemote) {
                         updateRoundsResponse.value = value
                         updateRoundsErrorResponse.value = false
                         updateRoundsLoad.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         updateRoundsLoad.value = false
                         updateRoundsErrorResponse.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }
@@ -105,16 +105,16 @@ class RoundRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<RoundRunRemote>() {
-                    override fun onSuccess(value: RoundRunRemote?) {
+                    override fun onSuccess(value: RoundRunRemote) {
                         addRoundsRunResponse.value = value
                         addRoundRunErrorResponse.value = false
                         addRoundsRunLoad.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         addRoundsRunLoad.value = false
                         addRoundRunErrorResponse.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }

@@ -27,16 +27,16 @@ class TabletViewModel (private val repository: TabletMixerRepository) : ViewMode
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<List<TabletMixerRemote>>() {
-                    override fun onSuccess(value: List<TabletMixerRemote>?) {
+                    override fun onSuccess(value: List<TabletMixerRemote>) {
                         loadTabletMixer.value = true
                         tabletMixersResponse.value = value
                         tabletMixersLoadingError.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         loadTabletMixer.value = false
                         tabletMixersLoadingError.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }
                 )

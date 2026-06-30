@@ -37,16 +37,16 @@ class CorralRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<MutableList<CorralRemote>>() {
-                    override fun onSuccess(value: MutableList<CorralRemote>?) {
+                    override fun onSuccess(value: MutableList<CorralRemote>) {
                         loadCorral.value = false
                         corralsResponse.value = value
                         corralsLoadingError.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         loadCorral.value = false
                         corralsLoadingError.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }
@@ -58,16 +58,16 @@ class CorralRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<CorralRemote>() {
-                    override fun onSuccess(value: CorralRemote?) {
+                    override fun onSuccess(value: CorralRemote) {
                         addCorralsResponse.value = value
                         addCorralErrorResponse.value = false
                         addCorralsLoad.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         addCorralsLoad.value = false
                         addCorralErrorResponse.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }
@@ -79,16 +79,16 @@ class CorralRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<CorralRemote>() {
-                    override fun onSuccess(value: CorralRemote?) {
+                    override fun onSuccess(value: CorralRemote) {
                         updateCorralsResponse.value = value
                         updateCorralsErrorResponse.value = false
                         updateCorralsLoad.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         updateCorralsLoad.value = false
                         updateCorralsErrorResponse.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }

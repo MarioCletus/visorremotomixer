@@ -31,16 +31,16 @@ class RoundRunReportRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<MutableList<RoundRunReportRemote>>() {
-                    override fun onSuccess(value: MutableList<RoundRunReportRemote>?) {
+                    override fun onSuccess(value: MutableList<RoundRunReportRemote>) {
                         reportsResponse.value = value
                         reportsLoadingError.value = false
                         loadReport.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         loadReport.value = false
                         reportsLoadingError.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }
@@ -52,16 +52,16 @@ class RoundRunReportRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<RoundRunReportRemote>() {
-                    override fun onSuccess(value: RoundRunReportRemote?) {
+                    override fun onSuccess(value: RoundRunReportRemote) {
                         addReportsResponse.value = value
                         addReportErrorResponse.value = false
                         addReportsLoad.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         addReportsLoad.value = false
                         addReportErrorResponse.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }

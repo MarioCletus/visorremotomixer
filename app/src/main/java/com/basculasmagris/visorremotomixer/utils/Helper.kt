@@ -17,7 +17,6 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -393,7 +392,7 @@ class Helper {
         fun showKeyboard(activity: Activity) { // Or View.showKeyboard()
             val inputMethodManager = activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.toggleSoftInput(
-                InputMethod.SHOW_FORCED,
+                InputMethodManager.SHOW_FORCED,
                 InputMethodManager.HIDE_IMPLICIT_ONLY
             )
         }

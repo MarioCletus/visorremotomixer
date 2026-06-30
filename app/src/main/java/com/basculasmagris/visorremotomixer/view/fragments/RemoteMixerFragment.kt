@@ -111,6 +111,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
     private var isSpinnerOpen = false
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(TAG,"onCreate")
         super.onCreate(savedInstanceState)
@@ -1127,7 +1128,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         (requireActivity() as MainActivity).weightReceived()
                     try{
                         val time = String(message,3,3).toLong()
-                        mBinding.tvTimer.text = "$time"
+                        mBinding.tvTimer.text = formatMmSs(time)
                     }catch (e : Exception){
                         Log.i("showCommand","CMD_WEIGHT_TIMER Exception $e")
                     }
@@ -1147,7 +1148,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
                         (requireActivity() as MainActivity).weightReceived()
                     try{
                         val time = String(message,3,3).toLong()
-                        mBinding.tvTimer.text = "$time"
+                        mBinding.tvTimer.text = formatMmSs(time)
                     }catch (e : Exception){
                         Log.i("showCommand","CMD_WEIGHT_TIMER Exception $e")
                     }
@@ -1676,6 +1677,13 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         val dietArrayAdapter =  ArrayAdapter(mBinding.spDiet.context, R.layout.spinner_step, diets)
         dietArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_mixer)
         mBinding.spDiet.adapter = dietArrayAdapter
+    }
+
+
+    private fun formatMmSs(totalSeconds: Long): String {
+        val minutes = totalSeconds / 60
+        val seconds = totalSeconds % 60
+        return "$minutes:${seconds.toString().padStart(2, '0')}"
     }
 
 }

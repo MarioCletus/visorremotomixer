@@ -12,7 +12,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
 import android.view.WindowManager
-import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -204,7 +203,7 @@ class AddUpdateTabletActivity : AppCompatActivity() {
     fun Activity.showKeyboard() { // Or View.showKeyboard()
         val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.toggleSoftInput(
-            InputMethod.SHOW_FORCED,
+            InputMethodManager.SHOW_FORCED,
             InputMethodManager.HIDE_IMPLICIT_ONLY
         )
     }

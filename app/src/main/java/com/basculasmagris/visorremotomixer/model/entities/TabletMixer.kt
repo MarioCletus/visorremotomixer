@@ -17,5 +17,6 @@ data class TabletMixer(
     @ColumnInfo(name = "updated_date") var updatedDate: String,
     /** Posición en la lista de Home. 0 = sin ordenar explícitamente (fallback a name). */
     @ColumnInfo(name = "sort_order") var sortOrder: Int = 0,
+    @ColumnInfo(name = "enable_vr_download") var enableVrDownload: Boolean = false,
     @PrimaryKey(autoGenerate = true) var id: Long = 0
 ) : Parcelable

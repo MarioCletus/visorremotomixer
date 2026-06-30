@@ -37,16 +37,16 @@ class DietRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<MutableList<DietRemote>>() {
-                    override fun onSuccess(value: MutableList<DietRemote>?) {
+                    override fun onSuccess(value: MutableList<DietRemote>) {
                         dietsResponse.value = value
                         dietsLoadingError.value = false
                         loadDiet.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         loadDiet.value = false
                         dietsLoadingError.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }
@@ -58,16 +58,16 @@ class DietRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<DietRemote>() {
-                    override fun onSuccess(value: DietRemote?) {
+                    override fun onSuccess(value: DietRemote) {
                         addDietsResponse.value = value
                         addDietErrorResponse.value = false
                         addDietsLoad.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         addDietsLoad.value = false
                         addDietErrorResponse.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }
@@ -79,16 +79,16 @@ class DietRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<DietRemote>() {
-                    override fun onSuccess(value: DietRemote?) {
+                    override fun onSuccess(value: DietRemote) {
                         updateDietsResponse.value = value
                         updateDietsErrorResponse.value = false
                         updateDietsLoad.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         updateDietsLoad.value = false
                         updateDietsErrorResponse.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }

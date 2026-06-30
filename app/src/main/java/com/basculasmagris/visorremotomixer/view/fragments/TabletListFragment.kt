@@ -97,7 +97,7 @@ class TabletListFragment : BottomSheetDialogFragment() {
         // Sync local data
         val liveData = fetchLocalData()
         liveData.observe(viewLifecycleOwner, object : Observer<MergedLocalData> {
-            override fun onChanged(it: MergedLocalData?) {
+            override fun onChanged(it: MergedLocalData) {
                 when (it) {
                     is TabletMixerData -> mLocalTablets = it.tabletMixers
                     else -> {}

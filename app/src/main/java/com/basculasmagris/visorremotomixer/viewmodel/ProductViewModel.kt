@@ -29,16 +29,16 @@ class ProductViewModel (private val repository: ProductRepository) : ViewModel()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<List<ProductRemote>>() {
-                    override fun onSuccess(value: List<ProductRemote>?) {
+                    override fun onSuccess(value: List<ProductRemote>) {
                         loadProduct.value = true
                         productsResponse.value = value
                         productsLoadingError.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         loadProduct.value = false
                         productsLoadingError.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }
             )

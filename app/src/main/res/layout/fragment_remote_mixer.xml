@@ -230,7 +230,7 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:background="@drawable/circular_gradient"
-            android:text="10"
+            android:text="0:00"
             android:textSize="80sp"
             android:textColor="@android:color/white"
             android:textStyle="bold" />

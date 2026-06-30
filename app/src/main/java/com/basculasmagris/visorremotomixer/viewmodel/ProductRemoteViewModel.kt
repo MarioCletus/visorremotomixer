@@ -36,16 +36,16 @@ class ProductRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<MutableList<ProductRemote>>() {
-                    override fun onSuccess(value: MutableList<ProductRemote>?) {
+                    override fun onSuccess(value: MutableList<ProductRemote>) {
                         loadProduct.value = false
                         productsResponse.value = value
                         productsLoadingError.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         loadProduct.value = false
                         productsLoadingError.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }
@@ -57,16 +57,16 @@ class ProductRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<ProductRemote>() {
-                    override fun onSuccess(value: ProductRemote?) {
+                    override fun onSuccess(value: ProductRemote) {
                         addProductsResponse.value = value
                         addProductErrorResponse.value = false
                         addProductsLoad.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         addProductsLoad.value = false
                         addProductErrorResponse.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }
@@ -78,16 +78,16 @@ class ProductRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<ProductRemote>() {
-                    override fun onSuccess(value: ProductRemote?) {
+                    override fun onSuccess(value: ProductRemote) {
                         updateProductsResponse.value = value
                         updateProductsErrorResponse.value = false
                         updateProductsLoad.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         updateProductsLoad.value = false
                         updateProductsErrorResponse.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }

@@ -64,7 +64,7 @@ class InputValueDialogFragment(val value: Double, val source: Int = 0, var title
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is Activity) {
-            activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+            requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
         } else {
             throw RuntimeException(context.toString() + "Debe implementar SeleccionValorListener")
         }

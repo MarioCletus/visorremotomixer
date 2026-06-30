@@ -27,16 +27,16 @@ class MixerViewModel (private val repository: MixerRepository) : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<List<MixerRemote>>() {
-                    override fun onSuccess(value: List<MixerRemote>?) {
+                    override fun onSuccess(value: List<MixerRemote>) {
                         loadMixer.value = true
                         mixersResponse.value = value
                         mixersLoadingError.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         loadMixer.value = false
                         mixersLoadingError.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }
                 )

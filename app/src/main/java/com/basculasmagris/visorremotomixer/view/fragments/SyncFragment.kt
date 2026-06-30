@@ -413,14 +413,17 @@ class SyncFragment : Fragment() {
                 Constants.CMD_TABLET -> {
                     bSyncroTablets = mainActivity.processTabletInfo(message)
                     if (bSyncroTablets) {
-                        mBinding.pbTablet.progress = 50   // 50% — CMD_VTL completa al 100%
-                        mBinding.tvTabletPercentage.text = "50%"
+                        // Llegar siempre al 100% — CMD_VTL es opcional (puede no llegar
+                        // si la tablet principal aún no tiene la lista guardada del servidor)
+                        mBinding.pbTablet.progress = 100
+                        mBinding.tvTabletPercentage.text = "100%"
                     }
                     bSyncroTablets = false
                 }
                 Constants.CMD_VTL -> {
                     val count = countJsonArray(message)
                     mainActivity.processVrTabletList(message)
+                    // CMD_VTL llegó: actualizar texto con conteo total (progreso ya está en 100%)
                     mBinding.pbTablet.progress = 100
                     mBinding.tvTabletPercentage.text = if (count > 0) "100% ($count)" else "100%"
                 }

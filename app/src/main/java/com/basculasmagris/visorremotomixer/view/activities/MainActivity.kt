@@ -270,7 +270,7 @@ class MainActivity : AppCompatActivity() {
         val liveData = fetchLocalData()
         Log.i(TAG,"Obteniendo datos locales...")
         liveData.observe(this, object : Observer<MergedLocalData> {
-            override fun onChanged(it: MergedLocalData?) {
+            override fun onChanged(it: MergedLocalData) {
                 when (it) {
                     is UserData -> {
                         mLocalUsers = it.users
@@ -797,7 +797,7 @@ class MainActivity : AppCompatActivity() {
                         archiveDate = null,
                         codeRole = minUser.codeRole,
                         codeClient = minUser.codeClient,
-                        id = localUser?.id
+                        id = localUser.id
                     )
                     Log.i(TAG,"update user $user")
                     mUserViewModel.update(user)
@@ -870,14 +870,19 @@ class MainActivity : AppCompatActivity() {
                     if (tabletInfo.tabletName.isNotEmpty()) existing.name = tabletInfo.tabletName
                     if (tabletInfo.mixerName.isNotEmpty())  existing.mixerName = tabletInfo.mixerName
                     if (connectedMac.isNotEmpty()) { existing.mac = connectedMac; existing.btName = connectedBtName }
+                    existing.enableVrDownload = tabletInfo.enableVrDownload
                     existing.updatedDate = Helper.getCurrentDateTime()
                     repo.updateTabletMixerData(existing)
-                    Log.i(TAG, "processTabletInfo: actualizado ${existing.name} mac=$connectedMac")
+                    if (selectedTabletInActivity?.id == existing.id) {
+                        selectedTabletInActivity = existing
+                    }
+                    Log.i(TAG, "processTabletInfo: actualizado ${existing.name} mac=$connectedMac enableVrDownload=${existing.enableVrDownload}")
                 } else {
                     val newTablet = TabletMixer(
                         name = tabletInfo.tabletName, mixerName = tabletInfo.mixerName,
                         mac = connectedMac, serial = tabletInfo.serialNumber,
-                        btName = connectedBtName, updatedDate = Helper.getCurrentDateTime()
+                        btName = connectedBtName, updatedDate = Helper.getCurrentDateTime(),
+                        enableVrDownload = tabletInfo.enableVrDownload
                     )
                     repo.insertTabletMixerData(newTablet)
                     Log.i(TAG, "processTabletInfo: insertada ${newTablet.name} mac=$connectedMac")
@@ -1142,14 +1147,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun saveVrSettings(enableVrDownload: Boolean) {
-        val prefs = getSharedPreferences(Constants.PREF_VR_SETTINGS, Context.MODE_PRIVATE)
-        prefs.edit().putBoolean(Constants.ENABLE_VR_DOWNLOAD, enableVrDownload).apply()
-        Log.i("VR_SETTINGS", "saveVrSettings enableVrDownload=$enableVrDownload")
+        val tabletMixer = selectedTabletInActivity ?: return
+        tabletMixer.enableVrDownload = enableVrDownload
+        mTabletMixerViewModel.update(tabletMixer)
+        Log.i("VR_SETTINGS", "saveVrSettings enableVrDownload=$enableVrDownload tablet=${tabletMixer.name}")
     }
 
     fun isVrDownloadEnabled(): Boolean {
-        val prefs = getSharedPreferences(Constants.PREF_VR_SETTINGS, Context.MODE_PRIVATE)
-        return prefs.getBoolean(Constants.ENABLE_VR_DOWNLOAD, false)
+        return selectedTabletInActivity?.enableVrDownload ?: false
     }
 
     fun sendRequestRoundRunDetail() {

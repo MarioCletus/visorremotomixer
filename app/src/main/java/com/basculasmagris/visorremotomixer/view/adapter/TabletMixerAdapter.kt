@@ -53,22 +53,12 @@ class TabletMixerAdapter (private  val fragment: Fragment) : RecyclerView.Adapte
             }
             holder.mixerCard.strokeWidth = 4
             if(fragment.context != null){
-                holder.mixerCard.strokeColor = fragment.context?.let {
-                    ContextCompat.getColor(
-                        it,
-                        R.color.color_dark_grey
-                    )
-                }!!
+                holder.mixerCard.strokeColor = ContextCompat.getColor(fragment.requireContext(), R.color.color_dark_grey)
             }
         }else{
             holder.mixerCard.strokeWidth = 1
             if(fragment.context != null){
-                holder.mixerCard.strokeColor = fragment.context?.let {
-                    ContextCompat.getColor(
-                        it,
-                        R.color.color_dark_grey
-                    )
-                }!!
+                holder.mixerCard.strokeColor = ContextCompat.getColor(fragment.requireContext(), R.color.color_dark_grey)
             }
         }
 

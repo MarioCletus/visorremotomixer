@@ -37,16 +37,16 @@ class EstablishmentRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<MutableList<EstablishmentRemote>>() {
-                    override fun onSuccess(value: MutableList<EstablishmentRemote>?) {
+                    override fun onSuccess(value: MutableList<EstablishmentRemote>) {
                         establishmentsResponse.value = value
                         establishmentsLoadingError.value = false
                         loadEstablishment.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         loadEstablishment.value = false
                         establishmentsLoadingError.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }
@@ -58,16 +58,16 @@ class EstablishmentRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<EstablishmentRemote>() {
-                    override fun onSuccess(value: EstablishmentRemote?) {
+                    override fun onSuccess(value: EstablishmentRemote) {
                         addEstablishmentsResponse.value = value
                         addEstablishmentErrorResponse.value = false
                         addEstablishmentsLoad.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         addEstablishmentsLoad.value = false
                         addEstablishmentErrorResponse.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }
@@ -79,16 +79,16 @@ class EstablishmentRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<EstablishmentRemote>() {
-                    override fun onSuccess(value: EstablishmentRemote?) {
+                    override fun onSuccess(value: EstablishmentRemote) {
                         updateEstablishmentsResponse.value = value
                         updateEstablishmentsErrorResponse.value = false
                         updateEstablishmentsLoad.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         updateEstablishmentsLoad.value = false
                         updateEstablishmentsErrorResponse.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }

@@ -355,7 +355,7 @@ class HomeFragment : Fragment() {
         Log.i(TAG, "getLocalData ${liveData?.value}")
         liveData = fetchLocalData()
         liveData?.observe(requireActivity(),  object : Observer<MergedLocalData> {
-            override fun onChanged(it: MergedLocalData?) {
+            override fun onChanged(it: MergedLocalData) {
                 Log.v(TAG, "it: ${it.toString()}")
                 when (it) {
                     is TabletMixerData -> {

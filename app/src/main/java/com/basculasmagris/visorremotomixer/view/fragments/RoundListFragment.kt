@@ -185,6 +185,7 @@ class RoundListFragment : Fragment() {
         if(!bBlockButton){
             bBlockButton = true
             (requireActivity() as MainActivity).sendRequestListOfRounds()
+            (requireActivity() as MainActivity).sendRequestTablet()
             val handler = Handler(Looper.getMainLooper())
             val action = Runnable {
 
@@ -215,7 +216,7 @@ class RoundListFragment : Fragment() {
         Log.i(TAG, "getLocalData ${liveData?.value}")
         liveData = fetchLocalData()
         liveData?.observe(requireActivity(),  object : Observer<MergedLocalData> {
-            override fun onChanged(it: MergedLocalData?) {
+            override fun onChanged(it: MergedLocalData) {
                 Log.v(TAG, "it: ${it.toString()}")
                 when (it) {
                     is TabletMixerData -> {
@@ -294,6 +295,7 @@ class RoundListFragment : Fragment() {
         override fun onDeviceConnected(device: BluetoothDevice?) {
             if(isAdded) {
                 (requireActivity() as MainActivity).sendRequestListOfRounds()
+                (requireActivity() as MainActivity).sendRequestTablet()
                 val name = BluetoothUtils.getBluetoothName(requireActivity(), device)
                 val address = BluetoothUtils.getAddress(requireActivity(), device)
                 Log.i(TAG, "onDeviceConnected $name $address")
@@ -353,6 +355,11 @@ class RoundListFragment : Fragment() {
                         (requireActivity() as MainActivity).refreshRounds(message)
                     Log.i("MEP","getLocalRound() 3 ")
                     getLocalRound()
+                }
+
+                Constants.CMD_TABLET->{
+                    Log.i("showCommand","CMD_TABLET RLF")
+                    if(isAdded) (requireActivity() as MainActivity).processTabletInfo(message)
                 }
 
                 Constants.CMD_WEIGHT->{

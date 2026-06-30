@@ -37,16 +37,16 @@ class TabletMixerRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<MutableList<TabletMixerRemote>>() {
-                    override fun onSuccess(value: MutableList<TabletMixerRemote>?) {
+                    override fun onSuccess(value: MutableList<TabletMixerRemote>) {
                         loadTabletMixer.value = false
                         remoteViewersResponse.value = value
                         remoteViewersLoadingError.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         loadTabletMixer.value = false
                         remoteViewersLoadingError.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }
@@ -58,16 +58,16 @@ class TabletMixerRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<TabletMixerRemote>() {
-                    override fun onSuccess(value: TabletMixerRemote?) {
+                    override fun onSuccess(value: TabletMixerRemote) {
                         addTabletMixersResponse.value = value
                         addTabletMixerErrorResponse.value = false
                         addTabletMixersLoad.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         addTabletMixersLoad.value = false
                         addTabletMixerErrorResponse.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }
@@ -79,16 +79,16 @@ class TabletMixerRemoteViewModel : ViewModel() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<TabletMixerRemote>() {
-                    override fun onSuccess(value: TabletMixerRemote?) {
+                    override fun onSuccess(value: TabletMixerRemote) {
                         updateTabletMixersResponse.value = value
                         updateTabletMixersErrorResponse.value = false
                         updateTabletMixersLoad.value = false
                     }
 
-                    override fun onError(e: Throwable?) {
+                    override fun onError(e: Throwable) {
                         updateTabletMixersLoad.value = false
                         updateTabletMixersErrorResponse.value = true
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
                 }))
     }

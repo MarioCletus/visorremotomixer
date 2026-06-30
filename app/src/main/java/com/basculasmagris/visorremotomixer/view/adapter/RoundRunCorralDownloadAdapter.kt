@@ -51,42 +51,41 @@ class RoundRunCorralDownloadAdapter (
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val corral = filteredRoundCorrals[position]
-        fragment.context?.let {context->
-            if((fragment as RemoteMixerFragment).isInFree()){
-                if(position < filteredRoundCorrals.size-1){
+        fragment.context?.let { context ->
+            if ((fragment as RemoteMixerFragment).isInFree()) {
+                if (position < filteredRoundCorrals.size - 1) {
                     holder.itemView.background = ContextCompat.getDrawable(context, R.drawable.item_round_run_product_ready_bkg)
-                    holder.tvCorralName.text = if(corral.description == "")corral.name else "${corral.name}\n${corral.description}"
+                    holder.tvCorralName.text = if (corral.description == "") corral.name else "${corral.name}\n${corral.description}"
                     holder.tvCurrentWeight.text = "${corral.customTargetWeight}kg"
                     holder.tvCurrentWeight.visibility = View.VISIBLE
                     holder.llBarra1.visibility = View.VISIBLE
-                }else{
+                } else {
                     holder.itemView.background = ContextCompat.getDrawable(context, R.drawable.item_round_run_product_select_bkg)
                     holder.tvCorralName.text = corral.name
                     holder.tvCurrentWeight.visibility = View.GONE
                     holder.llBarra1.visibility = View.GONE
                 }
-//                holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_ready_bkg)
-//                holder.tvDiffWeight.text = "0kg"
-            }else{
-                if(selectedPosition == position) {
-                    holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_select_bkg)
-                }
-                else if( position < selectedPosition){
-                    holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_ready_bkg)
+            } else {
+                // Bug 1 fix: texto y visibilidad van aquí, no fuera del when
+                holder.tvCorralName.text = corral.name
+                holder.tvCurrentWeight.text = "${corral.actualTargetWeight}kg"
+                holder.tvCurrentWeight.visibility = View.VISIBLE
+                holder.llBarra1.visibility = View.VISIBLE
+                if (selectedPosition == position) {
+                    holder.itemView.background = ContextCompat.getDrawable(context, R.drawable.item_round_run_product_select_bkg)
+                } else if (position < selectedPosition) {
+                    holder.itemView.background = ContextCompat.getDrawable(context, R.drawable.item_round_run_product_ready_bkg)
                     val diff = (corral.initialWeight - corral.finalWeight) - corral.actualTargetWeight
-                    if(diff >= 1){
+                    if (diff >= 1) {
                         holder.tvDiffWeight.text = "+${diff}kg"
-                    }else {
+                    } else {
                         holder.tvDiffWeight.text = "${diff}kg"
                     }
-                }else{
-                    holder.itemView.background = ContextCompat.getDrawable(context,R.drawable.item_round_run_product_bkg)
+                } else {
+                    holder.itemView.background = ContextCompat.getDrawable(context, R.drawable.item_round_run_product_bkg)
                 }
             }
-            holder.tvCorralName.text = corral.name
-            holder.tvCurrentWeight.text = "${corral.actualTargetWeight}kg"
         }
-
     }
 
 //    fun updateCorralWeight(weight: Double){
@@ -106,13 +105,15 @@ class RoundRunCorralDownloadAdapter (
 
 
     override fun getItemCount(): Int {
-        return roundCorrals.size
+        return filteredRoundCorrals.size  // Bug 2 fix: antes usaba roundCorrals (podía causar IOOBE con filtro activo)
     }
 
     fun corralList(list: ArrayList<MinCorralDetail>){
-        roundCorrals = list
-        filteredRoundCorrals = list
-        originalCorrals = list
+        // Bug 3 fix: copias independientes — antes las tres variables apuntaban al mismo objeto,
+        // con lo cual filtrar destruía los datos originales
+        originalCorrals = ArrayList(list)
+        roundCorrals = ArrayList(list)
+        filteredRoundCorrals = ArrayList(list)
         notifyDataSetChanged()
     }
 
@@ -148,13 +149,19 @@ class RoundRunCorralDownloadAdapter (
 
 
     fun updateRound(roundRunDetail: MinRoundRunDetail) {
-        var position : Int = 0
-        filteredRoundCorrals.forEach{corralDetail ->
-            corralDetail.initialWeight = roundRunDetail.round.corrals[position].initialWeight
-            corralDetail.finalWeight = roundRunDetail.round.corrals[position].finalWeight
-            corralDetail.actualTargetWeight = roundRunDetail.round.corrals[position].actualTargetWeight
-            corralDetail.customTargetWeight = roundRunDetail.round.corrals[position].customTargetWeight
-            position++
+        // Bug 4 fix: antes actualizaba por índice posicional — si las listas tenían distinto
+        // orden o tamaño los datos quedaban cruzados. Ahora matchea por id+order igual que
+        // el handler CMD_ROUNDDATA en RemoteMixerFragment
+        filteredRoundCorrals.forEach { corralDetail ->
+            val updated = roundRunDetail.round.corrals.firstOrNull {
+                it.id == corralDetail.id && it.order == corralDetail.order
+            }
+            updated?.let {
+                corralDetail.initialWeight = it.initialWeight
+                corralDetail.finalWeight = it.finalWeight
+                corralDetail.actualTargetWeight = it.actualTargetWeight
+                corralDetail.customTargetWeight = it.customTargetWeight
+            }
         }
     }
 }
