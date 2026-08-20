@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class AddUpdateTabletActivity : AppCompatActivity() {
+class AddUpdateTabletActivity : BaseActivity() {
 
     private lateinit var binding: ActivityAddUpdateTabletBinding
     private var mTabletDetails: TabletMixer? = null

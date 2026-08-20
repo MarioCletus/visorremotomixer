@@ -55,7 +55,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private var alertDialog: android.app.AlertDialog? = null
@@ -102,6 +102,11 @@ class LoginActivity : AppCompatActivity() {
             }else{
                 binding.llUrlServer.visibility = VISIBLE
             }
+        }
+
+
+        binding.ivAccountDeletion.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse(Constants.URL_ACCOUNT_DELETION)))
         }
 
         val userSharedPreferences = getSharedPreferences("UserConfig", Context.MODE_PRIVATE)

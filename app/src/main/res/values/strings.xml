@@ -553,5 +553,7 @@
     <string name="nombre_mixer">Nombre del mixer</string>
     <string name="seleccione_el_bluetooth_de_latablet">Seleccione el Bluetooth de la tablet %1$s</string>
     <string name="fin_carga_retorno_a_home">Fin de la carga. Se retorna al inicio</string>
+    <string name="privacy_policy">Politica de privacidad</string>
+    <string name="delete_account">Solicitar borrado de datos</string>
 
 </resources>

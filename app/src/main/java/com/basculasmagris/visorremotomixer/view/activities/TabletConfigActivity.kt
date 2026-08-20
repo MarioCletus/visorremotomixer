@@ -76,7 +76,7 @@ import java.util.Date
 import java.util.Timer
 import kotlin.concurrent.schedule
 
-class TabletConfigActivity : AppCompatActivity(){
+class TabletConfigActivity : BaseActivity() {
 
     private var macaddress: String = ""
     private var contMensajes: Int = 0

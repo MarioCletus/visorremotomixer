@@ -4,18 +4,13 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.View
-import android.view.WindowInsets
-import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.basculasmagris.visorremotomixer.R
@@ -34,7 +29,7 @@ data class TabletMixerData(val tabletMixers: MutableList<TabletMixer>): MergedLo
 data class UserData(val users: MutableList<User>): MergedLocalData()
 data class RoundLocalData(val roundsLocal: MutableList<RoundLocal>): MergedLocalData()
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity() {
 
     private val TAG = "DEBSplash"
 
@@ -64,16 +59,6 @@ class SplashActivity : AppCompatActivity() {
         val sSplashBinding: ActivitySplashBinding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(sSplashBinding.root)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            @Suppress("DEPRECATION")
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            )
-        }
-
         val splashAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_splash)
         sSplashBinding.ivAppName.animation = splashAnimation
 
@@ -82,8 +67,6 @@ class SplashActivity : AppCompatActivity() {
         )
         val version = pInfo.versionName
         sSplashBinding.tvVersion.text = "${getString(R.string.app_name)} $version"
-
-        hideNavigationBar()
 
         splashAnimation.setAnimationListener(object :
             Animation.AnimationListener {
@@ -99,11 +82,6 @@ class SplashActivity : AppCompatActivity() {
             }
 
         })
-    }
-
-    private fun hideNavigationBar() {
-        window.decorView.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
     }
 
     /**
