@@ -69,6 +69,7 @@ class SyncMixerFragment : Fragment() {
                 menu.findItem(R.id.bluetooth_balance).isVisible = false
                 menu.findItem(R.id.bluetooth_remote_status).isVisible = false
                 menu.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletInFragment?.name
+                menu.findItem(R.id.delete_account).isVisible = true
 
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -108,6 +109,15 @@ class SyncMixerFragment : Fragment() {
                         return true
                     }
 
+
+                    R.id.delete_account -> {
+                        val intent = android.content.Intent(
+                            android.content.Intent.ACTION_VIEW,
+                            android.net.Uri.parse("https://spimixer.magris.ar/account-deletion")
+                        )
+                        startActivity(intent)
+                        return true
+                    }
 
                     else -> false
                 }

@@ -34,6 +34,28 @@
         app:tint="?attr/colorControlNormal" />
 
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/iv_account_deletion"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        app:layout_constraintTop_toTopOf="@+id/iv_server"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_server"
+        app:layout_constraintStart_toEndOf="@+id/guideline_center"
+        app:layout_constraintEnd_toStartOf="@+id/iv_graint_cart"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:src="@drawable/privacy_tip_48px"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:tint="?attr/colorControlNormal"
+        android:clickable="true"
+        android:focusable="true" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

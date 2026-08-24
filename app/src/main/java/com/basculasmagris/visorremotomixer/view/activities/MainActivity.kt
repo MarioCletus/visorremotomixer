@@ -89,7 +89,7 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeParseException
 
 val Context.datastore by preferencesDataStore(name = "PREFERENCIAS")
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private val TAG1: String = "SOS"
     private val TAG : String =  "DEBMain"

@@ -504,5 +504,6 @@
 
     <string name="la_tablet_de_mixer">o tablet do misturador</string>
     <string name="tablet_remota_menu">"    Tablet Remota"</string>
+    <string name="delete_account">Solicitar exclusão de dados</string>
 
 </resources>

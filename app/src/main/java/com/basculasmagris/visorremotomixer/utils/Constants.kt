@@ -2,6 +2,9 @@ package com.basculasmagris.visorremotomixer.utils
 
 object Constants {
 
+    val URL_POLITICA_DE_PRIVACIDAD: String = "https://spimixer.magris.ar/privacy_policy"
+    val URL_ACCOUNT_DELETION: String = "https://spimixer.magris.ar/account-deletion"
+
     // BT SPP socket.connect() puede tardar hasta ~10s en fallar.
     // Con 2s se saturaba el stack iniciando múltiples threads concurrentes.
     const val RECONNECT_TIME: Long = 12_000

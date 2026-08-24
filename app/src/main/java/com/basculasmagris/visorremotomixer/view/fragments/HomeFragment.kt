@@ -3,7 +3,9 @@ package com.basculasmagris.visorremotomixer.view.fragments
 import android.Manifest
 import android.app.Dialog
 import android.bluetooth.BluetoothDevice
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -110,6 +112,7 @@ class HomeFragment : Fragment() {
 
                 }
                 menu.findItem(R.id.cancel_round).isVisible = false
+                menu.findItem(R.id.privacy_policy).isVisible = true
                 menu.findItem(R.id.menu_selected_remote_tablet)?.title = RemoteTabletSession.tabletName
             }
 
@@ -140,6 +143,15 @@ class HomeFragment : Fragment() {
                             (requireActivity() as MainActivity).mBinder?.connectKnowDeviceWithTransfer(it)
                             (requireActivity() as MainActivity).showCustomProgressDialog()
                         }
+                        return true
+                    }
+
+                    R.id.privacy_policy -> {
+                        val browserIntent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(Constants.URL_POLITICA_DE_PRIVACIDAD)
+                        )
+                        startActivity(browserIntent)
                         return true
                     }
 
