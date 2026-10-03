@@ -261,6 +261,11 @@
 
     <string name="aceptar">Aceptar</string>
     <string name="cancelar">Cancelar</string>
+    <string name="titulo_cerrar_ronda_en_mixer">Cerrar ronda</string>
+    <string name="msg_cerrar_ronda_en_mixer">Si aceptás, la ronda se cerrará también en la tablet del mixer.
+
+Con "Ir a inicio" volvés a la selección de mixers y la ronda sigue abierta en el mixer.</string>
+    <string name="ir_a_inicio">Ir a inicio</string>
 
 
     <string name="sync_reports_title">Reportes</string>
@@ -386,6 +391,13 @@
     <string name="bluetooth">Bluetooth</string>
     <string name="resto">Resto</string>
     <string name="por_defecto">Por defecto</string>
+    <string name="ingrese_url_servidor">Ingrese la dirección del servidor</string>
+    <string name="bluetooth_ya_asignado">Bluetooth ya asignado</string>
+    <string name="msg_bluetooth_ya_asignado">El bluetooth %1$s ya está asignado a la tablet %2$s. Elegí el bluetooth que corresponde a esta tablet.</string>
+    <string name="msg_bluetooth_de_otra_tablet">El bluetooth elegido es de la tablet %1$s, que ya está cargada. Se quitó de esta tablet: elegí el bluetooth que le corresponde.</string>
+    <string name="elegir_otro">Elegir otro</string>
+    <string name="reasignar">Reasignar</string>
+    <string name="url_servidor_invalida">La dirección debe empezar con http:// o https://</string>
     <string name="si">Si</string>
     <string name="no">No</string>
     <string name="menu_opciones">Opciones</string>

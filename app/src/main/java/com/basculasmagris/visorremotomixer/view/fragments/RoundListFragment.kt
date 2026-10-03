@@ -359,7 +359,7 @@ class RoundListFragment : Fragment() {
 
                 Constants.CMD_TABLET->{
                     Log.i("showCommand","CMD_TABLET RLF")
-                    if(isAdded) (requireActivity() as MainActivity).processTabletInfo(message)
+                    if(isAdded) (requireActivity() as MainActivity).processTabletInfo(message, device)
                 }
 
                 Constants.CMD_WEIGHT->{

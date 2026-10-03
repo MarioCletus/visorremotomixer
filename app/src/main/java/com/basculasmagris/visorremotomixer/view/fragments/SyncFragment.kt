@@ -411,7 +411,7 @@ class SyncFragment : Fragment() {
                     bSyncroUsers = false
                 }
                 Constants.CMD_TABLET -> {
-                    bSyncroTablets = mainActivity.processTabletInfo(message)
+                    bSyncroTablets = mainActivity.processTabletInfo(message, device)
                     if (bSyncroTablets) {
                         // Llegar siempre al 100% — CMD_VTL es opcional (puede no llegar
                         // si la tablet principal aún no tiene la lista guardada del servidor)

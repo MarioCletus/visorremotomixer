@@ -355,7 +355,7 @@ class TabletListFragment : BottomSheetDialogFragment() {
 
                 Constants.CMD_TABLET->{
                     Log.i("showCommand","CMD_TABLET")
-                    (activity as MainActivity).processTabletInfo(message)
+                    (activity as MainActivity).processTabletInfo(message, device)
 
                 }
 

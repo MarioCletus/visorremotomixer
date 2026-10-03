@@ -69,6 +69,7 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
@@ -270,9 +271,10 @@ class TabletConfigActivity : BaseActivity() {
         mTabletMixerViewModel.allTabletMixerList.observe(this,
             object : Observer<List<TabletMixer>> {
                 override fun onChanged(tablets: List<TabletMixer>) {
+                    // Se sigue observando (antes era una sola lectura): para detectar un bluetooth ya
+                    // asignado hace falta la lista al día, incluidos los cambios de esta pantalla.
                     mLocalTabletMixers = tablets
                     Log.i(TAG, "Tablets cargadas: ${tablets.size}")
-                    mTabletMixerViewModel.allTabletMixerList.removeObserver(this)
                 }
             })
     }
@@ -470,7 +472,7 @@ class TabletConfigActivity : BaseActivity() {
 
                 Constants.CMD_TABLET->{
                     Log.i("showCommand","CMD_TABLET")
-                    processTabletInfo(message)
+                    processTabletInfo(message, device)
                 }
             }
         }
@@ -600,7 +602,45 @@ class TabletConfigActivity : BaseActivity() {
         alertDialog.show()
     }
 
+    /**
+     * Antes de asignar el bluetooth se verifica que no lo tenga otra tablet: si se asignaba igual,
+     * al conectar respondía la otra tablet principal y la pantalla saltaba a configurar esa, sin
+     * forma de corregirlo (cada vez que se entraba se conectaba sola al bluetooth equivocado).
+     */
     private fun selectDevice(device : BluetoothDevice?) {
+        val currentId = tabletMixerReceibed?.id ?: 0L
+        val owner = device?.let { d ->
+            mLocalTabletMixers?.firstOrNull { it.mac.equals(d.address, ignoreCase = true) && it.id != currentId }
+        }
+        if (owner == null) {
+            applySelectedDevice(device)
+            return
+        }
+        val btName = BluetoothUtils.getBluetoothName(this, device)
+        val restoreText = { mBinding.tvCajaBluetoothAsoc.setText(tabletMixerReceibed?.btName ?: "") }
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle(getString(R.string.bluetooth_ya_asignado))
+            .setMessage(getString(R.string.msg_bluetooth_ya_asignado, btName, owner.name))
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.elegir_otro)) { dialog, _ ->
+                restoreText()
+                dialog.dismiss()
+            }
+        // Reasignar solo tiene sentido al editar una tablet ya guardada (p. ej. si se cambió el
+        // equipo físico). Para una tablet nueva, ese bluetooth es la tablet que ya está cargada.
+        if (currentId != 0L) {
+            builder.setNegativeButton(getString(R.string.reasignar)) { dialog, _ ->
+                owner.mac = ""
+                owner.btName = ""
+                mTabletMixerViewModel.update(owner)
+                dialog.dismiss()
+                applySelectedDevice(device)
+            }
+        }
+        builder.show()
+    }
+
+    private fun applySelectedDevice(device : BluetoothDevice?) {
         handlerBaliza.post(runnable)
         selectedBluetoothDevice = device
         if(tabletMixerReceibed != null){
@@ -1085,51 +1125,94 @@ class TabletConfigActivity : BaseActivity() {
         mBinder?.write(byteArray)
     }
 
-    fun processTabletInfo(message: ByteArray): Boolean{
-        try {
-            val messageStr = String(message)
-            Log.i(TAG,"processTabletInfo message: $messageStr")
-            val length = String(message, 3, 4).toInt()
-            val json = String(message, 7, length)
+    private fun onBluetoothBelongsToOtherTablet(other: TabletMixer) {
+        Log.w(TAG, "El bluetooth elegido es de la tablet '${other.name}' (id ${other.id})")
+        mBinder?.disconnectKnowDeviceWithTransfer()
+        mProgressDialog?.dismiss()
+        // Se le quita el bluetooth equivocado para que no vuelva a conectarse sola a la otra tablet.
+        tabletMixerReceibed?.let {
+            it.mac = ""
+            it.btName = ""
+            mTabletMixerViewModel.update(it)
+        }
+        macaddress = ""
+        selectedBluetoothDevice = null
+        mBinding.tvCajaBluetoothAsoc.setText("")
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle(getString(R.string.bluetooth_ya_asignado))
+            .setMessage(getString(R.string.msg_bluetooth_de_otra_tablet, other.name))
+            .setPositiveButton(getString(R.string.aceptar)) { dialog, _ -> dialog.dismiss() }
+            .show()
+    }
 
-            val tabletInfo = Gson().fromJson(
-                json,
-                RemoteTabletInfo::class.java
-            )
+    /**
+     * Datos que manda la tablet principal al conectarse.
+     * - [sourceDevice] es la tablet que mandó el mensaje: su bluetooth es el que se guarda. Antes se
+     *   usaba el de RemoteTabletSession (al que se está intentando conectar), y un mensaje rezagado
+     *   de otra tablet le dejaba a un registro el bluetooth de otro: después, editar la tablet 3
+     *   mostraba la 2.
+     * - La búsqueda se hace en la base en el momento: si la lista cargada en segundo plano todavía
+     *   no estaba, no se encontraba la tablet y se creaba un registro duplicado ("tablet2" repetida).
+     */
+    fun processTabletInfo(message: ByteArray, sourceDevice: BluetoothDevice? = null): Boolean{
+        val tabletInfo = try {
+            Log.i(TAG,"processTabletInfo message: ${String(message)}")
+            // El largo que manda la tablet principal es en caracteres; con acentos (p. ej.
+            // "Camión") no coincide con los bytes y el JSON llegaba cortado. El tamaño exacto
+            // ya lo da el encabezado del protocolo: se lee hasta el final del mensaje.
+            val json = String(message, 7, message.size - 7, Charsets.UTF_8)
+            Gson().fromJson(json, RemoteTabletInfo::class.java)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error procesando TabletInfo", e)
+            return false
+        }
+        Log.i(TAG, "Tablet: ${tabletInfo.tabletName} | Mixer: ${tabletInfo.mixerName} | Serial: ${tabletInfo.serialNumber}")
+        val sourceBt = sourceDevice ?: RemoteTabletSession.bluetoothDevice
 
-            Log.i(TAG, "Tablet: ${tabletInfo.tabletName}")
-            Log.i(TAG, "Mixer: ${tabletInfo.mixerName}")
-            Log.i(TAG, "Serial: ${tabletInfo.serialNumber}")
-            Log.i(TAG,"mLocalTabletMixers: $mLocalTabletMixers")
-            val existTablet = mLocalTabletMixers?.firstOrNull{
-                it.serial == tabletInfo.serialNumber
+        lifecycleScope.launch {
+            val repo = (application as com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication)
+                .tabletMixerRepository
+            val allTablets = repo.allTabletMixerList.first()
+            mLocalTabletMixers = allTablets
+
+            val bySerial = allTablets.firstOrNull {
+                it.serial.isNotEmpty() && it.serial == tabletInfo.serialNumber
             }
-            if(existTablet != null){
-                val tabletBt = RemoteTabletSession.bluetoothDevice
+            val configuring = tabletMixerReceibed?.takeIf { it.id != 0L }
+            // Se está configurando una tablet y respondió otra ya cargada: el bluetooth elegido es
+            // de esa otra. Antes la pantalla pasaba a configurar la otra tablet.
+            if (bySerial != null && configuring != null && bySerial.id != configuring.id) {
+                onBluetoothBelongsToOtherTablet(bySerial)
+                return@launch
+            }
+            // Si la tablet que se configura todavía no tenía serie, es esta: se le asigna en vez de
+            // crear un registro nuevo.
+            val existTablet = bySerial ?: configuring?.let { c ->
+                (allTablets.firstOrNull { it.id == c.id } ?: c).also {
+                    if (tabletInfo.serialNumber.isNotEmpty()) it.serial = tabletInfo.serialNumber
+                }
+            }
+            if (existTablet != null) {
                 // Solo sobreescribir si el HOST envió valores no vacíos — evita borrar
                 // datos guardados cuando el HOST tiene versión vieja o no tiene nombre configurado.
                 if (tabletInfo.tabletName.isNotEmpty()) existTablet.name = tabletInfo.tabletName
                 if (tabletInfo.mixerName.isNotEmpty()) existTablet.mixerName = tabletInfo.mixerName
                 existTablet.enableVrDownload = tabletInfo.enableVrDownload
-                Log.i(TAG,"tabletBt = $tabletBt")
-                if(tabletBt != null) {
-                    existTablet.mac = RemoteTabletSession.getBluetoothAddress(this)
-                    existTablet.btName = RemoteTabletSession.getBluetoothName(this)
+                if (sourceBt != null) {
+                    existTablet.mac = BluetoothUtils.getAddress(this@TabletConfigActivity, sourceBt)
+                    existTablet.btName = BluetoothUtils.getBluetoothName(this@TabletConfigActivity, sourceBt)
                 }
                 existTablet.updatedDate = Helper.getCurrentDateTime()
                 mTabletMixerViewModel.update(existTablet)
                 Log.i(TAG,"updateTabletMixer: $existTablet")
                 RemoteTabletSession.setTablet(existTablet)
-            }else if (tabletInfo.serialNumber.isNotEmpty()) {
-                // Solo crear un registro nuevo si el serial es válido, para evitar
-                // crear tablets fantasma cuando mLocalTabletMixers no cargó todavía
-                // o el HOST envió una respuesta con datos vacíos.
+            } else if (tabletInfo.serialNumber.isNotEmpty()) {
                 val newTabletMixer = TabletMixer(
                     name = tabletInfo.tabletName,
                     mixerName = tabletInfo.mixerName,
-                    mac = "",
+                    mac = sourceBt?.let { BluetoothUtils.getAddress(this@TabletConfigActivity, it) } ?: "",
                     serial = tabletInfo.serialNumber,
-                    btName = "",
+                    btName = sourceBt?.let { BluetoothUtils.getBluetoothName(this@TabletConfigActivity, it) } ?: "",
                     updatedDate = Helper.getCurrentDateTime(),
                 )
                 Log.i(TAG,"newTabletMixer: $newTabletMixer")
@@ -1144,10 +1227,6 @@ class TabletConfigActivity : BaseActivity() {
             // Solo actualizar el display si el HOST envió valores no vacíos
             if (tabletInfo.tabletName.isNotEmpty()) mBinding.tvTabletMixerName.text = tabletInfo.tabletName
             if (tabletInfo.mixerName.isNotEmpty()) mBinding.tvTabletMixerDescription.text = tabletInfo.mixerName
-
-        } catch (e: Exception) {
-            Log.e(TAG, "Error procesando TabletInfo", e)
-            return false
         }
         return true
     }

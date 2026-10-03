@@ -13,6 +13,8 @@ import android.view.View.VISIBLE
 import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -88,12 +90,13 @@ class LoginActivity : BaseActivity() {
         binding.llLoginData.visibility = VISIBLE
 
 
+        // Se muestran nombres, no URL (igual que en la tablet principal).
         val urlSuggestions = arrayListOf(
-            Constants.BASE_URL0,
-            Constants.BASE_URL1,
-            Constants.BASE_URL2
+            Constants.SERVER_NAME_PROD,
+            Constants.SERVER_NAME_DEV,
+            Constants.SERVER_NAME_TEST,
+            Constants.SERVER_NAME_CUSTOM
         )
-        urlSuggestions.add(getString(R.string.por_defecto))
 
 
         binding.ivServer.setOnClickListener{
@@ -119,12 +122,11 @@ class LoginActivity : BaseActivity() {
         binding.spServer.adapter = urlAdapter
 
 // Seleccionar automáticamente el item correspondiente a BASE_URL
-        val selectedPosition = urlSuggestions.indexOfFirst {
-            it == BASE_URL || (it == getString(R.string.por_defecto) && BASE_URL == BASE_URL_POR_DEFECTO)
-        }
+        val selectedPosition = urlSuggestions.indexOf(Constants.urlToServerName(BASE_URL))
         if (selectedPosition >= 0) {
             binding.spServer.setSelection(selectedPosition)
         }
+        lastServerPosition = selectedPosition.coerceAtLeast(0)
 
         binding.etUserRef.setOnClickListener {
             Log.i("LOGIN", "[mUsersList]: ${mUserList.count()}")
@@ -137,23 +139,18 @@ class LoginActivity : BaseActivity() {
 
         binding.spServer.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val serverUrlSelected = parent?.getItemAtPosition(position).toString()
-                val sharedPreferences: SharedPreferences = getSharedPreferences("UserConfig", Context.MODE_PRIVATE)
-                val editor = sharedPreferences.edit()
-                when (serverUrlSelected){
-                    getString(R.string.por_defecto) -> {
-                        BASE_URL = BASE_URL_POR_DEFECTO
-                        editor.putString("serverUrl", BASE_URL)
-                        Log.i(TAG,"por defecto BASE_URL: $BASE_URL")
-                        editor.apply()
-                    }
-                    ""->{}
-                    else->{
-                        BASE_URL = serverUrlSelected
-                        editor.putString("serverUrl", serverUrlSelected)
-                        Log.i(TAG,"else BASE_URL: $BASE_URL")
-                        editor.apply()
-                    }
+                // La primera llamada es la selección inicial de arriba, no una elección del operador.
+                if (ignoreInitialServerSelection) {
+                    ignoreInitialServerSelection = false
+                    return
+                }
+                val serverNameSelected = parent?.getItemAtPosition(position).toString()
+                val mappedUrl = Constants.serverNameToUrl(serverNameSelected)
+                if (mappedUrl != null) {
+                    saveServerUrl(mappedUrl)
+                    lastServerPosition = position
+                } else if (serverNameSelected == Constants.SERVER_NAME_CUSTOM) {
+                    showCustomServerUrlDialog(position)
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -266,6 +263,56 @@ class LoginActivity : BaseActivity() {
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
+    }
+
+    private var ignoreInitialServerSelection = true
+    private var lastServerPosition = 0
+
+    private fun saveServerUrl(url: String) {
+        BASE_URL = url
+        getSharedPreferences("UserConfig", Context.MODE_PRIVATE).edit()
+            .putString("serverUrl", url)
+            .apply()
+        Log.i(TAG, "serverUrl seleccionado: $BASE_URL")
+    }
+
+    /** "Personalizado": el visor no tiene pantalla de configuración, así que la URL se escribe acá. */
+    private fun showCustomServerUrlDialog(position: Int) {
+        val input = EditText(this).apply {
+            hint = "https://servidor:puerto/api/"
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_URI
+            // Se precarga la última personalizada, para poder corregirla.
+            val lastCustom = getSharedPreferences("UserConfig", Context.MODE_PRIVATE)
+                .getString("customServerUrl", null)
+                ?: BASE_URL.takeIf { Constants.urlToServerName(it) == Constants.SERVER_NAME_CUSTOM }
+            lastCustom?.let { setText(it) }
+        }
+        AlertDialog.Builder(this)
+            .setTitle(Constants.SERVER_NAME_CUSTOM)
+            .setMessage(getString(R.string.ingrese_url_servidor))
+            .setView(input)
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
+                var url = input.text.toString().trim()
+                if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                    Toast.makeText(this, getString(R.string.url_servidor_invalida), Toast.LENGTH_LONG).show()
+                    binding.spServer.setSelection(lastServerPosition)
+                    dialog.dismiss()
+                    return@setPositiveButton
+                }
+                // Retrofit exige que la URL base termine en "/".
+                if (!url.endsWith("/")) url += "/"
+                getSharedPreferences("UserConfig", Context.MODE_PRIVATE).edit()
+                    .putString("customServerUrl", url).apply()
+                saveServerUrl(url)
+                lastServerPosition = position
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.cancelar)) { dialog, _ ->
+                binding.spServer.setSelection(lastServerPosition)
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private fun initRoles() {

@@ -35,9 +35,10 @@ class BluetoothSDKService : Service() {
     private val MY_UUID = "00001101-0000-1000-8000-00805F9B34FB"
     // Bluetooth connections
     private var connectThread: ConnectThread? = null
-    private var connectThreadWithTransfer: ConnectThreadWithTransfer? = null
+    // Los escriben los hilos de conexión y los lee la UI: volátiles para que todos vean lo mismo.
+    @Volatile private var connectThreadWithTransfer: ConnectThreadWithTransfer? = null
 
-    private var connectedThread: ConnectedThread? = null
+    @Volatile private var connectedThread: ConnectedThread? = null
 
 
     // Invoked only first time
@@ -257,9 +258,15 @@ class BluetoothSDKService : Service() {
 
     private inner class ConnectThreadWithTransfer(device: BluetoothDevice) : Thread() {
 
-        private val mmSocket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
+        // Se crea al construir el hilo (no lazy): así cancel() puede cerrarlo aunque el
+        // connect() todavía no haya empezado o esté en curso.
+        private val mmSocket: BluetoothSocket? = try {
             device.createRfcommSocketToServiceRecord(UUID.fromString(MY_UUID))
+        } catch (e: Exception) {
+            Log.e("BLUE", "No se pudo crear el socket", e)
+            null
         }
+        @Volatile private var cancelled = false
 
         override fun run() {
 
@@ -273,12 +280,25 @@ class BluetoothSDKService : Service() {
                     // until it succeeds or throws an exception.
                     socketConnectWithPermission(socket)
 
+                    // Un intento viejo (se canceló o ya hay otro, p. ej. porque se cambió de
+                    // tablet) no debe quedar como conexión activa: antes podía terminar después
+                    // del cambio y el visor quedaba conectado a la tablet anterior.
+                    if (cancelled || connectThreadWithTransfer !== this) {
+                        Log.w("BLUE", "Conexión descartada: el intento ya no es el vigente")
+                        try { socket.close() } catch (_: IOException) {}
+                        return
+                    }
+
                     // The connection attempt succeeded. Perform work associated with
                     // the connection in a separate thread.
-                    connectedThread = ConnectedThread(socket)
-                    //mAcceptThread = AcceptThread()
-                    //mAcceptThread?.start()
-                    connectedThread?.start()
+                    // Nunca dos conexiones a la vez: si quedaba una anterior (p. ej. a otra tablet
+                    // principal) se cierra antes de reemplazarla. Antes se pisaba la referencia sin
+                    // cerrarla y el visor recibía mensajes de las dos tablets intercalados.
+                    val previous = connectedThread
+                    val newThread = ConnectedThread(socket)
+                    connectedThread = newThread
+                    previous?.cancel()
+                    newThread.start()
                     Log.i("BLUE", "***Transfer connectedThread: $connectedThread")
                 }
             } catch (e: IOException) {
@@ -287,12 +307,12 @@ class BluetoothSDKService : Service() {
 
         }
 
-        // Closes the client socket and causes the thread to finish.
+        // Cierra el socket siempre: close() también aborta un connect() en curso. Antes solo
+        // cerraba si ya estaba conectado, y los intentos pendientes seguían vivos.
         fun cancel() {
+            cancelled = true
             try {
-                if (mmSocket?.isConnected == true) {
-                    mmSocket?.close()
-                }
+                mmSocket?.close()
             } catch (e: IOException) {
                 Log.e("BLUE", "Could not close the client socket", e)
             }
@@ -316,7 +336,7 @@ class BluetoothSDKService : Service() {
         private val mmOutStream: OutputStream = mmSocket.outputStream
         private val dis = DataInputStream(mmInStream)
         private val dos = DataOutputStream(mmOutStream)
-        private var isConnected : Boolean = false
+        @Volatile private var isConnected : Boolean = false
 
         override fun run() {
             Log.i("BLUE", "BEGIN ConnectedThread $mmSocket")
@@ -328,17 +348,29 @@ class BluetoothSDKService : Service() {
                 } catch (e: IOException) {
                     Log.i("BLUE", "Errno reading length: ${e.message}")
                     isConnected = false
-                    pushBroadcastMessage(BluetoothUtils.ACTION_CONNECTION_ERROR, null, "Input stream was disconnected")
+                    if (!isReplaced()) pushBroadcastMessage(BluetoothUtils.ACTION_CONNECTION_ERROR, null, "Input stream was disconnected")
                     break
                 }
-                if (length <= 0) continue
+                if (length <= 0 || length > 1_048_576) {
+                    Log.e("BLUE", "Invalid message length: $length, closing connection")
+                    isConnected = false
+                    if (!isReplaced()) pushBroadcastMessage(BluetoothUtils.ACTION_CONNECTION_ERROR, null, "Invalid message length")
+                    break
+                }
                 val bytes = ByteArray(length)
                 try {
                     dis.readFully(bytes)
                 } catch (e: IOException) {
                     Log.i("BLUE", "Errno reading payload: ${e.message}")
                     isConnected = false
-                    pushBroadcastMessage(BluetoothUtils.ACTION_CONNECTION_ERROR, null, "Input stream was disconnected")
+                    if (!isReplaced()) pushBroadcastMessage(BluetoothUtils.ACTION_CONNECTION_ERROR, null, "Input stream was disconnected")
+                    break
+                }
+                // Si otra conexión la reemplazó (p. ej. a otra tablet principal), deja de entregar
+                // mensajes y se cierra: así el visor nunca recibe de dos tablets a la vez.
+                if (isReplaced()) {
+                    Log.w("BLUE", "Conexión reemplazada por otra, se cierra ${mmSocket.remoteDevice}")
+                    isConnected = false
                     break
                 }
                 isConnected = true
@@ -358,6 +390,15 @@ class BluetoothSDKService : Service() {
                     pushBroadcastMessage(BluetoothUtils.ACTION_MESSAGE_RECEIVED, arrayListOf(mmSocket.remoteDevice), message)
                 }
             }
+            // Al salir de la lectura (desconexión o largo inválido) se cierra el socket: si quedaba
+            // abierto, el host (atiende un solo visor) seguía ocupado con esta conexión muerta.
+            try { mmSocket.close() } catch (_: IOException) {}
+        }
+
+        /** Otra conexión ocupó su lugar. Si no hay ninguna (desconexión pedida), no cuenta. */
+        private fun isReplaced(): Boolean {
+            val current = connectedThread
+            return current != null && current !== this
         }
 
         fun write(msg: String): Int {
@@ -382,10 +423,9 @@ class BluetoothSDKService : Service() {
         // Call this method from the main activity to shut down the connection.
         fun cancel() {
             Log.i("BLUE", "CANCEL ConnectedThread")
+            isConnected = false
             try {
-                if (mmSocket.isConnected) {
-                    mmSocket.close()
-                }
+                mmSocket.close()
             } catch (e: IOException) {
                 pushBroadcastMessage(BluetoothUtils.ACTION_CONNECTION_ERROR, null, "Could not close the connect socket")
             }

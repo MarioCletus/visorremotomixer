@@ -29,6 +29,7 @@ import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
+import com.basculasmagris.visorremotomixer.utils.CustomAlertDialogBuilder
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -122,7 +123,10 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity = (requireActivity() as MainActivity)
-        activity?.showCustomProgressDialog()
+        // Solo si no hay conexión: antes aparecía cada vez que se entraba a la pantalla.
+        if (activity?.mBinder?.isConnected() != true) {
+            activity?.showCustomProgressDialog()
+        }
 
         val args: RemoteMixerFragmentArgs by navArgs()
 
@@ -442,9 +446,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
 
                     R.id.cancel_round -> {
                         if ((bInCfg || bInLoad || bInDownload || bInRes)) {
-                            Log.i(TAG,"Cancel round")
-                            (requireActivity() as MainActivity).sendCancelToMixer()
-                            (requireActivity() as MainActivity).onBackPressed()
+                            confirmCloseRound()
                         }
                         return true
                     }
@@ -453,6 +455,36 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
         return mBinding.root
+    }
+
+    /**
+     * La cruz de la barra cierra la ronda también en la tablet del mixer, así que se confirma.
+     * Tres salidas: cerrar (como antes), cancelar, o ir a Inicio (selección de mixers) dejando la
+     * ronda abierta en el mixer para retomarla después.
+     */
+    private fun confirmCloseRound() {
+        val mainActivity = activity as? MainActivity ?: return
+        val dialogBuilder = CustomAlertDialogBuilder(mainActivity)
+        dialogBuilder.setTitle(getString(R.string.titulo_cerrar_ronda_en_mixer))
+        dialogBuilder.setMessage(getString(R.string.msg_cerrar_ronda_en_mixer))
+        dialogBuilder.setCancelable(false)
+        dialogBuilder.setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
+            dialog.dismiss()
+            if (!isAdded) return@setPositiveButton
+            Log.i(TAG, "Cancel round")
+            mainActivity.sendCancelToMixer()
+            mainActivity.onBackPressed()
+        }
+        dialogBuilder.setNegativeButton(getString(R.string.cancelar)) { dialog, _ ->
+            dialog.dismiss()
+        }
+        dialogBuilder.setNeutralButton(getString(R.string.ir_a_inicio)) { dialog, _ ->
+            dialog.dismiss()
+            if (!isAdded) return@setNeutralButton
+            Log.i(TAG, "Ir a inicio sin cerrar la ronda en el mixer")
+            findNavController().popBackStack(R.id.nav_home, false)
+        }
+        dialogBuilder.create()?.show()
     }
 
     private fun permission() {
@@ -1317,7 +1349,13 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     }
 
     private fun refreshWeight(message:ByteArray) {
-        weight = String(message,4,8).toLong()
+        // Código(3) + signo(1) + peso(8) + progreso(3) + signo(1) + resto(8) + pausa(1) = 25 bytes.
+        // Un mensaje más corto o dañado se descarta en vez de tirar una excepción.
+        if (message.size < 25) {
+            Log.w(TAG, "refreshWeight: mensaje corto (${message.size} bytes), se ignora")
+            return
+        }
+        weight = String(message,4,8).toLongOrNull() ?: return
         var sign = String(message,3,1)
         Log.i("message","RMF sign ${sign}")
         var bConnected = true
@@ -1333,7 +1371,7 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
         }
         if(bConnected)
            (requireActivity() as MainActivity).weightReceived()
-        val progress = String(message,12,3).toInt()
+        val progress = String(message,12,3).toIntOrNull() ?: 0
         val signRest = String(message,15,1)
         rest = String(message,16,8).toIntOrNull()?:0
         val isChecked = (String(message, 24, 1).toIntOrNull() ?: 0) == 1
@@ -1350,11 +1388,14 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
             mBinding.tvCurrentProductWeightPending.text = "${getString(R.string.desconectado)}    ${sign}${weight}kg"
         }
         Log.i("lcation","messageIn ${String(message)}")
-        if(message.size > 25 && String(message,25,1) == "#" && String(message,27,2).toIntOrNull() != null){
+        // Ubicación: "#" + color(1) + largo en bytes(2) + texto. Hosts viejos mandan el largo en
+        // caracteres (con acentos no coincide), así que se limita a lo que realmente llegó para
+        // no leer fuera del mensaje.
+        if(message.size >= 29 && String(message,25,1) == "#" && String(message,27,2).toIntOrNull() != null){
             Log.i(TAG,"Ubicacion de corral")
-            val locationLarge = String(message,27,2).toIntOrNull()
+            val locationLarge = String(message,27,2).toIntOrNull()?.coerceIn(0, message.size - 29)
             locationLarge?.let {
-                val locationStr = String(message, 29, locationLarge)
+                val locationStr = String(message, 29, locationLarge, Charsets.UTF_8)
                 mBinding.tvLocation.visibility = View.VISIBLE
                 mBinding.tvLocation.text = locationStr
             }

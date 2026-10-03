@@ -222,7 +222,7 @@ class SyncMixerFragment : Fragment() {
                 Constants.CMD_TABLET->{
                     Log.i("showCommand","CMD_TABLET")
                     if(isAdded){
-                        bSyncroTablets = (activity as MainActivity).processTabletInfo(message)
+                        bSyncroTablets = (activity as MainActivity).processTabletInfo(message, device)
                         if(bSyncroTablets){
                             mBinding.pbTablet.progress = 100
                             mBinding.tvTabletPercentage.text = "100%"

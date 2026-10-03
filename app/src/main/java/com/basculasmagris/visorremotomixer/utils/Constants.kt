@@ -41,6 +41,26 @@ object Constants {
     var BASE_URL: String = "https://api.spimixer.magris.ar:443/api/"
     const val BASE_URL_POR_DEFECTO: String = "https://api.spimixer.magris.ar:443/api/"
 
+    // Nombres que ve el operador en el login en lugar de las URL (igual que en la tablet principal).
+    const val SERVER_NAME_PROD = "Producción"
+    const val SERVER_NAME_DEV = "Desarrollo"
+    const val SERVER_NAME_TEST = "Test"
+    const val SERVER_NAME_CUSTOM = "Personalizado"
+
+    fun urlToServerName(url: String): String = when (url) {
+        BASE_URL0 -> SERVER_NAME_PROD
+        BASE_URL1 -> SERVER_NAME_DEV
+        BASE_URL2 -> SERVER_NAME_TEST
+        else -> SERVER_NAME_CUSTOM
+    }
+
+    fun serverNameToUrl(name: String): String? = when (name) {
+        SERVER_NAME_PROD -> BASE_URL0
+        SERVER_NAME_DEV -> BASE_URL1
+        SERVER_NAME_TEST -> BASE_URL2
+        else -> null
+    }
+
     const val API_PRODUCT_ENDPOINT: String = "products/"
     const val API_ESTABLISHMENT_ENDPOINT: String = "establishment/"
     const val API_CORRAL_ENDPOINT: String = "corral/"

@@ -389,6 +389,18 @@ class MainActivity : BaseActivity() {
         mProgressDialog?.setCancelable(false)
         mProgressDialog?.let {
             it.setContentView(mLayoutId)
+            // Aviso no bloqueante: antes era un diálogo modal a pantalla completa y, sin conexión,
+            // había que esperar los 10 s del contador para poder usar la pantalla. Ahora es un
+            // cartel chico arriba, sin oscurecer el fondo, y los toques pasan a la pantalla de abajo.
+            it.window?.let { window ->
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+                window.setGravity(android.view.Gravity.TOP or android.view.Gravity.CENTER_HORIZONTAL)
+                window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+                window.addFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                )
+            }
             it.show()
             Handler(Looper.getMainLooper()).postDelayed({
                 if (it.isShowing){
@@ -836,12 +848,17 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    fun processTabletInfo(message: ByteArray): Boolean{
+    /** [sourceDevice]: la tablet que mandó el mensaje. Su bluetooth es el que se guarda (antes se
+     * usaba el de la sesión, y un mensaje rezagado de otra tablet le cruzaba el bluetooth). */
+    fun processTabletInfo(message: ByteArray, sourceDevice: BluetoothDevice? = null): Boolean{
         try {
             val messageStr = String(message)
             Log.i(TAG,"processTabletInfo message: $messageStr")
             val length = String(message, 3, 4).toInt()
-            val json = String(message, 7, length)
+            // El largo que manda la tablet principal es en caracteres; con acentos (p. ej.
+            // "Camión") no coincide con los bytes y el JSON llegaba cortado. El tamaño exacto
+            // ya lo da el encabezado del protocolo: se lee hasta el final del mensaje.
+            val json = String(message, 7, message.size - 7, Charsets.UTF_8)
 
             val tabletInfo = Gson().fromJson(json, RemoteTabletInfo::class.java)
             Log.i(TAG, "Tablet: ${tabletInfo.tabletName} | Mixer: ${tabletInfo.mixerName} | Serial: ${tabletInfo.serialNumber}")
@@ -851,7 +868,7 @@ class MainActivity : BaseActivity() {
                 return true
             }
 
-            val tabletBt        = RemoteTabletSession.bluetoothDevice ?: bluetoothDevice
+            val tabletBt        = sourceDevice ?: RemoteTabletSession.bluetoothDevice ?: bluetoothDevice
             val connectedMac    = tabletBt?.let { BluetoothUtils.getAddress(this, it) } ?: ""
             val connectedBtName = tabletBt?.let { BluetoothUtils.getBluetoothName(this, it) } ?: ""
 
@@ -1312,7 +1329,10 @@ class MainActivity : BaseActivity() {
     fun processVrTabletList(message: ByteArray): Boolean {
         return try {
             val length = String(message, 3, 4).toInt()
-            val json   = String(message, 7, length)
+            // El largo que manda la tablet principal es en caracteres; con acentos (p. ej.
+            // "Camión") no coincide con los bytes y el JSON llegaba cortado. El tamaño exacto
+            // ya lo da el encabezado del protocolo: se lee hasta el final del mensaje.
+            val json   = String(message, 7, message.size - 7, Charsets.UTF_8)
             Log.i("VTL", "processVrTabletList: $json")
 
             val listType = object : TypeToken<ArrayList<com.basculasmagris.visorremotomixer.model.entities.TabletRemote>>() {}.type
