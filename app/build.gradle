@@ -14,8 +14,8 @@ android {
         applicationId "com.basculasmagris.visorremotomixer"
         minSdk 26
         targetSdk 36
-        versionCode 6
-        versionName "1.261003"
+        versionCode 7
+        versionName "1.261007"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -28,7 +28,9 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            // R8: reduce y ofusca el código (Play lo exige). Reglas en proguard-rules.pro: el JSON
+            // con la tablet principal y el servidor depende de los nombres de las clases de model.
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -69,6 +71,8 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation 'androidx.core:core-ktx:1.8.0'
+    // enableEdgeToEdge() (Play: pantalla de borde a borde con targetSdk 35+)
+    implementation 'androidx.activity:activity-ktx:1.8.2'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'

@@ -93,9 +93,7 @@ class AddUpdateTabletActivity : BaseActivity() {
         }
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        window.decorView.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        // Pantalla completa / barras ocultas: lo hace BaseActivity con APIs vigentes.
 
     }
 
