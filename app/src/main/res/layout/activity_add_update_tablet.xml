@@ -32,13 +32,13 @@
         android:padding="10dp">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/_ti_tablet_name"
+            android:id="@+id/til_tablet_name"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/_ti_tablet_description"
+            app:layout_constraintEnd_toStartOf="@id/til_tablet_description"
             android:paddingLeft="@dimen/_5sdp"
             android:paddingTop="@dimen/_5sdp"
             android:paddingRight="@dimen/_5sdp"
@@ -58,11 +58,11 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/_ti_tablet_description"
+            android:id="@+id/til_tablet_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/_ti_tablet_name"
+            app:layout_constraintStart_toEndOf="@id/til_tablet_name"
             app:layout_constraintEnd_toEndOf="parent"
             android:paddingLeft="@dimen/_5sdp"
             android:paddingTop="@dimen/_5sdp"
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/_ti_rfid"
-            app:layout_constraintTop_toBottomOf="@id/_ti_tablet_name"
+            app:layout_constraintTop_toBottomOf="@id/til_tablet_name"
             android:paddingLeft="@dimen/_5sdp"
             android:paddingTop="@dimen/_5sdp"
             android:paddingRight="@dimen/_5sdp"
@@ -120,7 +120,7 @@
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/_ti_tablet_name"
+            app:layout_constraintTop_toBottomOf="@id/til_tablet_name"
             app:layout_constraintStart_toEndOf="@id/ti_bt_box"
 
             android:paddingTop="@dimen/_5sdp"

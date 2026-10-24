@@ -1,12 +1,9 @@
 package com.basculasmagris.visorremotomixer.view.fragments
 
-import android.Manifest
 import android.app.Dialog
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,7 +13,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -113,39 +109,17 @@ class HomeFragment : Fragment() {
                 }
                 menu.findItem(R.id.cancel_round).isVisible = false
                 menu.findItem(R.id.privacy_policy).isVisible = true
-                menu.findItem(R.id.menu_selected_remote_tablet)?.title = RemoteTabletSession.tabletName
+                // En el inicio el visor no está conectado (se conecta al elegir una tablet), así que
+                // los íconos de conexión y de tablet seleccionada no aportan. En pantallas grandes
+                // además se encimaban con el logo.
+                menu.findItem(R.id.menu_selected_remote_tablet)?.isVisible = false
+                menu.findItem(R.id.bluetooth_remote_status)?.isVisible = false
+                menu.findItem(R.id.bluetooth_balance)?.isVisible = false
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
-                    R.id.bluetooth_remote_status -> {
-                        val deviceBluetooth = (requireActivity() as MainActivity).knowDevices?.firstOrNull { bd->
-                            bd.address == selectedTabletInFragment?.mac
-                        }
-                        Log.v(TAG,"Force connection ${deviceBluetooth?.name} $selectedTabletInFragment")
-                        deviceBluetooth?.let {
-                            val name = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-                                if (ActivityCompat.checkSelfPermission(
-                                        requireActivity() as MainActivity,
-                                        Manifest.permission.BLUETOOTH_CONNECT
-                                    ) == PackageManager.PERMISSION_GRANTED
-                                ) {
-                                    if (it.name == null) "" else it.name
-                                }else{
-                                    ""
-                                }
-                            }else{
-                                if (it.name == null) "" else it.name
-                            }
-                            Log.v(TAG,"Force connection $name")
-                            (requireActivity() as MainActivity).mBinder?.disconnectKnowDeviceWithTransfer()
-                            (requireActivity() as MainActivity).mBinder?.connectKnowDeviceWithTransfer(it)
-                            (requireActivity() as MainActivity).showCustomProgressDialog()
-                        }
-                        return true
-                    }
-
                     R.id.privacy_policy -> {
                         val browserIntent = Intent(
                             Intent.ACTION_VIEW,
@@ -193,6 +167,11 @@ class HomeFragment : Fragment() {
 
         mBinding.btnSync.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeToSync())
+        }
+
+        // TEMPORAL: prueba de Crashlytics. El reporte llega a la consola al volver a abrir la app.
+        mBinding.btnTestCrash.setOnLongClickListener {
+            throw RuntimeException("Crash de prueba de Crashlytics (visor remoto)")
         }
         return mBinding.root
     }
@@ -319,17 +298,23 @@ class HomeFragment : Fragment() {
         Log.i(TAG1, "TabletMixer presionado: ${tabletMixer.id} - ${tabletMixer.name} - ${tabletMixer.btName}")
 
 
+        val activity = requireActivity() as MainActivity
+        // La lista de emparejados puede no haberse pedido todavía (instalación nueva, sin tablet
+        // guardada). Sin ella no se resuelve la MAC de una tablet que solo trae btName del servidor.
+        if (activity.knowDevices.isNullOrEmpty()) {
+            activity.mBinder?.getBondedDevices()?.let { activity.knowDevices = it }
+        }
+        val device = activity.resolveBluetoothDevice(tabletMixer)
+        // resolveBluetoothDevice guarda la MAC encontrada; se usa la copia actualizada para que
+        // la tablet seleccionada y la guardada ya la tengan.
+        val resolvedTablet = if (device != null && tabletMixer.mac.isEmpty()) tabletMixer.copy(mac = device.address) else tabletMixer
+
         viewLifecycleOwner.lifecycleScope.launch {
-            (requireActivity() as MainActivity).changeTablet_SUSPEND(tabletMixer)
-            (requireActivity() as MainActivity).saveTabletMixerAndWait(tabletMixer)
-
-            // Limpiar la lista de rondas al cambiar de tablet para que
-            // RoundListFragment no muestre rondas de una sesión anterior.
-            // Se poblarán de nuevo al conectar y recibir CMD_ROUNDS.
-            (requireActivity() as MainActivity).listOfMedRoundsRun.clear()
-
-            if (tabletMixer.btName.isNullOrEmpty()) {
-                Log.w(TAG, "⚠️ '${tabletMixer.name}' no tiene btName/mac — navegando a TabletConfigActivity para asignarlo")
+            if (device == null) {
+                // Sin Bluetooth asociado (btName vacío, o el nombre no coincide con ningún
+                // dispositivo emparejado): hay que elegirlo en la configuración de la tablet.
+                // No se intenta conectar: no hay a qué.
+                Log.w(TAG, "⚠️ '${tabletMixer.name}' sin Bluetooth resuelto (mac='${tabletMixer.mac}' btName='${tabletMixer.btName}') — navegando a TabletConfigActivity para asignarlo")
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.seleccione_el_bluetooth_de_latablet, tabletMixer.name),
@@ -339,12 +324,21 @@ class HomeFragment : Fragment() {
                 findNavController().navigate(
                     HomeFragmentDirections.actionHomeToTabletConfig(tabletMixer)
                 )
-            } else {
-                Log.i(TAG, "TabletMixer '${tabletMixer.name}' mac='${tabletMixer.mac}' btName='${tabletMixer.btName}' → navegando a RoundList")
-                findNavController().navigate(
-                    HomeFragmentDirections.actionHomeToRound()
-                )
+                return@launch
             }
+
+            activity.changeTablet_SUSPEND(resolvedTablet)
+            activity.saveTabletMixerAndWait(resolvedTablet)
+
+            // Limpiar la lista de rondas al cambiar de tablet para que
+            // RoundListFragment no muestre rondas de una sesión anterior.
+            // Se poblarán de nuevo al conectar y recibir CMD_ROUNDS.
+            activity.listOfMedRoundsRun.clear()
+
+            Log.i(TAG, "TabletMixer '${resolvedTablet.name}' mac='${resolvedTablet.mac}' btName='${resolvedTablet.btName}' → navegando a RoundList")
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeToRound()
+            )
         }
     }
 
@@ -646,10 +640,8 @@ class HomeFragment : Fragment() {
 
         override fun onBondedDevices(device: List<BluetoothDevice>?) {
             Log.i(TAG, "[Home]onBondedDevices ${device?.size} \n$device")
+            // Solo se guarda la lista: en el inicio no se conecta solo a la tablet guardada.
             (requireActivity() as MainActivity).knowDevices = device
-            selectedTabletInFragment?.let {
-                selectTablet(it)
-            }
         }
     }
 
@@ -670,66 +662,6 @@ class HomeFragment : Fragment() {
             (requireActivity() as MainActivity).weightReceived()
     }
 
-    fun selectTablet(tabletMixer: TabletMixer){
-        val activity = requireActivity() as MainActivity
-        Log.i(TAG,"selectTablet: '${tabletMixer.name}' mac='${tabletMixer.mac}' btName='${tabletMixer.btName}' knowDevices=${activity.knowDevices?.size ?: 0}")
-
-        if (tabletMixer.mac.isEmpty()) {
-            // Sin MAC: intentar resolverla por btName
-            val resolvedDevice = activity.resolveBluetoothDevice(tabletMixer)
-            if (resolvedDevice != null) {
-                Log.i(TAG, "selectTablet: MAC resuelta por btName='${tabletMixer.btName}' → ${resolvedDevice.address}")
-                if (activity.mBinder?.isConnected() != true) {
-                    activity.showCustomProgressDialog()
-                    activity.connectDevice(resolvedDevice)
-                }
-            } else {
-                Log.w(TAG,"selectTablet: ⚠️ '${tabletMixer.name}' no tiene MAC ni btName coincidente — no se puede conectar automáticamente")
-            }
-            return
-        }
-
-        activity.knowDevices?.forEach{
-            Log.i(TAG,"bluetoothKnowed ${it.name} ${it.address}")
-            if(tabletMixer.mac.equals(it.address)){
-                var name = ""
-                var address = ""
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-                    if (ActivityCompat.checkSelfPermission(
-                            activity, Manifest.permission.BLUETOOTH_CONNECT
-                        ) == PackageManager.PERMISSION_GRANTED) {
-                        name = it.name
-                        address = it.address
-                    }
-                }else{
-                    name = it.name
-                    address = it.address
-                }
-                Log.i(TAG,"Se seleccionó $name : $address")
-                if (activity.mBinder?.isConnected() != true) {
-                    connectTable(tabletMixer)
-                }
-            }
-        }
-    }
-
-
-    fun connectTable(tabletMixer: TabletMixer){
-        Log.i(TAG, "Cantidad: ${(requireActivity() as MainActivity).knowDevices?.size}")
-        val deviceBluetooth = (requireActivity() as MainActivity).knowDevices?.firstOrNull { bd->
-            bd.address == tabletMixer.mac
-        }
-
-        if (deviceBluetooth != null){
-            Log.i(TAG,"Try to connect with ${deviceBluetooth}")
-            (requireActivity() as MainActivity).showCustomProgressDialog()
-            (requireActivity() as MainActivity).connectDevice(deviceBluetooth)
-        } else {
-            Toast.makeText(requireActivity(), getString(R.string.no_se_pudo_conectar), Toast.LENGTH_SHORT).show()
-        }
-    }
-
-
     fun setTabletMixer(tabletMixerIn: TabletMixer) {
         selectedTabletInFragment = tabletMixerIn
         menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  ${tabletMixerIn.name}"
@@ -742,6 +674,10 @@ class HomeFragment : Fragment() {
         BluetoothSDKListenerHelper.unregisterBluetoothSDKListener(requireContext(), mBluetoothListener)
         BluetoothSDKListenerHelper.registerBluetoothSDKListener(requireContext(), mBluetoothListener)
         bMixerInit = false
+        // La tablet principal atiende un solo visor a la vez: en el inicio este visor se
+        // desconecta para dejarla libre. Se vuelve a conectar al elegir una tablet.
+        (requireActivity() as MainActivity).disconnectFromTablet()
+        menu?.findItem(R.id.bluetooth_balance)?.title = ""
         super.onResume()
     }
 
@@ -801,28 +737,17 @@ class HomeFragment : Fragment() {
         }
         when(selection){
             Constants.MIXER_REF->{
-                (requireActivity() as MainActivity).mBinder?.disconnectKnowDeviceWithTransfer()//Se seleccionó un nuevo mixer.
                 mCustomListDialog.dismiss()
-                menu?.findItem(R.id.menu_selected_remote_tablet)?.title = ""
-                menu?.findItem(R.id.bluetooth_balance)?.title = ""
-                bMixerInit = false
-
                 val localTabletMixer = mLocalTabletMixers?.firstOrNull { tabletMixer ->
                     tabletMixer.id == item.id
                 } ?: return
 
-                val changeTabletMixer = menu?.findItem(R.id.menu_selected_remote_tablet)
-                changeTabletMixer?.title = "   "+ localTabletMixer.name
-                localTabletMixer.let {
-                    Log.i(TAG, "1Se seleccionó tablet $localTabletMixer")
-                    (requireActivity() as MainActivity).saveTabletMixer(localTabletMixer)
-                }
-
                 Log.i(TAG, "Local tablet selected: ${localTabletMixer.name} | ${localTabletMixer.mac}")
-
+                // Igual que tocar la tarjeta: conecta y pasa a la lista de rondas, así el visor
+                // no queda conectado en el inicio.
                 selectedTabletInFragment = localTabletMixer
-                (requireActivity() as MainActivity).changeTabletMixer(localTabletMixer)
-                menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + selectedTabletInFragment?.name
+                menu?.findItem(R.id.menu_selected_remote_tablet)?.title = "  " + localTabletMixer.name
+                onTabletMixerPressed(localTabletMixer)
             }
         }
     }

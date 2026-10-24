@@ -512,9 +512,11 @@ class MainActivity : BaseActivity() {
         if(!isActionRunning && bReconnect){
             isActionRunning = true
             Handler(Looper.getMainLooper()).postDelayed({
+                isActionRunning = false
+                // La reconexión puede haberse apagado durante la espera (p. ej. al volver al inicio).
+                if (!bReconnect) return@postDelayed
                 Log.i(TAG1,"changeStatusDisconnected Reconexion automatica  ${BluetoothUtils.getBluetoothName(this,bluetoothDevice)}")
                 connectDevice(bluetoothDevice)
-                isActionRunning = false
             }, 1500)
         }
     }
@@ -734,6 +736,26 @@ class MainActivity : BaseActivity() {
             changeTabletRunnable = null
         }
         handlerChangeTablet.postDelayed(changeTabletRunnable!!, Constants.CHANGE_MIXER_TIME)
+    }
+
+    /**
+     * Corta la conexión con la tablet principal y apaga la reconexión automática. Se usa en la
+     * pantalla de inicio: la tablet principal atiende un solo visor a la vez, y si este queda
+     * conectado sin usarse, otro visor no puede conectarse. Se vuelve a conectar al elegir una
+     * tablet (changeTablet_SUSPEND / changeTabletMixer).
+     */
+    fun disconnectFromTablet() {
+        Log.i(TAG1, "disconnectFromTablet")
+        reconnectDisable()
+        reconnectRunnable?.let { handlerRecconect.removeCallbacks(it) }
+        reconnectRunnable = null
+        isReconnecting = false
+        changeTabletRunnable?.let { handlerChangeTablet.removeCallbacks(it) }
+        changeTabletRunnable = null
+        mBinder?.disconnectKnowDeviceWithTransfer()
+        connectedDeviceMac = null
+        hideCustomProgressDialog()
+        changeStatusDisconnected()
     }
 
     suspend fun changeTablet_SUSPEND(tabletMixer: TabletMixer) {

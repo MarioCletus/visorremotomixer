@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "589890647680",
+    "project_id": "visor-remoto-f2fde",
+    "storage_bucket": "visor-remoto-f2fde.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:589890647680:android:f7fcbdadbf4d7efb72d865",
+        "android_client_info": {
+          "package_name": "com.basculasmagris.visorremotomixer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0UyjKjEm7y-hubCe3NDdwphqxfHAWCYk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

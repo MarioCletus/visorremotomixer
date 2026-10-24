@@ -137,17 +137,21 @@ class RoundListFragment : Fragment() {
                         if(!isAdded){
                             return false
                         }
-                        val deviceBluetooth = (requireActivity() as MainActivity).knowDevices?.firstOrNull { bd->
-                            bd.address == selectedTabletInFragment?.mac
+                        val activity = requireActivity() as MainActivity
+                        if (activity.knowDevices.isNullOrEmpty()) {
+                            activity.mBinder?.getBondedDevices()?.let { activity.knowDevices = it }
                         }
+                        // Por MAC o, si la tablet solo trae btName, por nombre entre los emparejados.
+                        val deviceBluetooth = selectedTabletInFragment?.let { activity.resolveBluetoothDevice(it) }
                         Log.v(TAG,"Force connection $deviceBluetooth")
-                        deviceBluetooth?.let {
-                            val name = BluetoothUtils.getBluetoothName(requireActivity(), it)
-                            Log.v(TAG,"Force connection $name")
-                            (requireActivity() as MainActivity).mBinder?.disconnectKnowDeviceWithTransfer()
-                            (requireActivity() as MainActivity).mBinder?.connectKnowDeviceWithTransfer(it)
-                            (requireActivity() as MainActivity).showCustomProgressDialog()
+                        if (deviceBluetooth == null) {
+                            Toast.makeText(activity, getString(R.string.no_se_pudo_conectar), Toast.LENGTH_SHORT).show()
+                            return true
                         }
+                        Log.v(TAG,"Force connection ${BluetoothUtils.getBluetoothName(activity, deviceBluetooth)}")
+                        activity.mBinder?.disconnectKnowDeviceWithTransfer()
+                        activity.mBinder?.connectKnowDeviceWithTransfer(deviceBluetooth)
+                        activity.showCustomProgressDialog()
                         return true
                     }
 
