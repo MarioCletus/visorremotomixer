@@ -10,7 +10,6 @@ import com.basculasmagris.visorremotomixer.databinding.ItemCustomListBinding
 import com.basculasmagris.visorremotomixer.view.activities.LoginActivity
 import com.basculasmagris.visorremotomixer.view.activities.TabletConfigActivity
 import com.basculasmagris.visorremotomixer.view.fragments.AdminFragment
-import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RoundListFragment
 import com.basculasmagris.visorremotomixer.view.fragments.SyncFragment
 
@@ -105,9 +104,6 @@ class CustomListItemAdapterFragment (
                 fragment.selectedListItem(item, selection)
             }
             if (fragment is RoundListFragment){
-                fragment.selectedListItem(item, selection)
-            }
-            if (fragment is HomeFragment){
                 fragment.selectedListItem(item, selection)
             }
             if (fragment is SyncFragment){

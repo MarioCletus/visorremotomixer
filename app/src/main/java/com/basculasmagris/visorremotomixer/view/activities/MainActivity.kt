@@ -62,7 +62,6 @@ import com.basculasmagris.visorremotomixer.utils.CustomAlertDialogBuilder
 import com.basculasmagris.visorremotomixer.utils.Helper
 import com.basculasmagris.visorremotomixer.utils.RemoteTabletSession
 import com.basculasmagris.visorremotomixer.view.fragments.AdminFragment
-import com.basculasmagris.visorremotomixer.view.fragments.HomeFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RemoteMixerFragment
 import com.basculasmagris.visorremotomixer.view.fragments.RoundListFragment
 import com.basculasmagris.visorremotomixer.view.fragments.TabletListFragment
@@ -290,6 +289,10 @@ class MainActivity : BaseActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
+        // La flecha desde la ronda va al inicio, igual que "atrás" (ver RemoteMixerFragment).
+        if (navController.currentDestination?.id == R.id.nav_mixer_remoto) {
+            return navController.popBackStack(R.id.nav_home, false)
+        }
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
@@ -471,13 +474,6 @@ class MainActivity : BaseActivity() {
         val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
         navHost?.childFragmentManager?.primaryNavigationFragment?.let { fragment ->
             when (fragment) {
-                is HomeFragment -> {
-                    Log.i(TAG, "setTabletMixer in HomeFragment $selectedTabletInActivity")
-                    fragment.setTabletMixer(tabletMixer)
-                    if (mService != null) {
-                        onBluetoothServiceReady()
-                    }
-                }
                 is AdminFragment -> {
                     Log.i(TAG, "setTabletMixer in AdminFragment $selectedTabletInActivity")
                     fragment.setTabletMixer(tabletMixer)}

@@ -159,6 +159,16 @@ class TabletConfigActivity : BaseActivity() {
                 intent.getParcelableExtra< TabletMixer>(Constants.EXTRA_MIXER_DETAILS)
             }
             Log.i(TAG,"mTabletMixerDetails $tabletMixerReceibed")
+        } else if (intent.hasExtra("tabletMixer")) {
+            // Desde el inicio se abre con la acción de navegación, que pasa la tablet con el
+            // nombre del argumento ("tabletMixer"). Sin esto la tablet llegaba vacía y el
+            // bluetooth elegido no se guardaba.
+            tabletMixerReceibed = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableExtra("tabletMixer",  TabletMixer::class.java)
+            } else {
+                intent.getParcelableExtra< TabletMixer>("tabletMixer")
+            }
+            Log.i(TAG,"tabletMixer (navegación) $tabletMixerReceibed")
         }
         if (intent.hasExtra(Constants.EXTRA_MIXER_MODE)) {
             bIsDetail = intent.getBooleanExtra(Constants.EXTRA_MIXER_MODE, false)
@@ -194,14 +204,17 @@ class TabletConfigActivity : BaseActivity() {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
                     R.id.action_save_mixer -> {
-                        if(!isKeyBoardShowing()){
-                            if(bIsFirstIn)
-                                return true
-                            saveTabletMixer()
-                            cleanObservers()
-                            finish()
-                        }else
-                            hideSoftKeyboard()
+                        if(bIsFirstIn)
+                            return true
+                        // Antes, si se detectaba teclado abierto, solo se ocultaba el teclado y el
+                        // botón parecía no responder (en algunas tablets la detección da siempre
+                        // abierto). El bluetooth elegido ya se guarda al seleccionarlo
+                        // (applySelectedDevice), así que guardar es confirmar y salir.
+                        hideSoftKeyboard()
+                        saveTabletMixer()
+                        tabletMixerReceibed?.let { result(it) }
+                        cleanObservers()
+                        finish()
                         return true
                     }
                     R.id.menu_selected_remote_tablet -> {

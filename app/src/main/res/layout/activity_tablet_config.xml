@@ -20,6 +20,19 @@
         app:title="@string/tablet"
         />
 
+    <!-- Logo sobre la barra, como en app_bar_main. El ítem step_immage de menu_mixer_config
+         reserva su lugar para que los íconos del menú no queden debajo. -->
+    <ImageView
+        android:id="@+id/ib_logo_config"
+        android:layout_width="160dp"
+        android:layout_height="55dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/magris_logo_topbar"
+        android:contentDescription="@null"
+        app:layout_constraintTop_toTopOf="@id/toolbar_config_tablet"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar_config_tablet"
+        app:layout_constraintEnd_toEndOf="@id/toolbar_config_tablet" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/remoteViewerCustomMenu"
         android:layout_width="match_parent"

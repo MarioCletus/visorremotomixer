@@ -37,7 +37,8 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/step_immage"
-        android:title="                                          "
+        android:title=""
+        app:actionLayout="@layout/menu_logo_spacer"
         app:showAsAction="always"
         android:orderInCategory="106"
         />

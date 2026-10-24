@@ -123,6 +123,16 @@ class RemoteMixerFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity = (requireActivity() as MainActivity)
+        // Salir de la ronda (atrás, cancelar, cerrar, o la tablet principal salió de la ronda)
+        // vuelve al inicio y no a la lista de rondas: en el inicio el visor se desconecta y deja
+        // libre la tablet principal para otro visor. Para ver las rondas hay que volver a elegir
+        // la tablet, que es lo que conecta.
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : androidx.activity.OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (isAdded) findNavController().popBackStack(R.id.nav_home, false)
+                }
+            })
         // Solo si no hay conexión: antes aparecía cada vez que se entraba a la pantalla.
         if (activity?.mBinder?.isConnected() != true) {
             activity?.showCustomProgressDialog()
