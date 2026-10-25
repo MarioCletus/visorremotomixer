@@ -247,7 +247,11 @@ class TabletConfigActivity : BaseActivity() {
             mBinding.layBTAsoc.isEnabled  = false
         }
 
-        mBinding.tvCajaBluetoothAsoc.setText(tabletMixerReceibed?.btName?: "")
+        // Solo si ya se eligió en este visor (tiene MAC). Tablets de versiones anteriores pueden
+        // traer un nombre que vino del servidor sin haberlo elegido acá, y mostrarlo confundía.
+        mBinding.tvCajaBluetoothAsoc.setText(
+            tabletMixerReceibed?.takeIf { it.mac.isNotEmpty() }?.btName ?: ""
+        )
         macaddress = tabletMixerReceibed?.mac?: ""
 
         mBinding.layBTAsoc.setOnClickListener {
@@ -416,9 +420,10 @@ class TabletConfigActivity : BaseActivity() {
         override fun onDeviceDiscovered(device: BluetoothDevice?) {
             device?.let { currentDevice ->
                 Log.i(TAG, "onDeviceDiscovered $currentDevice")
+                if (isScaleDevice(BluetoothUtils.getBluetoothName(this@TabletConfigActivity, currentDevice))) return
                 allBluetoothDevice.add(device)
 
-                val name = if(BluetoothUtils.getBluetoothName(this@TabletConfigActivity,currentDevice).isEmpty()) getString(R.string.no_identificado) else BluetoothUtils.getBluetoothName(this@TabletConfigActivity,currentDevice)
+                val name = deviceLabel(currentDevice, mLocalTabletMixers.orEmpty())
                 val mac = if (BluetoothUtils.getAddress(this@TabletConfigActivity,currentDevice).isEmpty()) "00:00:00:00" else BluetoothUtils.getAddress(this@TabletConfigActivity,currentDevice)
 
                 val item = CustomListItem(0L, 0, name, mac, R.drawable.icon_balance)
@@ -573,6 +578,21 @@ class TabletConfigActivity : BaseActivity() {
         alertDialog.show()
     }
 
+    /** Las cajas de las balanzas se llaman "TBM-…": nunca son una tablet principal. */
+    private fun isScaleDevice(name: String): Boolean = name.startsWith("TBM", ignoreCase = true)
+
+    /**
+     * Texto de un bluetooth en la lista: el nombre y, si ya está asignado a otra tablet en este
+     * visor, a cuál. Con varias tablets del mismo modelo los nombres se repiten y se elegía el de
+     * otra tablet (en el video de un cliente, "T2" era de tablet1 y se eligió para Juani).
+     */
+    private fun deviceLabel(device: BluetoothDevice, tablets: List<TabletMixer>): String {
+        val name = BluetoothUtils.getBluetoothName(this, device).ifEmpty { getString(R.string.no_identificado) }
+        val currentId = tabletMixerReceibed?.id ?: 0L
+        val owner = tablets.firstOrNull { it.mac.equals(device.address, ignoreCase = true) && it.id != currentId }
+        return if (owner != null) "$name  ·  ${getString(R.string.bluetooth_asignado_a, owner.name)}" else name
+    }
+
     private fun equiposVinculados() {
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothDevicesKnow = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
@@ -589,28 +609,45 @@ class TabletConfigActivity : BaseActivity() {
             bluetoothManager.adapter.bondedDevices
         }
 
-        val devices = arrayOfNulls<BluetoothDevice>(bluetoothDevicesKnow.size)
-        val dispositivos = arrayOfNulls<String>(bluetoothDevicesKnow.size)
-        var i = 0
-        for (device in bluetoothDevicesKnow) {
-            dispositivos[i] = device.name
-            devices[i] = device
-            i++
-        }
-        if (i == 0) {
-            Toast.makeText(this, getString(R.string.no_hay_dispositivos), Toast.LENGTH_SHORT).show()
+        // Fuera las balanzas: antes ocupaban casi toda la lista y la única tablet quedaba al final.
+        val devices = bluetoothDevicesKnow.filterNot { isScaleDevice(BluetoothUtils.getBluetoothName(this, it)) }
+        if (devices.isEmpty()) {
+            noPairedTabletsDialog()
             return
         }
 
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.dispositivo))
-        builder.setItems(dispositivos) { dialog, which ->
-            selectDevice(devices[which])
-            dialog.dismiss()
-            //**********************************************************************
+        lifecycleScope.launch {
+            // Lista fresca de la base: para mostrar a qué tablet está asignado cada bluetooth.
+            val repo = (application as com.basculasmagris.visorremotomixer.application.SpiMixerVRApplication)
+                .tabletMixerRepository
+            val tablets = repo.allTabletMixerList.first()
+            mLocalTabletMixers = tablets
+            val labels = devices.map { deviceLabel(it, tablets) }.toTypedArray()
+
+            val builder = AlertDialog.Builder(this@TabletConfigActivity)
+            builder.setTitle(getString(R.string.dispositivo))
+            builder.setItems(labels) { dialog, which ->
+                selectDevice(devices[which])
+                dialog.dismiss()
+            }
+            builder.create().show()
         }
-        val alertDialog = builder.create()
-        alertDialog.show()
+    }
+
+    /**
+     * Ninguna tablet principal emparejada con este visor. El emparejamiento se hace desde los
+     * ajustes de Android (una vez por tablet), así que se ofrece ir directo ahí.
+     */
+    private fun noPairedTabletsDialog() {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.no_hay_tablets_vinculadas))
+            .setMessage(getString(R.string.msg_no_hay_tablets_vinculadas))
+            .setPositiveButton(getString(R.string.abrir_ajustes_bluetooth)) { dialog, _ ->
+                dialog.dismiss()
+                startActivity(Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS))
+            }
+            .setNegativeButton(getString(R.string.cerrar)) { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 
     /**

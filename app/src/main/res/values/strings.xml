@@ -394,6 +394,10 @@ Con "Ir a inicio" volvés a la selección de mixers y la ronda sigue abierta en 
     <string name="ingrese_url_servidor">Ingrese la dirección del servidor</string>
     <string name="bluetooth_ya_asignado">Bluetooth ya asignado</string>
     <string name="msg_bluetooth_ya_asignado">El bluetooth %1$s ya está asignado a la tablet %2$s. Elegí el bluetooth que corresponde a esta tablet.</string>
+    <string name="bluetooth_asignado_a">asignado a %1$s</string>
+    <string name="no_hay_tablets_vinculadas">No hay tablets vinculadas</string>
+    <string name="msg_no_hay_tablets_vinculadas">Este visor no tiene ninguna tablet principal vinculada por bluetooth. Vinculá la tablet desde los ajustes de bluetooth de Android y después volvé a elegirla acá.</string>
+    <string name="abrir_ajustes_bluetooth">Abrir ajustes de bluetooth</string>
     <string name="msg_bluetooth_de_otra_tablet">El bluetooth elegido es de la tablet %1$s, que ya está cargada. Se quitó de esta tablet: elegí el bluetooth que le corresponde.</string>
     <string name="elegir_otro">Elegir otro</string>
     <string name="reasignar">Reasignar</string>

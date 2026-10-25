@@ -237,22 +237,15 @@ class HomeFragment : Fragment() {
         Log.i(TAG, "TabletMixer presionado: ${tabletMixer.id} - ${tabletMixer.name} - ${tabletMixer.btName}")
 
         val activity = requireActivity() as MainActivity
-        // La lista de emparejados puede no haberse pedido todavía (instalación nueva, sin tablet
-        // guardada). Sin ella no se resuelve la MAC de una tablet que solo trae btName del servidor.
-        if (activity.knowDevices.isNullOrEmpty()) {
-            activity.mBinder?.getBondedDevices()?.let { activity.knowDevices = it }
-        }
+        // Solo por la MAC elegida en este visor (ver MainActivity.resolveBluetoothDevice).
         val device = activity.resolveBluetoothDevice(tabletMixer)
-        // resolveBluetoothDevice guarda la MAC encontrada; se usa la copia actualizada para que
-        // la tablet seleccionada y la guardada ya la tengan.
-        val resolvedTablet = if (device != null && tabletMixer.mac.isEmpty()) tabletMixer.copy(mac = device.address) else tabletMixer
+        val resolvedTablet = tabletMixer
 
         viewLifecycleOwner.lifecycleScope.launch {
             if (device == null) {
-                // Sin Bluetooth asociado (btName vacío, o el nombre no coincide con ningún
-                // dispositivo emparejado): hay que elegirlo en la configuración de la tablet.
-                // No se intenta conectar: no hay a qué.
-                Log.w(TAG, "⚠️ '${tabletMixer.name}' sin Bluetooth resuelto (mac='${tabletMixer.mac}' btName='${tabletMixer.btName}') — navegando a TabletConfigActivity para asignarlo")
+                // Todavía no se eligió el bluetooth de esta tablet en este visor: se elige en la
+                // configuración de la tablet. No se intenta conectar: no hay a qué.
+                Log.w(TAG, "⚠️ '${tabletMixer.name}' sin bluetooth elegido — navegando a TabletConfigActivity para asignarlo")
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.seleccione_el_bluetooth_de_latablet, tabletMixer.name),

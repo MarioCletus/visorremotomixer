@@ -500,10 +500,12 @@ class SyncFragment : Fragment() {
             // Buscar en la lista en memoria (incluye tablets recién insertadas en esta misma sync)
             val local = mLocalTabletMixers?.firstOrNull { it.serial == serial }
             if (local != null) {
+                // El bluetooth (mac y nombre) es el que se eligió en este visor: no se toma el del
+                // servidor, que lo subió otro visor y con nombres repetidos apuntaba a otra tablet.
                 val updated = TabletMixer(
                     name = tabletRemote.name ?: local.name, mixerName = local.mixerName,
                     mac = local.mac, serial = serial,
-                    btName = tabletRemote.bluetoothName ?: local.btName,
+                    btName = local.btName,
                     updatedDate = Helper.getCurrentDateTime(), id = local.id
                 )
                 // updateSync (suspend): espera el commit antes de continuar,
@@ -513,7 +515,7 @@ class SyncFragment : Fragment() {
             } else {
                 val toInsert = TabletMixer(
                     name = tabletRemote.name ?: "", mixerName = "", mac = "",
-                    serial = serial, btName = tabletRemote.bluetoothName ?: "",
+                    serial = serial, btName = "",
                     updatedDate = Helper.getCurrentDateTime()
                 )
                 // insertSync (suspend): espera el commit de Room antes de continuar.
@@ -552,8 +554,9 @@ class SyncFragment : Fragment() {
             updateUsersProgress(index + 1, mRemoteUsers?.size ?: 0)
         }
 
-        // Enviar al servidor los nombres BT de las tablets que el VR conoce
-        // para que futuros installs del VR puedan recuperarlos sin re-emparejar
+        // Enviar al servidor los nombres BT de las tablets que el VR conoce. Es solo
+        // informativo: el visor ya no usa el nombre que baja del servidor para conectar
+        // (el bluetooth se elige en cada visor).
         sendKnownBtNamesToServer()
     }
 

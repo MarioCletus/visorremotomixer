@@ -667,35 +667,19 @@ class MainActivity : BaseActivity() {
     }
 
     /**
-     * Resuelve el BluetoothDevice para una TabletMixer.
-     * Busca por MAC primero. Si no hay MAC pero hay btName, busca por nombre entre
-     * los dispositivos emparejados. Cuando lo encuentra por btName, persiste el MAC
-     * en la DB para que futuras conexiones no necesiten esta búsqueda.
+     * Resuelve el BluetoothDevice para una TabletMixer: solo por la MAC que se eligió en este
+     * visor (configuración de la tablet). Sin MAC devuelve null y hay que elegir el bluetooth.
+     *
+     * Antes, sin MAC, se buscaba por el nombre de bluetooth que venía del servidor. Con varias
+     * tablets principales del mismo nombre se conectaba a la que no era, y en un visor nuevo las
+     * tablets todavía no están emparejadas, así que tampoco servía. El emparejamiento se hace una
+     * vez desde Android y el bluetooth se elige en el visor.
      */
     fun resolveBluetoothDevice(tabletMixer: TabletMixer): BluetoothDevice? {
-        // 1. Camino normal: MAC disponible
         if (tabletMixer.mac.isNotEmpty()) {
-            val device = Helper.getBluetoothDeviceFromMac(tabletMixer.mac)
-            if (device != null) return device
+            return Helper.getBluetoothDeviceFromMac(tabletMixer.mac)
         }
-        // 2. MAC vacía pero btName disponible → buscar por nombre entre dispositivos emparejados
-        val btName = tabletMixer.btName
-        if (!btName.isNullOrEmpty() && !knowDevices.isNullOrEmpty()) {
-            val device = knowDevices!!.firstOrNull { bonded ->
-                BluetoothUtils.getBluetoothName(this, bonded).equals(btName, ignoreCase = true)
-            }
-            if (device != null) {
-                Log.i(TAG, "resolveBluetoothDevice: MAC resuelta desde btName='$btName' → ${device.address} para '${tabletMixer.name}'")
-                // Persistir el MAC para que la próxima vez no sea necesaria esta búsqueda
-                val resolved = tabletMixer.copy(mac = device.address)
-                mTabletMixerViewModel.update(resolved)
-                if (selectedTabletInActivity?.id == tabletMixer.id) {
-                    selectedTabletInActivity = resolved
-                }
-                return device
-            }
-            Log.w(TAG, "resolveBluetoothDevice: btName='$btName' no coincide con ningún dispositivo emparejado")
-        }
+        Log.i(TAG, "resolveBluetoothDevice: '${tabletMixer.name}' sin bluetooth elegido en este visor")
         return null
     }
 
