@@ -15,11 +15,14 @@ class UserAdapter (private  val fragment: Fragment) : RecyclerView.Adapter<UserA
     private var users: List<User> = listOf()
     private var filteredUsers: List<User> = listOf()
 
+    // Definición de roles de usuario para la UI
+    // NOTA: El "Operario" es el AGENTE principal del sistema - usuario que ejecuta rondas
+    // Ver documentación completa en docs/QUE_ES_UN_AGENTE.md y docs/ROLES_DE_USUARIO.md
     private var roles: ArrayList<Pair<Int, String>> = arrayListOf(
-        Pair(1, "Administrador"),
-        Pair(2, "Operario"),
-        Pair(3, "Supervisor"),
-        Pair(4, "Super Admin")
+        Pair(1, "Administrador"),  // USER_ADMIN - gestión completa
+        Pair(2, "Operario"),       // USER_OPERATOR - AGENTE principal del sistema
+        Pair(3, "Supervisor"),     // USER_SUPERVISOR - supervisión 
+        Pair(4, "Super Admin")     // USER_SUPER_ADMIN - control total
     )
 
 
